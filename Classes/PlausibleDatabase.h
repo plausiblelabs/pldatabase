@@ -30,5 +30,6 @@
 #import <Foundation/Foundation.h>
 
 /* Library Includes */
+#import "PLResultSet.h"
 #import "PLDatabase.h"
 #import "PLSqliteDatabase.h"

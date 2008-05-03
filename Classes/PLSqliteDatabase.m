@@ -31,4 +31,38 @@
 
 @implementation PLSqliteDatabase
 
+/* from PLDatabase. */
+- (void) close {
+}
+
+/* from PLDatabase. */
+- (BOOL) goodConnection {
+    return NO; // XXX
+}
+
+/* from PLDatabase. */
+- (BOOL) executeUpdate: (NSString *) statement, ... {
+    return NO; // XXX
+}
+
+/* from PLDatabase. */
+- (NSObject<PLResultSet> *) executeQuery: (NSString *) statement, ... {
+    return nil; // XXX
+}
+
+/* from PLDatabase. */
+- (BOOL) beginTransaction {
+    return NO; // XXX
+}
+
+/* from PLDatabase. */
+- (BOOL) commitTransaction {
+    return NO; // XXX
+}
+
+/* from PLDatabase. */
+- (BOOL) rollbackTransaction {
+    return NO; // XXX
+}
+
 @end

@@ -31,4 +31,56 @@
  * Protocol for interacting with an SQL database.
  */
 @protocol PLDatabase
+
+/**
+ * Close the database connection. Once closed, the connection may not be re-used.
+ */
+- (void) close;
+
+/**
+ * Test that the connection is active.
+ */
+- (BOOL) goodConnection;
+
+/**
+ * Execute an update, returning YES on success, NO on failure.
+ *
+ * Any arguments should be provided following the statement, and
+ * referred to using standard '?' JDBC substitutions
+ *
+ * @param statement SQL statement to execute.
+ */
+- (BOOL) executeUpdate: (NSString *) statement, ...;
+
+/**
+ * Execute a query, returning a #PLResultSet.
+ *
+ * Any arguments should be provided following the statement, and
+ * referred to using standard '?' JDBC substitutions
+ *
+ * @param statement SQL statement to execute.
+ */
+- (NSObject<PLResultSet> *) executeQuery: (NSString *) statement, ...;
+
+/**
+ * Begin a transaction.
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) beginTransaction;
+
+/**
+ * Commit an open transaction.
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) commitTransaction;
+
+/**
+ * Rollback an open transaction.
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) rollbackTransaction;
+
 @end

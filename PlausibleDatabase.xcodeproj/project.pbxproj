@@ -37,6 +37,7 @@
 		0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteDatabase.m; sourceTree = "<group>"; };
 		0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteDatabaseTests.m; sourceTree = "<group>"; };
 		0551CA740DCBED7200E31E46 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLResultSet.h; sourceTree = "<group>"; };
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -105,6 +106,7 @@
 				0551CA680DCBEC5B00E31E46 /* PLSqliteDatabase.h */,
 				0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */,
 				0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */,
+				05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
