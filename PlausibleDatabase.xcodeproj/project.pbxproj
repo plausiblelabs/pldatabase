@@ -75,6 +75,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		05939BF00DCBFFE4004FEA21 /* SQLite */ = {
+			isa = PBXGroup;
+			children = (
+				0551CA680DCBEC5B00E31E46 /* PLSqliteDatabase.h */,
+				0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */,
+				0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */,
+			);
+			name = SQLite;
+			sourceTree = "<group>";
+		};
 		0867D691FE84028FC02AAC07 /* PlausibleDatabase */ = {
 			isa = PBXGroup;
 			children = (
@@ -103,10 +113,8 @@
 			children = (
 				0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */,
 				0551CA660DCBEC1500E31E46 /* PLDatabase.h */,
-				0551CA680DCBEC5B00E31E46 /* PLSqliteDatabase.h */,
-				0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */,
-				0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */,
 				05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */,
+				05939BF00DCBFFE4004FEA21 /* SQLite */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
