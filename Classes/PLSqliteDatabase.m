@@ -31,6 +31,29 @@
 
 @implementation PLSqliteDatabase
 
+/**
+ * Initialize the SQLite database with the provided
+ * file path.
+ *
+ * @param dbPath Path to the sqlite database file.
+ */
+- (id) initWithPath: (NSString*) dbPath {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    _path = [dbPath retain];
+        
+    return self;
+}
+
+
+- (void) dealloc {
+    [_path release];
+
+    [super dealloc];
+}
+
+
 /* from PLDatabase. */
 - (void) close {
 }

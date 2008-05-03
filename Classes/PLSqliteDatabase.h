@@ -28,7 +28,11 @@
  */
 
 @interface PLSqliteDatabase : NSObject <PLDatabase> {
-
+@private
+    /** Path to the database file. */
+    NSString *_path;
 }
+
+- (id) initWithPath: (NSString*) dbPath;
 
 @end

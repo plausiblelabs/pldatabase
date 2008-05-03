@@ -27,16 +27,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
+#import "PlausibleDatabase.h"
+#import "PLTempDirectoryTestCase.h"
 
-@interface PLSqliteDatabaseTests : SenTestCase
+@interface PLSqliteDatabaseTests : PLTempDirectoryTestCase
 @end
 
 
 @implementation PLSqliteDatabaseTests
 
-- (void) testSomething {
-    // Whee
+- (void) testInitWithPath {
+    PLSqliteDatabase *db = [[[PLSqliteDatabase alloc] initWithPath: [[self testDirectory] stringByAppendingPathComponent: @"testdb"]] autorelease];
+    STAssertNotNil(db, @"Returned database is nil");
 }
 
 @end
