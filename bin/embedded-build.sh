@@ -11,7 +11,7 @@ print_usage () {
     echo "embedded-build.sh [-c <configuration>] [-s <sdk>] ..."
     echo "Options:"
     echo "-c:    Select the build configuration (Release or Debug)"
-    echo "-s:    Specify the SDKs to build against (See xcodebuild -sdks)."
+    echo "-s:    Specify the SDKs to build against (See xcodebuild -showsdks)."
     echo "       Multiple -s options may be supplied -- the results will be lipo'd together."
 }
 
