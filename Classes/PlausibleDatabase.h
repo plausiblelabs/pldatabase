@@ -38,3 +38,55 @@
 #import "PLSqliteDatabase.h"
 #import "PLSqliteResultSet.h"
 
+/**
+ * @mainpage Plausible Database
+ *
+ * @section intro_sec Introduction
+ *
+ * Plausible Database provides a generic Objective-C interface for interacting with
+ * SQL databases. SQLite is the initial and primary target, but the API has been
+ * designed to support more traditional databases.
+ *
+ * While the code is stable and unit tested, the API has not yet been finalized,
+ * and may see incompatible changes prior to the 1.0 release.
+ *
+ * Plausible Database provides an Objective-C veneer over the underlying SQL database. Classes
+ * are automatically bound to statement parameters, and converted to and from the underlying SQL datatypes.
+ *
+ * @section create_conn Creating a Connection
+ *
+ * Open a connection to a database file:
+ *
+ * <pre>
+ * PLSqliteDatabase *db = [[PLSqliteDatabase alloc] initWithPath:  @"/path/to/database"];
+ * if (![db open])
+ *     NSLog(@"Could not open database");
+ * </pre>
+ *
+ * @section exec_update Update Statements
+ *
+ * Update statements can be executed using -[PLDatabase executeUpdate:]
+ *
+ * <pre>
+ * if (![db executeUpdate: @"CREATE TABLE example (id INTEGER)"])
+ *     NSLog(@"Table creation failed");
+ *
+ * if (![db executeUpdate: @"INSERT INTO example (id) VALUES (?)", [NSNumber numberWithInteger: 42]])
+ *     NSLog(@"Data insert failed");
+ * </pre>
+ * @section exec_query Query Statements
+ *
+ * Queries can be executed using -[PLDatabase executeQuery:]. To iterate over the returned results, an NSObject instance
+ * conforming to #PLResultSet will be returned.
+ *
+ * <pre>
+ * NSObject<PLResultSet> *results = [db executeQuery: @"SELECT id FROM example WHERE id = ?", [NSNumber numberWithInteger: 42]];
+ * while ([results next]) {
+ *     NSLog(@"Value of column id is %d", [results intForColumn: @"id"]);
+ * }
+ *
+ * // Failure to close the result set will not leak memory, but may
+ * // retain database resources until the instance is deallocated.
+ * [results close];
+ * </pre>
+ */
