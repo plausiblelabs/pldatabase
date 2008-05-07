@@ -29,7 +29,12 @@
 
 #import "PlausibleDatabase.h"
 
-@implementation PLSqliteResultSet
+/**
+ * @internal
+ *
+ * SQLite #PLResultSet implementation.
+ */
+ @implementation PLSqliteResultSet
 
 /**
  * Initialize the ResultSet with an open database and an sqlite3 prepare statement.

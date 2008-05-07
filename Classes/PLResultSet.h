@@ -27,6 +27,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * Represents a set of results returned by an SQL query.
+ */
 @protocol PLResultSet
 
 /**

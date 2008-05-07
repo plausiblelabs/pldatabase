@@ -46,7 +46,9 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 @end
 
-
+/**
+ * SQLite #PLDatabase implementation.
+ */
 @implementation PLSqliteDatabase
 
 /**
