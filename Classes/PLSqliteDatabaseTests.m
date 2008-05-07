@@ -193,28 +193,6 @@
     STAssertEquals(42, [rs intForColumn: @"b"], @"Did not retrieve expected column");
 }
 
-
-- (void) testLastInsertRowIdFunction {
-    NSObject<PLResultSet> *rs;
-    int64_t rowId;
-
-    /* Create test table */
-    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a INTEGER PRIMARY KEY AUTOINCREMENT, b INTEGER)"], @"Create table failed");
-    STAssertTrue([_db tableExists: @"test"], @"Table 'test' not created");
-
-    /* Insert test data */
-    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a, b) VALUES (?, ?)", nil, [NSNumber numberWithInt: 42]]), @"Inserting test data failed");
-    rs = [_db executeQuery: @"SELECT last_insert_rowid()"];
-    STAssertTrue([rs next], @"No result returned");
-    rowId = [rs bigIntForColumnIndex: 0];
-    [rs close];
-
-    /* Try to fetch the test data again */
-    rs = [_db executeQuery: @"SELECT b FROM test WHERE rowId = ?", [NSNumber numberWithLongLong: rowId]];
-    STAssertTrue([rs next], @"No result returned");
-    STAssertEquals(42, [rs intForColumn: @"b"], @"Did not retrieve expected column");
-}
-
 - (void) testLastErrorMessage {
     STAssertNotNil([_db lastErrorMessage], @"Initial last error message was nil.");
 }
