@@ -46,6 +46,8 @@ extern NSString *PLSqliteException;
 
 - (BOOL) open;
 
+- (int64_t) lastInsertRowId;
+
 #ifdef PL_DB_PRIVATE
 - (NSString *) lastErrorMessage;
 #endif

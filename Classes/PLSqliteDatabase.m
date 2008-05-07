@@ -233,6 +233,18 @@ NSString *PLSqliteException = @"PLSqliteException";
 }
 
 /**
+ * Returns the row ID of the most recent successful INSERT. If the table
+ * has a column of type INTEGER PRIMARY KEY, then the value assigned will
+ * be an alias for the row ID.
+*
+ * @param Return the row ID (integer primary key) of the most recent successful INSERT.
+ */
+- (int64_t) lastInsertRowId {
+    return sqlite3_last_insert_rowid(_sqlite);
+}
+
+/**
+ * @internal
  * Return the last error message encountered by the underlying sqlite database.
  */
 - (NSString *) lastErrorMessage {

@@ -175,6 +175,20 @@
     STAssertFalse([_db tableExists: @"not exists"], @"Returned true on non-existent table");
 }
 
+- (void) testLastInsertRowId {
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a INTEGER PRIMARY KEY AUTOINCREMENT)"], @"Create table failed");
+    STAssertTrue([_db tableExists: @"test"], @"Table 'test' not created");
+    
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a) VALUES (?)", nil]), @"Inserting test data failed");    
+    int64_t id1 = [_db lastInsertRowId];
+    
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a) VALUES (?)", nil]), @"Inserting test data failed");
+    int64_t id2 = [_db lastInsertRowId];
+    
+    STAssertTrue(id1 != id2, @"Could not get last row ID");
+}
+
+
 - (void) testLastErrorMessage {
     STAssertNotNil([_db lastErrorMessage], @"Initial last error message was nil.");
 }
