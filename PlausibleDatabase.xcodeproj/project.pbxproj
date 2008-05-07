@@ -362,6 +362,7 @@
 				INFOPLIST_FILE = "Tests-Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Cocoa,
@@ -390,6 +391,7 @@
 				INFOPLIST_FILE = "Tests-Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Cocoa,
@@ -416,6 +418,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				INSTALL_PATH = /usr/local/lib;
+				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -439,6 +442,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				INSTALL_PATH = /usr/local/lib;
+				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -465,6 +469,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PlausibleDatabase_Prefix.pch;
 				INSTALL_PATH = /usr/local/lib;
+				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
 				PRODUCT_NAME = PlausibleDatabase;
 			};
 			name = Debug;
@@ -480,6 +485,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PlausibleDatabase_Prefix.pch;
 				INSTALL_PATH = /usr/local/lib;
+				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
 				PRODUCT_NAME = PlausibleDatabase;
 			};
 			name = Release;
