@@ -19,6 +19,8 @@
 		058196B50DD16BDC001E992F /* PLSqliteResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B00DD16BDC001E992F /* PLSqliteResultSet.m */; };
 		058196B60DD16BDC001E992F /* PLSqliteResultSetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */; };
 		058196D30DD16CAD001E992F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */; };
+		0581974E0DD17D03001E992F /* PLSqliteDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */; };
+		0581974F0DD17D04001E992F /* PLSqliteResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B00DD16BDC001E992F /* PLSqliteResultSet.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +30,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 0551CA4A0DCBE9F600E31E46;
 			remoteInfo = Tests;
+		};
+		0581975A0DD17DA2001E992F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 058197480DD17CD1001E992F;
+			remoteInfo = pldatabase;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -45,6 +54,7 @@
 		058196AF0DD16BDC001E992F /* PLSqliteResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteResultSet.h; sourceTree = "<group>"; };
 		058196B00DD16BDC001E992F /* PLSqliteResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSet.m; sourceTree = "<group>"; };
 		058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSetTests.m; sourceTree = "<group>"; };
+		058197490DD17CD1001E992F /* libpldatabase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libpldatabase.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLResultSet.h; sourceTree = "<group>"; };
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -60,6 +70,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				058196D30DD16CAD001E992F /* libsqlite3.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		058197470DD17CD1001E992F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +97,7 @@
 			children = (
 				D2AAC0C705546C1D00DB518D /* PlausibleDatabase.dylib */,
 				0551CA4B0DCBE9F600E31E46 /* Tests.octest */,
+				058197490DD17CD1001E992F /* libpldatabase.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -161,6 +179,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		058197450DD17CD1001E992F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2AAC0C305546C1D00DB518D /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -192,6 +217,23 @@
 			productReference = 0551CA4B0DCBE9F600E31E46 /* Tests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
+		058197480DD17CD1001E992F /* pldatabase */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 058197550DD17D10001E992F /* Build configuration list for PBXNativeTarget "pldatabase" */;
+			buildPhases = (
+				058197450DD17CD1001E992F /* Headers */,
+				058197460DD17CD1001E992F /* Sources */,
+				058197470DD17CD1001E992F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = pldatabase;
+			productName = pldatabase;
+			productReference = 058197490DD17CD1001E992F /* libpldatabase.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		D2AAC0C605546C1D00DB518D /* PlausibleDatabase */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB917D08733D990010E9CD /* Build configuration list for PBXNativeTarget "PlausibleDatabase" */;
@@ -204,6 +246,7 @@
 			);
 			dependencies = (
 				0551CA520DCBEB3A00E31E46 /* PBXTargetDependency */,
+				0581975B0DD17DA2001E992F /* PBXTargetDependency */,
 			);
 			name = PlausibleDatabase;
 			productName = PlausibleDatabase;
@@ -225,6 +268,7 @@
 			targets = (
 				D2AAC0C605546C1D00DB518D /* PlausibleDatabase */,
 				0551CA4A0DCBE9F600E31E46 /* Tests */,
+				058197480DD17CD1001E992F /* pldatabase */,
 			);
 		};
 /* End PBXProject section */
@@ -267,6 +311,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		058197460DD17CD1001E992F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0581974E0DD17D03001E992F /* PLSqliteDatabase.m in Sources */,
+				0581974F0DD17D04001E992F /* PLSqliteResultSet.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2AAC0C405546C1D00DB518D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -283,6 +336,11 @@
 			isa = PBXTargetDependency;
 			target = 0551CA4A0DCBE9F600E31E46 /* Tests */;
 			targetProxy = 0551CA510DCBEB3A00E31E46 /* PBXContainerItemProxy */;
+		};
+		0581975B0DD17DA2001E992F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 058197480DD17CD1001E992F /* pldatabase */;
+			targetProxy = 0581975A0DD17DA2001E992F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -341,6 +399,54 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = Tests;
 				WRAPPER_EXTENSION = octest;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		0581974A0DD17CD1001E992F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				INSTALL_PATH = /usr/local/lib;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = pldatabase;
+			};
+			name = Debug;
+		};
+		0581974B0DD17CD1001E992F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				INSTALL_PATH = /usr/local/lib;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = pldatabase;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -415,6 +521,15 @@
 			buildConfigurations = (
 				0551CA4E0DCBE9F600E31E46 /* Debug */,
 				0551CA4F0DCBE9F600E31E46 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		058197550DD17D10001E992F /* Build configuration list for PBXNativeTarget "pldatabase" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0581974A0DD17CD1001E992F /* Debug */,
+				0581974B0DD17CD1001E992F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
