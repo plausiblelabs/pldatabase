@@ -27,18 +27,157 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PlausibleDatabase.h"
-#import "PLTempDirectoryTestCase.h"
+#import <SenTestingKit/SenTestingKit.h>
 
-@interface PLSqliteDatabaseTests : PLTempDirectoryTestCase
+#import "PlausibleDatabase.h"
+
+@interface PLSqliteDatabaseTests : SenTestCase {
+@private
+    PLSqliteDatabase *_db;
+}
+
 @end
 
 
 @implementation PLSqliteDatabaseTests
 
+- (void) setUp {
+    _db = [[PLSqliteDatabase alloc] initWithPath: @":memory:"];
+    STAssertTrue([_db open], @"Couldn't open the test database");
+}
+
+- (void) tearDown {
+    [_db release];
+}
+
 - (void) testInitWithPath {
-    PLSqliteDatabase *db = [[[PLSqliteDatabase alloc] initWithPath: [[self testDirectory] stringByAppendingPathComponent: @"testdb"]] autorelease];
+    PLSqliteDatabase *db = [[[PLSqliteDatabase alloc] initWithPath:  @":memory:"] autorelease];
     STAssertNotNil(db, @"Returned database is nil");
 }
+
+
+- (void) testOpen {
+    PLSqliteDatabase *db = [[[PLSqliteDatabase alloc] initWithPath:  @":memory:"] autorelease];
+    STAssertTrue([db open], @"Could not open the database");
+    STAssertTrue([db goodConnection], @"The database did not report a good connection");
+}
+
+
+- (void) testExecuteUpdate {
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a VARCHAR(10), b VARCHAR(20), c BOOL)"], @"Create table failed");
+    STAssertTrue([_db tableExists: @"test"], @"Table 'test' not created");
+}
+
+
+- (void) testExecuteUpdateQueryParams {
+    NSObject<PLResultSet> *rs;
+
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Create table failed");
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a) VALUES (?)", [NSNumber numberWithInt: 42]]), @"Could not insert row");
+
+    rs = [_db executeQuery: @"SELECT a FROM test WHERE a = 42"];
+    STAssertTrue([rs next], @"No rows returned");
+}
+
+
+- (void) testExecuteQueryNoParameters {
+    NSObject<PLResultSet> *result = [_db executeQuery: @"PRAGMA user_version"];
+    STAssertNotNil(result, @"No result returned from query");
+    STAssertTrue([result next], @"No rows were returned");
+}
+
+/* Test handling of all supported parameter data types */
+- (void) testParameterHandling {
+	NSObject<PLResultSet> *rs;
+	BOOL ret;
+    NSDate *now = [NSDate date];
+    const char bytes[] = "This is some example test data";
+    NSData *data = [NSData dataWithBytes: bytes length: sizeof(bytes)];
+
+	/* Create the test table */
+    ret = [_db executeUpdate: @"CREATE TABLE test ("
+           "intval int,"
+           "int64val int,"
+           "stringval varchar(30),"
+           "nilval int,"
+           "floatval float,"
+           "doubleval double precision,"
+           "dateval double precision,"
+           "dataval blob"
+           ")"];
+	STAssertTrue(ret, nil);
+
+	/* Insert the test data */
+    ret = [_db executeUpdate: @"INSERT INTO test "
+           "(intval, int64val, stringval, nilval, floatval, doubleval, dateval, dataval)"
+           "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+		   [NSNumber numberWithInt: 42],
+           [NSNumber numberWithLongLong: INT64_MAX],
+           @"test",
+           nil,
+           [NSNumber numberWithFloat: 3.14],
+           [NSNumber numberWithDouble: 3.14159],
+           now,
+           data];
+	STAssertTrue(ret, nil);
+
+	/* Retrieve the data */
+    rs = [_db executeQuery: @"SELECT * FROM test WHERE intval = 42"];
+    STAssertTrue([rs next], @"No rows returned");
+
+    /* NULL value */
+    STAssertTrue([rs isNullForColumn: @"nilval"], @"NULL value not returned.");
+    
+    /* Date value */
+    STAssertEquals([now timeIntervalSince1970], [[rs dateForColumn: @"dateval"] timeIntervalSince1970], @"Date value incorrect.");
+    
+    /* String */
+    STAssertTrue([@"test" isEqual: [rs stringForColumn: @"stringval"]], @"String value incorrect.");
+
+    /* Integer */
+    STAssertEquals(42, [rs intForColumn: @"intval"], @"Integer value incorrect.");
+    
+    /* 64-bit integer value */
+    STAssertEquals(INT64_MAX, [rs bigIntForColumn: @"int64val"], @"64-bit integer value incorrect");
+
+    /* Float */
+    STAssertEquals(3.14f, [rs floatForColumn: @"floatval"], @"Float value incorrect");
+
+    /* Double */
+    STAssertEquals(3.14159, [rs doubleForColumn: @"doubleval"], @"Double value incorrect");
+    
+    /* Data */
+    STAssertTrue([data isEqualToData: [rs dataForColumn: @"dataval"]], @"Data value incorrect");
+}
+
+- (void) testBeginAndRollbackTransaction {
+    STAssertTrue([_db beginTransaction], @"Could not start a transaction");
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a) VALUES (?)", [NSNumber numberWithInt: 42]]), @"Inserting test data failed");
+    STAssertTrue([_db tableExists: @"test"], @"Table was not created");
+    STAssertTrue([_db rollbackTransaction], @"Could not roll back");
+    STAssertFalse([_db tableExists: @"test"], @"Table was not rolled back");
+}
+
+
+- (void) testBeginAndCommitTransaction {
+    STAssertTrue([_db beginTransaction], @"Could not start a transaction");
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a) VALUES (?)", [NSNumber numberWithInt: 42]]), @"Inserting test data failed");
+    STAssertTrue([_db tableExists: @"test"], @"Table was not created");
+    STAssertTrue([_db commitTransaction], @"Could not commit");
+    STAssertTrue([_db tableExists: @"test"], @"Table was not comitted");
+}
+
+- (void) testTableExists {
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a VARCHAR(10), b VARCHAR(20), c BOOL)"], @"Create table failed");
+    STAssertTrue([_db tableExists: @"test"], @"These are not the tables you are looking for");
+    STAssertFalse([_db tableExists: @"not exists"], @"Returned true on non-existent table");
+}
+
+- (void) testLastErrorMessage {
+    STAssertNotNil([_db lastErrorMessage], @"Initial last error message was nil.");
+}
+
 
 @end

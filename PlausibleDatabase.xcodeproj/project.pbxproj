@@ -14,7 +14,11 @@
 		0551CA6B0DCBEC5B00E31E46 /* PLSqliteDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */; };
 		0551CA780DCBED7A00E31E46 /* PLSqliteDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */; };
 		0551CA790DCBED7A00E31E46 /* PLSqliteDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */; };
-		05939C080DCC00D9004FEA21 /* PLTempDirectoryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 05939C070DCC00D9004FEA21 /* PLTempDirectoryTestCase.m */; };
+		058196B20DD16BDC001E992F /* PLSqliteResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 058196AF0DD16BDC001E992F /* PLSqliteResultSet.h */; };
+		058196B30DD16BDC001E992F /* PLSqliteResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B00DD16BDC001E992F /* PLSqliteResultSet.m */; };
+		058196B50DD16BDC001E992F /* PLSqliteResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B00DD16BDC001E992F /* PLSqliteResultSet.m */; };
+		058196B60DD16BDC001E992F /* PLSqliteResultSetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */; };
+		058196D30DD16CAD001E992F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,9 +42,10 @@
 		0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteDatabase.m; sourceTree = "<group>"; };
 		0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteDatabaseTests.m; sourceTree = "<group>"; };
 		0551CA740DCBED7200E31E46 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		058196AF0DD16BDC001E992F /* PLSqliteResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteResultSet.h; sourceTree = "<group>"; };
+		058196B00DD16BDC001E992F /* PLSqliteResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSet.m; sourceTree = "<group>"; };
+		058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSetTests.m; sourceTree = "<group>"; };
 		05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLResultSet.h; sourceTree = "<group>"; };
-		05939C060DCC00D9004FEA21 /* PLTempDirectoryTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTempDirectoryTestCase.h; sourceTree = "<group>"; };
-		05939C070DCC00D9004FEA21 /* PLTempDirectoryTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLTempDirectoryTestCase.m; sourceTree = "<group>"; };
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -54,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				058196D30DD16CAD001E992F /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,20 +87,14 @@
 		05939BF00DCBFFE4004FEA21 /* SQLite */ = {
 			isa = PBXGroup;
 			children = (
+				058196AF0DD16BDC001E992F /* PLSqliteResultSet.h */,
+				058196B00DD16BDC001E992F /* PLSqliteResultSet.m */,
+				058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */,
 				0551CA680DCBEC5B00E31E46 /* PLSqliteDatabase.h */,
 				0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */,
 				0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */,
 			);
 			name = SQLite;
-			sourceTree = "<group>";
-		};
-		05939C050DCC00AD004FEA21 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				05939C060DCC00D9004FEA21 /* PLTempDirectoryTestCase.h */,
-				05939C070DCC00D9004FEA21 /* PLTempDirectoryTestCase.m */,
-			);
-			name = Tests;
 			sourceTree = "<group>";
 		};
 		0867D691FE84028FC02AAC07 /* PlausibleDatabase */ = {
@@ -127,7 +127,6 @@
 				0551CA660DCBEC1500E31E46 /* PLDatabase.h */,
 				05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */,
 				05939BF00DCBFFE4004FEA21 /* SQLite */,
-				05939C050DCC00AD004FEA21 /* Tests */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -168,6 +167,7 @@
 			files = (
 				0551CA670DCBEC1500E31E46 /* PLDatabase.h in Headers */,
 				0551CA6A0DCBEC5B00E31E46 /* PLSqliteDatabase.h in Headers */,
+				058196B20DD16BDC001E992F /* PLSqliteResultSet.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,7 +262,8 @@
 			files = (
 				0551CA780DCBED7A00E31E46 /* PLSqliteDatabaseTests.m in Sources */,
 				0551CA790DCBED7A00E31E46 /* PLSqliteDatabase.m in Sources */,
-				05939C080DCC00D9004FEA21 /* PLTempDirectoryTestCase.m in Sources */,
+				058196B50DD16BDC001E992F /* PLSqliteResultSet.m in Sources */,
+				058196B60DD16BDC001E992F /* PLSqliteResultSetTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0551CA6B0DCBEC5B00E31E46 /* PLSqliteDatabase.m in Sources */,
+				058196B30DD16BDC001E992F /* PLSqliteResultSet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,6 +388,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
 			};

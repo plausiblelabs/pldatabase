@@ -27,15 +27,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 /**
  * Protocol for interacting with an SQL database.
  */
 @protocol PLDatabase
-
-/**
- * Close the database connection. Once closed, the connection may not be re-used.
- */
-- (void) close;
 
 /**
  * Test that the connection is active.
@@ -63,7 +59,13 @@
 - (NSObject<PLResultSet> *) executeQuery: (NSString *) statement, ...;
 
 /**
- * Begin a transaction.
+ * Begin a transaction. This must provide at least 'Read committed' isolation. As
+ * per the SQL standard, the isolation level may be stricter than what has been
+ * requested -- this method only gaurantees the MINIMUM of isolation.
+ *
+ * For more information on SQL standard transaction isolation levels, refer to
+ * PostgreSQL's documentation:
+ *    http://www.postgresql.org/docs/8.3/interactive/transaction-iso.html
  *
  * @return YES on success, NO on failure.
  */
@@ -82,5 +84,12 @@
  * @return YES on success, NO on failure.
  */
 - (BOOL) rollbackTransaction;
+
+/**
+ * Return YES if the given table name exists.
+ *
+ * @return YES if it exists, NO otherwise.
+ */
+- (BOOL) tableExists: (NSString *) tableName;
 
 @end

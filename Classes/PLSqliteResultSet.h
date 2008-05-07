@@ -27,14 +27,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifdef PL_DB_PRIVATE
 
-/* Dependencies */
-#import <Foundation/Foundation.h>
+@interface PLSqliteResultSet : NSObject <PLResultSet> {
+    /** The open database connection. */
+    PLSqliteDatabase *_db;
+    
+    /** The sqlite3 prepared statement. */
+    sqlite3_stmt *_sqlite_stmt;
 
-/* Library Includes */
-#import "PLResultSet.h"
-#import "PLDatabase.h"
+    /** The number of columns in the result. */
+    uint32_t _columnCount;
 
-#import "PLSqliteDatabase.h"
-#import "PLSqliteResultSet.h"
+    /** Cache of column name to column index */
+    NSDictionary *_columnNames;
+}
 
+- (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt;
+
+@end
+
+#endif

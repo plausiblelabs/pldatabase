@@ -27,12 +27,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <sqlite3.h>
+
+extern NSString *PLSqliteException;
+
 @interface PLSqliteDatabase : NSObject <PLDatabase> {
 @private
     /** Path to the database file. */
     NSString *_path;
+    
+    /** Underlying sqlite database reference. */
+    sqlite3 *_sqlite;
 }
 
++ (id) databaseWithPath: (NSString *) dbPath;
+
 - (id) initWithPath: (NSString*) dbPath;
+
+- (BOOL) open;
+
+#ifdef PL_DB_PRIVATE
+- (NSString *) lastErrorMessage;
+#endif
 
 @end
