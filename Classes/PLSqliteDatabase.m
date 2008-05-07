@@ -36,6 +36,17 @@
 /** A generic SQLite exception. */
 NSString *PLSqliteException = @"PLSqliteException";
 
+
+/**
+ * @internal
+ * Implements the last_insert_rowid() SQLite function.
+ */
+static void last_insert_rowid (sqlite3_context *context, int argc, sqlite3_value **argv) {
+    PLSqliteDatabase *db = sqlite3_user_data(context);
+    sqlite3_result_int64(context, [db lastInsertRowId]);
+}
+
+
 @interface PLSqliteDatabase (PLSqliteDatabasePrivate)
 
 - (sqlite3_stmt *) createStatement: (NSString *) statement;
@@ -125,6 +136,9 @@ NSString *PLSqliteException = @"PLSqliteException";
         NSLog(@"Could not set SQLite busy timeout for database '%@': %s", _path, sqlite3_errmsg(_sqlite));
         return NO;
     }
+    
+    /* Load custom functions */
+    sqlite3_create_function(_sqlite, "last_insert_rowid", 0, SQLITE_ANY, self, last_insert_rowid, NULL, NULL);
 
     /* Success */
     return YES;
