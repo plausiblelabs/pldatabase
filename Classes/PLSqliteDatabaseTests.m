@@ -63,6 +63,16 @@
 }
 
 
+- (void) testOpenAndReturnError {
+    NSError *error;
+
+    PLSqliteDatabase *db = [PLSqliteDatabase databaseWithPath: @"/will/fail/with/a/path/that/can/not/be/opened"];
+    STAssertFalse([db openAndReturnError: &error], @"Database was opened, and it should not have been");
+    STAssertNotNil(error, @"Returned error was nil");
+    STAssertTrue([PLDatabaseErrorDomain isEqual: [error domain]], @"Incorrect error domain");
+}
+
+
 - (void) testExecuteUpdate {
     STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a VARCHAR(10), b VARCHAR(20), c BOOL)"], @"Create table failed");
     STAssertTrue([_db tableExists: @"test"], @"Table 'test' not created");

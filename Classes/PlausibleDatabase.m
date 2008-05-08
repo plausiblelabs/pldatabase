@@ -27,30 +27,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
+#import "PlausibleDatabase.h"
 
-extern NSString *PLSqliteException;
+/** PlausibleDatabase Error Domain */
+NSString *PLDatabaseErrorDomain = @"com.plausiblelabs.pldatabase";
 
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
-@private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+/**
+ * @internal
+ * Implementation-private utility methods.
+ */
+@implementation PlausibleDatabase
+
+/**
+ * @internal
+ *
+ * Create a new NSError in the PLDatabaseErrorDomain.
+ *
+ * @param code The error code.
+ * @param localizedDescription A localized error description.
+ * @return A NSError that may be returned to the API caller.
+ */
++ (NSError *) databaseError: (PLDatabaseError) code localizedDescription: (NSString *) localizedDescription {
+    NSDictionary *userInfo;
+
+    /* Create the userInfo dictionary */
+    userInfo = [NSDictionary dictionaryWithObjectsAndKeys: localizedDescription, NSLocalizedDescriptionKey, nil];
+
+    /* Return the NSError */
+    return [NSError errorWithDomain: PLDatabaseErrorDomain code: code userInfo: userInfo];
 }
-
-+ (id) databaseWithPath: (NSString *) dbPath;
-
-- (id) initWithPath: (NSString*) dbPath;
-
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
-
-- (int64_t) lastInsertRowId;
-
-#ifdef PL_DB_PRIVATE
-- (NSString *) lastErrorMessage;
-#endif
 
 @end

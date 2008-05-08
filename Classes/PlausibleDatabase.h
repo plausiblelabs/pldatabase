@@ -38,6 +38,32 @@
 #import "PLSqliteDatabase.h"
 #import "PLSqliteResultSet.h"
 
+/* Error Domain and Codes */
+extern NSString *PLDatabaseErrorDomain;
+
+/**
+ * Database error codes.
+ */
+typedef enum {
+    /** An unknown error has occured. If this
+     * code is received, it is a bug, and should be reported. */
+    PLDatabaseErrorUnknown = 0,
+
+    /** File not found. */
+    PLDatabaseErrorFileNotFound = 1,
+} PLDatabaseError;
+
+#ifdef PL_DB_PRIVATE
+
+@interface PlausibleDatabase : NSObject {
+}
+
++ (NSError *) databaseError: (PLDatabaseError) code localizedDescription: (NSString *) localizedDescription;
+
+@end
+
+#endif /* PL_DB_PRIVATE */
+
 /**
  * @mainpage Plausible Database
  *

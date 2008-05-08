@@ -105,32 +105,59 @@ NSString *PLSqliteException = @"PLSqliteException";
  * @return YES on success, NO on failure.
  */
 - (BOOL) open {
+    NSError *err;
+    BOOL result;
+
+    result = [self openAndReturnError: &err];
+    
+    /* Log the ignored error message */
+    if (result == NO)
+        NSLog(@"Error opening database: %@", err);
+    
+    return result;
+}
+
+
+/**
+ * Opens the database connection, and returns any errors. May
+ * be called once and only once.
+ *
+ * @param A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the database could
+ * not be opened. If no error occurs, this parameter will be left unmodified.
+ * You may specify nil for this parameter, and no error information will be provided.
+ *
+ * @return YES if the database was successfully opened, NO on failure.
+ */
+- (BOOL) openAndReturnError: (NSError **) error {
     int err;
 
     /* Do not call open twice! */
     if (_sqlite != nil)
         [NSException raise: PLSqliteException format: @"Attempted to open already-open SQLite database instance at '%@'. Called -[PLSqliteDatabase open] twice?", _path];
-
+    
     /* Open the database */
     err = sqlite3_open([_path fileSystemRepresentation], &_sqlite);
     if (err != SQLITE_OK) {
-        /* Failed. Log a helpful error. */
-        NSLog(@"Could not open SQLite database at '%@': %s", _path, sqlite3_errmsg(_sqlite));
+        if (error != NULL)
+            *error = [PlausibleDatabase databaseError: PLDatabaseErrorFileNotFound
+                                 localizedDescription: NSLocalizedString(@"The SQLite database file could not be found.", @"")];
         return NO;
     }
-
+    
     /* Set a busy timeout */
     err = sqlite3_busy_timeout(_sqlite, SQLITE_BUSY_TIMEOUT);
     if (err != SQLITE_OK) {
-        /* Failed. Log a helpful error. */
-        NSLog(@"Could not set SQLite busy timeout for database '%@': %s", _path, sqlite3_errmsg(_sqlite));
+        /* This should never happen. */
+        if (error != NULL)
+            *error = [PlausibleDatabase databaseError: PLDatabaseErrorUnknown
+                                 localizedDescription: NSLocalizedString(@"The SQLite database busy timeout could not be set due to an internal error.", @"")];
         return NO;
     }
-
+    
     /* Success */
     return YES;
 }
-
 
 /* from PLDatabase. */
 - (BOOL) goodConnection {
