@@ -226,20 +226,17 @@ NSString *PLSqliteException = @"PLSqliteException";
 }
 
 
-/* from PLDatabase. */
-- (NSObject<PLResultSet> *) executeQuery: (NSString *) statement, ... {
+/* varargs version */
+- (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement args: (va_list) args {
     sqlite3_stmt *sqlite_stmt;
-    va_list ap;
-
+    
     /* Prepare our statement */
-    sqlite_stmt = [self createStatement: statement error: nil];
+    sqlite_stmt = [self createStatement: statement error: error];
     if (sqlite_stmt == nil)
         return nil;
-
+    
     /* Varargs parsing */
-    va_start(ap, statement);
-    [self bindValuesForStatement: sqlite_stmt withArgs: ap];
-    va_end(ap);
+    [self bindValuesForStatement: sqlite_stmt withArgs: args];
     
     /* Create a new PLSqliteResultSet statement.
      *
@@ -247,6 +244,31 @@ NSString *PLSqliteException = @"PLSqliteException";
      * We pass our sqlite3_stmt reference to the PLSqliteResultSet, which now must assume authority for releasing
      * that statement using sqlite3_finalize(). */
     return [[[PLSqliteResultSet alloc] initWithDatabase:self sqliteStmt:sqlite_stmt] autorelease];
+}
+
+
+- (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement, ... {
+    NSObject<PLResultSet> *result;
+    va_list ap;
+
+    va_start(ap, statement);
+    result = [self executeQueryAndReturnError: error statement: statement args: ap];
+    va_end(ap);
+
+    return result;
+}
+
+
+/* from PLDatabase. */
+- (NSObject<PLResultSet> *) executeQuery: (NSString *) statement, ... {
+    NSObject<PLResultSet> *result;
+    va_list ap;
+    
+    va_start(ap, statement);
+    result = [self executeQueryAndReturnError: nil statement: statement args: ap];
+    va_end(ap);
+    
+    return result;
 }
 
 

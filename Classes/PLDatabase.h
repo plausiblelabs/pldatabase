@@ -51,15 +51,15 @@
 /**
  * Execute an update, returning YES on success, NO on failure.
  *
- * @param A pointer to an NSError object variable. If an error occurs, this
- * pointer will contain an error object indicating why the database could
- * not be opened. If no error occurs, this parameter will be left unmodified.
- * You may specify nil for this parameter, and no error information will be provided.
- * 
  * Any arguments should be provided following the statement, and
  * referred to using standard '?' JDBC substitutions
  *
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the database could
+ * not be opened. If no error occurs, this parameter will be left unmodified.
+ * You may specify nil for this parameter, and no error information will be provided.
  * @param statement SQL statement to execute.
+ *
  */
 - (BOOL) executeUpdateAndReturnError: (NSError **) error statement: (NSString *) statement, ...;
 
@@ -72,6 +72,21 @@
  * @param statement SQL statement to execute.
  */
 - (NSObject<PLResultSet> *) executeQuery: (NSString *) statement, ...;
+
+/**
+ * Execute a query, returning a #PLResultSet.
+ *
+ * Any arguments should be provided following the statement, and
+ * referred to using standard '?' JDBC substitutions
+ *
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the database could
+ * not be opened. If no error occurs, this parameter will be left unmodified.
+ * You may specify nil for this parameter, and no error information will be provided.
+ * @param statement SQL statement to execute.
+ */
+- (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement, ...;
+
 
 /**
  * Begin a transaction. This must provide at least 'Read committed' isolation. As
