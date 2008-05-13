@@ -274,20 +274,36 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* from PLDatabase. */
 - (BOOL) beginTransaction {
-    return [self executeUpdate: @"BEGIN DEFERRED"];
+    return [self beginTransactionAndReturnError: nil];
+}
+
+/* from PLDatabase */
+- (BOOL) beginTransactionAndReturnError: (NSError **) error {
+    return [self executeUpdateAndReturnError: error statement: @"BEGIN DEFERRED"];
 }
 
 
 /* from PLDatabase. */
 - (BOOL) commitTransaction {
-    return [self executeUpdate: @"COMMIT"];
+    return [self commitTransactionAndReturnError: nil];
+}
+
+/* from PLDatabase */
+- (BOOL) commitTransactionAndReturnError: (NSError **) error {
+    return [self executeUpdateAndReturnError: error statement: @"COMMIT"];
 }
 
 
 /* from PLDatabase. */
 - (BOOL) rollbackTransaction {
-    return [self executeUpdate: @"ROLLBACK"];
+    return [self rollbackTransactionAndReturnError: nil];
 }
+
+/* from PLDatabase */
+- (BOOL) rollbackTransactionAndReturnError: (NSError **) error {
+    return [self executeUpdateAndReturnError: error statement: @"ROLLBACK"];
+}
+
 
 /* from PLDatabase */
 - (BOOL) tableExists: (NSString *) tableName {

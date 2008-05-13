@@ -55,9 +55,9 @@
  * referred to using standard '?' JDBC substitutions
  *
  * @param error A pointer to an NSError object variable. If an error occurs, this
- * pointer will contain an error object indicating why the database could
- * not be opened. If no error occurs, this parameter will be left unmodified.
- * You may specify nil for this parameter, and no error information will be provided.
+ * pointer will contain an error object indicating why the statement could not be executed.
+ * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * parameter, and no error information will be provided.
  * @param statement SQL statement to execute.
  *
  */
@@ -80,9 +80,9 @@
  * referred to using standard '?' JDBC substitutions
  *
  * @param error A pointer to an NSError object variable. If an error occurs, this
- * pointer will contain an error object indicating why the database could
- * not be opened. If no error occurs, this parameter will be left unmodified.
- * You may specify nil for this parameter, and no error information will be provided.
+ * pointer will contain an error object indicating why the statement could not be executed.
+ * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * parameter, and no error information will be provided.
  * @param statement SQL statement to execute.
  */
 - (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement, ...;
@@ -102,6 +102,25 @@
 - (BOOL) beginTransaction;
 
 /**
+ * Begin a transaction. This must provide at least 'Read committed' isolation. As
+ * per the SQL standard, the isolation level may be stricter than what has been
+ * requested -- this method only gaurantees the MINIMUM of isolation.
+ *
+ * For more information on SQL standard transaction isolation levels, refer to
+ * PostgreSQL's documentation:
+ *    http://www.postgresql.org/docs/8.3/interactive/transaction-iso.html
+ *
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the transaction could not
+ * be started.
+ *
+ * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * parameter, and no error information will be provided.
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) beginTransactionAndReturnError: (NSError **) error;
+
+/**
  * Commit an open transaction.
  *
  * @return YES on success, NO on failure.
@@ -109,11 +128,33 @@
 - (BOOL) commitTransaction;
 
 /**
+ * Commit an open transaction.
+ *
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the transaction could not
+ * be committed.
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) commitTransactionAndReturnError: (NSError **) error;
+
+/**
  * Rollback an open transaction.
  *
  * @return YES on success, NO on failure.
  */
 - (BOOL) rollbackTransaction;
+
+/**
+ * Rollback an open transaction.
+ *
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the transaction could not
+ * be rolled back.
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) rollbackTransactionAndReturnError: (NSError **) error;
 
 /**
  * Return YES if the given table name exists.
