@@ -203,8 +203,9 @@
     STAssertEquals(42, [rs intForColumn: @"b"], @"Did not retrieve expected column");
 }
 
-- (void) testLastErrorMessage {
+- (void) testLastError {
     STAssertNotNil([_db lastErrorMessage], @"Initial last error message was nil.");
+    STAssertEquals(SQLITE_OK, [_db lastErrorCode], @"Initial last error code was not SQLITE_OK");
 }
 
 

@@ -21,11 +21,17 @@
 
 /* Test NSError creation */
 - (void) testDatabaseError {
-    NSError *error = [PlausibleDatabase databaseError: PLDatabaseErrorFileNotFound localizedDescription: @"test"];
+    NSError *error = [PlausibleDatabase errorWithCode: PLDatabaseErrorFileNotFound 
+                                 localizedDescription: @"test"
+                                          vendorError: [NSNumber numberWithInt: 42]
+                                    vendorErrorString: @"native"];
 
     STAssertTrue([PLDatabaseErrorDomain isEqual: [error domain]], @"Domain incorrect");
     STAssertEquals(PLDatabaseErrorFileNotFound, [error code], @"Code incorrect");
     STAssertTrue([@"test" isEqual: [error localizedDescription]], @"Description incorrect");
+
+    STAssertEquals(42, [[[error userInfo] objectForKey: PLDatabaseErrorVendorErrorKey] intValue], @"Native error code incorrect");
+    STAssertTrue([@"native" isEqual: [[error userInfo] objectForKey: PLDatabaseErrorVendorStringKey]], @"Native error string incorrect");
 }
 
 @end

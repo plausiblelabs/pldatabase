@@ -40,6 +40,8 @@
 
 /* Error Domain and Codes */
 extern NSString *PLDatabaseErrorDomain;
+extern NSString *PLDatabaseErrorVendorErrorKey;
+extern NSString *PLDatabaseErrorVendorStringKey;
 
 /**
  * Database error codes.
@@ -58,7 +60,8 @@ typedef enum {
 @interface PlausibleDatabase : NSObject {
 }
 
-+ (NSError *) databaseError: (PLDatabaseError) code localizedDescription: (NSString *) localizedDescription;
++ (NSError *) errorWithCode: (PLDatabaseError) errorCode localizedDescription: (NSString *) localizedDescription 
+                 vendorError: (NSNumber *) vendorError vendorErrorString: (NSString *) vendorErrorString;
 
 @end
 

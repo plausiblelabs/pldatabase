@@ -39,6 +39,8 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 @interface PLSqliteDatabase (PLSqliteDatabasePrivate)
 
+- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode description: (NSString *) localizedDescription;
+
 - (sqlite3_stmt *) createStatement: (NSString *) statement;
 
 - (int) bindValueForParameter: (sqlite3_stmt *) sqlite_stmt withParameter: (int) parameterIndex withValue: (id) value;
@@ -46,6 +48,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 - (void) bindValuesForStatement: (sqlite3_stmt *) sqlite_stmt withArgs: (va_list) args;
 
 @end
+
 
 /**
  * SQLite #PLDatabase implementation.
@@ -105,16 +108,7 @@ NSString *PLSqliteException = @"PLSqliteException";
  * @return YES on success, NO on failure.
  */
 - (BOOL) open {
-    NSError *err;
-    BOOL result;
-
-    result = [self openAndReturnError: &err];
-    
-    /* Log the ignored error message */
-    if (result == NO)
-        NSLog(@"Error opening database: %@", err);
-    
-    return result;
+    return [self openAndReturnError: nil];
 }
 
 
@@ -139,9 +133,9 @@ NSString *PLSqliteException = @"PLSqliteException";
     /* Open the database */
     err = sqlite3_open([_path fileSystemRepresentation], &_sqlite);
     if (err != SQLITE_OK) {
-        if (error != NULL)
-            *error = [PlausibleDatabase databaseError: PLDatabaseErrorFileNotFound
-                                 localizedDescription: NSLocalizedString(@"The SQLite database file could not be found.", @"")];
+        [self populateError: error 
+              withErrorCode: PLDatabaseErrorFileNotFound 
+                description: NSLocalizedString(@"The SQLite database file could not be found.", @"")];
         return NO;
     }
     
@@ -149,9 +143,9 @@ NSString *PLSqliteException = @"PLSqliteException";
     err = sqlite3_busy_timeout(_sqlite, SQLITE_BUSY_TIMEOUT);
     if (err != SQLITE_OK) {
         /* This should never happen. */
-        if (error != NULL)
-            *error = [PlausibleDatabase databaseError: PLDatabaseErrorUnknown
-                                 localizedDescription: NSLocalizedString(@"The SQLite database busy timeout could not be set due to an internal error.", @"")];
+        [self populateError: error
+              withErrorCode: PLDatabaseErrorUnknown
+                description: NSLocalizedString(@"The SQLite database busy timeout could not be set due to an internal error.", @"")];
         return NO;
     }
     
@@ -273,6 +267,14 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /**
  * @internal
+ * Return the last error code encountered by the underlying sqlite database.
+ */
+- (int) lastErrorCode {
+    return sqlite3_errcode(_sqlite);
+}
+
+/**
+ * @internal
  * Return the last error message encountered by the underlying sqlite database.
  */
 - (NSString *) lastErrorMessage {
@@ -282,6 +284,35 @@ NSString *PLSqliteException = @"PLSqliteException";
 @end
 
 @implementation PLSqliteDatabase (PLSqliteDatabasePrivate)
+
+/**
+ * @internal
+ *
+ * Populate an NSError (if not nil), otherwise, log it.
+ *
+ * @param error Pointer to NSError instance to populate. If nil, the error message will be logged instead.
+ * @param errorCode A PLDatabaseError error code.
+ * @param description A localized description of the error message.
+ */
+- (void) populateError: (NSError **) error withErrorCode: (PLDatabaseError) errorCode
+  description: (NSString *) localizedDescription
+{
+    NSString *vendorString = [self lastErrorMessage];
+    NSNumber *vendorError = [NSNumber numberWithInt: [self lastErrorCode]];
+    NSError *result;
+
+    /* Create the error */
+    result = [PlausibleDatabase errorWithCode: errorCode
+                        localizedDescription: localizedDescription
+                             vendorError: vendorError
+                           vendorErrorString: vendorString];    
+
+    /* Either log it or return it */
+    if (error == nil)
+        NSLog(@"A SQLite database error occurred, and was ignored by the caller: %@", result);
+    else
+        *error = result;
+}
 
 /**
  * @internal

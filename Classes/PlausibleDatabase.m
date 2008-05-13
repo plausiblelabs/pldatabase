@@ -29,8 +29,16 @@
 
 #import "PlausibleDatabase.h"
 
-/** PlausibleDatabase Error Domain */
+/** PlausibleDatabase NSError Domain */
 NSString *PLDatabaseErrorDomain = @"com.plausiblelabs.pldatabase";
+
+/** Key to retrieve the native database error
+  * code from an NSError in the PLDatabaseErrorDomain, as an NSNumber */
+NSString *PLDatabaseErrorVendorErrorKey = @"com.plausiblelabs.pldatabase.error.vendor.code";
+
+/** Key to retrieve the native database error
+ * string from an NSError in the PLDatabaseErrorDomain, as an NSString */
+NSString *PLDatabaseErrorVendorStringKey = @"com.plausiblelabs.pldatabase.error.vendor.string";
 
 /**
  * @internal
@@ -43,18 +51,26 @@ NSString *PLDatabaseErrorDomain = @"com.plausiblelabs.pldatabase";
  *
  * Create a new NSError in the PLDatabaseErrorDomain.
  *
- * @param code The error code.
+ * @param errorCode The error code.
  * @param localizedDescription A localized error description.
+ * @param nativeCode The native SQL driver's error code.
+ * @param nativeString The native SQL driver's non-localized error string.
  * @return A NSError that may be returned to the API caller.
  */
-+ (NSError *) databaseError: (PLDatabaseError) code localizedDescription: (NSString *) localizedDescription {
++ (NSError *) errorWithCode: (PLDatabaseError) errorCode localizedDescription: (NSString *) localizedDescription 
+            vendorError: (NSNumber *) vendorError vendorErrorString: (NSString *) vendorErrorString 
+{
     NSDictionary *userInfo;
 
     /* Create the userInfo dictionary */
-    userInfo = [NSDictionary dictionaryWithObjectsAndKeys: localizedDescription, NSLocalizedDescriptionKey, nil];
+    userInfo = [NSDictionary dictionaryWithObjectsAndKeys: 
+                localizedDescription, NSLocalizedDescriptionKey,
+                vendorError, PLDatabaseErrorVendorErrorKey,
+                vendorErrorString, PLDatabaseErrorVendorStringKey,
+                nil];
 
     /* Return the NSError */
-    return [NSError errorWithDomain: PLDatabaseErrorDomain code: code userInfo: userInfo];
+    return [NSError errorWithDomain: PLDatabaseErrorDomain code: errorCode userInfo: userInfo];
 }
 
 @end
