@@ -39,9 +39,10 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 @interface PLSqliteDatabase (PLSqliteDatabasePrivate)
 
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode description: (NSString *) localizedDescription;
+- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
+           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
 
-- (sqlite3_stmt *) createStatement: (NSString *) statement;
+- (sqlite3_stmt *) createStatement: (NSString *) statement error: (NSError **) error;
 
 - (int) bindValueForParameter: (sqlite3_stmt *) sqlite_stmt withParameter: (int) parameterIndex withValue: (id) value;
 
@@ -135,7 +136,8 @@ NSString *PLSqliteException = @"PLSqliteException";
     if (err != SQLITE_OK) {
         [self populateError: error 
               withErrorCode: PLDatabaseErrorFileNotFound 
-                description: NSLocalizedString(@"The SQLite database file could not be found.", @"")];
+                description: NSLocalizedString(@"The SQLite database file could not be found.", @"")
+                queryString: nil];
         return NO;
     }
     
@@ -145,7 +147,8 @@ NSString *PLSqliteException = @"PLSqliteException";
         /* This should never happen. */
         [self populateError: error
               withErrorCode: PLDatabaseErrorUnknown
-                description: NSLocalizedString(@"The SQLite database busy timeout could not be set due to an internal error.", @"")];
+                description: NSLocalizedString(@"The SQLite database busy timeout could not be set due to an internal error.", @"")
+                queryString: nil];
         return NO;
     }
     
@@ -162,41 +165,64 @@ NSString *PLSqliteException = @"PLSqliteException";
     return YES;
 }
 
-
-/* from PLDatabase. */
-- (BOOL) executeUpdate: (NSString *) statement, ... {
+/* varargs version */
+- (BOOL) executeUpdateAndReturnError: (NSError **) error statement: (NSString *) statement args: (va_list) args {
     sqlite3_stmt *sqlite_stmt;
-    va_list ap;
     int ret;
-
+    
     /* Prepare our statement */
-    sqlite_stmt = [self createStatement: statement];
+    sqlite_stmt = [self createStatement: statement error: error];
     if (sqlite_stmt == nil)
         return NO;
-
-    /* Varargs parsing */
-    va_start(ap, statement);
-    [self bindValuesForStatement: sqlite_stmt withArgs: ap];
-    va_end(ap);
-
+    
+    /* Parameter binding */
+    [self bindValuesForStatement: sqlite_stmt withArgs: args];
+    
     /* Call sqlite3_step() to run the virtual machine, and finalize the statement */
     ret = sqlite3_step(sqlite_stmt);
     sqlite3_finalize(sqlite_stmt);
-
+    
     /* On success, return */
     if (ret == SQLITE_DONE)
         return YES;
-
+    
     /* Programmer error */
     if (ret == SQLITE_ROW) {
         /* Since the SQL being executed is not a SELECT statement, we assume no data will be returned. */
         [NSException raise: PLSqliteException format: @"SQLite -[PLSqliteDatabase executeUpdate:] query '%@' on database '%@' "
          "returned result set. Perhaps the developer provided SELECT query to -[db executeUpdate:]?)", statement, _path];
     }
-
+    
     /* Query failed */
-    NSLog(@"SQLite query '%@' on database '%@' failed: %@", statement, _path, [self lastErrorMessage]);
+    [self populateError: error
+          withErrorCode: PLDatabaseErrorQueryFailed
+            description: NSLocalizedString(@"An error occurred executing an SQL update.", @"")
+            queryString: statement];
     return NO;
+}
+
+/* from PLDatabase. */
+- (BOOL) executeUpdate: (NSString *) statement, ... {
+    BOOL ret;
+    va_list ap;
+    
+    va_start(ap, statement);
+    ret = [self executeUpdateAndReturnError: nil statement: statement args: ap];
+    va_end(ap);
+    
+    return ret;
+}
+
+/* from PLDatabase. */
+- (BOOL) executeUpdateAndReturnError: (NSError **) error statement: (NSString *) statement, ... {
+    BOOL ret;
+    va_list ap;
+
+    va_start(ap, statement);
+    ret = [self executeUpdateAndReturnError: error statement: statement args: ap];
+    va_end(ap);
+
+    return ret;
 }
 
 
@@ -206,7 +232,7 @@ NSString *PLSqliteException = @"PLSqliteException";
     va_list ap;
 
     /* Prepare our statement */
-    sqlite_stmt = [self createStatement: statement];
+    sqlite_stmt = [self createStatement: statement error: nil];
     if (sqlite_stmt == nil)
         return nil;
 
@@ -288,14 +314,15 @@ NSString *PLSqliteException = @"PLSqliteException";
 /**
  * @internal
  *
- * Populate an NSError (if not nil), otherwise, log it.
+ * Populate an NSError (if not nil) and log it.
  *
  * @param error Pointer to NSError instance to populate. If nil, the error message will be logged instead.
  * @param errorCode A PLDatabaseError error code.
  * @param description A localized description of the error message.
+ * @param queryString The optional SQL query which caused the error.
  */
 - (void) populateError: (NSError **) error withErrorCode: (PLDatabaseError) errorCode
-  description: (NSString *) localizedDescription
+           description: (NSString *) localizedDescription queryString: (NSString *) queryString
 {
     NSString *vendorString = [self lastErrorMessage];
     NSNumber *vendorError = [NSNumber numberWithInt: [self lastErrorCode]];
@@ -304,13 +331,15 @@ NSString *PLSqliteException = @"PLSqliteException";
     /* Create the error */
     result = [PlausibleDatabase errorWithCode: errorCode
                         localizedDescription: localizedDescription
-                             vendorError: vendorError
+                                 queryString: queryString
+                                 vendorError: vendorError
                            vendorErrorString: vendorString];    
 
-    /* Either log it or return it */
-    if (error == nil)
-        NSLog(@"A SQLite database error occurred, and was ignored by the caller: %@", result);
-    else
+    /* Log it and optionally return it */
+    NSLog(@"A SQLite database error occurred on database '%@': %@ (SQLite #%@: %@) (query: '%@')", 
+          _path, result, vendorError, vendorString, queryString != nil ? queryString : @"<none>");
+
+    if (error != nil)
         *error = result;
 }
 
@@ -321,7 +350,7 @@ NSString *PLSqliteException = @"PLSqliteException";
  * MEMORY OWNERSHIP WARNING:
  * The returned statement is owned by the caller, and MUST be free'd using sqlite3_finalize().
  */
-- (sqlite3_stmt *) createStatement: (NSString *) statement {
+- (sqlite3_stmt *) createStatement: (NSString *) statement error: (NSError **) error {
     sqlite3_stmt *sqlite_stmt;
     const char *unused;
     int ret;
@@ -331,13 +360,19 @@ NSString *PLSqliteException = @"PLSqliteException";
     
     /* Prepare failed */
     if (ret != SQLITE_OK) {
-        NSLog(@"Could not prepare statement '%@' for SQLite database at '%@': %s", statement, _path, sqlite3_errmsg(_sqlite));
+        [self populateError: error
+              withErrorCode: PLDatabaseErrorInvalidStatement
+                description: NSLocalizedString(@"An error occured parsing the provided SQL statement.", @"")
+                queryString: statement];
         return nil;
     }
     
     /* Multiple statements were provided */
     if (*unused != '\0') {
-        NSLog(@"Multiple statements '%@' were provided for single-statement preparation SQLite database at '%@'", statement, _path);
+        [self populateError: error
+              withErrorCode: PLDatabaseErrorInvalidStatement
+                description: NSLocalizedString(@"Multiple SQL statements were provided for a single query.", @"")
+                queryString: statement];
         return nil;
     }
 

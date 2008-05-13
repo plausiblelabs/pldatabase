@@ -23,6 +23,7 @@
 - (void) testDatabaseError {
     NSError *error = [PlausibleDatabase errorWithCode: PLDatabaseErrorFileNotFound 
                                  localizedDescription: @"test"
+                                          queryString: @"query"
                                           vendorError: [NSNumber numberWithInt: 42]
                                     vendorErrorString: @"native"];
 
@@ -30,6 +31,8 @@
     STAssertEquals(PLDatabaseErrorFileNotFound, [error code], @"Code incorrect");
     STAssertTrue([@"test" isEqual: [error localizedDescription]], @"Description incorrect");
 
+    STAssertTrue([@"query" isEqual: [[error userInfo] objectForKey: PLDatabaseErrorQueryStringKey]], @"Query string incorrect");
+    
     STAssertEquals(42, [[[error userInfo] objectForKey: PLDatabaseErrorVendorErrorKey] intValue], @"Native error code incorrect");
     STAssertTrue([@"native" isEqual: [[error userInfo] objectForKey: PLDatabaseErrorVendorStringKey]], @"Native error string incorrect");
 }

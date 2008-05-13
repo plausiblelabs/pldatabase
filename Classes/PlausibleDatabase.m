@@ -32,6 +32,9 @@
 /** PlausibleDatabase NSError Domain */
 NSString *PLDatabaseErrorDomain = @"com.plausiblelabs.pldatabase";
 
+/** Key to retrieve the optionally provided SQL query which caused the error. */
+NSString *PLDatabaseErrorQueryStringKey = @"com.plausiblelabs.pldatabase.error.query.string";
+
 /** Key to retrieve the native database error
   * code from an NSError in the PLDatabaseErrorDomain, as an NSNumber */
 NSString *PLDatabaseErrorVendorErrorKey = @"com.plausiblelabs.pldatabase.error.vendor.code";
@@ -53,22 +56,28 @@ NSString *PLDatabaseErrorVendorStringKey = @"com.plausiblelabs.pldatabase.error.
  *
  * @param errorCode The error code.
  * @param localizedDescription A localized error description.
+ * @param queryString The optional query which caused the error.
  * @param nativeCode The native SQL driver's error code.
  * @param nativeString The native SQL driver's non-localized error string.
  * @return A NSError that may be returned to the API caller.
  */
 + (NSError *) errorWithCode: (PLDatabaseError) errorCode localizedDescription: (NSString *) localizedDescription 
-            vendorError: (NSNumber *) vendorError vendorErrorString: (NSString *) vendorErrorString 
+                queryString: (NSString *) queryString vendorError: (NSNumber *) vendorError
+                vendorErrorString: (NSString *) vendorErrorString 
 {
-    NSDictionary *userInfo;
+    NSMutableDictionary *userInfo;
 
     /* Create the userInfo dictionary */
-    userInfo = [NSDictionary dictionaryWithObjectsAndKeys: 
+    userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys: 
                 localizedDescription, NSLocalizedDescriptionKey,
                 vendorError, PLDatabaseErrorVendorErrorKey,
                 vendorErrorString, PLDatabaseErrorVendorStringKey,
                 nil];
-
+    
+    /* Optionally insert the query string. */
+    if (queryString != nil)
+        [userInfo setObject: queryString forKey: PLDatabaseErrorQueryStringKey];
+    
     /* Return the NSError */
     return [NSError errorWithDomain: PLDatabaseErrorDomain code: errorCode userInfo: userInfo];
 }

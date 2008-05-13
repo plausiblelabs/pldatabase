@@ -40,6 +40,7 @@
 
 /* Error Domain and Codes */
 extern NSString *PLDatabaseErrorDomain;
+extern NSString *PLDatabaseErrorQueryStringKey;
 extern NSString *PLDatabaseErrorVendorErrorKey;
 extern NSString *PLDatabaseErrorVendorStringKey;
 
@@ -53,6 +54,12 @@ typedef enum {
 
     /** File not found. */
     PLDatabaseErrorFileNotFound = 1,
+    
+    /** An SQL query failed. */
+    PLDatabaseErrorQueryFailed = 2,
+    
+    /** The provided SQL statement was invalid. */
+    PLDatabaseErrorInvalidStatement = 3,
 } PLDatabaseError;
 
 #ifdef PL_DB_PRIVATE
@@ -61,6 +68,7 @@ typedef enum {
 }
 
 + (NSError *) errorWithCode: (PLDatabaseError) errorCode localizedDescription: (NSString *) localizedDescription 
+                queryString: (NSString *) queryString
                  vendorError: (NSNumber *) vendorError vendorErrorString: (NSString *) vendorErrorString;
 
 @end
