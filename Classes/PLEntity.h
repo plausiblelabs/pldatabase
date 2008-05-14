@@ -29,7 +29,7 @@
 
 
 /**
- * Represents a database entity.
+ * Represents a managed database entity.
  */
 @protocol PLEntity
 
