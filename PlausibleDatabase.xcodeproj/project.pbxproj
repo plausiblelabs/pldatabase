@@ -20,6 +20,8 @@
 		053D38050DDAAB19009D4EAF /* PLEntityDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D38000DDAAB19009D4EAF /* PLEntityDefinition.m */; };
 		053D382D0DDAADFD009D4EAF /* PLEntityDefinitionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D382C0DDAADFD009D4EAF /* PLEntityDefinitionTests.m */; };
 		053D38870DDADCB2009D4EAF /* PLEntityTransactionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D38860DDADCB2009D4EAF /* PLEntityTransactionTests.m */; };
+		053D38A20DDAE657009D4EAF /* OCMock.framework in Copy OCMock */ = {isa = PBXBuildFile; fileRef = 053D389F0DDAE64B009D4EAF /* OCMock.framework */; };
+		053D38A80DDAE663009D4EAF /* OCMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053D389F0DDAE64B009D4EAF /* OCMock.framework */; };
 		0551CA540DCBEB5000E31E46 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */; };
 		0551CA560DCBEB5E00E31E46 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA550DCBEB5E00E31E46 /* Foundation.framework */; };
 		0551CA780DCBED7A00E31E46 /* PLSqliteDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */; };
@@ -58,6 +60,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		053D38F80DDAE855009D4EAF /* Copy OCMock */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				053D38A20DDAE657009D4EAF /* OCMock.framework in Copy OCMock */,
+			);
+			name = "Copy OCMock";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabase.m; sourceTree = "<group>"; };
 		051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabaseTests.m; sourceTree = "<group>"; };
@@ -74,6 +90,7 @@
 		053D38000DDAAB19009D4EAF /* PLEntityDefinition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLEntityDefinition.m; sourceTree = "<group>"; };
 		053D382C0DDAADFD009D4EAF /* PLEntityDefinitionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLEntityDefinitionTests.m; sourceTree = "<group>"; };
 		053D38860DDADCB2009D4EAF /* PLEntityTransactionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLEntityTransactionTests.m; sourceTree = "<group>"; };
+		053D389F0DDAE64B009D4EAF /* OCMock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCMock.framework; sourceTree = "<group>"; };
 		0551CA4B0DCBE9F600E31E46 /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551CA4C0DCBE9F600E31E46 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -105,6 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				053D38A80DDAE663009D4EAF /* OCMock.framework in Frameworks */,
 				05CD55D60DDAD65F004448D9 /* libpldatabase.a in Frameworks */,
 				058196D30DD16CAD001E992F /* libsqlite3.dylib in Frameworks */,
 			);
@@ -173,6 +191,14 @@
 			name = Entity;
 			sourceTree = "<group>";
 		};
+		053D389E0DDAE62B009D4EAF /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				053D389F0DDAE64B009D4EAF /* OCMock.framework */,
+			);
+			path = Dependencies;
+			sourceTree = "<group>";
+		};
 		05939BF00DCBFFE4004FEA21 /* SQLite */ = {
 			isa = PBXGroup;
 			children = (
@@ -222,6 +248,7 @@
 				08FB77AEFE84172EC02AAC07 /* Classes */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
 				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				053D389E0DDAE62B009D4EAF /* Dependencies */,
 				034768DFFF38A50411DB9C8B /* Products */,
 				0551CA4C0DCBE9F600E31E46 /* Tests-Info.plist */,
 				0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */,
@@ -310,6 +337,7 @@
 			buildConfigurationList = 0551CA500DCBE9F700E31E46 /* Build configuration list for PBXNativeTarget "Tests" */;
 			buildPhases = (
 				0551CA460DCBE9F600E31E46 /* Resources */,
+				053D38F80DDAE855009D4EAF /* Copy OCMock */,
 				0551CA470DCBE9F600E31E46 /* Sources */,
 				0551CA480DCBE9F600E31E46 /* Frameworks */,
 				0551CA490DCBE9F600E31E46 /* ShellScript */,
@@ -470,7 +498,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"\"$(SRCROOT)/Dependencies\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -501,7 +532,10 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"\"$(SRCROOT)/Dependencies\"",
+				);
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_MODEL_TUNING = G5;

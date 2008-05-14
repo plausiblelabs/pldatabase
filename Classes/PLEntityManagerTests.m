@@ -70,4 +70,5 @@
     STAssertNotNil(entityManager, @"Could not initialize entity manager");
 }
 
+
 @end

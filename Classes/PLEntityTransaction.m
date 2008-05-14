@@ -35,6 +35,26 @@
  */
 @implementation PLEntityTransaction
 
+/**
+ * @internal
+ * Initialize with the given transaction manager.
+ */
+- (id) initWithEntityManager: (PLEntityManager *) entityManager {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    _entityManager = [entityManager retain];
+
+    return self;
+}
+
+
+- (void) dealloc {
+    [_entityManager release];
+
+    [super dealloc];
+}
+
 
 /**
  * Begin a transaction. This must provide at least 'Read committed' isolation. As

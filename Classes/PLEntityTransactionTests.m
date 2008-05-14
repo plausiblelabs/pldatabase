@@ -28,14 +28,78 @@
  */
 
 #import <SenTestingKit/SenTestingKit.h>
+#import <OCMock/OCMock.h>
 
 #import "PlausibleDatabase.h"
 
 @interface PLEntityTransactionTests : SenTestCase {
 @private
+    OCMockObject *_mockDB;
+    PLEntityTransaction *_tx;
 }
 @end
 
+
 @implementation PLEntityTransactionTests
+
+- (void) setUp {
+    PLEntityManager *entityManager;
+
+    /* Create the mock database */
+    _mockDB = [[OCMockObject mockForProtocol:@protocol(PLDatabase)] retain];
+
+    /* Create the entity manager */
+    PLSqliteEntityDialect *dialect = [[[PLSqliteEntityDialect alloc] init] autorelease];
+    entityManager = [[[PLEntityManager alloc] initWithDatabase: (NSObject<PLDatabase> *) _mockDB entityDialect: dialect] autorelease];
+
+    /* Create a transaction */
+    _tx = [[PLEntityTransaction alloc] initWithEntityManager: (PLEntityManager *) entityManager];
+}
+
+- (void) tearDown {
+    [_tx release];
+    [_mockDB release];
+}
+
+- (void) testInit {
+    PLEntityTransaction *tx;
+    OCMockObject *manager;
+    
+    /* Create the mock manager */
+    manager = [OCMockObject mockForClass: [PLEntityManager class]];    
+
+    /* Set up an entity transaction */
+    tx = [[[PLEntityTransaction alloc] initWithEntityManager: (PLEntityManager *) manager] autorelease];
+    STAssertNotNil(tx, @"Could not initialize the transaction instance");
+}
+
+
+/*
+ * For begin, commit, and rollback, we abuse the shared database connection to validate
+ * transaction state.
+ */
+- (void) testBegin {
+    BOOL yes = YES;
+    NSValue *yesValue = [NSValue value: &yes withObjCType: @encode(BOOL)];
+    
+    [[[_mockDB expect] andReturnValue: yesValue] beginTransactionAndReturnError: (NSError **) OCMOCK_ANY];
+    STAssertTrue([_tx begin], @"Transaction was not started?");
+
+    [_mockDB verify];
+}
+
+
+- (void) testCommit {
+    /* Configure the mock */
+    
+    
+    [_tx begin];
+//    STAssertTrue([_tx commit], @"Could not commit transaction -- was a transaction open?");
+}
+
+
+- (void) testRollback {
+}
+
 
 @end

@@ -27,8 +27,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+// Forward-declare the entity manager
+@class PLEntityManager;
+
 @interface PLEntityTransaction : NSObject {
+@private
+    PLEntityManager *_entityManager;
 }
+
+/* Transactions should only be created by the PLEntityManager */
+#if PL_DB_PRIVATE
+- (id) initWithEntityManager: (PLEntityManager *) entityManager;
+#endif
 
 - (BOOL) begin;
 - (BOOL) beginAndReturnError: (NSError **) error;
