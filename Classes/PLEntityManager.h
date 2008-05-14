@@ -28,7 +28,10 @@
  */
 
 @interface PLEntityManager : NSObject {
-
+@private
+    NSObject<PLDatabase> *_db;
 }
+
+- (id) initWithDatabase: (NSObject<PLDatabase> *) database; 
 
 @end

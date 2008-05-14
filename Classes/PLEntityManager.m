@@ -31,4 +31,20 @@
 
 @implementation PLEntityManager
 
+- (id) initWithDatabase: (NSObject<PLDatabase> *) database {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    _db = [self retain];
+
+    return self;
+}
+
+
+- (void) dealloc {
+    [_db release];
+
+    [super dealloc];
+}
+
 @end
