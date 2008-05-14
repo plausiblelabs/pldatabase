@@ -29,6 +29,96 @@
 
 #import "PlausibleDatabase.h"
 
+/**
+ * The PLEntityTransaction is used to control transactions on its enclosing
+ * PLEntityManager.
+ */
 @implementation PLEntityTransaction
+
+
+/**
+ * Begin a transaction. This must provide at least 'Read committed' isolation. As
+ * per the SQL standard, the isolation level may be stricter than what has been
+ * requested -- this method only gaurantees the MINIMUM of isolation.
+ *
+ * For more information on SQL standard transaction isolation levels, refer to
+ * PostgreSQL's documentation:
+ *    http://www.postgresql.org/docs/8.3/interactive/transaction-iso.html
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) begin {
+    return [self beginAndReturnError: nil];
+}
+
+
+/**
+ * Begin a transaction. This must provide at least 'Read committed' isolation. As
+ * per the SQL standard, the isolation level may be stricter than what has been
+ * requested -- this method only gaurantees the MINIMUM of isolation.
+ *
+ * For more information on SQL standard transaction isolation levels, refer to
+ * PostgreSQL's documentation:
+ *    http://www.postgresql.org/docs/8.3/interactive/transaction-iso.html
+ *
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the transaction could not
+ * be started.
+ *
+ * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * parameter, and no error information will be provided.
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) beginAndReturnError: (NSError **) error {
+    return NO; // XXX TODO
+}
+
+
+/**
+ * Commit an open transaction.
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) commit {
+    return [self commitAndReturnError: nil];
+}
+
+
+/**
+ * Commit an open transaction.
+ *
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the transaction could not
+ * be committed.
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) commitAndReturnError: (NSError **) error {
+    return NO; // XXX TODO
+}
+
+
+/**
+ * Rollback an open transaction.
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) rollback {
+    return [self rollbackAndReturnError: nil];
+}
+
+
+/**
+ * Rollback an open transaction.
+ *
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the transaction could not
+ * be rolled back.
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) rollbackAndReturnError: (NSError **) error {
+    return NO; // XXX TODO
+}
 
 @end

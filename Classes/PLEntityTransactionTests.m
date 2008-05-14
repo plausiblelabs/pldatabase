@@ -27,18 +27,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-@interface PLEntityTransaction : NSObject {
+#import <SenTestingKit/SenTestingKit.h>
+
+#import "PlausibleDatabase.h"
+
+@interface PLEntityTransactionTests : SenTestCase {
+@private
 }
+@end
 
-- (BOOL) begin;
-- (BOOL) beginAndReturnError: (NSError **) error;
-
-
-- (BOOL) commit;
-- (BOOL) commitAndReturnError: (NSError **) error;
-
-
-- (BOOL) rollback;
-- (BOOL) rollbackAndReturnError: (NSError **) error;
+@implementation PLEntityTransactionTests
 
 @end
