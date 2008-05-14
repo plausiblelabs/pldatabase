@@ -11,6 +11,12 @@
 		051D15590DD36FAB0083CC76 /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
 		051D156F0DD375060083CC76 /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
 		051D157C0DD377F00083CC76 /* PlausibleDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */; };
+		053D37580DDA9E2A009D4EAF /* PLEntity.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D37570DDA9E2A009D4EAF /* PLEntity.h */; };
+		053D375B0DDAA049009D4EAF /* PLSqliteEntityDialect.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D37590DDAA049009D4EAF /* PLSqliteEntityDialect.h */; };
+		053D375C0DDAA049009D4EAF /* PLSqliteEntityDialect.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D375A0DDAA049009D4EAF /* PLSqliteEntityDialect.m */; };
+		053D375D0DDAA049009D4EAF /* PLSqliteEntityDialect.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D37590DDAA049009D4EAF /* PLSqliteEntityDialect.h */; };
+		053D375E0DDAA049009D4EAF /* PLSqliteEntityDialect.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D375A0DDAA049009D4EAF /* PLSqliteEntityDialect.m */; };
+		053D375F0DDAA049009D4EAF /* PLSqliteEntityDialect.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D375A0DDAA049009D4EAF /* PLSqliteEntityDialect.m */; };
 		0551CA540DCBEB5000E31E46 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */; };
 		0551CA560DCBEB5E00E31E46 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA550DCBEB5E00E31E46 /* Foundation.framework */; };
 		0551CA670DCBEC1500E31E46 /* PLDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA660DCBEC1500E31E46 /* PLDatabase.h */; };
@@ -47,6 +53,10 @@
 /* Begin PBXFileReference section */
 		051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabase.m; sourceTree = "<group>"; };
 		051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabaseTests.m; sourceTree = "<group>"; };
+		053D37570DDA9E2A009D4EAF /* PLEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLEntity.h; sourceTree = "<group>"; };
+		053D37590DDAA049009D4EAF /* PLSqliteEntityDialect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteEntityDialect.h; sourceTree = "<group>"; };
+		053D375A0DDAA049009D4EAF /* PLSqliteEntityDialect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteEntityDialect.m; sourceTree = "<group>"; };
+		053D37600DDAA061009D4EAF /* PLEntityDialect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLEntityDialect.h; sourceTree = "<group>"; };
 		0551CA4B0DCBE9F600E31E46 /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551CA4C0DCBE9F600E31E46 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -108,6 +118,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		053D37550DDA9A68009D4EAF /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				053D37570DDA9E2A009D4EAF /* PLEntity.h */,
+				053D37590DDAA049009D4EAF /* PLSqliteEntityDialect.h */,
+				053D375A0DDAA049009D4EAF /* PLSqliteEntityDialect.m */,
+				053D37600DDAA061009D4EAF /* PLEntityDialect.h */,
+			);
+			name = Entity;
+			sourceTree = "<group>";
+		};
 		05939BF00DCBFFE4004FEA21 /* SQLite */ = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +168,7 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				053D37550DDA9A68009D4EAF /* Entity */,
 				051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */,
 				051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */,
 				0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */,
@@ -191,6 +213,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				053D375D0DDAA049009D4EAF /* PLSqliteEntityDialect.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,6 +224,8 @@
 				0551CA670DCBEC1500E31E46 /* PLDatabase.h in Headers */,
 				0551CA6A0DCBEC5B00E31E46 /* PLSqliteDatabase.h in Headers */,
 				058196B20DD16BDC001E992F /* PLSqliteResultSet.h in Headers */,
+				053D37580DDA9E2A009D4EAF /* PLEntity.h in Headers */,
+				053D375B0DDAA049009D4EAF /* PLSqliteEntityDialect.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +343,7 @@
 				058196B60DD16BDC001E992F /* PLSqliteResultSetTests.m in Sources */,
 				051D156F0DD375060083CC76 /* PlausibleDatabase.m in Sources */,
 				051D157C0DD377F00083CC76 /* PlausibleDatabaseTests.m in Sources */,
+				053D375F0DDAA049009D4EAF /* PLSqliteEntityDialect.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,6 +354,7 @@
 				0581974E0DD17D03001E992F /* PLSqliteDatabase.m in Sources */,
 				0581974F0DD17D04001E992F /* PLSqliteResultSet.m in Sources */,
 				051D15590DD36FAB0083CC76 /* PlausibleDatabase.m in Sources */,
+				053D375E0DDAA049009D4EAF /* PLSqliteEntityDialect.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,6 +365,7 @@
 				0551CA6B0DCBEC5B00E31E46 /* PLSqliteDatabase.m in Sources */,
 				058196B30DD16BDC001E992F /* PLSqliteResultSet.m in Sources */,
 				051D15580DD36FAB0083CC76 /* PlausibleDatabase.m in Sources */,
+				053D375C0DDAA049009D4EAF /* PLSqliteEntityDialect.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

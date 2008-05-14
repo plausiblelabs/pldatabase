@@ -38,6 +38,11 @@
 #import "PLSqliteDatabase.h"
 #import "PLSqliteResultSet.h"
 
+#import "PLEntity.h"
+#import "PLEntityDialect.h"
+
+#import "PLSqliteEntityDialect.h"
+
 /* Error Domain and Codes */
 extern NSString *PLDatabaseErrorDomain;
 extern NSString *PLDatabaseErrorQueryStringKey;
