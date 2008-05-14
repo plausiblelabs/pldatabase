@@ -27,13 +27,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Cocoa/Cocoa.h>
-
-
 @interface PLEntityField : NSObject {
+@private
+    /** Database column name */
+    NSString *_columnName;
 
+    /** Accessor selector */
+    SEL _accessor;
 }
 
-- (id) initWithColumnName: (NSString *) columnName selector: (SEL) selector;
+- (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor;
 
 @end

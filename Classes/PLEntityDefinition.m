@@ -29,25 +29,7 @@
 
 #import "PlausibleDatabase.h"
 
-/**
- * Represents a single database column.
- */
-@implementation PLEntityField
 
-- (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor {
-    if ((self = [super init]) == nil)
-        return nil;
-
-    _columnName = [columnName retain];
-    _accessor = accessor;
-    
-    return self;
-}
-
-- (void) dealloc {
-    [_columnName release];
-
-    [super dealloc];
-}
+@implementation PLEntityDefinition
 
 @end

@@ -40,7 +40,7 @@
 @implementation PLEntityFieldTests
 
 - (void) testInit {
-    PLEntityField *field = [[[PLEntityField alloc] initWithColumnName: @"column_id" selector: @selector(entityKey)] autorelease];
+    PLEntityField *field = [[[PLEntityField alloc] initWithColumnName: @"column_id" accessor: @selector(entityKey)] autorelease];
     STAssertNotNil(field, @"Could not create instance");
 }
 
