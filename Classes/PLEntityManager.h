@@ -29,9 +29,13 @@
 
 @interface PLEntityManager : NSObject {
 @private
+    /** Backing database connection */
     NSObject<PLDatabase> *_db;
+
+    /** Entity dialect */
+    NSObject<PLEntityDialect> *_dialect;
 }
 
-- (id) initWithDatabase: (NSObject<PLDatabase> *) database; 
+- (id) initWithDatabase: (NSObject<PLDatabase> *) database entityDialect: (NSObject<PLEntityDialect> *) dialect;
 
 @end

@@ -27,8 +27,5 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-@interface PLSqliteEntityDialect : NSObject {
-
-}
-
+@interface PLSqliteEntityDialect : NSObject
 @end

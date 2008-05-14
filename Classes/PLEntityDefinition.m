@@ -78,13 +78,13 @@
     _tableName = [tableName retain];
 
     /* Populate the column cache */
-    _columnCache = mutableColumnCache = [[NSMutableDictionary alloc] initWithCapacity: [columns count]];
+    mutableColumnCache = [[NSMutableDictionary alloc] initWithCapacity: [columns count]];
+    _columnCache = mutableColumnCache;
+
     for (PLEntityColumn *column in columns) {
         [mutableColumnCache setObject: column forKey: [column columnName]]; 
     }
 
-    _columnCache = [columns retain];
-    
     return self;
 }
 

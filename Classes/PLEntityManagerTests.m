@@ -34,6 +34,8 @@
 @interface PLEntityManagerTests : SenTestCase {
 @private
     NSObject<PLDatabase> *_db;
+
+    NSObject<PLEntityDialect> *_dialect;
 }
 @end
 
@@ -51,16 +53,20 @@
            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
            "name VARCHAR(255))"];
     STAssertTrue(ret, @"Could not create test table");
+
+    /* Create a dialect instance */
+    _dialect = [[PLSqliteEntityDialect alloc] init];
 }
 
 - (void) tearDown {
     [_db release];
+    [_dialect release];
 }
 
 - (void) testInitWithDatabase {
     PLEntityManager *entityManager;
     
-    entityManager = [[[PLEntityManager alloc] initWithDatabase: _db] autorelease];
+    entityManager = [[[PLEntityManager alloc] initWithDatabase: _db entityDialect: _dialect] autorelease];
     STAssertNotNil(entityManager, @"Could not initialize entity manager");
 }
 
