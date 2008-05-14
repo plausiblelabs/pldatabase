@@ -138,20 +138,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		053D37550DDA9A68009D4EAF /* Entity */ = {
+		053D37550DDA9A68009D4EAF /* Entities */ = {
 			isa = PBXGroup;
 			children = (
-				053D38060DDAAB20009D4EAF /* Definition */,
-				053D37570DDA9E2A009D4EAF /* PLEntity.h */,
-				053D37600DDAA061009D4EAF /* PLEntityDialect.h */,
-				053D379B0DDAA18F009D4EAF /* PLEntityManager.h */,
-				053D379C0DDAA18F009D4EAF /* PLEntityManager.m */,
-				05CD55950DDAD0DF004448D9 /* PLEntityManagerTests.m */,
-				05CD55C40DDAD550004448D9 /* PLEntityTransaction.h */,
-				05CD55C50DDAD550004448D9 /* PLEntityTransaction.m */,
-				053D37A20DDAA198009D4EAF /* SQLite */,
+				053D38060DDAAB20009D4EAF /* Entity */,
+				05CD56250DDAD768004448D9 /* Manager */,
+				05CD56240DDAD74F004448D9 /* Dialects */,
 			);
-			name = Entity;
+			name = Entities;
 			sourceTree = "<group>";
 		};
 		053D37A20DDAA198009D4EAF /* SQLite */ = {
@@ -163,9 +157,10 @@
 			name = SQLite;
 			sourceTree = "<group>";
 		};
-		053D38060DDAAB20009D4EAF /* Definition */ = {
+		053D38060DDAAB20009D4EAF /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				053D37570DDA9E2A009D4EAF /* PLEntity.h */,
 				053D37A30DDAA329009D4EAF /* PLEntityColumn.h */,
 				053D37A40DDAA329009D4EAF /* PLEntityColumn.m */,
 				053D37AA0DDAA338009D4EAF /* PLEntityColumnTests.m */,
@@ -173,7 +168,7 @@
 				053D38000DDAAB19009D4EAF /* PLEntityDefinition.m */,
 				053D382C0DDAADFD009D4EAF /* PLEntityDefinitionTests.m */,
 			);
-			name = Definition;
+			name = Entity;
 			sourceTree = "<group>";
 		};
 		05939BF00DCBFFE4004FEA21 /* SQLite */ = {
@@ -187,6 +182,35 @@
 				0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */,
 			);
 			name = SQLite;
+			sourceTree = "<group>";
+		};
+		05CD56240DDAD74F004448D9 /* Dialects */ = {
+			isa = PBXGroup;
+			children = (
+				053D37600DDAA061009D4EAF /* PLEntityDialect.h */,
+				053D37A20DDAA198009D4EAF /* SQLite */,
+			);
+			name = Dialects;
+			sourceTree = "<group>";
+		};
+		05CD56250DDAD768004448D9 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				053D379B0DDAA18F009D4EAF /* PLEntityManager.h */,
+				053D379C0DDAA18F009D4EAF /* PLEntityManager.m */,
+				05CD55950DDAD0DF004448D9 /* PLEntityManagerTests.m */,
+				05CD55C40DDAD550004448D9 /* PLEntityTransaction.h */,
+				05CD55C50DDAD550004448D9 /* PLEntityTransaction.m */,
+			);
+			name = Manager;
+			sourceTree = "<group>";
+		};
+		05CD56260DDAD786004448D9 /* Drivers */ = {
+			isa = PBXGroup;
+			children = (
+				05939BF00DCBFFE4004FEA21 /* SQLite */,
+			);
+			name = Drivers;
 			sourceTree = "<group>";
 		};
 		0867D691FE84028FC02AAC07 /* PlausibleDatabase */ = {
@@ -215,13 +239,13 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				053D37550DDA9A68009D4EAF /* Entity */,
 				051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */,
 				051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */,
 				0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */,
 				0551CA660DCBEC1500E31E46 /* PLDatabase.h */,
 				05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */,
-				05939BF00DCBFFE4004FEA21 /* SQLite */,
+				053D37550DDA9A68009D4EAF /* Entities */,
+				05CD56260DDAD786004448D9 /* Drivers */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
