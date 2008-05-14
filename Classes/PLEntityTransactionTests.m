@@ -44,13 +44,19 @@
 
 - (void) setUp {
     PLEntityManager *entityManager;
+    OCMockObject *_mockDBDelegate;
 
     /* Create the mock database */
     _mockDB = [[OCMockObject mockForProtocol:@protocol(PLDatabase)] retain];
 
+    /* Create the mock database delegate */
+    _mockDBDelegate = [OCMockObject mockForProtocol:@protocol(PLEntityConnectionDelegate)];
+    [[[_mockDBDelegate stub] andReturn: _mockDB] getConnectionAndReturnError: (NSError **) OCMOCK_ANY];
+
     /* Create the entity manager */
     PLSqliteEntityDialect *dialect = [[[PLSqliteEntityDialect alloc] init] autorelease];
-    entityManager = [[[PLEntityManager alloc] initWithDatabase: (NSObject<PLDatabase> *) _mockDB entityDialect: dialect] autorelease];
+    entityManager = [[[PLEntityManager alloc] initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) _mockDBDelegate
+                                                           entityDialect: dialect] autorelease];
 
     /* Create a transaction */
     _tx = [[PLEntityTransaction alloc] initWithEntityManager: (PLEntityManager *) entityManager];
@@ -79,8 +85,6 @@
  * transaction state.
  */
 - (void) testBegin {
-    
-#if 0 // XXX Re-enable
     BOOL yes = YES;
     NSValue *yesValue = [NSValue value: &yes withObjCType: @encode(BOOL)];
 
@@ -88,7 +92,6 @@
     STAssertTrue([_tx begin], @"Transaction was not started?");
 
     [_mockDB verify];
-#endif
 }
 
 

@@ -31,11 +31,11 @@
 
 @implementation PLEntityManager
 
-- (id) initWithDatabase: (NSObject<PLDatabase> *) database entityDialect: (NSObject<PLEntityDialect> *) dialect {
+- (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) delegate entityDialect: (NSObject<PLEntityDialect> *) dialect {
     if ((self = [super init]) == nil)
         return nil;
 
-    _db = [database retain];
+    _delegate = [delegate retain];
     _dialect = [dialect retain];
 
     return self;
@@ -43,7 +43,7 @@
 
 
 - (void) dealloc {
-    [_db release];
+    [_delegate release];
     [_dialect release];
 
     [super dealloc];

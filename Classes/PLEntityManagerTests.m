@@ -33,7 +33,8 @@
 
 @interface PLEntityManagerTests : SenTestCase {
 @private
-    NSObject<PLDatabase> *_db;
+    NSString *_dbPath;
+    PLSqliteDatabase *_db;
 
     NSObject<PLEntityDialect> *_dialect;
 }
@@ -42,31 +43,39 @@
 @implementation PLEntityManagerTests
 
 - (void) setUp {
-    PLSqliteDatabase *sqlite;
-    BOOL ret;
-
-    /* Create and open test database */
-    _db = sqlite = [[PLSqliteDatabase alloc] initWithPath: @":memory:"];
-    STAssertTrue([sqlite open], @"Could not open database");
-
-    ret = [_db executeUpdate: @"CREATE TABLE Test ("
+    /* Create a temporary file for the database. Secure -- user owns enclosing directory. */
+    _dbPath = [[NSTemporaryDirectory() stringByAppendingPathComponent: [[NSProcessInfo processInfo] globallyUniqueString]] retain];
+    
+    /* Create the temporary database */
+    _db = [[PLSqliteDatabase alloc] initWithPath: _dbPath];
+    STAssertTrue([_db open], @"Could not open temporary database");
+    
+    /* Populate it with some data */    
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE Test ("
            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-           "name VARCHAR(255))"];
-    STAssertTrue(ret, @"Could not create test table");
-
-    /* Create a dialect instance */
-    _dialect = [[PLSqliteEntityDialect alloc] init];
+           "name VARCHAR(255))"], @"Could not create test table");
 }
 
 - (void) tearDown {
+    /* Remove the temporary database file */
+    STAssertTrue([[NSFileManager defaultManager] removeItemAtPath: _dbPath error: nil], @"Could not clean up database %@", _dbPath);
+    
+    /* Release our objects */
+    [_dbPath release];
     [_db release];
-    [_dialect release];
 }
 
 - (void) testInitWithDatabase {
     PLEntityManager *entityManager;
+    PLSqliteEntityDialect *dialect;
+    PLSqliteEntityConnectionDelegate *delegate;
     
-    entityManager = [[[PLEntityManager alloc] initWithDatabase: _db entityDialect: _dialect] autorelease];
+    /* Set up a delegate and dialect */
+    delegate = [[[PLSqliteEntityConnectionDelegate alloc] initWithPath: _dbPath] autorelease];
+    dialect = [[[PLSqliteEntityDialect alloc] init] autorelease];
+
+    /* Create the entity manager */
+    entityManager = [[[PLEntityManager alloc] initWithConnectionDelegate: delegate entityDialect: dialect] autorelease];
     STAssertNotNil(entityManager, @"Could not initialize entity manager");
 }
 
