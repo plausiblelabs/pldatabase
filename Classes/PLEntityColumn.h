@@ -27,7 +27,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-@interface PLEntityField : NSObject {
+/**
+ * A short-cut macro for declaring a PLEntityColumn.
+ */
+#define PLEntityColumnDeclare(name, sel) [[[PLEntityColumn alloc] initWithColumnName: name accessor: @selector(sel)] autorelease]
+
+/**
+ * A short-cut macro for declaring a PLEntityColumn.
+ */
+#define PLEntityColumnDeclareId(name, sel) [[[PLEntityColumn alloc] initWithColumnName: name accessor: @selector(sel) isPrimaryKey: YES] autorelease]
+
+@interface PLEntityColumn : NSObject {
 @private
     /** Database column name */
     NSString *_columnName;
