@@ -27,15 +27,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-@interface PLEntityField : NSObject {
-@private
-    /** Database column name */
-    NSString *_columnName;
+#import "PlausibleDatabase.h"
 
-    /** Accessor selector */
-    SEL _accessor;
+/**
+ * Represents a single database column.
+ */
+@implementation PLEntityField
+
+/**
+ * Initialize with the given column name, and column data accessor.
+ *
+ * @param columnName Name of the database column.
+ * @param accessor Accessor to retrieve column value.
+ */
+- (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor {
+    return [self initWithColumnName: columnName accessor: accessor isPrimaryKey: NO];
 }
 
-- (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor;
+
+/**
+ * Initialize with the given column name, and column data accessor.
+ *
+ * If this column is part (or wholly comprises) the table's primary key,
+ * primaryKey must be YES.
+ *
+ * @param columnName Name of the database column.
+ * @param accessor Accessor to retrieve column value.
+ * @param primaryKey YES if this column comprises the table's primary key.
+ */
+- (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor isPrimaryKey: (BOOL) primaryKey {
+    if ((self = [super init]) == nil)
+        return nil;
+    
+    _columnName = [columnName retain];
+    _accessor = accessor;
+    _primaryKey = primaryKey;
+    
+    return self;
+}
+
+
+- (void) dealloc {
+    [_columnName release];
+
+    [super dealloc];
+}
 
 @end

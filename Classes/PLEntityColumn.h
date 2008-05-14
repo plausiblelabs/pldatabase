@@ -27,27 +27,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PlausibleDatabase.h"
+@interface PLEntityField : NSObject {
+@private
+    /** Database column name */
+    NSString *_columnName;
 
-/**
- * Represents a single database column.
- */
-@implementation PLEntityField
+    /** Accessor selector */
+    SEL _accessor;
 
-- (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor {
-    if ((self = [super init]) == nil)
-        return nil;
-
-    _columnName = [columnName retain];
-    _accessor = accessor;
-    
-    return self;
+    /** Is primary key */
+    BOOL _primaryKey;
 }
 
-- (void) dealloc {
-    [_columnName release];
-
-    [super dealloc];
-}
+- (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor;
+- (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor isPrimaryKey: (BOOL) primaryKey;
 
 @end
