@@ -43,6 +43,7 @@
 
 #import "PLEntity.h"
 #import "PLEntityDialect.h"
+#import "PLEntityTransaction.h"
 #import "PLEntityManager.h"
 
 #import "PLSqliteEntityDialect.h"
