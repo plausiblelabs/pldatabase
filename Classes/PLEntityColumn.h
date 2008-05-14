@@ -27,16 +27,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * A short-cut macro for declaring a PLEntityColumn.
- */
-#define PLEntityColumnDeclare(name, sel) [[[PLEntityColumn alloc] initWithColumnName: name accessor: @selector(sel)] autorelease]
-
-/**
- * A short-cut macro for declaring a PLEntityColumn.
- */
-#define PLEntityColumnDeclareId(name, sel) [[[PLEntityColumn alloc] initWithColumnName: name accessor: @selector(sel) isPrimaryKey: YES] autorelease]
-
 @interface PLEntityColumn : NSObject {
 @private
     /** Database column name */
@@ -51,5 +41,29 @@
 
 - (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor;
 - (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor isPrimaryKey: (BOOL) primaryKey;
+
+/* Accessors are library-private */
+#ifdef PL_DB_PRIVATE
+- (NSString *) columnName;
+- (BOOL) isPrimaryKey;
+- (SEL) accessor;
+#endif /* PL_DB_PRIVATE */
+
+/**
+ * Create an entity column.
+ *
+ * @param columnName Name of the database column.
+ * @param sel Accessor SEL used to retrieve column value.
+ */
+#define PLEntityColumnDeclare(name, sel) [[[PLEntityColumn alloc] initWithColumnName: name accessor: sel] autorelease]
+
+/**
+ * Create a primary key entity column.
+ *
+ * @param columnName Name of the database column.
+ * @param sel Accessor SEL used to retrieve column value.
+ */
+#define PLEntityColumnDeclareId(name, sel) [[[PLEntityColumn alloc] initWithColumnName: name accessor: sel isPrimaryKey: YES] autorelease]
+
 
 @end

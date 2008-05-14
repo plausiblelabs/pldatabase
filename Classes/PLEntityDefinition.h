@@ -28,7 +28,21 @@
  */
 
 @interface PLEntityDefinition : NSObject {
+@private
+    /** Database table name */
+    NSString *_tableName;
 
+    /** Column definitions */
+    NSDictionary *_columnCache;
 }
+
++ (PLEntityDefinition *) defineEntityForTable: (NSString *) tableName withColumns: (PLEntityColumn *) firstObj, ...;
+
+- (id) initWithTableName: (NSString *) tableName columns: (NSSet *) columns;
+
+/* Accessors are library private */
+#ifdef PL_DB_PRIVATE
+- (NSString *) tableName;
+#endif
 
 @end

@@ -73,4 +73,27 @@
     [super dealloc];
 }
 
+/**
+ * Return the column's name.
+ */
+- (NSString *) columnName {
+    return _columnName;
+}
+
+/**
+ * @internal
+ * Returns YES if the column is a primary key.
+ */
+- (BOOL) isPrimaryKey {
+    return _primaryKey;
+}
+
+/**
+ * @internal
+ * Returns the column accessor.
+ */
+- (SEL) accessor {
+    return _accessor; 
+}
+
 @end
