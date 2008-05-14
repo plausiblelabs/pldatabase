@@ -32,7 +32,7 @@
 /**
  * Represents a single database column.
  */
-@implementation PLEntityField
+@implementation PLEntityColumn
 
 /**
  * Initialize with the given column name, and column data accessor.

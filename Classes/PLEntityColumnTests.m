@@ -31,17 +31,14 @@
 
 #import "PlausibleDatabase.h"
 
-@interface PLEntityFieldTests : SenTestCase {
-@private
-}
-
+@interface PLEntityFieldTests : SenTestCase
 @end
 
 @implementation PLEntityFieldTests
 
 - (void) testInit {
-    PLEntityField *field = [[[PLEntityField alloc] initWithColumnName: @"column_id" accessor: @selector(entityKey)] autorelease];
-    STAssertNotNil(field, @"Could not create instance");
+    PLEntityColumn *column = [[[PLEntityColumn alloc] initWithColumnName: @"column_id" accessor: @selector(entityKey)] autorelease];
+    STAssertNotNil(column, @"Could not create instance");
 }
 
 @end

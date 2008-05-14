@@ -33,6 +33,7 @@
 		053D38030DDAAB19009D4EAF /* PLEntityDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D38000DDAAB19009D4EAF /* PLEntityDefinition.m */; };
 		053D38040DDAAB19009D4EAF /* PLEntityDefinition.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D37FF0DDAAB19009D4EAF /* PLEntityDefinition.h */; };
 		053D38050DDAAB19009D4EAF /* PLEntityDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D38000DDAAB19009D4EAF /* PLEntityDefinition.m */; };
+		053D382D0DDAADFD009D4EAF /* PLEntityDefinitionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D382C0DDAADFD009D4EAF /* PLEntityDefinitionTests.m */; };
 		0551CA540DCBEB5000E31E46 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */; };
 		0551CA560DCBEB5E00E31E46 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA550DCBEB5E00E31E46 /* Foundation.framework */; };
 		0551CA670DCBEC1500E31E46 /* PLDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA660DCBEC1500E31E46 /* PLDatabase.h */; };
@@ -80,6 +81,7 @@
 		053D37AA0DDAA338009D4EAF /* PLEntityColumnTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLEntityColumnTests.m; sourceTree = "<group>"; };
 		053D37FF0DDAAB19009D4EAF /* PLEntityDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLEntityDefinition.h; sourceTree = "<group>"; };
 		053D38000DDAAB19009D4EAF /* PLEntityDefinition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLEntityDefinition.m; sourceTree = "<group>"; };
+		053D382C0DDAADFD009D4EAF /* PLEntityDefinitionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLEntityDefinitionTests.m; sourceTree = "<group>"; };
 		0551CA4B0DCBE9F600E31E46 /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551CA4C0DCBE9F600E31E46 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -171,6 +173,7 @@
 				053D37AA0DDAA338009D4EAF /* PLEntityColumnTests.m */,
 				053D37FF0DDAAB19009D4EAF /* PLEntityDefinition.h */,
 				053D38000DDAAB19009D4EAF /* PLEntityDefinition.m */,
+				053D382C0DDAADFD009D4EAF /* PLEntityDefinitionTests.m */,
 			);
 			name = Definition;
 			sourceTree = "<group>";
@@ -400,6 +403,7 @@
 				053D37A70DDAA329009D4EAF /* PLEntityColumn.m in Sources */,
 				053D37AB0DDAA338009D4EAF /* PLEntityColumnTests.m in Sources */,
 				053D38010DDAAB19009D4EAF /* PLEntityDefinition.m in Sources */,
+				053D382D0DDAADFD009D4EAF /* PLEntityDefinitionTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
