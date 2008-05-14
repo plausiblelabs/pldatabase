@@ -38,8 +38,10 @@
 #import "PLSqliteDatabase.h"
 #import "PLSqliteResultSet.h"
 
+#import "PLEntityField.h"
 #import "PLEntity.h"
 #import "PLEntityDialect.h"
+#import "PLEntityManager.h"
 
 #import "PLSqliteEntityDialect.h"
 

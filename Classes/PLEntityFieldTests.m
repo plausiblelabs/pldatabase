@@ -27,28 +27,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <SenTestingKit/SenTestingKit.h>
 
-/**
- * Represents a database entity.
- */
-@protocol PLEntity
+#import "PlausibleDatabase.h"
 
-/**
- * Initialize the entity class with the given dictionary, supplied by the
- * database.
- */
-- (id) initWithEntityDictionary: (NSDictionary *) entityDictionary;
+@interface PLEntityFieldTests : SenTestCase {
+@private
+}
 
-/**
- * Return the entity's primary key. Must return nil if this entity
- * was not loaded from the database.
- */
-- (id) entityKey;
+@end
 
-/**
- * Return a list of fields.
- */
-- (NSArray *) entityFields;
+@implementation PLEntityFieldTests
 
+- (void) testInit {
+    PLEntityField *field = [[[PLEntityField alloc] initWithColumnName: @"column_id" selector: @selector(entityKey)] autorelease];
+    STAssertNotNil(field, @"Could not create instance");
+}
 
 @end

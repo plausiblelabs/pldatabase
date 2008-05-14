@@ -27,28 +27,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <Cocoa/Cocoa.h>
 
-/**
- * Represents a database entity.
- */
-@protocol PLEntity
 
-/**
- * Initialize the entity class with the given dictionary, supplied by the
- * database.
- */
-- (id) initWithEntityDictionary: (NSDictionary *) entityDictionary;
+@interface PLEntityField : NSObject {
 
-/**
- * Return the entity's primary key. Must return nil if this entity
- * was not loaded from the database.
- */
-- (id) entityKey;
+}
 
-/**
- * Return a list of fields.
- */
-- (NSArray *) entityFields;
-
+- (id) initWithColumnName: (NSString *) columnName selector: (SEL) selector;
 
 @end

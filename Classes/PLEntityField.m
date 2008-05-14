@@ -27,28 +27,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import "PLEntityField.h"
 
 /**
- * Represents a database entity.
+ * Represents a single database column.
  */
-@protocol PLEntity
+@implementation PLEntityField
 
-/**
- * Initialize the entity class with the given dictionary, supplied by the
- * database.
- */
-- (id) initWithEntityDictionary: (NSDictionary *) entityDictionary;
-
-/**
- * Return the entity's primary key. Must return nil if this entity
- * was not loaded from the database.
- */
-- (id) entityKey;
-
-/**
- * Return a list of fields.
- */
-- (NSArray *) entityFields;
-
+- (id) initWithColumnName: (NSString *) columnName selector: (SEL) selector {
+    return nil;
+}
 
 @end
