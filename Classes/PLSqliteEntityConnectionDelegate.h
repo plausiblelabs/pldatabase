@@ -27,26 +27,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * A delegate responsible for providing #PLDatabase instances to the
- * PLEntityManager.
- */
-@protocol PLEntityConnectionDelegate
+@interface PLSqliteEntityConnectionDelegate : NSObject <PLEntityConnectionDelegate> {
+@private
+    /** Path to backing database */
+    NSString *_dbPath;
+}
 
-/**
- * Returns a database connection.
- *
- * @param error A pointer to an NSError object variable. If an error occurs, this
- * pointer will contain an error object indicating why the transaction could not
- * be started.
- *
- * @return A database connection, or nil on error.
- */
-- (NSObject<PLDatabase> *) getConnectionAndReturnError: (NSError **) error;
-
-/**
- * Called to inform the delegate that the given connection may be re-used.
- */
-- (void) closeConnection: (NSObject<PLDatabase> *) connection;
+- (id) initWithPath: (NSString *) dbPath;
 
 @end

@@ -27,26 +27,57 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * A delegate responsible for providing #PLDatabase instances to the
- * PLEntityManager.
- */
-@protocol PLEntityConnectionDelegate
+#import "PlausibleDatabase.h"
 
 /**
- * Returns a database connection.
- *
- * @param error A pointer to an NSError object variable. If an error occurs, this
- * pointer will contain an error object indicating why the transaction could not
- * be started.
- *
- * @return A database connection, or nil on error.
+ * Provides new PLSqliteDatabase connections as per the PLEntityConnectionDelegate
+ * protocol. This class does no connection pooling, and should be combined
+ * with a generic connection pool implementation if pooling is required.
  */
-- (NSObject<PLDatabase> *) getConnectionAndReturnError: (NSError **) error;
+@implementation PLSqliteEntityConnectionDelegate
 
 /**
- * Called to inform the delegate that the given connection may be re-used.
+ * Initialize the database connection delegate with the provided
+ * file path.
+ *
+ * @param dbPath Path to the sqlite database file.
  */
-- (void) closeConnection: (NSObject<PLDatabase> *) connection;
+- (id) initWithPath: (NSString *) dbPath {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    /* Path to our backing database */
+    _dbPath = [dbPath retain];
+
+    return self;
+}
+
+- (void) dealloc {
+    [_dbPath release];
+    
+    [super dealloc];
+}
+
+/* from PLEntityConnectionDelegate */
+- (NSObject<PLDatabase> *) getConnectionAndReturnError: (NSError **) error {
+    PLSqliteDatabase *database;
+
+    /* Create and attempt to open */
+    database = [[[PLSqliteDatabase alloc] initWithPath: _dbPath] autorelease];
+    if (![database openAndReturnError: error]) {
+        /* Error was filled in, simply return nil */
+        return nil;
+    }
+
+    /* All is well, and database connection is open */
+    return database;
+}
+
+
+/* from PLEntityConnectionDelegate */
+- (void) closeConnection: (NSObject<PLDatabase> *) connection {
+    // Nothing to do, no connection pooling
+}
+
 
 @end

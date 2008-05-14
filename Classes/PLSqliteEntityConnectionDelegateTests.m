@@ -27,26 +27,51 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * A delegate responsible for providing #PLDatabase instances to the
- * PLEntityManager.
- */
-@protocol PLEntityConnectionDelegate
+#import <SenTestingKit/SenTestingKit.h>
 
-/**
- * Returns a database connection.
- *
- * @param error A pointer to an NSError object variable. If an error occurs, this
- * pointer will contain an error object indicating why the transaction could not
- * be started.
- *
- * @return A database connection, or nil on error.
- */
-- (NSObject<PLDatabase> *) getConnectionAndReturnError: (NSError **) error;
+#import "PlausibleDatabase.h"
 
-/**
- * Called to inform the delegate that the given connection may be re-used.
- */
-- (void) closeConnection: (NSObject<PLDatabase> *) connection;
+@interface PLSqliteEntityConnectionDelegateTests : SenTestCase {
+@private
+    NSString *_dbPath;
+    PLSqliteDatabase *_db;
+}
+@end
+
+@implementation PLSqliteEntityConnectionDelegateTests
+
+- (void) setUp {
+    /* Create a temporary file for the database. Secure -- user owns enclosing directory. */
+    _dbPath = [[NSTemporaryDirectory() stringByAppendingPathComponent: [[NSProcessInfo processInfo] globallyUniqueString]] retain];
+    
+    /* Create the temporary database */
+    _db = [[PLSqliteDatabase alloc] initWithPath: _dbPath];
+    STAssertTrue([_db open], @"Could not open temporary database");
+}
+
+- (void) tearDown {
+    /* Remove the temporary database file */
+    STAssertTrue([[NSFileManager defaultManager] removeItemAtPath: _dbPath error: nil], @"Could not clean up database %@", _dbPath);
+
+    /* Release our objects */
+    [_dbPath release];
+    [_db release];
+}
+
+- (void) testInitWithPath {
+    PLSqliteEntityConnectionDelegate *delegate;
+    NSObject<PLDatabase> *db;
+
+    /* Create our delegate and request a connection */
+    delegate = [[[PLSqliteEntityConnectionDelegate alloc] initWithPath: _dbPath] autorelease];
+    db = [delegate getConnectionAndReturnError: nil];
+
+    /* Test the connection */
+    STAssertNotNil(db, @"Delegate returned nil.");
+    STAssertTrue([db goodConnection], @"Database connection claims to be bad.");
+
+    /* Try to be polite */
+    [delegate closeConnection: db];
+}
 
 @end

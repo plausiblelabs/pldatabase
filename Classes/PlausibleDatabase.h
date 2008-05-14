@@ -42,11 +42,13 @@
 #import "PLEntityDefinition.h"
 
 #import "PLEntity.h"
+#import "PLEntityConnectionDelegate.h"
 #import "PLEntityDialect.h"
 #import "PLEntityTransaction.h"
 #import "PLEntityManager.h"
 
 #import "PLSqliteEntityDialect.h"
+#import "PLSqliteEntityConnectionDelegate.h"
 
 /* Error Domain and Codes */
 extern NSString *PLDatabaseErrorDomain;
