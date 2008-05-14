@@ -34,21 +34,15 @@
 @protocol PLEntity
 
 /**
+ * Return the entity definition.
+ */
++ (PLEntityDefinition *) entityDefinition;
+
+/**
  * Initialize the entity class with the given dictionary, supplied by the
  * database.
  */
 - (id) initWithEntityDictionary: (NSDictionary *) entityDictionary;
-
-/**
- * Return the entity's primary key. Must return nil if this entity
- * was not loaded from the database.
- */
-- (id) entityKey;
-
-/**
- * Return a list of fields.
- */
-- (NSArray *) entityFields;
 
 
 @end
