@@ -29,13 +29,25 @@
 
 
 /**
- * Represents a managed database entity.
+ * Represents an entity that may be loaded and persisted to and
+ * from a database. Implementing classes must support initialization via
+ * the init method.
  */
 @protocol PLEntity
+@required
 
 /**
  * Return the entity definition.
  */
 + (PLEntityDescription *) entityDescription;
+
+
+@optional
+/**
+ * Classes may implement this method to perform additional initialization after
+ * an object has been loaded from the database, and declared entity
+ * properties have been populated.
+ */
+- (void) awakeFromDatabase;
 
 @end
