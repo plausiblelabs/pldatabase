@@ -21,7 +21,6 @@
 		053D38050DDAAB19009D4EAF /* PLEntityDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D38000DDAAB19009D4EAF /* PLEntityDefinition.m */; };
 		053D382D0DDAADFD009D4EAF /* PLEntityDefinitionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D382C0DDAADFD009D4EAF /* PLEntityDefinitionTests.m */; };
 		053D38870DDADCB2009D4EAF /* PLEntityTransactionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D38860DDADCB2009D4EAF /* PLEntityTransactionTests.m */; };
-		053D38A20DDAE657009D4EAF /* OCMock.framework in Copy OCMock */ = {isa = PBXBuildFile; fileRef = 053D389F0DDAE64B009D4EAF /* OCMock.framework */; };
 		053D39680DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D39660DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.h */; };
 		053D39690DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D39670DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.m */; };
 		053D39820DDAF551009D4EAF /* PLSqliteEntityConnectionDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D39810DDAF551009D4EAF /* PLSqliteEntityConnectionDelegateTests.m */; };
@@ -70,7 +69,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				053D38A20DDAE657009D4EAF /* OCMock.framework in Copy OCMock */,
 			);
 			name = "Copy OCMock";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -95,7 +93,6 @@
 		053D38000DDAAB19009D4EAF /* PLEntityDefinition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLEntityDefinition.m; sourceTree = "<group>"; };
 		053D382C0DDAADFD009D4EAF /* PLEntityDefinitionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLEntityDefinitionTests.m; sourceTree = "<group>"; };
 		053D38860DDADCB2009D4EAF /* PLEntityTransactionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLEntityTransactionTests.m; sourceTree = "<group>"; };
-		053D389F0DDAE64B009D4EAF /* OCMock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCMock.framework; sourceTree = "<group>"; };
 		053D39310DDAF243009D4EAF /* PLEntityConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLEntityConnectionDelegate.h; sourceTree = "<group>"; };
 		053D39660DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteEntityConnectionDelegate.h; sourceTree = "<group>"; };
 		053D39670DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteEntityConnectionDelegate.m; sourceTree = "<group>"; };
@@ -206,7 +203,6 @@
 		053D389E0DDAE62B009D4EAF /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				053D389F0DDAE64B009D4EAF /* OCMock.framework */,
 			);
 			path = Dependencies;
 			sourceTree = "<group>";
