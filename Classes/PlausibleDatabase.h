@@ -39,6 +39,7 @@
 #import "PLSqliteResultSet.h"
 
 #import "PLEntityPropertyDescription.h"
+#import "PLEntityPrimaryKey.h"
 #import "PLEntityDescription.h"
 
 #import "PLEntity.h"

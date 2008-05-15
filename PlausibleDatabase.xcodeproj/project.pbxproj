@@ -20,6 +20,10 @@
 		053D39690DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D39670DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.m */; };
 		053D39820DDAF551009D4EAF /* PLSqliteEntityConnectionDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D39810DDAF551009D4EAF /* PLSqliteEntityConnectionDelegateTests.m */; };
 		0551CA780DCBED7A00E31E46 /* PLSqliteDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */; };
+		05730CEE0DDCE52100555D42 /* PLEntityPrimaryKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 05730CEC0DDCE52100555D42 /* PLEntityPrimaryKey.h */; };
+		05730CEF0DDCE52100555D42 /* PLEntityPrimaryKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 05730CED0DDCE52100555D42 /* PLEntityPrimaryKey.m */; };
+		05730CF00DDCE52100555D42 /* PLEntityPrimaryKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 05730CEC0DDCE52100555D42 /* PLEntityPrimaryKey.h */; };
+		05730CF80DDCE5DA00555D42 /* PLEntityPrimaryKeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05730CF20DDCE59000555D42 /* PLEntityPrimaryKeyTests.m */; };
 		058196B60DD16BDC001E992F /* PLSqliteResultSetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */; };
 		058196D30DD16CAD001E992F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */; };
 		0581974E0DD17D03001E992F /* PLSqliteDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */; };
@@ -102,6 +106,9 @@
 		0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteDatabase.m; sourceTree = "<group>"; };
 		0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteDatabaseTests.m; sourceTree = "<group>"; };
 		0551CA740DCBED7200E31E46 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		05730CEC0DDCE52100555D42 /* PLEntityPrimaryKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLEntityPrimaryKey.h; sourceTree = "<group>"; };
+		05730CED0DDCE52100555D42 /* PLEntityPrimaryKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLEntityPrimaryKey.m; sourceTree = "<group>"; };
+		05730CF20DDCE59000555D42 /* PLEntityPrimaryKeyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLEntityPrimaryKeyTests.m; sourceTree = "<group>"; };
 		058196AF0DD16BDC001E992F /* PLSqliteResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteResultSet.h; sourceTree = "<group>"; };
 		058196B00DD16BDC001E992F /* PLSqliteResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSet.m; sourceTree = "<group>"; };
 		058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSetTests.m; sourceTree = "<group>"; };
@@ -188,6 +195,9 @@
 				053D37FF0DDAAB19009D4EAF /* PLEntityDescription.h */,
 				053D38000DDAAB19009D4EAF /* PLEntityDescription.m */,
 				053D382C0DDAADFD009D4EAF /* PLEntityDescriptionTests.m */,
+				05730CEC0DDCE52100555D42 /* PLEntityPrimaryKey.h */,
+				05730CED0DDCE52100555D42 /* PLEntityPrimaryKey.m */,
+				05730CF20DDCE59000555D42 /* PLEntityPrimaryKeyTests.m */,
 			);
 			name = Entity;
 			sourceTree = "<group>";
@@ -322,6 +332,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05730CEE0DDCE52100555D42 /* PLEntityPrimaryKey.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +355,7 @@
 				05CD581E0DDC44D9004448D9 /* PLSqliteEntityConnectionDelegate.h in Headers */,
 				05CD581F0DDC44DC004448D9 /* PLSqliteEntityDialect.h in Headers */,
 				05CD58200DDC44DE004448D9 /* PLSqliteResultSet.h in Headers */,
+				05730CF00DDCE52100555D42 /* PLEntityPrimaryKey.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,6 +485,7 @@
 				053D38870DDADCB2009D4EAF /* PLEntityTransactionTests.m in Sources */,
 				053D39820DDAF551009D4EAF /* PLSqliteEntityConnectionDelegateTests.m in Sources */,
 				051E34E40DDBCB50009A7A30 /* PLMockEntityManager.m in Sources */,
+				05730CF80DDCE5DA00555D42 /* PLEntityPrimaryKeyTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,6 +502,7 @@
 				053D38050DDAAB19009D4EAF /* PLEntityDescription.m in Sources */,
 				05CD55CA0DDAD550004448D9 /* PLEntityTransaction.m in Sources */,
 				053D39690DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.m in Sources */,
+				05730CEF0DDCE52100555D42 /* PLEntityPrimaryKey.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
