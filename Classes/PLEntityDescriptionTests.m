@@ -52,13 +52,13 @@
     PLEntityDescription *description;
 
     /* Create one */
-    description = [PLEntityDescription entityDescriptionWithTableName: @"test"];
+    description = [PLEntityDescription descriptionWithTableName: @"test"];
     STAssertNotNil(description, @"Could not initialize PLEntityDescription");
     STAssertTrue([@"test" isEqual: [description tableName]], @"Entity table name incorrect");
 
     /* Add some properties */
-    [description addPropertyDescription: [PLEntityPropertyDescription propertyDescriptionWithKey: @"rowId" columnName: @"id"]];
-    [description addPropertyDescription: [PLEntityPropertyDescription propertyDescriptionWithKey: @"name" columnName: @"name"]];
+    [description addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"]];
+    [description addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"name" columnName: @"name"]];
 }
 
 @end

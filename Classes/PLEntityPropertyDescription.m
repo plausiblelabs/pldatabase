@@ -41,7 +41,7 @@
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
  */
-+ (id) propertyDescriptionWithKey: (NSString *) key columnName: (NSString *) columnName {
++ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName {
     return [[[PLEntityPropertyDescription alloc] initWithKey: key columnName: columnName] autorelease];
 }
 

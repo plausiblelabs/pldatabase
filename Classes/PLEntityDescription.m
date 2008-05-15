@@ -40,7 +40,7 @@
  *
  * @param tableName The database table corresponding to the described entity.
  */
-+ (PLEntityDescription *) entityDescriptionWithTableName: (NSString *) tableName {
++ (PLEntityDescription *) descriptionWithTableName: (NSString *) tableName {
     return [[[PLEntityDescription alloc] initWithTableName: tableName] autorelease];
 }
 

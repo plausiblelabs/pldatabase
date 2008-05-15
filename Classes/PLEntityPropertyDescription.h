@@ -36,7 +36,7 @@
     NSString *_columnName;
 }
 
-+ (id) propertyDescriptionWithKey: (NSString *) key columnName: (NSString *) columnName;
++ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName;
 
 - (id) initWithKey: (NSString *) key columnName: (NSString *) columnName;
 

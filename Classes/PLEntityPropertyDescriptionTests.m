@@ -39,7 +39,7 @@
 - (void) testInit {
     PLEntityPropertyDescription *propertyDescription;
 
-    propertyDescription = [PLEntityPropertyDescription propertyDescriptionWithKey: @"rowId" columnName: @"id"];
+    propertyDescription = [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"];
     STAssertNotNil(propertyDescription, @"Initializer returned nil");
 
     STAssertTrue([@"rowId" isEqual: [propertyDescription key]], @"KVC key incorrect");

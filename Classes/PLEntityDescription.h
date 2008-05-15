@@ -38,7 +38,7 @@
 - (NSString *) tableName;
 #endif
 
-+ (PLEntityDescription *) entityDescriptionWithTableName: (NSString *) tableName;
++ (PLEntityDescription *) descriptionWithTableName: (NSString *) tableName;
 
 - (id) initWithTableName: (NSString *) tableName;
 
