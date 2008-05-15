@@ -47,6 +47,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		059297B70DDC4CEB002DDC90 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0551CA4A0DCBE9F600E31E46 /* Tests */;
+			remoteInfo = Tests;
+		};
 		05CD561A0DDAD692004448D9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -58,7 +65,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 058197480DD17CD1001E992F /* pldatabase */;
+			remoteGlobalIDString = 058197480DD17CD1001E992F;
 			remoteInfo = pldatabase;
 		};
 /* End PBXContainerItemProxy section */
@@ -392,6 +399,7 @@
 			);
 			dependencies = (
 				05CD57FD0DDC435D004448D9 /* PBXTargetDependency */,
+				059297B80DDC4CEB002DDC90 /* PBXTargetDependency */,
 			);
 			name = PlausibleDatabase;
 			productName = PlausibleDatabase;
@@ -494,6 +502,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		059297B80DDC4CEB002DDC90 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0551CA4A0DCBE9F600E31E46 /* Tests */;
+			targetProxy = 059297B70DDC4CEB002DDC90 /* PBXContainerItemProxy */;
+		};
 		05CD561B0DDAD692004448D9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 058197480DD17CD1001E992F /* pldatabase */;

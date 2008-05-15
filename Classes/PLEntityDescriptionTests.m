@@ -36,4 +36,12 @@
 
 @implementation PLEntityDescriptionTests
 
+- (void) testInit {
+    PLEntityDescription *description;
+
+    description = [[[PLEntityDescription alloc] initWithTableName: @"test" properties: [NSArray array]] autorelease];
+    STAssertNotNil(description, @"Could not initialize PLEntityDescription");
+    STAssertTrue([@"test" isEqual: [description tableName]], @"Entity table name incorrect");
+}
+
 @end

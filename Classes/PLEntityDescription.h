@@ -38,4 +38,6 @@
 - (NSString *) tableName;
 #endif
 
+- (id) initWithTableName: (NSString *) tableName properties: (NSArray *) properties;
+
 @end

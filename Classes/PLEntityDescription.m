@@ -34,6 +34,29 @@
  */
 @implementation PLEntityDescription
 
+/**
+ * Initialize the entity description.
+ *
+ * @param tableName The database table corresponding to the described entity.
+ * @param properties A list of PLEntityPropertyDescription instances, maping
+ * entity properties to columns.
+ */
+- (id) initWithTableName: (NSString *) tableName properties: (NSArray *) properties {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    _tableName = [tableName retain];
+    // TODO
+
+    return self;
+}
+
+
+- (void) dealloc {
+    [_tableName release];
+
+    [super dealloc];
+}
 
 
 /**

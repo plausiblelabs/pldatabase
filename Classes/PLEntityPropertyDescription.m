@@ -34,6 +34,12 @@
  */
 @implementation PLEntityPropertyDescription
 
+/**
+ * Initialize with the Key Value Coding key and database column name.
+ *
+ * @param key KVC key used to access the column value.
+ * @param columnName The corresponding database column.
+ */
 - (id) initWithKey: (NSString *) key columnName: (NSString *) columnName {
     if ((self = [super init]) == nil)
         return nil;
