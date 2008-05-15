@@ -129,7 +129,7 @@ typedef enum {
  * @section exec_query Query Statements
  *
  * Queries can be executed using -[PLDatabase executeQuery:]. To iterate over the returned results, an NSObject instance
- * conforming to #PLResultSet will be returned.
+ * conforming to PLResultSet will be returned.
  *
  * <pre>
  * NSObject<PLResultSet> *results = [db executeQuery: @"SELECT id FROM example WHERE id = ?", [NSNumber numberWithInteger: 42]];

@@ -31,15 +31,15 @@
 
 /**
  * Manages the object relational mapping between a database, and Objective-C objects
- * conforming to the #PLEntity protocol.
+ * conforming to the PLEntity protocol.
  */
 @implementation PLEntityManager
 
 /**
  * Initialize a new entity manager with the given connection provider delegate, and SQL dialect.
  *
- * @param delegate A delegate responsible for providing database connections.
- * @param entityDialect The SQL entity dialect for the given database.
+ * @param connectionDelegate Delegate responsible for providing database connections.
+ * @param sqlDialect The SQL entity dialect for the given database.
  */
 - (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) connectionDelegate sqlDialect: (NSObject<PLEntityDialect> *) sqlDialect {
     if ((self = [super init]) == nil)

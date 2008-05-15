@@ -29,7 +29,9 @@
 
 #import "PlausibleDatabase.h"
 
-
+/**
+ * Defines the object entity mapping of a class and database table.
+ */
 @implementation PLEntityDefinition
 
 /**

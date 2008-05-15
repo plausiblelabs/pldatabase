@@ -28,7 +28,7 @@
  */
 
 /**
- * A delegate responsible for providing #PLDatabase instances to the
+ * A delegate responsible for providing PLDatabase instances to the
  * PLEntityManager.
  */
 @protocol PLEntityConnectionDelegate
