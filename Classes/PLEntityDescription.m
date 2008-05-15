@@ -38,6 +38,10 @@
 /**
  * Create a new entity description.
  *
+ * @bug Composite primary keys may be defined, however, table composite
+ * foreign keys are are not currently supported, and relationships
+ * will not be handled correctly.
+ *
  * @param tableName The database table corresponding to the described entity.
  */
 + (PLEntityDescription *) descriptionWithTableName: (NSString *) tableName {
@@ -54,6 +58,7 @@
         return nil;
 
     _tableName = [tableName retain];
+    _columnProperties = [[NSMutableDictionary alloc] initWithCapacity: 2];
 
     return self;
 }
@@ -61,6 +66,7 @@
 
 - (void) dealloc {
     [_tableName release];
+    [_columnProperties release];
 
     [super dealloc];
 }
@@ -73,6 +79,28 @@
  * @throw An exception will be thrown if two properties maintain conflicting column names.
  */
 - (void) addPropertyDescription: (PLEntityPropertyDescription *) description {
+    [self addPropertyDescription: description isPrimaryKey: NO];
+}
+
+/**
+ * Add a new property description to the PLEntityDescription.
+ *
+ * @param description A property description.
+ * @param isPrimaryKey YES if the property comprises the object's primary key.
+ * @throw An exception will be thrown if two properties maintain conflicting column names.
+ */
+- (void) addPropertyDescription: (PLEntityPropertyDescription *) description isPrimaryKey: (BOOL) isPrimaryKey {
+    NSString *columnName = [description columnName];
+
+    /* Sanity check -- verify that multiple entries aren't registered for the same column */
+    if ([_columnProperties objectForKey: columnName] != nil) {
+        @throw [NSException exceptionWithName: PLDatabaseException 
+                                       reason: [NSString stringWithFormat: @"Multiple properties registered for column %@", columnName] 
+                                     userInfo: nil];
+    }
+
+    /* Save the description in our map */
+    [_columnProperties setObject: description forKey: [description columnName]]; 
 }
 
 

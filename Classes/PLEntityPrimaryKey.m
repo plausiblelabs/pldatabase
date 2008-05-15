@@ -26,11 +26,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#import "PLEntityPrimaryKey.h"
+#import "PlausibleDatabase.h"
 
 /**
  * A primary key is defined by one or more PLEntityPropertyDescription instances.
  */
 @implementation PLEntityPrimaryKey
+
++ (PLEntityPrimaryKey *) primaryKeyWithPropertyDescription: (PLEntityPropertyDescription *) propertyDescription {
+    return [[[PLEntityPrimaryKey alloc] initWithPropertyDescription: propertyDescription] autorelease];
+}
+
+- (id) initWithPropertyDescription: (PLEntityPropertyDescription *) propertyDescription {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    // XXX TODO
+
+    return self;
+}
+
 
 @end

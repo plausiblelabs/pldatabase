@@ -57,7 +57,7 @@
     STAssertTrue([@"test" isEqual: [description tableName]], @"Entity table name incorrect");
 
     /* Add some properties */
-    [description addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"]];
+    [description addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"] isPrimaryKey: YES];
     [description addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"name" columnName: @"name"]];
 }
 

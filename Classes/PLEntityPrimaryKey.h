@@ -27,11 +27,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Cocoa/Cocoa.h>
-
-
 @interface PLEntityPrimaryKey : NSObject {
 
 }
+
++ (PLEntityPrimaryKey *) primaryKeyWithPropertyDescription: (PLEntityPropertyDescription *) propertyDescription;
+
+- (id) initWithPropertyDescription: (PLEntityPropertyDescription *) propertyDescription;
 
 @end

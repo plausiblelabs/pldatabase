@@ -31,6 +31,9 @@
 @private
     /** Database table name */
     NSString *_tableName;
+
+    /** Map of column name to PLEntityPropertyDescription */
+    NSMutableDictionary *_columnProperties;
 }
 
 /* Accessors are library private */
@@ -43,5 +46,7 @@
 - (id) initWithTableName: (NSString *) tableName;
 
 - (void) addPropertyDescription: (PLEntityPropertyDescription *) description;
+
+- (void) addPropertyDescription: (PLEntityPropertyDescription *) description isPrimaryKey: (BOOL) isPrimaryKey;
 
 @end

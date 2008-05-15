@@ -36,4 +36,11 @@
 
 @implementation PLEntityPrimaryKeyTests
 
+- (void) testInit {
+    PLEntityPrimaryKey *primaryKey;
+
+    primaryKey = [PLEntityPrimaryKey primaryKeyWithPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"]];
+    STAssertNotNil(primaryKey, @"Could not initialize instance");
+}
+
 @end
