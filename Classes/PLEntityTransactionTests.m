@@ -31,30 +31,77 @@
 #import <OCMock/OCMock.h>
 
 #import "PlausibleDatabase.h"
+#import "PLMockEntityManager.h"
 
 @interface PLEntityTransactionTests : SenTestCase {
 @private
+    PLEntityManager *_manager;
+    PLEntityTransaction *_tx;
 }
 @end
 
 
 @implementation PLEntityTransactionTests
 
-- (void) testInit {
 
+- (void) setUp {
+    _manager = [[PLMockEntityManager alloc] init];
+    _tx = [[PLEntityTransaction alloc] initWithEntityManager: _manager error: nil];
 }
 
+- (void) tearDown {
+    [_manager release];
+    [_tx release];
+}
+
+- (void) testInit {
+    PLEntityTransaction *tx = [[[PLEntityTransaction alloc] initWithEntityManager: _manager error: nil] autorelease];
+
+    STAssertNotNil(tx, @"Could not initialize transaction");
+}
+
+- (void) testInTransaction {
+    STAssertFalse([_tx inTransaction], @"Transaction started active");
+
+    /* Try begin + commit */
+    STAssertTrue([_tx begin], @"Could not start transaction");
+    STAssertTrue([_tx inTransaction], @"Transaction active, but inTransaction returned false");
+    STAssertTrue([_tx commit], @"Could not commit transaction");
+    STAssertFalse([_tx inTransaction], @"Transaction not active, but inTransaction returned true");
+
+    /* Try begin + rollback */
+    STAssertTrue([_tx begin], @"Could not start transaction");
+    STAssertTrue([_tx inTransaction], @"Transaction active, but inTransaction returned false");
+    STAssertTrue([_tx rollback], @"Could not commit transaction");
+    STAssertFalse([_tx inTransaction], @"Transaction not active, but inTransaction returned true");
+}
+
+
 - (void) testBegin {
+    PLEntityTransaction *tx = [[[PLEntityTransaction alloc] initWithEntityManager: _manager error: nil] autorelease];
+
+    STAssertFalse([tx commit], @"Commit return true, but transaction not started");
+    STAssertTrue([tx begin], @"Could not start transaction");
+    STAssertTrue([tx commit], @"Could not commit transaction");
 
 }
 
 
 - (void) testCommit {
+    PLEntityTransaction *tx = [[[PLEntityTransaction alloc] initWithEntityManager: _manager error: nil] autorelease];
 
+    STAssertTrue([tx begin], @"Could not start transaction");
+    STAssertTrue([tx commit], @"Could not commit transaction");
+    STAssertFalse([tx commit], @"Commit return true, but transaction not started");
 }
 
 
 - (void) testRollback {
+    PLEntityTransaction *tx = [[[PLEntityTransaction alloc] initWithEntityManager: _manager error: nil] autorelease];
+
+    STAssertTrue([tx begin], @"Could not start transaction");
+    STAssertTrue([tx rollback], @"Could not rollback transaction");
+    STAssertTrue([tx begin], @"Begin return false, but transaction not started");
 }
 
 

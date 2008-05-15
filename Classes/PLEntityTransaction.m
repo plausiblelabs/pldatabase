@@ -49,9 +49,12 @@
 
     /* Retain a reference to our entity manager */
     _entityManager = [entityManager retain];
+    
+    /* Initialize transaction state */
+    _inTransaction = NO;
 
     /* Fetch a database connection. This must be returned in dealloc. */
-    _database = [[_entityManager connectionDelegate] getConnectionAndReturnError: error];
+    _database = [[[_entityManager connectionDelegate] getConnectionAndReturnError: error] retain];
     if (_database == nil) {
         [self release];
         return nil;
@@ -107,7 +110,13 @@
  * @return YES on success, NO on failure.
  */
 - (BOOL) beginAndReturnError: (NSError **) error {
-    return [_database beginTransactionAndReturnError: error];
+    BOOL ret;
+
+    ret = [_database beginTransactionAndReturnError: error];
+    if (ret)
+        _inTransaction = YES;
+
+    return ret;
 }
 
 
@@ -131,7 +140,13 @@
  * @return YES on success, NO on failure.
  */
 - (BOOL) commitAndReturnError: (NSError **) error {
-    return NO; // XXX TODO
+    BOOL ret;
+
+    ret = [_database commitTransactionAndReturnError: error];
+    if (ret)
+        _inTransaction = NO;
+
+    return ret;
 }
 
 
@@ -155,7 +170,21 @@
  * @return YES on success, NO on failure.
  */
 - (BOOL) rollbackAndReturnError: (NSError **) error {
-    return NO; // XXX TODO
+    BOOL ret;
+
+    ret = [_database rollbackTransactionAndReturnError: error];
+    if (ret)
+        _inTransaction = NO;
+
+    return ret;
+}
+
+
+/**
+ * Returns YES if the transaction is active.
+ */
+- (BOOL) inTransaction {
+    return _inTransaction;
 }
 
 @end

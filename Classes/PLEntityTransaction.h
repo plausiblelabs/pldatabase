@@ -32,14 +32,21 @@
 
 @interface PLEntityTransaction : NSObject {
 @private
+    /** Our parent entity manager. */
     PLEntityManager *_entityManager;
+
+    /** The backing database connection */
     NSObject<PLDatabase> *_database;
+
+    /** Marks the current transaction state (in transaction == YES) */
+    BOOL _inTransaction;
 }
 
 /* Transactions should only be created by the PLEntityManager */
 #if PL_DB_PRIVATE
 - (id) initWithEntityManager: (PLEntityManager *) entityManager error: (NSError **) error;
 #endif
+
 
 - (BOOL) begin;
 - (BOOL) beginAndReturnError: (NSError **) error;
@@ -51,5 +58,7 @@
 
 - (BOOL) rollback;
 - (BOOL) rollbackAndReturnError: (NSError **) error;
+
+- (BOOL) inTransaction;
 
 @end
