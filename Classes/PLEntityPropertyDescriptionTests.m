@@ -31,13 +31,13 @@
 
 #import "PlausibleDatabase.h"
 
-@interface PLEntityFieldTests : SenTestCase
+@interface PLEntityPropertyDescriptionTests : SenTestCase
 @end
 
-@implementation PLEntityFieldTests
+@implementation PLEntityPropertyDescriptionTests
 
 - (void) testInit {
-    PLEntityColumn *column = [[[PLEntityColumn alloc] initWithColumnName: @"column_id" accessor: @selector(entityKey)] autorelease];
+    PLEntityPropertyDescription *column = [[[PLEntityPropertyDescription alloc] initWithColumnName: @"column_id" accessor: @selector(entityKey)] autorelease];
     STAssertNotNil(column, @"Could not create instance");
     
     STAssertTrue([@"column_id" isEqual: [column columnName]], @"Column name incorrect.");

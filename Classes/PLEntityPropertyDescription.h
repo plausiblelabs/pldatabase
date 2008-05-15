@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-@interface PLEntityColumn : NSObject {
+@interface PLEntityPropertyDescription : NSObject {
 @private
     /** Database column name */
     NSString *_columnName;
@@ -55,7 +55,7 @@
  * @param columnName Name of the database column.
  * @param sel Accessor SEL used to retrieve column value.
  */
-#define PLEntityColumnDeclare(name, sel) [[[PLEntityColumn alloc] initWithColumnName: name accessor: sel] autorelease]
+#define PLEntityColumnDeclare(name, sel) [[[PLEntityPropertyDescription alloc] initWithColumnName: name accessor: sel] autorelease]
 
 /**
  * Create a primary key entity column.
@@ -63,7 +63,7 @@
  * @param columnName Name of the database column.
  * @param sel Accessor SEL used to retrieve column value.
  */
-#define PLEntityColumnDeclareId(name, sel) [[[PLEntityColumn alloc] initWithColumnName: name accessor: sel isPrimaryKey: YES] autorelease]
+#define PLEntityColumnDeclareId(name, sel) [[[PLEntityPropertyDescription alloc] initWithColumnName: name accessor: sel isPrimaryKey: YES] autorelease]
 
 
 @end

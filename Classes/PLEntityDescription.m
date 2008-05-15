@@ -41,8 +41,8 @@
  * @param firstObj A nil-terminated list of PLEntityColumn instances.
  * @result An entity definition for the given table.
  */
-+ (PLEntityDescription *) defineEntityForTable: (NSString *) tableName withColumns: (PLEntityColumn *) firstObj, ... {
-    PLEntityColumn *column;
++ (PLEntityDescription *) defineEntityForTable: (NSString *) tableName withColumns: (PLEntityPropertyDescription *) firstObj, ... {
+    PLEntityPropertyDescription *column;
     NSMutableSet *columns;
     va_list ap;
 
@@ -54,7 +54,7 @@
     columns = [NSMutableSet setWithObject: firstObj]; // arbitrary capacity
 
     va_start(ap, firstObj);
-    while ((column = va_arg(ap, PLEntityColumn *)) != nil) {
+    while ((column = va_arg(ap, PLEntityPropertyDescription *)) != nil) {
         [columns addObject: column];
     }
     va_end(ap);
@@ -83,7 +83,7 @@
     mutableColumnCache = [[NSMutableDictionary alloc] initWithCapacity: [columns count]];
     _columnCache = mutableColumnCache;
 
-    for (PLEntityColumn *column in columns) {
+    for (PLEntityPropertyDescription *column in columns) {
         [mutableColumnCache setObject: column forKey: [column columnName]]; 
     }
 

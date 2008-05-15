@@ -36,7 +36,7 @@
     NSDictionary *_columnCache;
 }
 
-+ (PLEntityDescription *) defineEntityForTable: (NSString *) tableName withColumns: (PLEntityColumn *) firstObj, ...;
++ (PLEntityDescription *) defineEntityForTable: (NSString *) tableName withColumns: (PLEntityPropertyDescription *) firstObj, ...;
 
 - (id) initWithTableName: (NSString *) tableName columns: (NSSet *) columns;
 
