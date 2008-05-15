@@ -36,45 +36,4 @@
 
 @implementation PLEntityDescriptionTests
 
-- (void) testInit {
-    PLEntityDescription *entityDefinition;
-    NSMutableSet *columns;
-
-    /* Set up a column dictionary */
-    columns = [[[NSMutableSet alloc] initWithCapacity: 2] autorelease];
-    [columns addObject: PLEntityColumnDeclareId(@"id", @selector(rowId))];
-    [columns addObject: PLEntityColumnDeclare(@"name", @selector(name))];
-
-    /* Create the definition */
-    entityDefinition = [[[PLEntityDescription alloc] initWithTableName: @"table" columns: columns] autorelease];
-    STAssertNotNil(entityDefinition, @"Could not create entity definition");
-
-    /* Test it */
-    STAssertTrue([@"table" isEqual: [entityDefinition tableName]], @"Table name incorrect");
-}
-
-- (void) testDefineEntity {
-    PLEntityDescription *entityDefinition;
-
-    /* Create the definition */
-    entityDefinition = [PLEntityDescription defineEntityForTable: @"table" withColumns:
-                        PLEntityColumnDeclareId(@"id", @selector(rowId)),
-                        PLEntityColumnDeclare(@"name", @selector(name)),
-                        PLEntityColumnDeclare(@"age", @selector(age)),
-                        nil];
-    STAssertNotNil(entityDefinition, @"Could not create entity definition");
-
-    /* Test it */
-    STAssertTrue([@"table" isEqual: [entityDefinition tableName]], @"Table name incorrect");
-}
-
-/* Verify that a zero-length variadic argument list works as expected */
-- (void) testDefineEntityNoColumns {
-    PLEntityDescription *entityDefinition;
-    
-    /* Create the definition */
-    entityDefinition = [PLEntityDescription defineEntityForTable: @"table" withColumns: nil];
-    STAssertNotNil(entityDefinition, @"Could not create entity definition");
-}
-
 @end

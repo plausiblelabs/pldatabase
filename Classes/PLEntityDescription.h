@@ -31,14 +31,7 @@
 @private
     /** Database table name */
     NSString *_tableName;
-
-    /** Column definitions */
-    NSDictionary *_columnCache;
 }
-
-+ (PLEntityDescription *) defineEntityForTable: (NSString *) tableName withColumns: (PLEntityPropertyDescription *) firstObj, ...;
-
-- (id) initWithTableName: (NSString *) tableName columns: (NSSet *) columns;
 
 /* Accessors are library private */
 #ifdef PL_DB_PRIVATE

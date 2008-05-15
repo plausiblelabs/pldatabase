@@ -34,66 +34,21 @@
  */
 @implementation PLEntityPropertyDescription
 
-/**
- * Initialize with the given column name, and column data accessor.
- *
- * @param columnName Name of the database column.
- * @param accessor Accessor to retrieve column value.
- */
-- (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor {
-    return [self initWithColumnName: columnName accessor: accessor isPrimaryKey: NO];
-}
-
-
-/**
- * Initialize with the given column name, and column data accessor.
- *
- * If this column is part (or wholly comprises) the table's primary key,
- * primaryKey must be YES.
- *
- * @param columnName Name of the database column.
- * @param accessor Accessor to retrieve column value.
- * @param primaryKey YES if this column comprises the table's primary key.
- */
-- (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor isPrimaryKey: (BOOL) primaryKey {
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName {
     if ((self = [super init]) == nil)
         return nil;
-    
+
+    _key = [key retain];
     _columnName = [columnName retain];
-    _accessor = accessor;
-    _primaryKey = primaryKey;
     
     return self;
 }
 
-
 - (void) dealloc {
+    [_key release];
     [_columnName release];
 
     [super dealloc];
-}
-
-/**
- * Return the column's name.
- */
-- (NSString *) columnName {
-    return _columnName;
-}
-
-/**
- * @internal
- * Returns YES if the column is a primary key.
- */
-- (BOOL) isPrimaryKey {
-    return _primaryKey;
-}
-
-/**
- * @internal
- * Returns the column accessor.
- */
-- (SEL) accessor {
-    return _accessor; 
 }
 
 @end

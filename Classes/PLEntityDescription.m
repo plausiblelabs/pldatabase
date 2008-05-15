@@ -34,69 +34,6 @@
  */
 @implementation PLEntityDescription
 
-/**
- * Create a new entity definition for the given table.
- *
- * @param tableName Name of table to which the new entity definition will correspond.
- * @param firstObj A nil-terminated list of PLEntityColumn instances.
- * @result An entity definition for the given table.
- */
-+ (PLEntityDescription *) defineEntityForTable: (NSString *) tableName withColumns: (PLEntityPropertyDescription *) firstObj, ... {
-    PLEntityPropertyDescription *column;
-    NSMutableSet *columns;
-    va_list ap;
-
-    /* If there are no columns, exit early */
-    if (firstObj == nil)
-        return [[[PLEntityDescription alloc] initWithTableName: tableName columns: [NSMutableSet setWithCapacity: 0]] autorelease];
-
-    /* Populate the set */
-    columns = [NSMutableSet setWithObject: firstObj]; // arbitrary capacity
-
-    va_start(ap, firstObj);
-    while ((column = va_arg(ap, PLEntityPropertyDescription *)) != nil) {
-        [columns addObject: column];
-    }
-    va_end(ap);
-
-    /* Now return a nice new definition */
-    return [[[PLEntityDescription alloc] initWithTableName: tableName columns: columns] autorelease];
-}
-
-/**
- * Initialize a new entity definition for the given table.
- *
- * @param tableName Name of table to which this entity definition corresponds.
- * @param columns A set of #PLEntityColumn instances.
- */
-- (id) initWithTableName: (NSString *) tableName columns: (NSSet *) columns {
-    /* A mutable pointer to _columnCache */
-    NSMutableDictionary *mutableColumnCache;
-    
-    if ((self = [super init]) == nil)
-        return nil;
-
-    /* Save the table name */
-    _tableName = [tableName retain];
-
-    /* Populate the column cache */
-    mutableColumnCache = [[NSMutableDictionary alloc] initWithCapacity: [columns count]];
-    _columnCache = mutableColumnCache;
-
-    for (PLEntityPropertyDescription *column in columns) {
-        [mutableColumnCache setObject: column forKey: [column columnName]]; 
-    }
-
-    return self;
-}
-
-
-- (void) dealloc {
-    [_tableName release];
-    [_columnCache release];
-
-    [super dealloc];
-}
 
 
 /**

@@ -37,12 +37,6 @@
 @implementation PLEntityPropertyDescriptionTests
 
 - (void) testInit {
-    PLEntityPropertyDescription *column = [[[PLEntityPropertyDescription alloc] initWithColumnName: @"column_id" accessor: @selector(entityKey)] autorelease];
-    STAssertNotNil(column, @"Could not create instance");
-    
-    STAssertTrue([@"column_id" isEqual: [column columnName]], @"Column name incorrect.");
-    STAssertFalse([column isPrimaryKey], @"Returned incorrect primary key value.");
-    STAssertEquals(@selector(entityKey), [column accessor], @"Accessor incorrect.");
 }
 
 @end

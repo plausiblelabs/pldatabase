@@ -29,41 +29,13 @@
 
 @interface PLEntityPropertyDescription : NSObject {
 @private
+    /** KVC key */
+    NSString *_key;
+    
     /** Database column name */
     NSString *_columnName;
-
-    /** Accessor selector */
-    SEL _accessor;
-
-    /** Is primary key */
-    BOOL _primaryKey;
 }
 
-- (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor;
-- (id) initWithColumnName: (NSString *) columnName accessor: (SEL) accessor isPrimaryKey: (BOOL) primaryKey;
-
-/* Accessors are library-private */
-#ifdef PL_DB_PRIVATE
-- (NSString *) columnName;
-- (BOOL) isPrimaryKey;
-- (SEL) accessor;
-#endif /* PL_DB_PRIVATE */
-
-/**
- * Create an entity column.
- *
- * @param columnName Name of the database column.
- * @param sel Accessor SEL used to retrieve column value.
- */
-#define PLEntityColumnDeclare(name, sel) [[[PLEntityPropertyDescription alloc] initWithColumnName: name accessor: sel] autorelease]
-
-/**
- * Create a primary key entity column.
- *
- * @param columnName Name of the database column.
- * @param sel Accessor SEL used to retrieve column value.
- */
-#define PLEntityColumnDeclareId(name, sel) [[[PLEntityPropertyDescription alloc] initWithColumnName: name accessor: sel isPrimaryKey: YES] autorelease]
-
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName;
 
 @end

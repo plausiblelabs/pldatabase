@@ -39,48 +39,6 @@
 }
 @end
 
-@interface SimpleEntity : NSObject <PLEntity> {
-
-@private
-    NSNumber *_rowId;
-    NSString *_name;
-}
-@end
-
-@implementation SimpleEntity
-
-+ (PLEntityDescription *) entityDefinition {
-    return [PLEntityDescription defineEntityForTable: @"simple" withColumns:
-            PLEntityColumnDeclareId(@"id", @selector(rowId)),
-            PLEntityColumnDeclare(@"name", @selector(name)),
-            nil];
-}
-
-
-- (id) initWithRowId: (NSNumber *) rowId name: (NSString *) name {
-    return nil;
-}
-
-- (id) initWithEntityDictionary: (NSDictionary *) entityDictionary {
-    NSNumber *rowId;
-    NSString *name;
-
-    rowId = [entityDictionary objectForKey: @"id"];
-    name = [entityDictionary objectForKey: @"name"];
-
-    return [self initWithRowId: rowId name: name];
-}
-
-- (NSNumber *) rowId {
-    return _rowId;
-}
-
-- (NSString *) name {
-    return _name;
-}
-
-@end
-
 @implementation PLEntityTransactionTests
 
 
