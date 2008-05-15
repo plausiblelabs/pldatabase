@@ -37,32 +37,42 @@
     PLSqliteDatabase *_db;
 
     NSObject<PLEntityDialect> *_dialect;
+    
+    PLEntityManager *_manager;
 }
 @end
 
 @implementation PLEntityManagerTests
 
 - (void) setUp {
+    PLSqliteEntityConnectionDelegate *delegate;
+    PLSqliteEntityDialect *dialect;
+    
     /* Create a temporary file for the database. Secure -- user owns enclosing directory. */
     _dbPath = [[NSTemporaryDirectory() stringByAppendingPathComponent: [[NSProcessInfo processInfo] globallyUniqueString]] retain];
     
-    /* Create the temporary database */
+    /* Create the temporary database and populate it with some data */
     _db = [[PLSqliteDatabase alloc] initWithPath: _dbPath];
     STAssertTrue([_db open], @"Could not open temporary database");
     
-    /* Populate it with some data */    
     STAssertTrue([_db executeUpdate: @"CREATE TABLE Test ("
            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
            "name VARCHAR(255))"], @"Could not create test table");
+
+    /* Create an entity manager */
+    delegate = [[[PLSqliteEntityConnectionDelegate alloc] initWithPath: _dbPath] autorelease];
+    dialect = [[[PLSqliteEntityDialect alloc] init] autorelease];
+    _manager = [[PLEntityManager alloc] initWithConnectionDelegate: delegate entityDialect: dialect];
 }
 
 - (void) tearDown {
     /* Remove the temporary database file */
     STAssertTrue([[NSFileManager defaultManager] removeItemAtPath: _dbPath error: nil], @"Could not clean up database %@", _dbPath);
-    
+
     /* Release our objects */
     [_dbPath release];
     [_db release];
+    [_manager release];
 }
 
 - (void) testInitWithDatabase {
