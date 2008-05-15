@@ -39,6 +39,47 @@
 }
 @end
 
+@interface SimpleEntity : NSObject <PLEntity> {
+
+@private
+    NSNumber *_rowId;
+    NSString *_name;
+}
+@end
+
+@implementation SimpleEntity
+
++ (PLEntityDefinition *) entityDefinition {
+    return [PLEntityDefinition defineEntityForTable: @"simple" withColumns:
+            PLEntityColumnDeclareId(@"id", @selector(rowId)),
+            PLEntityColumnDeclare(@"name", @selector(name)),
+            nil];
+}
+
+
+- (id) initWithRowId: (NSNumber *) rowId name: (NSString *) name {
+    return nil;
+}
+
+- (id) initWithEntityDictionary: (NSDictionary *) entityDictionary {
+    NSNumber *rowId;
+    NSString *name;
+
+    rowId = [entityDictionary objectForKey: @"id"];
+    name = [entityDictionary objectForKey: @"name"];
+
+    return [self initWithRowId: rowId name: name];
+}
+
+- (NSNumber *) rowId {
+    return _rowId;
+}
+
+- (NSString *) name {
+    return _name;
+}
+
+@end
 
 @implementation PLEntityTransactionTests
 
@@ -59,6 +100,11 @@
     STAssertNotNil(tx, @"Could not initialize transaction");
 }
 
+- (void) testInsertEntity {
+    
+}
+
+
 - (void) testInTransaction {
     STAssertFalse([_tx inTransaction], @"Transaction started active");
 
@@ -77,31 +123,24 @@
 
 
 - (void) testBegin {
-    PLEntityTransaction *tx = [[[PLEntityTransaction alloc] initWithEntityManager: _manager error: nil] autorelease];
-
-    STAssertFalse([tx commit], @"Commit return true, but transaction not started");
-    STAssertTrue([tx begin], @"Could not start transaction");
-    STAssertTrue([tx commit], @"Could not commit transaction");
+    STAssertFalse([_tx commit], @"Commit return true, but transaction not started");
+    STAssertTrue([_tx begin], @"Could not start transaction");
+    STAssertTrue([_tx commit], @"Could not commit transaction");
 
 }
 
 
 - (void) testCommit {
-    PLEntityTransaction *tx = [[[PLEntityTransaction alloc] initWithEntityManager: _manager error: nil] autorelease];
-
-    STAssertTrue([tx begin], @"Could not start transaction");
-    STAssertTrue([tx commit], @"Could not commit transaction");
-    STAssertFalse([tx commit], @"Commit return true, but transaction not started");
+    STAssertTrue([_tx begin], @"Could not start transaction");
+    STAssertTrue([_tx commit], @"Could not commit transaction");
+    STAssertFalse([_tx commit], @"Commit return true, but transaction not started");
 }
 
 
 - (void) testRollback {
-    PLEntityTransaction *tx = [[[PLEntityTransaction alloc] initWithEntityManager: _manager error: nil] autorelease];
-
-    STAssertTrue([tx begin], @"Could not start transaction");
-    STAssertTrue([tx rollback], @"Could not rollback transaction");
-    STAssertTrue([tx begin], @"Begin return false, but transaction not started");
+    STAssertTrue([_tx begin], @"Could not start transaction");
+    STAssertTrue([_tx rollback], @"Could not rollback transaction");
+    STAssertTrue([_tx begin], @"Begin return false, but transaction not started");
 }
-
 
 @end

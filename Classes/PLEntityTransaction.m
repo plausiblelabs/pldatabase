@@ -189,4 +189,8 @@
     return _inTransaction;
 }
 
+- (BOOL) insertEntity: (NSObject<PLEntity> *) entity error: (NSError **) error {
+    return NO; // XXX TODO
+}
+
 @end
