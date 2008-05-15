@@ -39,3 +39,12 @@
 - (id) initWithKey: (NSString *) key columnName: (NSString *) columnName;
 
 @end
+
+#ifdef PL_DB_PRIVATE
+@interface PLEntityPropertyDescription (PLEntityPropertyDescriptionLibraryPrivate)
+
+- (NSString *) key;
+- (NSString *) columnName;
+
+@end
+#endif /* PL_DB_PRIVATE */

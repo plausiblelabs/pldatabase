@@ -37,6 +37,13 @@
 @implementation PLEntityPropertyDescriptionTests
 
 - (void) testInit {
+    PLEntityPropertyDescription *propertyDescription;
+
+    propertyDescription = [[[PLEntityPropertyDescription alloc] initWithKey: @"rowId" columnName: @"id"] autorelease];
+    STAssertNotNil(propertyDescription, @"Initializer returned nil");
+
+    STAssertTrue([@"rowId" isEqual: [propertyDescription key]], @"KVC key incorrect");
+    STAssertTrue([@"id" isEqual: [propertyDescription columnName]], @"Column name incorrect");
 }
 
 @end

@@ -52,3 +52,26 @@
 }
 
 @end
+
+/**
+ * @internal
+ * Private library methods.
+ */
+@implementation PLEntityPropertyDescription (PLEntityPropertyDescriptionLibraryPrivate)
+
+/**
+ * Return the the property's key.
+ */
+- (NSString *) key {
+    return _key;
+}
+
+
+/**
+ * Return the database column name.
+ */
+- (NSString *) columnName {
+    return _columnName;
+}
+
+@end
