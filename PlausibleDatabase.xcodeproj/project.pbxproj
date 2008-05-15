@@ -62,19 +62,6 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		053D38F80DDAE855009D4EAF /* Copy OCMock */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			name = "Copy OCMock";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabase.m; sourceTree = "<group>"; };
 		051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabaseTests.m; sourceTree = "<group>"; };
@@ -356,7 +343,6 @@
 			buildConfigurationList = 0551CA500DCBE9F700E31E46 /* Build configuration list for PBXNativeTarget "Tests" */;
 			buildPhases = (
 				0551CA460DCBE9F600E31E46 /* Resources */,
-				053D38F80DDAE855009D4EAF /* Copy OCMock */,
 				0551CA470DCBE9F600E31E46 /* Sources */,
 				0551CA480DCBE9F600E31E46 /* Frameworks */,
 				0551CA490DCBE9F600E31E46 /* ShellScript */,
