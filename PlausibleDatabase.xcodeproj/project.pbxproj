@@ -24,8 +24,6 @@
 		053D39680DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D39660DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.h */; };
 		053D39690DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D39670DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.m */; };
 		053D39820DDAF551009D4EAF /* PLSqliteEntityConnectionDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D39810DDAF551009D4EAF /* PLSqliteEntityConnectionDelegateTests.m */; };
-		0551CA540DCBEB5000E31E46 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */; };
-		0551CA560DCBEB5E00E31E46 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA550DCBEB5E00E31E46 /* Foundation.framework */; };
 		0551CA780DCBED7A00E31E46 /* PLSqliteDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */; };
 		058196B60DD16BDC001E992F /* PLSqliteResultSetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */; };
 		058196D30DD16CAD001E992F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */; };
@@ -34,30 +32,39 @@
 		05CD55960DDAD0DF004448D9 /* PLEntityManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CD55950DDAD0DF004448D9 /* PLEntityManagerTests.m */; };
 		05CD55C90DDAD550004448D9 /* PLEntityTransaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CD55C40DDAD550004448D9 /* PLEntityTransaction.h */; };
 		05CD55CA0DDAD550004448D9 /* PLEntityTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 05CD55C50DDAD550004448D9 /* PLEntityTransaction.m */; };
-		05CD55D30DDAD65A004448D9 /* libpldatabase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 058197490DD17CD1001E992F /* libpldatabase.a */; };
 		05CD55D60DDAD65F004448D9 /* libpldatabase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 058197490DD17CD1001E992F /* libpldatabase.a */; };
+		05CD57FE0DDC4364004448D9 /* libpldatabase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 058197490DD17CD1001E992F /* libpldatabase.a */; };
+		05CD57FF0DDC4371004448D9 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */; };
+		05CD58110DDC44AE004448D9 /* PlausibleDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD58120DDC44B6004448D9 /* PLDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA660DCBEC1500E31E46 /* PLDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD58130DDC44B8004448D9 /* PLEntity.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D37570DDA9E2A009D4EAF /* PLEntity.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD58140DDC44BA004448D9 /* PLEntityConnectionDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D39310DDAF243009D4EAF /* PLEntityConnectionDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD58150DDC44BB004448D9 /* PLEntityDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D37FF0DDAAB19009D4EAF /* PLEntityDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD58160DDC44BF004448D9 /* PLEntityDialect.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D37600DDAA061009D4EAF /* PLEntityDialect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD58180DDC44C3004448D9 /* PLEntityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D379B0DDAA18F009D4EAF /* PLEntityManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD58190DDC44C7004448D9 /* PLEntityPropertyDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D37A30DDAA329009D4EAF /* PLEntityPropertyDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD581A0DDC44CE004448D9 /* PLEntityTransaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CD55C40DDAD550004448D9 /* PLEntityTransaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD581B0DDC44D0004448D9 /* PLMockEntityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 051E34E20DDBCB50009A7A30 /* PLMockEntityManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD581C0DDC44D4004448D9 /* PLResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD581D0DDC44D5004448D9 /* PLSqliteDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA680DCBEC5B00E31E46 /* PLSqliteDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD581E0DDC44D9004448D9 /* PLSqliteEntityConnectionDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D39660DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD581F0DDC44DC004448D9 /* PLSqliteEntityDialect.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D37590DDAA049009D4EAF /* PLSqliteEntityDialect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05CD58200DDC44DE004448D9 /* PLSqliteResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 058196AF0DD16BDC001E992F /* PLSqliteResultSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		0551CA510DCBEB3A00E31E46 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0551CA4A0DCBE9F600E31E46;
-			remoteInfo = Tests;
-		};
-		0581975A0DD17DA2001E992F /* PBXContainerItemProxy */ = {
+		05CD561A0DDAD692004448D9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 058197480DD17CD1001E992F;
 			remoteInfo = pldatabase;
 		};
-		05CD561A0DDAD692004448D9 /* PBXContainerItemProxy */ = {
+		05CD57FC0DDC435D004448D9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 058197480DD17CD1001E992F;
+			remoteGlobalIDString = 058197480DD17CD1001E992F /* pldatabase */;
 			remoteInfo = pldatabase;
 		};
 /* End PBXContainerItemProxy section */
@@ -102,9 +109,10 @@
 		05CD55950DDAD0DF004448D9 /* PLEntityManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLEntityManagerTests.m; sourceTree = "<group>"; };
 		05CD55C40DDAD550004448D9 /* PLEntityTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLEntityTransaction.h; sourceTree = "<group>"; };
 		05CD55C50DDAD550004448D9 /* PLEntityTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLEntityTransaction.m; sourceTree = "<group>"; };
+		05CD57F60DDC4357004448D9 /* PlausibleDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlausibleDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05CD57F70DDC4357004448D9 /* PlausibleDatabase-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PlausibleDatabase-Info.plist"; sourceTree = "<group>"; };
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF5E0370ADEE00C91783 /* PlausibleDatabase_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlausibleDatabase_Prefix.pch; sourceTree = "<group>"; };
-		D2AAC0C705546C1D00DB518D /* PlausibleDatabase.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = PlausibleDatabase.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,13 +132,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D2AAC0C505546C1D00DB518D /* Frameworks */ = {
+		05CD57F40DDC4357004448D9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05CD55D30DDAD65A004448D9 /* libpldatabase.a in Frameworks */,
-				0551CA540DCBEB5000E31E46 /* libsqlite3.dylib in Frameworks */,
-				0551CA560DCBEB5E00E31E46 /* Foundation.framework in Frameworks */,
+				05CD57FE0DDC4364004448D9 /* libpldatabase.a in Frameworks */,
+				05CD57FF0DDC4371004448D9 /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,9 +147,9 @@
 		034768DFFF38A50411DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D2AAC0C705546C1D00DB518D /* PlausibleDatabase.dylib */,
 				0551CA4B0DCBE9F600E31E46 /* Tests.octest */,
 				058197490DD17CD1001E992F /* libpldatabase.a */,
+				05CD57F60DDC4357004448D9 /* PlausibleDatabase.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -255,6 +262,7 @@
 				0551CA4C0DCBE9F600E31E46 /* Tests-Info.plist */,
 				0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */,
 				0551CA550DCBEB5E00E31E46 /* Foundation.framework */,
+				05CD57F70DDC4357004448D9 /* PlausibleDatabase-Info.plist */,
 			);
 			name = PlausibleDatabase;
 			sourceTree = "<group>";
@@ -322,10 +330,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D2AAC0C305546C1D00DB518D /* Headers */ = {
+		05CD57F10DDC4357004448D9 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05CD58110DDC44AE004448D9 /* PlausibleDatabase.h in Headers */,
+				05CD58120DDC44B6004448D9 /* PLDatabase.h in Headers */,
+				05CD58130DDC44B8004448D9 /* PLEntity.h in Headers */,
+				05CD58140DDC44BA004448D9 /* PLEntityConnectionDelegate.h in Headers */,
+				05CD58150DDC44BB004448D9 /* PLEntityDescription.h in Headers */,
+				05CD58160DDC44BF004448D9 /* PLEntityDialect.h in Headers */,
+				05CD58180DDC44C3004448D9 /* PLEntityManager.h in Headers */,
+				05CD58190DDC44C7004448D9 /* PLEntityPropertyDescription.h in Headers */,
+				05CD581A0DDC44CE004448D9 /* PLEntityTransaction.h in Headers */,
+				05CD581B0DDC44D0004448D9 /* PLMockEntityManager.h in Headers */,
+				05CD581C0DDC44D4004448D9 /* PLResultSet.h in Headers */,
+				05CD581D0DDC44D5004448D9 /* PLSqliteDatabase.h in Headers */,
+				05CD581E0DDC44D9004448D9 /* PLSqliteEntityConnectionDelegate.h in Headers */,
+				05CD581F0DDC44DC004448D9 /* PLSqliteEntityDialect.h in Headers */,
+				05CD58200DDC44DE004448D9 /* PLSqliteResultSet.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,24 +391,24 @@
 			productReference = 058197490DD17CD1001E992F /* libpldatabase.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		D2AAC0C605546C1D00DB518D /* PlausibleDatabase */ = {
+		05CD57F50DDC4357004448D9 /* PlausibleDatabase */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1DEB917D08733D990010E9CD /* Build configuration list for PBXNativeTarget "PlausibleDatabase" */;
+			buildConfigurationList = 05CD57FB0DDC4358004448D9 /* Build configuration list for PBXNativeTarget "PlausibleDatabase" */;
 			buildPhases = (
-				D2AAC0C305546C1D00DB518D /* Headers */,
-				D2AAC0C405546C1D00DB518D /* Sources */,
-				D2AAC0C505546C1D00DB518D /* Frameworks */,
+				05CD57F10DDC4357004448D9 /* Headers */,
+				05CD57F20DDC4357004448D9 /* Resources */,
+				05CD57F30DDC4357004448D9 /* Sources */,
+				05CD57F40DDC4357004448D9 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				0551CA520DCBEB3A00E31E46 /* PBXTargetDependency */,
-				0581975B0DD17DA2001E992F /* PBXTargetDependency */,
+				05CD57FD0DDC435D004448D9 /* PBXTargetDependency */,
 			);
 			name = PlausibleDatabase;
 			productName = PlausibleDatabase;
-			productReference = D2AAC0C705546C1D00DB518D /* PlausibleDatabase.dylib */;
-			productType = "com.apple.product-type.library.dynamic";
+			productReference = 05CD57F60DDC4357004448D9 /* PlausibleDatabase.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -400,7 +423,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D2AAC0C605546C1D00DB518D /* PlausibleDatabase */,
+				05CD57F50DDC4357004448D9 /* PlausibleDatabase */,
 				0551CA4A0DCBE9F600E31E46 /* Tests */,
 				058197480DD17CD1001E992F /* pldatabase */,
 			);
@@ -409,6 +432,13 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		0551CA460DCBE9F600E31E46 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05CD57F20DDC4357004448D9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -466,7 +496,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D2AAC0C405546C1D00DB518D /* Sources */ = {
+		05CD57F30DDC4357004448D9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -476,20 +506,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0551CA520DCBEB3A00E31E46 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0551CA4A0DCBE9F600E31E46 /* Tests */;
-			targetProxy = 0551CA510DCBEB3A00E31E46 /* PBXContainerItemProxy */;
-		};
-		0581975B0DD17DA2001E992F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 058197480DD17CD1001E992F /* pldatabase */;
-			targetProxy = 0581975A0DD17DA2001E992F /* PBXContainerItemProxy */;
-		};
 		05CD561B0DDAD692004448D9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 058197480DD17CD1001E992F /* pldatabase */;
 			targetProxy = 05CD561A0DDAD692004448D9 /* PBXContainerItemProxy */;
+		};
+		05CD57FD0DDC435D004448D9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 058197480DD17CD1001E992F /* pldatabase */;
+			targetProxy = 05CD57FC0DDC435D004448D9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -611,38 +636,59 @@
 			};
 			name = Release;
 		};
-		1DEB917E08733D990010E9CD /* Debug */ = {
+		05CD57F90DDC4357004448D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = PlausibleDatabase_Prefix.pch;
-				INSTALL_PATH = /usr/local/lib;
-				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "PlausibleDatabase-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
 				PRODUCT_NAME = PlausibleDatabase;
 			};
 			name = Debug;
 		};
-		1DEB917F08733D990010E9CD /* Release */ = {
+		05CD57FA0DDC4357004448D9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = PlausibleDatabase_Prefix.pch;
-				INSTALL_PATH = /usr/local/lib;
-				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "PlausibleDatabase-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
 				PRODUCT_NAME = PlausibleDatabase;
+				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -706,11 +752,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1DEB917D08733D990010E9CD /* Build configuration list for PBXNativeTarget "PlausibleDatabase" */ = {
+		05CD57FB0DDC4358004448D9 /* Build configuration list for PBXNativeTarget "PlausibleDatabase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1DEB917E08733D990010E9CD /* Debug */,
-				1DEB917F08733D990010E9CD /* Release */,
+				05CD57F90DDC4357004448D9 /* Debug */,
+				05CD57FA0DDC4357004448D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
