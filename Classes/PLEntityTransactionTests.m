@@ -49,8 +49,8 @@
 
 @implementation SimpleEntity
 
-+ (PLEntityDefinition *) entityDefinition {
-    return [PLEntityDefinition defineEntityForTable: @"simple" withColumns:
++ (PLEntityDescription *) entityDefinition {
+    return [PLEntityDescription defineEntityForTable: @"simple" withColumns:
             PLEntityColumnDeclareId(@"id", @selector(rowId)),
             PLEntityColumnDeclare(@"name", @selector(name)),
             nil];

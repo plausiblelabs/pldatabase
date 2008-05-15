@@ -31,13 +31,13 @@
 
 #import "PlausibleDatabase.h"
 
-@interface PLEntityDefinitionTests : SenTestCase
+@interface PLEntityDescriptionTests : SenTestCase
 @end
 
-@implementation PLEntityDefinitionTests
+@implementation PLEntityDescriptionTests
 
 - (void) testInit {
-    PLEntityDefinition *entityDefinition;
+    PLEntityDescription *entityDefinition;
     NSMutableSet *columns;
 
     /* Set up a column dictionary */
@@ -46,7 +46,7 @@
     [columns addObject: PLEntityColumnDeclare(@"name", @selector(name))];
 
     /* Create the definition */
-    entityDefinition = [[[PLEntityDefinition alloc] initWithTableName: @"table" columns: columns] autorelease];
+    entityDefinition = [[[PLEntityDescription alloc] initWithTableName: @"table" columns: columns] autorelease];
     STAssertNotNil(entityDefinition, @"Could not create entity definition");
 
     /* Test it */
@@ -54,10 +54,10 @@
 }
 
 - (void) testDefineEntity {
-    PLEntityDefinition *entityDefinition;
+    PLEntityDescription *entityDefinition;
 
     /* Create the definition */
-    entityDefinition = [PLEntityDefinition defineEntityForTable: @"table" withColumns:
+    entityDefinition = [PLEntityDescription defineEntityForTable: @"table" withColumns:
                         PLEntityColumnDeclareId(@"id", @selector(rowId)),
                         PLEntityColumnDeclare(@"name", @selector(name)),
                         PLEntityColumnDeclare(@"age", @selector(age)),
@@ -70,10 +70,10 @@
 
 /* Verify that a zero-length variadic argument list works as expected */
 - (void) testDefineEntityNoColumns {
-    PLEntityDefinition *entityDefinition;
+    PLEntityDescription *entityDefinition;
     
     /* Create the definition */
-    entityDefinition = [PLEntityDefinition defineEntityForTable: @"table" withColumns: nil];
+    entityDefinition = [PLEntityDescription defineEntityForTable: @"table" withColumns: nil];
     STAssertNotNil(entityDefinition, @"Could not create entity definition");
 }
 

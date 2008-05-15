@@ -32,7 +32,7 @@
 /**
  * Defines the object entity mapping of a class and database table.
  */
-@implementation PLEntityDefinition
+@implementation PLEntityDescription
 
 /**
  * Create a new entity definition for the given table.
@@ -41,14 +41,14 @@
  * @param firstObj A nil-terminated list of PLEntityColumn instances.
  * @result An entity definition for the given table.
  */
-+ (PLEntityDefinition *) defineEntityForTable: (NSString *) tableName withColumns: (PLEntityColumn *) firstObj, ... {
++ (PLEntityDescription *) defineEntityForTable: (NSString *) tableName withColumns: (PLEntityColumn *) firstObj, ... {
     PLEntityColumn *column;
     NSMutableSet *columns;
     va_list ap;
 
     /* If there are no columns, exit early */
     if (firstObj == nil)
-        return [[[PLEntityDefinition alloc] initWithTableName: tableName columns: [NSMutableSet setWithCapacity: 0]] autorelease];
+        return [[[PLEntityDescription alloc] initWithTableName: tableName columns: [NSMutableSet setWithCapacity: 0]] autorelease];
 
     /* Populate the set */
     columns = [NSMutableSet setWithObject: firstObj]; // arbitrary capacity
@@ -60,7 +60,7 @@
     va_end(ap);
 
     /* Now return a nice new definition */
-    return [[[PLEntityDefinition alloc] initWithTableName: tableName columns: columns] autorelease];
+    return [[[PLEntityDescription alloc] initWithTableName: tableName columns: columns] autorelease];
 }
 
 /**

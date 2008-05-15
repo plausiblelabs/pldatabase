@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-@interface PLEntityDefinition : NSObject {
+@interface PLEntityDescription : NSObject {
 @private
     /** Database table name */
     NSString *_tableName;
@@ -36,7 +36,7 @@
     NSDictionary *_columnCache;
 }
 
-+ (PLEntityDefinition *) defineEntityForTable: (NSString *) tableName withColumns: (PLEntityColumn *) firstObj, ...;
++ (PLEntityDescription *) defineEntityForTable: (NSString *) tableName withColumns: (PLEntityColumn *) firstObj, ...;
 
 - (id) initWithTableName: (NSString *) tableName columns: (NSSet *) columns;
 

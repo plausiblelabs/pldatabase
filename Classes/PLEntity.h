@@ -36,7 +36,7 @@
 /**
  * Return the entity definition.
  */
-+ (PLEntityDefinition *) entityDefinition;
++ (PLEntityDescription *) entityDefinition;
 
 /**
  * Initialize the entity class with the given dictionary, supplied by the
