@@ -33,11 +33,12 @@
 @interface PLEntityTransaction : NSObject {
 @private
     PLEntityManager *_entityManager;
+    NSObject<PLDatabase> *_database;
 }
 
 /* Transactions should only be created by the PLEntityManager */
 #if PL_DB_PRIVATE
-- (id) initWithEntityManager: (PLEntityManager *) entityManager;
+- (id) initWithEntityManager: (PLEntityManager *) entityManager error: (NSError **) error;
 #endif
 
 - (BOOL) begin;

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		051D15590DD36FAB0083CC76 /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
 		051D157C0DD377F00083CC76 /* PlausibleDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */; };
+		051E34E40DDBCB50009A7A30 /* PLMockEntityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 051E34E30DDBCB50009A7A30 /* PLMockEntityManager.m */; };
 		053D375D0DDAA049009D4EAF /* PLSqliteEntityDialect.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D37590DDAA049009D4EAF /* PLSqliteEntityDialect.h */; };
 		053D375E0DDAA049009D4EAF /* PLSqliteEntityDialect.m in Sources */ = {isa = PBXBuildFile; fileRef = 053D375A0DDAA049009D4EAF /* PLSqliteEntityDialect.m */; };
 		053D37A00DDAA18F009D4EAF /* PLEntityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 053D379B0DDAA18F009D4EAF /* PLEntityManager.h */; };
@@ -80,6 +81,8 @@
 /* Begin PBXFileReference section */
 		051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabase.m; sourceTree = "<group>"; };
 		051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabaseTests.m; sourceTree = "<group>"; };
+		051E34E20DDBCB50009A7A30 /* PLMockEntityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLMockEntityManager.h; sourceTree = "<group>"; };
+		051E34E30DDBCB50009A7A30 /* PLMockEntityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLMockEntityManager.m; sourceTree = "<group>"; };
 		053D37570DDA9E2A009D4EAF /* PLEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLEntity.h; sourceTree = "<group>"; };
 		053D37590DDAA049009D4EAF /* PLSqliteEntityDialect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteEntityDialect.h; sourceTree = "<group>"; };
 		053D375A0DDAA049009D4EAF /* PLSqliteEntityDialect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteEntityDialect.m; sourceTree = "<group>"; };
@@ -168,6 +171,7 @@
 		053D37550DDA9A68009D4EAF /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				05CD567B0DDB7498004448D9 /* Relationship */,
 				053D38060DDAAB20009D4EAF /* Entity */,
 				05CD56250DDAD768004448D9 /* Manager */,
 				05CD56240DDAD74F004448D9 /* Dialects */,
@@ -241,6 +245,8 @@
 				05CD55C50DDAD550004448D9 /* PLEntityTransaction.m */,
 				053D38860DDADCB2009D4EAF /* PLEntityTransactionTests.m */,
 				053D39310DDAF243009D4EAF /* PLEntityConnectionDelegate.h */,
+				051E34E20DDBCB50009A7A30 /* PLMockEntityManager.h */,
+				051E34E30DDBCB50009A7A30 /* PLMockEntityManager.m */,
 			);
 			name = Manager;
 			sourceTree = "<group>";
@@ -251,6 +257,13 @@
 				05939BF00DCBFFE4004FEA21 /* SQLite */,
 			);
 			name = Drivers;
+			sourceTree = "<group>";
+		};
+		05CD567B0DDB7498004448D9 /* Relationship */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Relationship;
 			sourceTree = "<group>";
 		};
 		0867D691FE84028FC02AAC07 /* PlausibleDatabase */ = {
@@ -459,6 +472,7 @@
 				05CD55960DDAD0DF004448D9 /* PLEntityManagerTests.m in Sources */,
 				053D38870DDADCB2009D4EAF /* PLEntityTransactionTests.m in Sources */,
 				053D39820DDAF551009D4EAF /* PLSqliteEntityConnectionDelegateTests.m in Sources */,
+				051E34E40DDBCB50009A7A30 /* PLMockEntityManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

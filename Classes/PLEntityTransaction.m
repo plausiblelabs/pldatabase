@@ -37,19 +37,36 @@
 
 /**
  * @internal
- * Initialize with the given transaction manager.
+ * Initialize with the given entity manager.
  */
-- (id) initWithEntityManager: (PLEntityManager *) entityManager {
-    if ((self = [super init]) == nil)
+- (id) initWithEntityManager: (PLEntityManager *) entityManager error: (NSError **) error {
+    if ((self = [super init]) == nil) {
+        /* This should not fail, but we have to return an error. */
+        if (error != nil)
+            *error = [NSError errorWithDomain: PLDatabaseErrorDomain code: PLDatabaseErrorUnknown userInfo: nil];
         return nil;
+    }
 
+    /* Retain a reference to our entity manager */
     _entityManager = [entityManager retain];
+
+    /* Fetch a database connection. This must be returned in dealloc. */
+    _database = [[_entityManager connectionDelegate] getConnectionAndReturnError: error];
+    if (_database == nil) {
+        [self release];
+        return nil;
+    }
 
     return self;
 }
 
 
 - (void) dealloc {
+    /* Return our database connection */
+    [[_entityManager connectionDelegate] closeConnection: _database];
+    
+    /* Free any memory */
+    [_database release];
     [_entityManager release];
 
     [super dealloc];
@@ -90,7 +107,7 @@
  * @return YES on success, NO on failure.
  */
 - (BOOL) beginAndReturnError: (NSError **) error {
-    return NO; // XXX TODO
+    return [_database beginTransactionAndReturnError: error];
 }
 
 

@@ -41,22 +41,46 @@
  * @param delegate A delegate responsible for providing database connections.
  * @param entityDialect The SQL entity dialect for the given database.
  */
-- (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) delegate entityDialect: (NSObject<PLEntityDialect> *) dialect {
+- (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) connectionDelegate sqlDialect: (NSObject<PLEntityDialect> *) sqlDialect {
     if ((self = [super init]) == nil)
         return nil;
 
-    _delegate = [delegate retain];
-    _dialect = [dialect retain];
+    _connectionDelegate = [connectionDelegate retain];
+    _sqlDialect = [sqlDialect retain];
 
     return self;
 }
 
 
 - (void) dealloc {
-    [_delegate release];
-    [_dialect release];
+    [_connectionDelegate release];
+    [_sqlDialect release];
 
     [super dealloc];
+}
+
+@end
+
+/**
+ * @internal
+ * Library Private API
+ */
+@implementation PLEntityManager (PLEntityManagerLibraryPrivate)
+
+/**
+ * @internal
+ * Return the connection delegate.
+ */
+- (NSObject<PLEntityConnectionDelegate> *) connectionDelegate {
+    return _connectionDelegate;
+}
+
+/**
+ * @internal
+ * Return the entity dialect.
+ */
+- (NSObject<PLEntityDialect> *) sqlDialect {
+    return _sqlDialect;
 }
 
 @end
