@@ -50,6 +50,9 @@
 #import "PLSqliteEntityDialect.h"
 #import "PLSqliteEntityConnectionDelegate.h"
 
+/* Exceptions */
+extern NSString *PLDatabaseException;
+
 /* Error Domain and Codes */
 extern NSString *PLDatabaseErrorDomain;
 extern NSString *PLDatabaseErrorQueryStringKey;
