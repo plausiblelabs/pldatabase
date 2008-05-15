@@ -181,7 +181,9 @@
 
 
 /**
- * Returns YES if the transaction is active.
+ * Returns YES if the transaction is active. This method only reflects local
+ * state -- if a transaction was rolled back through other means (such as by the database),
+ * it will not be reflected here.
  */
 - (BOOL) inTransaction {
     return _inTransaction;
