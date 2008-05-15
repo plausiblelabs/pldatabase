@@ -38,6 +38,10 @@
 - (NSString *) tableName;
 #endif
 
-- (id) initWithTableName: (NSString *) tableName properties: (NSArray *) properties;
++ (PLEntityDescription *) entityDescriptionWithTableName: (NSString *) tableName;
+
+- (id) initWithTableName: (NSString *) tableName;
+
+- (void) addPropertyDescription: (PLEntityPropertyDescription *) description;
 
 @end

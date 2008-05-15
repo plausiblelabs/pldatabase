@@ -34,14 +34,31 @@
 @interface PLEntityDescriptionTests : SenTestCase
 @end
 
+
+@interface ExampleEntity : NSObject <PLEntity>
+@end
+
+@implementation ExampleEntity
+
++ (PLEntityDescription *) entityDescription {
+    return nil;
+}
+
+@end
+
 @implementation PLEntityDescriptionTests
 
 - (void) testInit {
     PLEntityDescription *description;
 
-    description = [[[PLEntityDescription alloc] initWithTableName: @"test" properties: [NSArray array]] autorelease];
+    /* Create one */
+    description = [PLEntityDescription entityDescriptionWithTableName: @"test"];
     STAssertNotNil(description, @"Could not initialize PLEntityDescription");
     STAssertTrue([@"test" isEqual: [description tableName]], @"Entity table name incorrect");
+
+    /* Add some properties */
+    [description addPropertyDescription: [PLEntityPropertyDescription propertyDescriptionWithKey: @"rowId" columnName: @"id"]];
+    [description addPropertyDescription: [PLEntityPropertyDescription propertyDescriptionWithKey: @"name" columnName: @"name"]];
 }
 
 @end

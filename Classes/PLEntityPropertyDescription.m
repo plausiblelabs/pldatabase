@@ -35,6 +35,17 @@
 @implementation PLEntityPropertyDescription
 
 /**
+ * Create and return a description with the provided Key Value Coding key and
+ * database column name.
+ *
+ * @param key KVC key used to access the column value.
+ * @param columnName The corresponding database column.
+ */
++ (id) propertyDescriptionWithKey: (NSString *) key columnName: (NSString *) columnName {
+    return [[[PLEntityPropertyDescription alloc] initWithKey: key columnName: columnName] autorelease];
+}
+
+/**
  * Initialize with the Key Value Coding key and database column name.
  *
  * @param key KVC key used to access the column value.

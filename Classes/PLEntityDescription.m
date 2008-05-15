@@ -34,19 +34,26 @@
  */
 @implementation PLEntityDescription
 
+
+/**
+ * Create a new entity description.
+ *
+ * @param tableName The database table corresponding to the described entity.
+ */
++ (PLEntityDescription *) entityDescriptionWithTableName: (NSString *) tableName {
+    return [[[PLEntityDescription alloc] initWithTableName: tableName] autorelease];
+}
+
 /**
  * Initialize the entity description.
  *
  * @param tableName The database table corresponding to the described entity.
- * @param properties A list of PLEntityPropertyDescription instances, maping
- * entity properties to columns.
  */
-- (id) initWithTableName: (NSString *) tableName properties: (NSArray *) properties {
+- (id) initWithTableName: (NSString *) tableName {
     if ((self = [super init]) == nil)
         return nil;
 
     _tableName = [tableName retain];
-    // TODO
 
     return self;
 }
@@ -60,7 +67,16 @@
 
 
 /**
- * @internal
+ * Add a new property description to the PLEntityDescription.
+ *
+ * @param description A property description.
+ * @throw An exception will be thrown if two properties maintain conflicting column names.
+ */
+- (void) addPropertyDescription: (PLEntityPropertyDescription *) description {
+}
+
+
+/**
  * Return the table's name.
  */
 - (NSString *) tableName {
