@@ -38,11 +38,4 @@
  */
 + (PLEntityDescription *) entityDefinition;
 
-/**
- * Initialize the entity class with the given dictionary, supplied by the
- * database.
- */
-- (id) initWithEntityDictionary: (NSDictionary *) entityDictionary;
-
-
 @end
