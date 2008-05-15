@@ -36,6 +36,6 @@
 /**
  * Return the entity definition.
  */
-+ (PLEntityDescription *) entityDefinition;
++ (PLEntityDescription *) entityDescription;
 
 @end
