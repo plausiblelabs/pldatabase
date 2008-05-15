@@ -29,8 +29,18 @@
 
 #import "PlausibleDatabase.h"
 
+/**
+ * Manages the object relational mapping between a database, and Objective-C objects
+ * conforming to the #PLEntity protocol.
+ */
 @implementation PLEntityManager
 
+/**
+ * Initialize a new entity manager with the given connection provider delegate, and SQL dialect.
+ *
+ * @param delegate A delegate responsible for providing database connections.
+ * @param entityDialect The SQL entity dialect for the given database.
+ */
 - (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) delegate entityDialect: (NSObject<PLEntityDialect> *) dialect {
     if ((self = [super init]) == nil)
         return nil;
