@@ -30,6 +30,15 @@
 
 /**
  * Protocol for interacting with an SQL database.
+ *
+ * @par Supported Scalar Types
+ * PLDatabase drivers support conversion to and from the scalar types as defined in
+ * the Key Value Coding documentation, Scalar and Structure Support:
+ * http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/DataTypes.html#//apple_ref/doc/uid/20002171-184842-BCIJIBHC
+ *
+ * The mapping of these scalar types to specific database types is implementation
+ * defined. Refer to the database driver's documentation for the specific mapping
+ * used.
  */
 @protocol PLDatabase
 
