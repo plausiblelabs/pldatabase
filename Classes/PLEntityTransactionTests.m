@@ -28,7 +28,6 @@
  */
 
 #import <SenTestingKit/SenTestingKit.h>
-#import <OCMock/OCMock.h>
 
 #import "PlausibleDatabase.h"
 #import "PLMockEntityManager.h"
