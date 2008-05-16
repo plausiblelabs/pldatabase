@@ -34,8 +34,8 @@
  * Implementors should subclass this abstract base class to implement
  * Plausible Entity Support for a specific database system.
  *
- * As this class is intended to be extended, binary compatibility is
- * gauranteed. 
+ * As this class is intended to be extended, binary compatibility of
+ * subclasses is gauranteed.
  *
  * Subclass implementations must be immutable, as they will be shared
  * between multiple threads and potentially unrelated database connections.
