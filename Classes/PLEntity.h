@@ -32,6 +32,8 @@
  * Represents an entity that may be loaded and persisted to and
  * from a database. Implementing classes must support initialization via
  * the init method.
+ *
+ * XXX TODO Missing documentation
  */
 @protocol PLEntity
 @required
