@@ -116,7 +116,7 @@
 /**
  * XXX TODO
  */
-- (id) instantiateEntityWithValues: (NSDictionary *) values {
+- (id) instantiateEntityWithColumnValues: (NSDictionary *) values {
     NSObject<PLEntity> *entity;
 
     /* Create the new class instance */

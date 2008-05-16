@@ -103,7 +103,7 @@
     [values setObject: @"Appleseed" forKey: @"last_name"];
 
     /* Try creating the entity */
-    entity = [[ExampleEntity entityDescription] instantiateEntityWithValues: values];
+    entity = [[ExampleEntity entityDescription] instantiateEntityWithColumnValues: values];
     STAssertNotNil(entity, @"Could not instantiate entity");
 
     STAssertEquals(42, [[entity rowId] intValue], @"Incorrect row id");
