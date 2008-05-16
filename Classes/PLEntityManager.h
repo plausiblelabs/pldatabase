@@ -33,10 +33,10 @@
     NSObject<PLEntityConnectionDelegate> *_connectionDelegate;
 
     /** SQL dialect */
-    NSObject<PLEntityDialect> *_sqlDialect;
+    PLEntityDialect *_sqlDialect;
 }
 
-- (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) delegate sqlDialect: (NSObject<PLEntityDialect> *) sqlDialect;
+- (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) delegate sqlDialect: (PLEntityDialect *) sqlDialect;
 
 @end
 
@@ -44,7 +44,7 @@
 @interface PLEntityManager (PLEntityManagerLibraryPrivate)
 
 - (NSObject<PLEntityConnectionDelegate> *) connectionDelegate;
-- (NSObject<PLEntityDialect> *) sqlDialect;
+- (PLEntityDialect *) sqlDialect;
 
 @end
 #endif /* PL_DB_PRIVATE */

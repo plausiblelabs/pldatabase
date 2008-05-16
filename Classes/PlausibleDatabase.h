@@ -106,6 +106,10 @@ typedef enum {
  * Plausible Database provides an Objective-C veneer over the underlying SQL database. Classes
  * are automatically bound to statement parameters, and converted to and from the underlying SQL datatypes.
  *
+ * Library classes supporting subclassing are explicitly documented. Due to Objective-C's fragile base classes,
+ * binary compatibility with subclasses is NOT guaranteed. You should avoid subclassing library
+ * classes -- use class composition instead.
+ *
  * @section create_conn Creating a Connection
  *
  * Open a connection to a database file:

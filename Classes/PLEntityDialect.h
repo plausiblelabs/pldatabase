@@ -27,9 +27,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * Database-specific support for the PLEntityManager.
- */
-@protocol PLEntityDialect
+
+@interface PLEntityDialect : NSObject {
+@private
+    // An extensible class, reserve instance variable space.
+    id *_reserved0;
+    id *_reserved1;
+    id *_reserved2;
+    id *_reserved3;
+}
 
 @end

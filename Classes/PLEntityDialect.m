@@ -30,57 +30,16 @@
 #import "PlausibleDatabase.h"
 
 /**
- * Manages the object relational mapping between a database, and Objective-C objects
- * conforming to the PLEntity protocol.
- */
-@implementation PLEntityManager
-
-/**
- * Initialize a new entity manager with the given connection provider delegate, and SQL dialect.
+ * Represents a SQL dialect as implemented by a specific database system.
+ * Implementors should subclass this abstract base class to implement
+ * Plausible Entity Support for a specific database system.
  *
- * @param connectionDelegate Delegate responsible for providing database connections.
- * @param sqlDialect The SQL entity dialect for the given database.
+ * As this class is intended to be extended, binary compatibility is
+ * gauranteed. 
+ *
+ * Subclass implementations must be immutable, as they will be shared
+ * between multiple threads and potentially unrelated database connections.
  */
-- (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) connectionDelegate sqlDialect: (PLEntityDialect *) sqlDialect {
-    if ((self = [super init]) == nil)
-        return nil;
-
-    _connectionDelegate = [connectionDelegate retain];
-    _sqlDialect = [sqlDialect retain];
-
-    return self;
-}
-
-
-- (void) dealloc {
-    [_connectionDelegate release];
-    [_sqlDialect release];
-
-    [super dealloc];
-}
-
-@end
-
-/**
- * @internal
- * Library Private API
- */
-@implementation PLEntityManager (PLEntityManagerLibraryPrivate)
-
-/**
- * @internal
- * Return the connection delegate.
- */
-- (NSObject<PLEntityConnectionDelegate> *) connectionDelegate {
-    return _connectionDelegate;
-}
-
-/**
- * @internal
- * Return the entity dialect.
- */
-- (PLEntityDialect *) sqlDialect {
-    return _sqlDialect;
-}
+@implementation PLEntityDialect
 
 @end
