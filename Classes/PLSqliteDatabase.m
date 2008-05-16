@@ -82,23 +82,35 @@ NSString *PLSqliteException = @"PLSqliteException";
     return self;
 }
 
-
-- (void) dealloc {
+/* Private shared finalization */
+- (void) sharedFinalization {
     int err;
 
     /* Close the connection and release any sqlite resources (if open was ever called) */
     if (_sqlite != nil) {
         err = sqlite3_close(_sqlite);
-
+        
         /* Leaking prepared statements is programmer error, and is the only cause for SQLITE_BUSY */
         if (err == SQLITE_BUSY)
             [NSException raise: PLSqliteException format: @"The SQLite database at '%@' can not be closed, as the implementation has leaked prepared statements", _path];
-
+        
         /* Unexpected! This should not happen */
         if (err != SQLITE_OK)
             NSLog(@"Unexpected error closing SQLite database at '%@': %s", sqlite3_errmsg(_sqlite));
     }
-    
+}
+
+/* GC */
+- (void) finalize {
+    [self sharedFinalization];
+
+    [super finalize];
+}
+
+/* Manual */
+- (void) dealloc {
+    [self sharedFinalization];
+
     /* Release our backing path */
     [_path release];
 

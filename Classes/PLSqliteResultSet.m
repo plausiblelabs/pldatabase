@@ -66,6 +66,14 @@
     return self;
 }
 
+/* GC */
+- (void) finalize {
+    /* The statement must be released before the databse is released, as the statement has a reference
+     * to the database which would cause a SQLITE_BUSY error when the database is released. */
+    [self close];
+}
+
+/* Manual */
 - (void) dealloc {
     /* The statement must be released before the databse is released, as the statement has a reference
      * to the database which would cause a SQLITE_BUSY error when the database is released. */
