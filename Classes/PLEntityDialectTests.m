@@ -27,56 +27,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <SenTestingKit/SenTestingKit.h>
+
 #import "PlausibleDatabase.h"
 
-
-/**
- * Represents a SQL dialect as implemented by a specific database system.
- * Implementors should subclass this abstract base class to implement
- * Plausible Entity support for a specific database system.
- *
- * As this class is intended to be extended, binary compatibility of
- * subclasses is gauranteed.
- *
- * Subclass implementations must be immutable, as they will be shared
- * between multiple threads and potentially unrelated database connections.
- */
-@implementation PLEntityDialect
-
-/**
- * @name Determining Insert Identity
- * @{
- */
-
-/**
- * Return YES if the dialect supports SELECT for the
- * previous insert's identity value.
- *
- * @return Return YES if PLEntityDialect::selectLastInsertIdentity is supported.
- *
- * @par Default Value:
- * Method returns NO by default.
- */
-- (BOOL) supportsLastInsertIdentity {
-    return NO;
+@interface PLEntityDialectTests : SenTestCase {
+@private
 }
+@end
 
-/**
- * Returns the statement used to get the last generated IDENTITY value.
- *
- * If PLEntityDialect::supportsLastInsertIdentity returns NO, this method may
- * return a nil value.
- *
- * @return Returns a SQL statement that provides the last generated IDENTITY value for the previous INSERT.
- *
- * @par Default Value:
- * Method returns nil by default.
- *
- */
-- (NSString *) selectLastInsertIdentity {
-    return nil;
+@implementation PLEntityDialectTests
+
+- (void) testDefaults {
+    PLEntityDialect *dialect = [[[PLEntityDialect alloc] init] autorelease];
+
+    /* INSERT Identity */
+    STAssertFalse([dialect supportsLastInsertIdentity], nil);
 }
-
-/** @} Insert Identity */
 
 @end

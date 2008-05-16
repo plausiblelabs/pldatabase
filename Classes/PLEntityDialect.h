@@ -27,7 +27,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 @interface PLEntityDialect : NSObject {
 @private
     // An extensible class, reserve instance variable space.
@@ -36,5 +35,8 @@
     id *_reserved2;
     id *_reserved3;
 }
+
+- (BOOL) supportsLastInsertIdentity;
+- (NSString *) selectLastInsertIdentity;
 
 @end
