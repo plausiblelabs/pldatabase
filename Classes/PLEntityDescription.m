@@ -38,9 +38,7 @@
 /**
  * Create a new entity description.
  *
- * @bug Composite primary keys may be defined, however, table composite
- * foreign keys are are not currently supported, and relationships
- * will not be handled correctly.
+ * @note Composite primary keys are not currently supported.
  *
  * @param entityClass The class corresponding to the described entity.
  * @param tableName The database table corresponding to the described entity.
@@ -116,7 +114,7 @@
 /**
  * XXX TODO
  */
-- (id) instantiateEntityWithColumnValues: (NSDictionary *) values {
+- (id) instantiateEntityWithColumnValues: (NSDictionary *) values error: (NSError **) outError {
     NSObject<PLEntity> *entity;
 
     /* Create the new class instance */
@@ -124,15 +122,21 @@
 
     /* Iterate over defined columns */
     for (NSString *columnName in _columnProperties) {
+        NSString *key;
         id value;
 
-        /* Retrieve the column's value. Skip missing values */
+        /* Get the property key */
+        key = [[_columnProperties valueForKey: columnName] key];
+
+        /* Retrieve the column's value (may be nil, it's up to the validator to accept/reject a nil value) */
         value = [values objectForKey: columnName];
-        if (value == nil)
-            continue;
+        
+        /* Validate the value (might replace value!) */
+        if (![entity validateValue: &value forKey: key error: outError])
+            return nil;
 
         /* Set the value */
-        [entity setValue: value forKey: [[_columnProperties valueForKey: columnName] key]];
+        [entity setValue: value forKey: key];
     }
 
     return entity;

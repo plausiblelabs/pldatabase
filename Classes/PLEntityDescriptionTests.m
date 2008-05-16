@@ -74,6 +74,24 @@
     return lastName;
 }
 
+- (BOOL) validateFirstName: (NSString **) ioValue error: (NSError **) error {
+    /* Never allow Barnie */
+    if ([*ioValue isEqual: @"Barnie"]) {
+        if (error != nil)
+            *error = [NSError errorWithDomain: PLDatabaseErrorDomain code: PLDatabaseErrorUnknown userInfo: nil];
+        return NO;
+    }
+
+    /* Sarah is OK, but it should be spelled Sara */
+    if ([*ioValue isEqual: @"Sarah"]) {
+        *ioValue = @"Sara";
+        return YES;
+    }
+
+    /* All other names are OK */
+    return YES;
+}
+
 @end
 
 
@@ -93,22 +111,47 @@
 }
 
 
-- (void) testInstantiateEntityWithValues {
+- (void) testInstantiateEntityWithColumnValues {
     NSMutableDictionary *values = [NSMutableDictionary dictionaryWithCapacity: 3];
     ExampleEntity *entity;
+    NSError *error;
 
     /* Set some example values */
     [values setObject: [NSNumber numberWithInt: 42] forKey: @"id"];
     [values setObject: @"Johnny" forKey: @"first_name"];
     [values setObject: @"Appleseed" forKey: @"last_name"];
 
-    /* Try creating the entity */
-    entity = [[ExampleEntity entityDescription] instantiateEntityWithColumnValues: values];
+    
+    /*
+     * Try creating the entity
+     */
+    entity = [[ExampleEntity entityDescription] instantiateEntityWithColumnValues: values error: nil];
     STAssertNotNil(entity, @"Could not instantiate entity");
 
     STAssertEquals(42, [[entity rowId] intValue], @"Incorrect row id");
     STAssertTrue([@"Johnny" isEqual: [entity firstName]], @"Incorrect firstName");
     STAssertTrue([@"Appleseed" isEqual: [entity lastName]], @"Incorrect lastName");
+
+    
+    /*
+     * Try creating the entity with a name that will be changed (Sarah -> Sara) 
+     */
+    [values setObject: @"Sarah" forKey: @"first_name"];
+    entity = [[ExampleEntity entityDescription] instantiateEntityWithColumnValues: values error: nil];
+    STAssertNotNil(entity, @"Could not instantiate entity");
+    STAssertTrue([@"Sara" isEqual: [entity firstName]], @"Incorrect firstName '%@'", [entity firstName]);
+
+    
+    /*
+     * Try triggering a validation error
+     */
+    [values setObject: @"Barnie" forKey: @"first_name"];
+    
+    error = nil;
+    entity = [[ExampleEntity entityDescription] instantiateEntityWithColumnValues: values error: &error];
+
+    STAssertNil(entity, @"Entity was incorrect instantiated");
+    STAssertNotNil(error, @"No NSError value was provided");
 }
 
 @end

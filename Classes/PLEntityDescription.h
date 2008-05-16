@@ -50,7 +50,7 @@
 - (void) addPropertyDescription: (PLEntityPropertyDescription *) description isPrimaryKey: (BOOL) isPrimaryKey;
 
 #ifdef PL_DB_PRIVATE
-- (id) instantiateEntityWithColumnValues: (NSDictionary *) values;
+- (id) instantiateEntityWithColumnValues: (NSDictionary *) values error: (NSError **) outError;
 #endif
 
 @end
