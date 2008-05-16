@@ -62,6 +62,14 @@
     return desc;
 }
 
+- (void) dealloc {
+    [rowId release];
+    [firstName release];
+    [lastName release];
+
+    [super dealloc];
+}
+
 - (NSNumber *) rowId {
     return rowId;
 }
