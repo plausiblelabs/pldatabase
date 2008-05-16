@@ -45,6 +45,9 @@
 
     /** Last name */
     NSString *lastName;
+    
+    /** Were we woken from the database? */
+    BOOL awoken;
 }
 @end
 
@@ -60,6 +63,15 @@
     [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"lastName" columnName: @"last_name"]];
 
     return desc;
+}
+
+- (id) init {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    awoken = NO;
+    
+    return self;
 }
 
 - (void) dealloc {
@@ -80,6 +92,14 @@
 
 - (NSString *) lastName {
     return lastName;
+}
+
+- (BOOL) awoken {
+    return awoken;
+}
+
+- (void) awakeFromDatabase {
+    awoken = YES;
 }
 
 - (BOOL) validateFirstName: (NSString **) ioValue error: (NSError **) error {
@@ -136,9 +156,11 @@
     entity = [[ExampleEntity entityDescription] instantiateEntityWithColumnValues: values error: nil];
     STAssertNotNil(entity, @"Could not instantiate entity");
 
+    STAssertTrue([entity awoken], @"awakeFromDatabase was not called");
     STAssertEquals(42, [[entity rowId] intValue], @"Incorrect row id");
     STAssertTrue([@"Johnny" isEqual: [entity firstName]], @"Incorrect firstName");
     STAssertTrue([@"Appleseed" isEqual: [entity lastName]], @"Incorrect lastName");
+
 
     
     /*

@@ -112,7 +112,13 @@
 }
 
 /**
- * XXX TODO
+ * @internal
+ *
+ * Instantiate an instance of the described class, using database column values.
+ *
+ * @param values A dictionary mapping database column names to associated values.
+ * @param outError A pointer to an NSError instance that will be set if an error occurs. May be nil.
+ * @return Returns a new instance, or sets outError and returns nil on failure.
  */
 - (id) instantiateEntityWithColumnValues: (NSDictionary *) values error: (NSError **) outError {
     NSObject<PLEntity> *entity;
@@ -138,6 +144,10 @@
         /* Set the value */
         [entity setValue: value forKey: key];
     }
+
+    /* Wake the object up */
+    if ([entity respondsToSelector: @selector(awakeFromDatabase)])
+        [entity awakeFromDatabase];
 
     return entity;
 }
