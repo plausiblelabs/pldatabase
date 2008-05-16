@@ -34,19 +34,23 @@
 
     /** Map of column name to PLEntityPropertyDescription */
     NSMutableDictionary *_columnProperties;
+
+    /** The described entity's class object */
+    Class _entityClass;
 }
 
-/* Accessors are library private */
-#ifdef PL_DB_PRIVATE
 - (NSString *) tableName;
-#endif
 
-+ (PLEntityDescription *) descriptionWithTableName: (NSString *) tableName;
++ (PLEntityDescription *) descriptionForClass: (Class) entityClass tableName: (NSString *) tableName;
 
-- (id) initWithTableName: (NSString *) tableName;
+- (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName;
 
 - (void) addPropertyDescription: (PLEntityPropertyDescription *) description;
 
 - (void) addPropertyDescription: (PLEntityPropertyDescription *) description isPrimaryKey: (BOOL) isPrimaryKey;
+
+#ifdef PL_DB_PRIVATE
+- (id) instantiateEntityWithValues: (NSDictionary *) values;
+#endif
 
 @end

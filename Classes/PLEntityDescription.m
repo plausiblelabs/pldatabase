@@ -42,27 +42,29 @@
  * foreign keys are are not currently supported, and relationships
  * will not be handled correctly.
  *
+ * @param entityClass The class corresponding to the described entity.
  * @param tableName The database table corresponding to the described entity.
  */
-+ (PLEntityDescription *) descriptionWithTableName: (NSString *) tableName {
-    return [[[PLEntityDescription alloc] initWithTableName: tableName] autorelease];
++ (PLEntityDescription *) descriptionForClass: (Class) entityClass tableName: (NSString *) tableName {
+    return [[[PLEntityDescription alloc] initWithClass: entityClass tableName: tableName] autorelease];
 }
 
 /**
  * Initialize the entity description.
  *
+ * @param entityClass The class corresponding to the described entity.
  * @param tableName The database table corresponding to the described entity.
  */
-- (id) initWithTableName: (NSString *) tableName {
+- (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName {
     if ((self = [super init]) == nil)
         return nil;
 
+    _entityClass = entityClass;
     _tableName = [tableName retain];
     _columnProperties = [[NSMutableDictionary alloc] initWithCapacity: 2];
-
+    
     return self;
 }
-
 
 - (void) dealloc {
     [_tableName release];
@@ -110,5 +112,31 @@
 - (NSString *) tableName {
     return _tableName;
 }
+
+/**
+ * XXX TODO
+ */
+- (id) instantiateEntityWithValues: (NSDictionary *) values {
+    NSObject<PLEntity> *entity;
+
+    /* Create the new class instance */
+    entity = [[[_entityClass alloc] init] autorelease];
+
+    /* Iterate over defined columns */
+    for (NSString *columnName in _columnProperties) {
+        id value;
+
+        /* Retrieve the column's value. Skip missing values */
+        value = [values objectForKey: columnName];
+        if (value == nil)
+            continue;
+
+        /* Set the value */
+        [entity setValue: value forKey: [[_columnProperties valueForKey: columnName] key]];
+    }
+
+    return entity;
+}
+
 
 @end

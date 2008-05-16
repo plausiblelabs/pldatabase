@@ -35,16 +35,47 @@
 @end
 
 
-@interface ExampleEntity : NSObject <PLEntity>
+@interface ExampleEntity : NSObject <PLEntity> {
+@private
+    /** Row id */
+    NSNumber *rowId;
+
+    /** First name */
+    NSString *firstName;
+
+    /** Last name */
+    NSString *lastName;
+}
 @end
+
 
 @implementation ExampleEntity
 
 + (PLEntityDescription *) entityDescription {
-    return nil;
+    PLEntityDescription *desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"People"];
+
+    /* Define our columns */
+    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"] isPrimaryKey: YES];
+    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"firstName" columnName: @"first_name"]];
+    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"lastName" columnName: @"last_name"]];
+
+    return desc;
+}
+
+- (NSNumber *) rowId {
+    return rowId;
+}
+
+- (NSString *) firstName {
+    return firstName;
+}
+
+- (NSString *) lastName {
+    return lastName;
 }
 
 @end
+
 
 @implementation PLEntityDescriptionTests
 
@@ -52,13 +83,32 @@
     PLEntityDescription *description;
 
     /* Create one */
-    description = [PLEntityDescription descriptionWithTableName: @"test"];
+    description = [PLEntityDescription descriptionForClass: [self class] tableName: @"test"];
     STAssertNotNil(description, @"Could not initialize PLEntityDescription");
-    STAssertTrue([@"test" isEqual: [description tableName]], @"Entity table name incorrect");
+    STAssertTrue([@"test" isEqual: [description tableName]], @"Entity table name incorrect (%@)", [description tableName]);
 
     /* Add some properties */
     [description addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"] isPrimaryKey: YES];
     [description addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"name" columnName: @"name"]];
+}
+
+
+- (void) testInstantiateEntityWithValues {
+    NSMutableDictionary *values = [NSMutableDictionary dictionaryWithCapacity: 3];
+    ExampleEntity *entity;
+
+    /* Set some example values */
+    [values setObject: [NSNumber numberWithInt: 42] forKey: @"id"];
+    [values setObject: @"Johnny" forKey: @"first_name"];
+    [values setObject: @"Appleseed" forKey: @"last_name"];
+
+    /* Try creating the entity */
+    entity = [[ExampleEntity entityDescription] instantiateEntityWithValues: values];
+    STAssertNotNil(entity, @"Could not instantiate entity");
+
+    STAssertEquals(42, [[entity rowId] intValue], @"Incorrect row id");
+    STAssertTrue([@"Johnny" isEqual: [entity firstName]], @"Incorrect firstName");
+    STAssertTrue([@"Appleseed" isEqual: [entity lastName]], @"Incorrect lastName");
 }
 
 @end
