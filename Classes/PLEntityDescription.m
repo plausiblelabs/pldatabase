@@ -103,13 +103,56 @@
     [_columnProperties setObject: description forKey: [description columnName]]; 
 }
 
+@end
+
 
 /**
+ * @internal
+ * Library-private methods.
+ */
+@implementation PLEntityDescription (PLEntityDescriptionLibraryPrivate)
+
+/**
+ * @internal
+ *
  * Return the table's name.
  */
 - (NSString *) tableName {
     return _tableName;
 }
+
+
+/**
+ * @internal
+ *
+ * Retrieve all available column values from the given entity instance,
+ * using the object's declared PLEntityPropertyDescription instances.
+ */
+- (NSDictionary *) columnValuesForEntity: (NSObject<PLEntity> *) entity {
+    NSMutableDictionary *columnValues;
+
+    /* Create our return dictionary */
+    columnValues = [NSMutableDictionary dictionaryWithCapacity: [_columnProperties count]];
+
+    for (NSString *columnName in _columnProperties) {
+        PLEntityPropertyDescription *property;
+        id value;
+        
+        /* Fetch the property description and the entity's value */
+        property = [_columnProperties objectForKey: columnName];
+        value = [entity valueForKey: [property key]];
+
+        /* nil values aren't returned */
+        if (value == nil)
+            continue;
+
+        /* Add column, value */
+        [columnValues setObject: value forKey: [property columnName]];
+    }
+
+    return columnValues;
+}
+
 
 /**
  * @internal

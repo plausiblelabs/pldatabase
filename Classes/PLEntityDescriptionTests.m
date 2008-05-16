@@ -38,16 +38,16 @@
 @interface ExampleEntity : NSObject <PLEntity> {
 @private
     /** Row id */
-    NSNumber *rowId;
+    NSNumber *_rowId;
 
     /** First name */
-    NSString *firstName;
+    NSString *_firstName;
 
     /** Last name */
-    NSString *lastName;
+    NSString *_lastName;
     
     /** Were we woken from the database? */
-    BOOL awoken;
+    BOOL _awoken;
 }
 @end
 
@@ -69,37 +69,47 @@
     if ((self = [super init]) == nil)
         return nil;
 
-    awoken = NO;
+    _awoken = NO;
     
     return self;
 }
 
+- (id) initWithFirstName: (NSString *) firstName lastName: (NSString *) lastName {
+    if (![self init])
+        return nil;
+
+    _firstName = [firstName retain];
+    _lastName = [lastName retain];
+
+    return self;
+}
+
 - (void) dealloc {
-    [rowId release];
-    [firstName release];
-    [lastName release];
+    [_rowId release];
+    [_firstName release];
+    [_lastName release];
 
     [super dealloc];
 }
 
 - (NSNumber *) rowId {
-    return rowId;
+    return _rowId;
 }
 
 - (NSString *) firstName {
-    return firstName;
+    return _firstName;
 }
 
 - (NSString *) lastName {
-    return lastName;
+    return _lastName;
 }
 
 - (BOOL) awoken {
-    return awoken;
+    return _awoken;
 }
 
 - (void) awakeFromDatabase {
-    awoken = YES;
+    _awoken = YES;
 }
 
 - (BOOL) validateFirstName: (NSString **) ioValue error: (NSError **) error {
@@ -138,6 +148,20 @@
     [description addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"name" columnName: @"name"]];
 }
 
+- (void) testEntityColumnValues {
+    ExampleEntity *entity;
+    NSDictionary *columnValues;
+
+    /* Create a new entity */
+    entity = [[[ExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
+
+    /* Try to fetch the column values */
+    columnValues = [[ExampleEntity entityDescription] columnValuesForEntity: entity];
+    STAssertNotNil(columnValues, @"Could not fetch column values");
+
+    STAssertTrue([@"Johnny" isEqual: [columnValues objectForKey: @"first_name"]], @"Returned first name was incorrect");
+    STAssertTrue([@"Appleseed" isEqual: [columnValues objectForKey: @"last_name"]], @"Returned last name was incorrect");
+}
 
 - (void) testInstantiateEntityWithColumnValues {
     NSMutableDictionary *values = [NSMutableDictionary dictionaryWithCapacity: 3];

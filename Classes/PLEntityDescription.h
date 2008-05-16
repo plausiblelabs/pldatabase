@@ -39,8 +39,6 @@
     Class _entityClass;
 }
 
-- (NSString *) tableName;
-
 + (PLEntityDescription *) descriptionForClass: (Class) entityClass tableName: (NSString *) tableName;
 
 - (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName;
@@ -49,8 +47,18 @@
 
 - (void) addPropertyDescription: (PLEntityPropertyDescription *) description isPrimaryKey: (BOOL) isPrimaryKey;
 
-#ifdef PL_DB_PRIVATE
-- (id) instantiateEntityWithColumnValues: (NSDictionary *) values error: (NSError **) outError;
-#endif
 
 @end
+
+
+#ifdef PL_DB_PRIVATE
+@interface PLEntityDescription (PLEntityDescriptionLibraryPrivate)
+
+- (NSString *) tableName;
+
+- (NSDictionary *) columnValuesForEntity: (NSObject<PLEntity> *) entity;
+
+- (id) instantiateEntityWithColumnValues: (NSDictionary *) values error: (NSError **) outError;
+
+@end
+#endif

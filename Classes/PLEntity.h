@@ -27,6 +27,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/* Forward declare */
+@class PLEntityDescription;
 
 /**
  * Represents an entity that may be loaded and persisted to and

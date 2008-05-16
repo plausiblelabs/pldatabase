@@ -38,11 +38,11 @@
 #import "PLSqliteDatabase.h"
 #import "PLSqliteResultSet.h"
 
+#import "PLEntity.h"
 #import "PLEntityPropertyDescription.h"
 #import "PLEntityPrimaryKey.h"
 #import "PLEntityDescription.h"
 
-#import "PLEntity.h"
 #import "PLEntityConnectionDelegate.h"
 #import "PLEntityDialect.h"
 #import "PLEntityTransaction.h"
