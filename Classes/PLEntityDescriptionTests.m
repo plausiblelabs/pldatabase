@@ -159,6 +159,7 @@
     columnValues = [[ExampleEntity entityDescription] columnValuesForEntity: entity];
     STAssertNotNil(columnValues, @"Could not fetch column values");
 
+    STAssertEquals([NSNull null], [columnValues objectForKey: @"id"], @"Row id was not NSNull instance");
     STAssertTrue([@"Johnny" isEqual: [columnValues objectForKey: @"first_name"]], @"Returned first name was incorrect");
     STAssertTrue([@"Appleseed" isEqual: [columnValues objectForKey: @"last_name"]], @"Returned last name was incorrect");
 }

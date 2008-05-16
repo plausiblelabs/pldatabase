@@ -127,6 +127,9 @@
  *
  * Retrieve all available column values from the given entity instance,
  * using the object's declared PLEntityPropertyDescription instances.
+ *
+ * Nil values are represented as NSNull, as per the Key-Value Coding
+ * Programming Guidelines: http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/BasicPrinciples.html
  */
 - (NSDictionary *) columnValuesForEntity: (NSObject<PLEntity> *) entity {
     NSMutableDictionary *columnValues;
@@ -142,9 +145,9 @@
         property = [_columnProperties objectForKey: columnName];
         value = [entity valueForKey: [property key]];
 
-        /* nil values aren't returned */
+        /* Handle nil (NSDictionary values can't be nil) */
         if (value == nil)
-            continue;
+            value = [NSNull null];
 
         /* Add column, value */
         [columnValues setObject: value forKey: [property columnName]];
