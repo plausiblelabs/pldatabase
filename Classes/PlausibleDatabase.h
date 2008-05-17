@@ -33,9 +33,11 @@
 
 /* Library Includes */
 #import "PLResultSet.h"
+#import "PLPreparedStatement.h"
 #import "PLDatabase.h"
 
 #import "PLSqliteDatabase.h"
+#import "PLSqlitePreparedStatement.h"
 #import "PLSqliteResultSet.h"
 
 #import "PLEntity.h"
