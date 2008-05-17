@@ -83,4 +83,10 @@
     return _sqlDialect;
 }
 
+
+- (PLEntityDescription *) descriptionForEntity: (Class<PLEntity>) entity {
+    return nil;
+}
+
+
 @end

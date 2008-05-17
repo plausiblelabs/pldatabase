@@ -46,5 +46,7 @@
 - (NSObject<PLEntityConnectionDelegate> *) connectionDelegate;
 - (PLEntityDialect *) sqlDialect;
 
+- (PLEntityDescription *) descriptionForEntity: (Class<PLEntity>) entity;
+
 @end
 #endif /* PL_DB_PRIVATE */
