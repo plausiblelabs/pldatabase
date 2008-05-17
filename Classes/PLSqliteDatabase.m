@@ -37,6 +37,13 @@
 NSString *PLSqliteException = @"PLSqliteException";
 
 
+@interface PLSqliteDatabase (PLSqliteDatabasePrivate)
+
+- (sqlite3_stmt *) createStatement: (NSString *) statement error: (NSError **) error;
+
+@end
+
+
 /**
  * An SQLite PLDatabase driver.
  */
@@ -359,6 +366,17 @@ NSString *PLSqliteException = @"PLSqliteException";
     return sqlite3_last_insert_rowid(_sqlite);
 }
 
+@end
+
+#pragma mark Library Private
+
+/**
+ * @internal
+ *
+ * Library Private PLSqliteDatabase methods
+ */
+@implementation PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
+
 /**
  * @internal
  * Return the last error code encountered by the underlying sqlite database.
@@ -366,6 +384,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 - (int) lastErrorCode {
     return sqlite3_errcode(_sqlite);
 }
+
 
 /**
  * @internal
@@ -375,14 +394,6 @@ NSString *PLSqliteException = @"PLSqliteException";
     return [NSString stringWithUTF8String: sqlite3_errmsg(_sqlite)];
 }
 
-@end
-
-/**
- * @internal
- *
- * Private PLSqliteDatabase methods.
- */
-@implementation PLSqliteDatabase (PLSqliteDatabasePrivate)
 
 /**
  * @internal
@@ -400,21 +411,35 @@ NSString *PLSqliteException = @"PLSqliteException";
     NSString *vendorString = [self lastErrorMessage];
     NSNumber *vendorError = [NSNumber numberWithInt: [self lastErrorCode]];
     NSError *result;
-
+    
     /* Create the error */
     result = [PlausibleDatabase errorWithCode: errorCode
-                        localizedDescription: localizedDescription
-                                 queryString: queryString
-                                 vendorError: vendorError
-                           vendorErrorString: vendorString];    
-
+                         localizedDescription: localizedDescription
+                                  queryString: queryString
+                                  vendorError: vendorError
+                            vendorErrorString: vendorString];    
+    
     /* Log it and optionally return it */
     NSLog(@"A SQLite database error occurred on database '%@': %@ (SQLite #%@: %@) (query: '%@')", 
           _path, result, vendorError, vendorString, queryString != nil ? queryString : @"<none>");
-
+    
     if (error != nil)
         *error = result;
 }
+
+@end
+
+
+#pragma mark Private
+
+/**
+ * @internal
+ *
+ * Private PLSqliteDatabase methods.
+ */
+@implementation PLSqliteDatabase (PLSqliteDatabasePrivate)
+
+
 
 /**
  * @internal

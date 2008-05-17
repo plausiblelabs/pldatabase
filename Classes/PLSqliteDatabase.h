@@ -49,21 +49,17 @@ extern NSString *PLSqliteException;
 
 - (int64_t) lastInsertRowId;
 
-#ifdef PL_DB_PRIVATE
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-#endif
-
 @end
 
 #ifdef PL_DB_PRIVATE
 
-@interface PLSqliteDatabase (PLSqliteDatabasePrivate)
+@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
+
+- (int) lastErrorCode;
+- (NSString *) lastErrorMessage;
 
 - (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
            description: (NSString *) localizedDescription queryString: (NSString *) queryString;
-
-- (sqlite3_stmt *) createStatement: (NSString *) statement error: (NSError **) error;
 
 @end
 
