@@ -33,6 +33,7 @@
 
 - (int) bindValueForParameter: (sqlite3_stmt *) sqlite_stmt withParameter: (int) parameterIndex withValue: (id) value;
 
+- (void) assertNotClosed;
 - (void) assertNotInUse;
 
 - (PLSqliteResultSet *) checkoutResultSet;
@@ -91,6 +92,8 @@
     [super dealloc];
 }
 
+
+/* from PLPreparedStatement */
 - (void) close {
     if (_sqlite_stmt == nil)
         return;
@@ -105,13 +108,14 @@
 
 /* from PLPreparedStatement */
 - (int) parameterCount {
+    [self assertNotClosed];
+
     return _parameterCount;
 }
 
 
 /* from PLPreparedStatement */
 - (void) bindParameters: (NSArray *) parameters {
-    /* Assert that we're not in-use */
     [self assertNotInUse];
     
     /* Verify that a complete parameter list was provided */
@@ -151,6 +155,8 @@
 
 /* from PLPreparedStatement */
 - (BOOL) executeUpdateAndReturnError: (NSError **) outError {
+    [self assertNotInUse];
+
     int ret;
     
     /* Call sqlite3_step() to run the virtual machine */
@@ -224,6 +230,8 @@
  * Assert that this instance is not in use by a PLSqliteResult.
  */
 - (void) assertNotInUse {
+    [self assertNotClosed];
+
     if (_inUse)
         [NSException raise: PLSqliteException format: @"A PLSqliteResultSet is already active and has not been properly closed for prepared statement '%@'", _queryString];
 }
