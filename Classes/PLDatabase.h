@@ -55,6 +55,19 @@
 - (BOOL) goodConnection;
 
 /**
+ * Prepare and return a new PLPreparedStatement.
+ *
+ * @param statement SQL statement to prepare.
+ * @param outError A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the statement could not be prepared.
+ * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * parameter, and no error information will be provided.
+ * @return The prepared statement, or nil if it could not be prepared.
+ */
+- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement error: (NSError **) outError;
+
+
+/**
  * Execute an update, returning YES on success, NO on failure.
  *
  * Any arguments should be provided following the statement, and

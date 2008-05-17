@@ -180,6 +180,25 @@ NSString *PLSqliteException = @"PLSqliteException";
     return YES;
 }
 
+
+/* from PLDatabase */
+- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement error: (NSError **) outError {
+    sqlite3_stmt *sqlite_stmt;
+    
+    /* Prepare our statement */
+    sqlite_stmt = [self createStatement: statement error: outError];
+    if (sqlite_stmt == nil)
+        return nil;
+
+    /* Create a new PLSqliteResultSet statement.
+     *
+     * MEMORY OWNERSHIP WARNING:
+     * We pass our sqlite3_stmt reference to the PLSqlitePreparedStatement, which now must assume authority for releasing
+     * that statement using sqlite3_finalize(). */
+    return [[[PLSqlitePreparedStatement alloc] initWithDatabase: self sqliteStmt: sqlite_stmt] autorelease];
+}
+
+
 /* varargs version */
 - (BOOL) executeUpdateAndReturnError: (NSError **) error statement: (NSString *) statement args: (va_list) args {
     sqlite3_stmt *sqlite_stmt;

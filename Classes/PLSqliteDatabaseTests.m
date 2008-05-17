@@ -73,6 +73,18 @@
 }
 
 
+- (void) testPrepareStatement {
+    NSObject<PLPreparedStatement> *stmt;
+
+    /* Create a test table */
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a VARCHAR(10), b VARCHAR(20), c BOOL)"], @"Create table failed");
+    
+    /* Prepare a statement */
+    stmt = [_db prepareStatement: @"INSERT INTO test (a) VALUES (?)" error: nil];
+    STAssertNotNil(stmt, @"Could not prepare statement");
+}
+
+
 - (void) testExecuteUpdate {
     STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a VARCHAR(10), b VARCHAR(20), c BOOL)"], @"Create table failed");
     STAssertTrue([_db tableExists: @"test"], @"Table 'test' not created");

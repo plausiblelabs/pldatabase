@@ -40,6 +40,9 @@
 
 - (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt;
 
+// XXX move to protocol
+- (void) close;
+
 @end
 
 #endif
