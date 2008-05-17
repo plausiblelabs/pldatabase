@@ -55,6 +55,13 @@
     [_db release];
 }
 
+- (void) testParameterCount {
+    NSObject<PLPreparedStatement> *stmt;
+
+    stmt = [_db prepareStatement: @"SELECT * FROM test WHERE name = (?)"];
+    STAssertEquals(1, [stmt parameterCount], @"Incorrect parameter count");
+}
+
 
 /* Test handling of all supported parameter data types */
 - (void) testParameterBinding {
@@ -94,9 +101,9 @@
         data,
         nil
     ];
-    
+
     /* Bind our values */
-    STAssertTrue([stmt bindParameters: values error: nil], @"Could not bind parameters");
+    [stmt bindParameters: values];
 
 #if 0
 	NSObject<PLResultSet> *rs;

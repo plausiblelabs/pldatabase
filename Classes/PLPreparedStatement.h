@@ -35,28 +35,24 @@
  * Query parameters may be specified as either named parameters (:name) or unamed parameters '?'.
  * XXX TODO described named vs unnamed parameter binding.
  *
- * @warning A prepared query may not be re-used by simultaneous result sets. Re-executing a query
- * will result in the previously returned result set being closed.
+ * @warning A prepared query may not be re-used by simultaneous result sets.
  */
 @protocol PLPreparedStatement
 
 /**
- * Bind a list of parameters, returning YES on success, NO on failure.
+ * Returns the number of parameters in the prepared statement.
+ */
+- (int) parameterCount;
+
+/**
+ * Bind a list of parameters to the prepared statement. All parameters
+ * must be provided -- if less than PLPreparedStatement::parameterCount
+ * values are provided, an exception will be thrown.
  *
  * @param parameters List of parameters to bind.
- * @param outError A pointer to an NSError object variable. If an error occurs, this
- * pointer will contain an error object indicating why the parameters could not be bound.
- * If no error occurs, this parameter will be left unmodified. You may specify nil, and
- * no error information will be provided.
- *
  * @note NSArray may not contain nil values. Any nil parameter values must be
  * supplied using NSNull.
  */
-- (BOOL) bindParameters: (NSArray *) parameters error: (NSError **) outError;
-
-/*
-- (BOOL) bindParameterList: (NSArray *) parameters;
-- (BOOL) bindParameterDictionary: (NSDictionary *) parameters;
-*/
+- (void) bindParameters: (NSArray *) parameters;
 
 @end

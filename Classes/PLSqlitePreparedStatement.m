@@ -57,7 +57,7 @@
     _database = [db retain];
     _sqlite_stmt = sqlite_stmt;
     _parameterCount = sqlite3_bind_parameter_count(_sqlite_stmt);
-    assert(_parameterCount >= 0);
+    assert(_parameterCount >= 0); // sanity check
 
     return self;
 }
@@ -93,13 +93,23 @@
 
 
 /* from PLPreparedStatement */
-- (BOOL) bindParameters: (NSArray *) parameters error: (NSError **) outError {
+- (int) parameterCount {
+    return _parameterCount;
+}
+
+
+/* from PLPreparedStatement */
+- (void) bindParameters: (NSArray *) parameters {
+    /* Verify that a complete parameter list was provided */
+    if ([parameters count] != _parameterCount)
+        [NSException raise: PLSqliteException 
+                    format: @"%@ prepared statement provided invalid parameter count (expected %d, but %d were provided)", [self class], _parameterCount, [parameters count]];
 
     /* Sqlite counts parameters starting at 1. */
     for (int valueIndex = 1; valueIndex <= _parameterCount; valueIndex++) {
         /* (Note that NSArray indexes from 0, so we subtract one to get the current value) */
         id value = [parameters objectAtIndex: valueIndex - 1];
-        
+
         /* Bind the parameter */
         int ret = [self bindValueForParameter: _sqlite_stmt
                                 withParameter: valueIndex
@@ -112,8 +122,7 @@
         }
     }
     
-    /* If you get this far, all is well */
-    return YES;
+    /* If you got this far, all is well */
 }
 
 @end
