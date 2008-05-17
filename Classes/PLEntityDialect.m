@@ -43,6 +43,25 @@
  */
 @implementation PLEntityDialect
 
+- (NSException *) validationExceptionWithReason: (NSString *) reason {
+    return [NSException exceptionWithName: PLDatabaseException reason: reason userInfo: nil];
+}
+
+- (id) init {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    /*
+     * Perform validation of the subclass' implementation.
+     */
+
+    /* Determining Insert Identity */
+    if ([self supportsLastInsertIdentity])
+        assert([self selectLastInsertIdentity] != nil);
+
+    return self;
+}
+
 /**
  * @name Determining Insert Identity
  * @{
