@@ -40,6 +40,8 @@
  *
  * Subclass implementations must be immutable, as they will be shared
  * between multiple threads and potentially unrelated database connections.
+ *
+ * @warning The PLEntityDialect API is experimental and subject to change.
  */
 @implementation PLEntityDialect
 
