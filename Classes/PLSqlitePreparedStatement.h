@@ -36,6 +36,9 @@
 
     /** The prepared SQLite statement. */
     sqlite3_stmt *_sqlite_stmt;
+
+    /** Number of parameters. */
+    int _parameterCount;
 }
 
 - (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt;

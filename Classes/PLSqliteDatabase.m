@@ -182,6 +182,12 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 
 /* from PLDatabase */
+- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement {
+    return [self prepareStatement: statement error: nil];
+}
+
+
+/* from PLDatabase */
 - (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement error: (NSError **) outError {
     sqlite3_stmt *sqlite_stmt;
     

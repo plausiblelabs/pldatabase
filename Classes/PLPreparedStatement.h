@@ -40,6 +40,20 @@
  */
 @protocol PLPreparedStatement
 
+/**
+ * Bind a list of parameters, returning YES on success, NO on failure.
+ *
+ * @param parameters List of parameters to bind.
+ * @param outError A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the parameters could not be bound.
+ * If no error occurs, this parameter will be left unmodified. You may specify nil, and
+ * no error information will be provided.
+ *
+ * @note NSArray may not contain nil values. Any nil parameter values must be
+ * supplied using NSNull.
+ */
+- (BOOL) bindParameters: (NSArray *) parameters error: (NSError **) outError;
+
 /*
 - (BOOL) bindParameterList: (NSArray *) parameters;
 - (BOOL) bindParameterDictionary: (NSDictionary *) parameters;

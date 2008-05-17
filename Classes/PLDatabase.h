@@ -54,6 +54,15 @@
  */
 - (BOOL) goodConnection;
 
+
+/**
+ * Prepare and return a new PLPreparedStatement.
+ *
+ * @param statement SQL statement to prepare.
+ * @return The prepared statement, or nil if it could not be prepared.
+ */
+- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement;
+
 /**
  * Prepare and return a new PLPreparedStatement.
  *
