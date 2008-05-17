@@ -168,7 +168,6 @@
      * Create a new PLSqliteResultSet statement.
      * At this point, is there any way for the query to actually fail? It has already been compiled and verified.
      *
-     *
      * MEMORY OWNERSHIP WARNING:
      * We pass our sqlite3_stmt reference to the PLSqliteResultSet, which now must assume authority for releasing
      * that statement using sqlite3_finalize(). */
