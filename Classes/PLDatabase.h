@@ -108,6 +108,7 @@
  * referred to using standard '?' JDBC substitutions
  *
  * @param statement SQL statement to execute.
+ * @return PLResultSet on success, or nil on failure.
  */
 - (NSObject<PLResultSet> *) executeQuery: (NSString *) statement, ...;
 
@@ -122,6 +123,7 @@
  * If no error occurs, this parameter will be left unmodified. You may specify nil for this
  * parameter, and no error information will be provided.
  * @param statement SQL statement to execute.
+ * @return PLResultSet on success, or nil on failure.
  */
 - (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement, ...;
 

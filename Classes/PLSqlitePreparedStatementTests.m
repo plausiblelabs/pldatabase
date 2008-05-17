@@ -62,10 +62,51 @@
     STAssertEquals(1, [stmt parameterCount], @"Incorrect parameter count");
 }
 
+- (void) testUpdateAndQuery {
+    NSObject<PLPreparedStatement> *stmt;
+    NSObject<PLResultSet> *rs;
+
+    /* Prepare the statement */
+    stmt = [_db prepareStatement: @"INSERT INTO test (name, color) VALUES (?, ?)"];
+
+    /* Insert twice */
+    [stmt bindParameters: [NSArray arrayWithObjects: @"Johnny", @"blue", nil]];
+    STAssertTrue([stmt executeUpdate], @"INSERT failed");
+
+    [stmt bindParameters: [NSArray arrayWithObjects: @"Sarah", @"red", nil]];
+    STAssertTrue([stmt executeUpdate], @"INSERT failed");
+
+    /* Now check the values */
+    stmt = [_db prepareStatement: @"SELECT * FROM test WHERE name = ?"];
+
+    /* Johnny */
+    [stmt bindParameters: [NSArray arrayWithObjects: @"Johnny", nil]];
+    rs = [stmt executeQuery];
+
+    STAssertNotNil(rs, @"Query failed");
+    STAssertTrue([rs next], @"No results returned");
+
+    STAssertFalse([rs isNullForColumn: @"id"], @"ID column wasn't set");
+    STAssertTrue([@"Johnny" isEqual: [rs stringForColumn: @"name"]], @"Name set incorrectly");
+    STAssertTrue([@"blue" isEqual: [rs stringForColumn: @"color"]], @"Color set incorrectly");
+
+    /* Sarah */
+    [stmt bindParameters: [NSArray arrayWithObjects: @"Sarah", nil]];
+    rs = [stmt executeQuery];
+    
+    STAssertNotNil(rs, @"Query failed");
+    STAssertTrue([rs next], @"No results returned");
+
+    STAssertFalse([rs isNullForColumn: @"id"], @"ID column wasn't set");
+    STAssertTrue([@"Sarah" isEqual: [rs stringForColumn: @"name"]], @"Name set incorrectly");
+    STAssertTrue([@"red" isEqual: [rs stringForColumn: @"color"]], @"Color set incorrectly");
+}
+
 
 /* Test handling of all supported parameter data types */
 - (void) testParameterBinding {
     NSObject<PLPreparedStatement> *stmt;
+    NSObject<PLResultSet> *rs;
 
     /* Create the data table */
     STAssertTrue([_db executeUpdate: @"CREATE TABLE data ("
@@ -105,39 +146,12 @@
     /* Bind our values */
     [stmt bindParameters: values];
 
-#if 0
-	NSObject<PLResultSet> *rs;
-	BOOL ret;
+    /* Execute the update */
+    STAssertTrue([stmt executeUpdate], @"INSERT failed");
     
-	/* Create the test table */
-    ret = [_db executeUpdate: @"CREATE TABLE test ("
-           "intval int,"
-           "int64val int,"
-           "stringval varchar(30),"
-           "nilval int,"
-           "floatval float,"
-           "doubleval double precision,"
-           "dateval double precision,"
-           "dataval blob"
-           ")"];
-	STAssertTrue(ret, nil);
-    
-	/* Insert the test data */
-    ret = [_db executeUpdate: @"INSERT INTO test "
-           "(intval, int64val, stringval, nilval, floatval, doubleval, dateval, dataval)"
-           "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-		   [NSNumber numberWithInt: 42],
-           [NSNumber numberWithLongLong: INT64_MAX],
-           @"test",
-           nil,
-           [NSNumber numberWithFloat: 3.14],
-           [NSNumber numberWithDouble: 3.14159],
-           now,
-           data];
-	STAssertTrue(ret, nil);
-    
-	/* Retrieve the data */
-    rs = [_db executeQuery: @"SELECT * FROM test WHERE intval = 42"];
+	/* Execute the query */
+    rs = [_db executeQuery: @"SELECT * FROM data WHERE intval = 42"];
+    STAssertNotNil(rs, @"Query failed");
     STAssertTrue([rs next], @"No rows returned");
     
     /* NULL value */
@@ -163,7 +177,6 @@
     
     /* Data */
     STAssertTrue([data isEqualToData: [rs dataForColumn: @"dataval"]], @"Data value incorrect");
-#endif
 }
 
 @end

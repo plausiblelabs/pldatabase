@@ -55,4 +55,46 @@
  */
 - (void) bindParameters: (NSArray *) parameters;
 
+
+/**
+ * Execute an update, returning YES on success, NO on failure.
+ */
+- (BOOL) executeUpdate;
+
+
+/**
+ * Execute an update, returning YES on success, NO on failure.
+ *
+ * @param outError A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the statement could not be executed.
+ * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * parameter, and no error information will be provided.
+ * @param statement SQL statement to execute.
+ *
+ */
+- (BOOL) executeUpdateAndReturnError: (NSError **) outError;
+
+
+/**
+ * Execute a query, returning a PLResultSet.
+ *
+ * @return PLResultSet on success, or nil on failure.
+ */
+- (NSObject<PLResultSet> *) executeQuery;
+
+
+/**
+ * Execute a query, returning a PLResultSet.
+ *
+ * @param outError A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the statement could not be executed.
+ * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * parameter, and no error information will be provided.
+ * @param statement SQL statement to execute.
+ * @return PLResultSet on success, or nil on failure.
+ */
+- (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) outError;
+
+
+
 @end

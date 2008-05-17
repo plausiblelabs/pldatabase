@@ -55,3 +55,20 @@ extern NSString *PLSqliteException;
 #endif
 
 @end
+
+#ifdef PL_DB_PRIVATE
+
+@interface PLSqliteDatabase (PLSqliteDatabasePrivate)
+
+- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
+           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
+
+- (sqlite3_stmt *) createStatement: (NSString *) statement error: (NSError **) error;
+
+- (int) bindValueForParameter: (sqlite3_stmt *) sqlite_stmt withParameter: (int) parameterIndex withValue: (id) value;
+
+- (void) bindValuesForStatement: (sqlite3_stmt *) sqlite_stmt withArgs: (va_list) args;
+
+@end
+
+#endif

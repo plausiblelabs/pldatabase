@@ -31,6 +31,34 @@
 /* Dependencies */
 #import <Foundation/Foundation.h>
 
+/* Exceptions */
+extern NSString *PLDatabaseException;
+
+/* Error Domain and Codes */
+extern NSString *PLDatabaseErrorDomain;
+extern NSString *PLDatabaseErrorQueryStringKey;
+extern NSString *PLDatabaseErrorVendorErrorKey;
+extern NSString *PLDatabaseErrorVendorStringKey;
+
+/**
+ * Database error codes.
+ */
+typedef enum {
+    /** An unknown error has occured. If this
+     * code is received, it is a bug, and should be reported. */
+    PLDatabaseErrorUnknown = 0,
+    
+    /** File not found. */
+    PLDatabaseErrorFileNotFound = 1,
+    
+    /** An SQL query failed. */
+    PLDatabaseErrorQueryFailed = 2,
+    
+    /** The provided SQL statement was invalid. */
+    PLDatabaseErrorInvalidStatement = 3,
+} PLDatabaseError;
+
+
 /* Library Includes */
 #import "PLResultSet.h"
 #import "PLPreparedStatement.h"
@@ -52,33 +80,6 @@
 
 #import "PLSqliteEntityDialect.h"
 #import "PLSqliteEntityConnectionDelegate.h"
-
-/* Exceptions */
-extern NSString *PLDatabaseException;
-
-/* Error Domain and Codes */
-extern NSString *PLDatabaseErrorDomain;
-extern NSString *PLDatabaseErrorQueryStringKey;
-extern NSString *PLDatabaseErrorVendorErrorKey;
-extern NSString *PLDatabaseErrorVendorStringKey;
-
-/**
- * Database error codes.
- */
-typedef enum {
-    /** An unknown error has occured. If this
-     * code is received, it is a bug, and should be reported. */
-    PLDatabaseErrorUnknown = 0,
-
-    /** File not found. */
-    PLDatabaseErrorFileNotFound = 1,
-    
-    /** An SQL query failed. */
-    PLDatabaseErrorQueryFailed = 2,
-    
-    /** The provided SQL statement was invalid. */
-    PLDatabaseErrorInvalidStatement = 3,
-} PLDatabaseError;
 
 #ifdef PL_DB_PRIVATE
 

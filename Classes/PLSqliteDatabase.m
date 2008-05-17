@@ -37,20 +37,6 @@
 NSString *PLSqliteException = @"PLSqliteException";
 
 
-@interface PLSqliteDatabase (PLSqliteDatabasePrivate)
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
-
-- (sqlite3_stmt *) createStatement: (NSString *) statement error: (NSError **) error;
-
-- (int) bindValueForParameter: (sqlite3_stmt *) sqlite_stmt withParameter: (int) parameterIndex withValue: (id) value;
-
-- (void) bindValuesForStatement: (sqlite3_stmt *) sqlite_stmt withArgs: (va_list) args;
-
-@end
-
-
 /**
  * An SQLite PLDatabase driver.
  *
@@ -201,7 +187,7 @@ NSString *PLSqliteException = @"PLSqliteException";
      * MEMORY OWNERSHIP WARNING:
      * We pass our sqlite3_stmt reference to the PLSqlitePreparedStatement, which now must assume authority for releasing
      * that statement using sqlite3_finalize(). */
-    return [[[PLSqlitePreparedStatement alloc] initWithDatabase: self sqliteStmt: sqlite_stmt] autorelease];
+    return [[[PLSqlitePreparedStatement alloc] initWithDatabase: self sqliteStmt: sqlite_stmt queryString: statement] autorelease];
 }
 
 

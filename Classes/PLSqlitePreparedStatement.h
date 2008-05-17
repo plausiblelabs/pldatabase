@@ -36,12 +36,15 @@
 
     /** The prepared SQLite statement. */
     sqlite3_stmt *_sqlite_stmt;
+    
+    /** The unprepared query string. */
+    NSString *_queryString;
 
     /** Number of parameters. */
     int _parameterCount;
 }
 
-- (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt;
+- (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt queryString: (NSString *) queryString;
 
 // XXX move to protocol
 - (void) close;

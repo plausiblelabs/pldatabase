@@ -49,13 +49,14 @@
  * We are passed an sqlite3_stmt reference which now we now assume authority for releasing
  * that statement using sqlite3_finalize().
  */
-- (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt {
+- (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt queryString: (NSString *) queryString {
     if ((self = [super init]) == nil)
         return nil;
 
     /* Save our database and statement reference. */
     _database = [db retain];
     _sqlite_stmt = sqlite_stmt;
+    _queryString = [queryString retain];
     _parameterCount = sqlite3_bind_parameter_count(_sqlite_stmt);
     assert(_parameterCount >= 0); // sanity check
 
@@ -105,6 +106,10 @@
         [NSException raise: PLSqliteException 
                     format: @"%@ prepared statement provided invalid parameter count (expected %d, but %d were provided)", [self class], _parameterCount, [parameters count]];
 
+    /* Reset any existing bindings */
+    sqlite3_reset(_sqlite_stmt);
+    sqlite3_clear_bindings(_sqlite_stmt);
+    
     /* Sqlite counts parameters starting at 1. */
     for (int valueIndex = 1; valueIndex <= _parameterCount; valueIndex++) {
         /* (Note that NSArray indexes from 0, so we subtract one to get the current value) */
@@ -118,11 +123,56 @@
         /* If the bind fails, throw an exception (programmer error). */
         if (ret != SQLITE_OK) {
             [NSException raise: PLSqliteException
-                        format: @"SQlite error binding parameter %d for database: %d", valueIndex, ret];
+                        format: @"SQlite error binding parameter %d for query %@: %@", valueIndex - 1, _queryString, [_database lastErrorMessage]];
         }
     }
     
     /* If you got this far, all is well */
+}
+
+
+/* from PLPreparedStatement */
+- (BOOL) executeUpdate {
+    return [self executeUpdateAndReturnError: nil];
+}
+
+
+/* from PLPreparedStatement */
+- (BOOL) executeUpdateAndReturnError: (NSError **) outError {
+    int ret;
+    
+    /* Call sqlite3_step() to run the virtual machine, and finalize the statement */
+    ret = sqlite3_step(_sqlite_stmt);
+    
+    /* On success, return (even if data was provided) */
+    if (ret == SQLITE_DONE || ret == SQLITE_ROW)
+        return YES;
+    
+    /* Query failed */
+    [_database populateError: outError
+               withErrorCode: PLDatabaseErrorQueryFailed
+                 description: NSLocalizedString(@"An error occurred executing an SQL update.", @"")
+                 queryString: _queryString];
+    return NO;
+}
+
+
+/* from PLPreparedStatement */
+- (NSObject<PLResultSet> *) executeQuery {
+    return [self executeQueryAndReturnError: nil];
+}
+
+/* from PLPreparedStatement */
+- (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) outError {
+    /*
+     * Create a new PLSqliteResultSet statement.
+     * At this point, is there any way for the query to actually fail? It has already been compiled and verified.
+     *
+     *
+     * MEMORY OWNERSHIP WARNING:
+     * We pass our sqlite3_stmt reference to the PLSqliteResultSet, which now must assume authority for releasing
+     * that statement using sqlite3_finalize(). */
+    return [[[PLSqliteResultSet alloc] initWithDatabase: _database sqliteStmt: _sqlite_stmt] autorelease];
 }
 
 @end
