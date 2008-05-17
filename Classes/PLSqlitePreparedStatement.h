@@ -29,6 +29,8 @@
 
 #if PL_DB_PRIVATE
 
+@class PLSqliteResultSet;
+
 @interface PLSqlitePreparedStatement : NSObject <PLPreparedStatement> {
 @private
     /** Our backing database. */
@@ -42,12 +44,15 @@
 
     /** Number of parameters. */
     int _parameterCount;
+
+    /** Is the prepared statement in use by a PLResultSet */
+    BOOL _inUse;
 }
 
 - (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt queryString: (NSString *) queryString;
 
-// XXX move to protocol
-- (void) close;
+// DO NOT CALL. Must only be called from PLSqliteResultSet
+- (void) checkinResultSet: (PLSqliteResultSet *) resultSet;
 
 @end
 

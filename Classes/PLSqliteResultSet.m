@@ -40,16 +40,20 @@
  * Initialize the ResultSet with an open database and an sqlite3 prepare statement.
  *
  * MEMORY OWNERSHIP WARNING:
- * We are passed an sqlite3_stmt reference which now we now assume authority for releasing
- * that statement using sqlite3_finalize().
+ * We are passed an sqlite3_stmt reference owned by the PLSqlitePreparedStatement.
+ * It will remain valid insofar as the PLSqlitePreparedStatement reference is retained.
  */
-- (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt {
+- (id) initWithDatabase: (PLSqliteDatabase *) db 
+      preparedStatement: (PLSqlitePreparedStatement *) stmt 
+         sqliteStatemet: (sqlite3_stmt *) sqlite_stmt
+{
     if ((self = [super init]) == nil) {
         return nil;
     }
     
-    /* Save our database and statement reference. */
+    /* Save our database and statement references. */
     _db = [db retain];
+    _stmt = [stmt retain];
     _sqlite_stmt = sqlite_stmt;
 
     /* Save result information */
@@ -83,6 +87,9 @@
 
     /* Release the column cache. */
     [_columnNames release];
+    
+    /* Release the statement. */
+    [_stmt release];
 
     /* Now release the database. */
     [_db release];
@@ -95,10 +102,9 @@
     if (_sqlite_stmt == nil)
         return;
 
-    /* The finalization may return the last error returned by sqlite3_next(), but this has already
-     * been handled by the -[PLSqliteResultSet next] implementation. Any remaining memory and
-     * resources are released regardless of the error code, so we do not check it here. */
-    sqlite3_finalize(_sqlite_stmt);
+    /* Check ourselves back in and give up our statement reference */
+    [_stmt checkinResultSet: self];
+    _sqlite_stmt = nil;
 }
 
 /**

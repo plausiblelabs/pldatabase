@@ -62,6 +62,35 @@
     STAssertEquals(1, [stmt parameterCount], @"Incorrect parameter count");
 }
 
+- (void) testInUseHandling {
+    NSObject<PLPreparedStatement> *stmt;
+    NSObject<PLResultSet> *rs;
+    
+    /* Prepare the statement */
+    stmt = [_db prepareStatement: @"SELECT * FROM test WHERE name = ?"];
+    [stmt bindParameters: [NSArray arrayWithObjects: @"Johnny", nil]];
+
+    /* First result set */
+    rs = [stmt executeQuery];
+    
+    /* Should throw an exception */
+    STAssertThrows([stmt executeQuery], @"Did not throw an exception re-executing query");
+    STAssertThrows(([stmt bindParameters: [NSArray arrayWithObjects: @"Johnny", nil]]),
+                   @"Did not throw an exception re-binding query");
+
+    /* Close and try again (should not throw an exception) */
+    [rs close];
+    [[stmt executeQuery] close];
+}
+
+- (void) testClose {
+    NSObject<PLPreparedStatement> *stmt;
+
+    stmt = [_db prepareStatement: @"SELECT * FROM test WHERE name = ?"];
+    [stmt close];
+    STAssertThrows([stmt executeQuery], @"Did not throw an exception executing query on closed statement");
+}
+
 - (void) testUpdateAndQuery {
     NSObject<PLPreparedStatement> *stmt;
     NSObject<PLResultSet> *rs;
@@ -89,6 +118,7 @@
     STAssertFalse([rs isNullForColumn: @"id"], @"ID column wasn't set");
     STAssertTrue([@"Johnny" isEqual: [rs stringForColumn: @"name"]], @"Name set incorrectly");
     STAssertTrue([@"blue" isEqual: [rs stringForColumn: @"color"]], @"Color set incorrectly");
+    [rs close];
 
     /* Sarah */
     [stmt bindParameters: [NSArray arrayWithObjects: @"Sarah", nil]];
@@ -100,6 +130,7 @@
     STAssertFalse([rs isNullForColumn: @"id"], @"ID column wasn't set");
     STAssertTrue([@"Sarah" isEqual: [rs stringForColumn: @"name"]], @"Name set incorrectly");
     STAssertTrue([@"red" isEqual: [rs stringForColumn: @"color"]], @"Color set incorrectly");
+    [rs close];
 }
 
 

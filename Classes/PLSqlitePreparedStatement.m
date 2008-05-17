@@ -33,6 +33,10 @@
 
 - (int) bindValueForParameter: (sqlite3_stmt *) sqlite_stmt withParameter: (int) parameterIndex withValue: (id) value;
 
+- (void) assertNotInUse;
+
+- (PLSqliteResultSet *) checkoutResultSet;
+
 @end
 
 
@@ -58,6 +62,7 @@
     _sqlite_stmt = sqlite_stmt;
     _queryString = [queryString retain];
     _parameterCount = sqlite3_bind_parameter_count(_sqlite_stmt);
+    _inUse = NO;
     assert(_parameterCount >= 0); // sanity check
 
     return self;
@@ -66,6 +71,10 @@
 
 /* GC */
 - (void) finalize {
+    // XXX: May cause a memory leak when garbage collecting due
+    // to Apple's finalization rules. No ordering is maintained,
+    // and such, there's no way to ensure that the sqlite3_stmt
+    // is released before sqlite3_close() is called.
     [self close];
     [super finalize];
 }
@@ -90,6 +99,7 @@
      * been handled by the -[PLSqliteResultSet next] implementation. Any remaining memory and
      * resources are released regardless of the error code, so we do not check it here. */
     sqlite3_finalize(_sqlite_stmt);
+    _sqlite_stmt = nil;
 }
 
 
@@ -101,15 +111,17 @@
 
 /* from PLPreparedStatement */
 - (void) bindParameters: (NSArray *) parameters {
+    /* Assert that we're not in-use */
+    [self assertNotInUse];
+    
     /* Verify that a complete parameter list was provided */
     if ([parameters count] != _parameterCount)
         [NSException raise: PLSqliteException 
                     format: @"%@ prepared statement provided invalid parameter count (expected %d, but %d were provided)", [self class], _parameterCount, [parameters count]];
 
-    /* Reset any existing bindings */
-    sqlite3_reset(_sqlite_stmt);
+    /* Clear any existing bindings */
     sqlite3_clear_bindings(_sqlite_stmt);
-    
+
     /* Sqlite counts parameters starting at 1. */
     for (int valueIndex = 1; valueIndex <= _parameterCount; valueIndex++) {
         /* (Note that NSArray indexes from 0, so we subtract one to get the current value) */
@@ -141,8 +153,11 @@
 - (BOOL) executeUpdateAndReturnError: (NSError **) outError {
     int ret;
     
-    /* Call sqlite3_step() to run the virtual machine, and finalize the statement */
+    /* Call sqlite3_step() to run the virtual machine */
     ret = sqlite3_step(_sqlite_stmt);
+
+    /* Reset the statement */
+    sqlite3_reset(_sqlite_stmt);
     
     /* On success, return (even if data was provided) */
     if (ret == SQLITE_DONE || ret == SQLITE_ROW)
@@ -165,13 +180,23 @@
 /* from PLPreparedStatement */
 - (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) outError {
     /*
-     * Create a new PLSqliteResultSet statement.
+     * Check out a new PLSqliteResultSet statement.
      * At this point, is there any way for the query to actually fail? It has already been compiled and verified.
-     *
-     * MEMORY OWNERSHIP WARNING:
-     * We pass our sqlite3_stmt reference to the PLSqliteResultSet, which now must assume authority for releasing
-     * that statement using sqlite3_finalize(). */
-    return [[[PLSqliteResultSet alloc] initWithDatabase: _database sqliteStmt: _sqlite_stmt] autorelease];
+     */
+    return [self checkoutResultSet];
+}
+
+/**
+ * @internal
+ *
+ * Check a result set back in, releasing any associated data
+ * and releasing any exclusive ownership on the prepared statement.
+ */
+- (void) checkinResultSet: (PLSqliteResultSet *) resultSet {
+    assert(_inUse = YES); // That would be strange.
+
+    _inUse = NO;
+    sqlite3_reset(_sqlite_stmt);
 }
 
 @end
@@ -183,6 +208,46 @@
  * Private PLSqliteDatabase methods.
  */
 @implementation PLSqlitePreparedStatement (PLSqlitePreparedStatementPrivate)
+
+/**
+ * @internal
+ * Assert that the result set has not been closed
+ */
+- (void) assertNotClosed {
+    if (_sqlite_stmt == nil)
+        [NSException raise: PLSqliteException format: @"Attempt to access already-closed prepared statement."];
+}
+
+/**
+ * @internal
+ *
+ * Assert that this instance is not in use by a PLSqliteResult.
+ */
+- (void) assertNotInUse {
+    if (_inUse)
+        [NSException raise: PLSqliteException format: @"A PLSqliteResultSet is already active and has not been properly closed for prepared statement '%@'", _queryString];
+}
+
+/**
+ * @internal
+ *
+ * Check out a new PLSqliteResultSet, acquiring exclusive ownership
+ * of the prepared statement. If another result set is currently checked
+ * out, will throw an exception;
+ */
+- (PLSqliteResultSet *) checkoutResultSet {
+    /* State validation. Only one result set may be checked out at a time */
+    [self assertNotInUse];
+    _inUse = YES;
+
+   /*
+    * MEMORY OWNERSHIP WARNING:
+    * We pass our sqlite3_stmt reference to the PLSqliteResultSet, and gaurantee (by contract)
+    * that the statement reference will remain valid until checkinResultSet is called for
+    * the new PLSqliteResultSet instance.
+    */
+    return [[[PLSqliteResultSet alloc] initWithDatabase: _database preparedStatement: self sqliteStatemet: _sqlite_stmt] autorelease];
+}
 
 /**
  * @internal

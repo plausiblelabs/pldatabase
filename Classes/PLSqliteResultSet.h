@@ -33,7 +33,10 @@
     /** The open database connection. */
     PLSqliteDatabase *_db;
     
-    /** The sqlite3 prepared statement. */
+    /** The prepared statement */
+    PLSqlitePreparedStatement *_stmt;
+    
+    /** The weak referenced sqlite3 prepared statement. */
     sqlite3_stmt *_sqlite_stmt;
 
     /** The number of columns in the result. */
@@ -43,8 +46,7 @@
     NSDictionary *_columnNames;
 }
 
-- (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt;
-
+- (id) initWithDatabase: (PLSqliteDatabase *) db preparedStatement: (PLSqlitePreparedStatement *) stmt sqliteStatemet: (sqlite3_stmt *)sqlite_stmt;
 @end
 
 #endif

@@ -35,6 +35,10 @@
  * Query parameters may be specified as either named parameters (:name) or unamed parameters '?'.
  * XXX TODO described named vs unnamed parameter binding.
  *
+ * @paragraph Thread Safety
+ * PLPreparedStatement implementations are stateful, and access is not synchronized. It is not
+ * safe to share instances between threads without external synchronization.
+ *
  * @warning A prepared statement may not be re-used by simultaneous PLResultSet. Attempting to 
  * either re-execute a statement or rebind its parameters without first closing any PLResultSet previously
  * returned by the statement will throw an exception.
@@ -97,6 +101,16 @@
  */
 - (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) outError;
 
-
+/**
+ * Close the prepared statement, and return any held database resources. After calling,
+ * no further PLPreparedStatement methods may be called on the instance.
+ *
+ * As PLPreparedStatement objects may be placed into autorelease pools with indeterminate
+ * release of database resources, this method may be used to ensure that resources
+ * are free'd in a timely fashion.
+ *
+ * Failure to call close will not result in any memory leaks.
+ */
+- (void) close;
 
 @end
