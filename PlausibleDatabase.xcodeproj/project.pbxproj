@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0502A77E0DDE6465006F4613 /* PLSqliteEntityDialectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0502A77D0DDE6465006F4613 /* PLSqliteEntityDialectTests.m */; };
 		051D15590DD36FAB0083CC76 /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
 		051D157C0DD377F00083CC76 /* PlausibleDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */; };
 		051E34E40DDBCB50009A7A30 /* PLMockEntityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 051E34E30DDBCB50009A7A30 /* PLMockEntityManager.m */; };
@@ -77,6 +78,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0502A77D0DDE6465006F4613 /* PLSqliteEntityDialectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteEntityDialectTests.m; sourceTree = "<group>"; };
 		051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabase.m; sourceTree = "<group>"; };
 		051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabaseTests.m; sourceTree = "<group>"; };
 		051E34E20DDBCB50009A7A30 /* PLMockEntityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLMockEntityManager.h; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 			children = (
 				053D37590DDAA049009D4EAF /* PLSqliteEntityDialect.h */,
 				053D375A0DDAA049009D4EAF /* PLSqliteEntityDialect.m */,
+				0502A77D0DDE6465006F4613 /* PLSqliteEntityDialectTests.m */,
 				053D39660DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.h */,
 				053D39670DDAF476009D4EAF /* PLSqliteEntityConnectionDelegate.m */,
 				053D39810DDAF551009D4EAF /* PLSqliteEntityConnectionDelegateTests.m */,
@@ -493,6 +496,7 @@
 				051E34E40DDBCB50009A7A30 /* PLMockEntityManager.m in Sources */,
 				05730CF80DDCE5DA00555D42 /* PLEntityPrimaryKeyTests.m in Sources */,
 				054AD6EB0DDE524900F96C5A /* PLEntityDialectTests.m in Sources */,
+				0502A77E0DDE6465006F4613 /* PLSqliteEntityDialectTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
