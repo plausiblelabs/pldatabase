@@ -38,6 +38,16 @@
 }
 @end
 
+@interface PLEntityManagerExampleEntity : NSObject <PLEntity> {
+@private
+    /** Row id */
+    NSNumber *_rowId;
+    
+    /** First name */
+    NSString *_name;
+}
+@end
+
 @implementation PLEntityManagerTests
 
 - (void) setUp {
@@ -69,6 +79,27 @@
 
 - (void) testSqlDialect {
     STAssertNotNil([_manager sqlDialect], @"Could not retrieve sql dialect");
+}
+
+- (void) testDescriptionForEntity {
+    STAssertNotNil([_manager descriptionForEntity: [PLEntityManagerExampleEntity class]], @"Could not fetch entity description");
+}
+
+@end
+
+/**
+ * @internal
+ * The example entity
+ */
+@implementation PLEntityManagerExampleEntity
+
++ (PLEntityDescription *) entityDescription {
+    PLEntityDescription *desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"People"];
+    
+    /* Define our columns */
+    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"] isPrimaryKey: YES];
+    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"name" columnName: @"name"]];    
+    return desc;
 }
 
 @end

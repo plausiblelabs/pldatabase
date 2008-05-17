@@ -35,7 +35,7 @@
 @end
 
 
-@interface ExampleEntity : NSObject <PLEntity> {
+@interface PLEntityDescExampleEntity : NSObject <PLEntity> {
 @private
     /** Row id */
     NSNumber *_rowId;
@@ -52,7 +52,7 @@
 @end
 
 
-@implementation ExampleEntity
+@implementation PLEntityDescExampleEntity
 
 + (PLEntityDescription *) entityDescription {
     PLEntityDescription *desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"People"];
@@ -149,14 +149,14 @@
 }
 
 - (void) testEntityColumnValues {
-    ExampleEntity *entity;
+    PLEntityDescExampleEntity *entity;
     NSDictionary *columnValues;
 
     /* Create a new entity */
-    entity = [[[ExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
+    entity = [[[PLEntityDescExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
 
     /* Try to fetch the column values */
-    columnValues = [[ExampleEntity entityDescription] columnValuesForEntity: entity];
+    columnValues = [[PLEntityDescExampleEntity entityDescription] columnValuesForEntity: entity];
     STAssertNotNil(columnValues, @"Could not fetch column values");
 
     STAssertEquals([NSNull null], [columnValues objectForKey: @"id"], @"Row id was not NSNull instance");
@@ -166,7 +166,7 @@
 
 - (void) testInstantiateEntityWithColumnValues {
     NSMutableDictionary *values = [NSMutableDictionary dictionaryWithCapacity: 3];
-    ExampleEntity *entity;
+    PLEntityDescExampleEntity *entity;
     NSError *error;
 
     /* Set some example values */
@@ -178,7 +178,7 @@
     /*
      * Try creating the entity
      */
-    entity = [[ExampleEntity entityDescription] instantiateEntityWithColumnValues: values error: nil];
+    entity = [[PLEntityDescExampleEntity entityDescription] instantiateEntityWithColumnValues: values error: nil];
     STAssertNotNil(entity, @"Could not instantiate entity");
 
     STAssertTrue([entity awoken], @"awakeFromDatabase was not called");
@@ -192,7 +192,7 @@
      * Try creating the entity with a name that will be changed (Sarah -> Sara) 
      */
     [values setObject: @"Sarah" forKey: @"first_name"];
-    entity = [[ExampleEntity entityDescription] instantiateEntityWithColumnValues: values error: nil];
+    entity = [[PLEntityDescExampleEntity entityDescription] instantiateEntityWithColumnValues: values error: nil];
     STAssertNotNil(entity, @"Could not instantiate entity");
     STAssertTrue([@"Sara" isEqual: [entity firstName]], @"Incorrect firstName '%@'", [entity firstName]);
 
@@ -203,7 +203,7 @@
     [values setObject: @"Barnie" forKey: @"first_name"];
     
     error = nil;
-    entity = [[ExampleEntity entityDescription] instantiateEntityWithColumnValues: values error: &error];
+    entity = [[PLEntityDescExampleEntity entityDescription] instantiateEntityWithColumnValues: values error: &error];
 
     STAssertNil(entity, @"Entity was incorrect instantiated");
     STAssertNotNil(error, @"No NSError value was provided");

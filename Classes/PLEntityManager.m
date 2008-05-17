@@ -84,8 +84,16 @@
 }
 
 
+/**
+ * @internal
+ *
+ * Return the (potentially cached) entity description for the given
+ * class.
+ *
+ * @todo Implement LRU cache here, if measurements dictate.
+ */
 - (PLEntityDescription *) descriptionForEntity: (Class<PLEntity>) entity {
-    return nil;
+    return [entity entityDescription];
 }
 
 
