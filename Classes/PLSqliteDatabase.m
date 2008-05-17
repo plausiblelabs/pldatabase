@@ -179,7 +179,7 @@ NSString *PLSqliteException = @"PLSqliteException";
     if (sqlite_stmt == nil)
         return nil;
 
-    /* Create a new PLSqliteResultSet statement.
+    /* Create a new prepared statement.
      *
      * MEMORY OWNERSHIP WARNING:
      * We pass our sqlite3_stmt reference to the PLSqlitePreparedStatement, which now must assume authority for releasing
