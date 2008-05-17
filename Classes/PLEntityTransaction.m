@@ -190,6 +190,13 @@
 }
 
 - (BOOL) insertEntity: (NSObject<PLEntity> *) entity error: (NSError **) error {
+    PLEntityDescription *desc;
+    NSDictionary *values;
+
+    /* Fetch the data */
+    desc = [_entityManager descriptionForEntity: [entity class]];
+    values = [desc columnValuesForEntity: entity];
+    
     return NO; // XXX TODO
 }
 
