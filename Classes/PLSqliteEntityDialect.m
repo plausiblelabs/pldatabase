@@ -29,6 +29,24 @@
 
 #import "PlausibleDatabase.h"
 
+/**
+ * Implementation of an SQLite PLEntityDialect.
+ */
 @implementation PLSqliteEntityDialect
+
+
+/*
+ * Insert Identity
+ */
+
+/* from PLEntityDialect */
+- (BOOL) supportsLastInsertIdentity {
+    return YES;
+}
+
+/* from PLEntityDialect */
+- (NSString *) selectLastInsertIdentity {
+    return @"SELECT last_insert_rowid()";
+}
 
 @end
