@@ -35,7 +35,9 @@
  * Query parameters may be specified as either named parameters (:name) or unamed parameters '?'.
  * XXX TODO described named vs unnamed parameter binding.
  *
- * @warning A prepared query may not be re-used by simultaneous result sets.
+ * @warning A prepared statement may not be re-used by simultaneous PLResultSet. Attempting to 
+ * either re-execute a statement or rebind its parameters without first closing any PLResultSet previously
+ * returned by the statement will throw an exception.
  */
 @protocol PLPreparedStatement
 
