@@ -65,10 +65,6 @@ extern NSString *PLSqliteException;
 
 - (sqlite3_stmt *) createStatement: (NSString *) statement error: (NSError **) error;
 
-- (int) bindValueForParameter: (sqlite3_stmt *) sqlite_stmt withParameter: (int) parameterIndex withValue: (id) value;
-
-- (void) bindValuesForStatement: (sqlite3_stmt *) sqlite_stmt withArgs: (va_list) args;
-
 @end
 
 #endif
