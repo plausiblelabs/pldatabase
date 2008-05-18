@@ -44,6 +44,9 @@
 
     /** Number of parameters. */
     int _parameterCount;
+    
+    /** Mapping of named parameters (if any) to parameter index */
+    NSDictionary *_parameterNameIndex;
 
     /** Is the prepared statement in use by a PLResultSet */
     BOOL _inUse;

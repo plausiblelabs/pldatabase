@@ -91,6 +91,8 @@
     STAssertThrows([stmt executeQuery], @"Did not throw an exception executing query on closed statement");
 }
 
+
+/* Test basic update and query support */
 - (void) testUpdateAndQuery {
     NSObject<PLPreparedStatement> *stmt;
     NSObject<PLResultSet> *rs;
@@ -134,8 +136,34 @@
 }
 
 
+/* Test dictionary-based binding */
+- (void) testBindParameterDictionary {
+    NSObject<PLPreparedStatement> *stmt;
+    NSMutableDictionary *parameters;
+
+    /* Prepare the statement */
+    stmt = [_db prepareStatement: @"INSERT INTO test (name, color) VALUES (:name, :color)"];
+    
+    /* Create the parameter dictionary */
+    parameters = [NSMutableDictionary dictionaryWithCapacity: 2];
+    [parameters setObject: @"Appleseed" forKey: @"name"];
+    [parameters setObject: @"blue" forKey: @"color"];
+
+    /* Bind and insert our values */
+    [stmt bindParameterDictionary: parameters];
+    STAssertTrue([stmt executeUpdate], @"INSERT failed");
+
+    /* Fetch the inserted data */
+    NSObject<PLResultSet> *rs = [_db executeQuery: @"SELECT * FROM test WHERE color = ?", @"blue"];
+    STAssertTrue([rs next], @"No data returned");
+    STAssertTrue([@"Appleseed" isEqual: [rs stringForColumn: @"name"]], @"Name incorrectly bound");
+    STAssertTrue([@"blue" isEqual: [rs stringForColumn: @"color"]], @"Color incorrectly bound");
+
+}
+
+
 /* Test handling of all supported parameter data types */
-- (void) testParameterBinding {
+- (void) testBindParameters {
     NSObject<PLPreparedStatement> *stmt;
     NSObject<PLResultSet> *rs;
 
