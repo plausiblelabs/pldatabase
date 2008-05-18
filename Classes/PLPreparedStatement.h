@@ -61,16 +61,6 @@
  */
 - (void) bindParameters: (NSArray *) parameters;
 
-/**
- * If a statement was created using named parameters, the parameter
- * values may be bound using a dictionary mapping the parameter name
- * to its intended value.
- *
- * @param parameters Dictionary of named parameters to bind.
- * @note NSDictionary may not contain nil values. Any nil parameter values must be
- * supplied using NSNull.
- */
-- (void) bindParameterDictionary: (NSDictionary *) parameters;
 
 /**
  * Execute an update, returning YES on success, NO on failure.

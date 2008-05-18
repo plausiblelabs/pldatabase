@@ -55,8 +55,6 @@
  * that statement using sqlite3_finalize().
  */
 - (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt queryString: (NSString *) queryString {
-    NSMutableDictionary *parameterNameIndex;
-
     if ((self = [super init]) == nil)
         return nil;
 
@@ -64,22 +62,9 @@
     _database = [db retain];
     _sqlite_stmt = sqlite_stmt;
     _queryString = [queryString retain];
-    _inUse = NO;
-
-    /* Cache parameter count */
     _parameterCount = sqlite3_bind_parameter_count(_sqlite_stmt);
+    _inUse = NO;
     assert(_parameterCount >= 0); // sanity check
-
-    /* Cache parameter names */
-    _parameterNameIndex = parameterNameIndex = [NSMutableDictionary dictionaryWithCapacity: 0];
-    for (int i = 1; i <= _parameterCount; i++) {
-        const char *name = sqlite3_bind_parameter_name(_sqlite_stmt, i);
-        if (name == NULL)
-            continue;
-
-        /* Parameter names include the initial character, eg, '@', ":", etc. Skip it. */
-        [parameterNameIndex setObject: [NSNumber numberWithInt: i] forKey: [NSString stringWithCString: name+1]];
-    }
 
     return self;
 }
@@ -159,10 +144,6 @@
     }
     
     /* If you got this far, all is well */
-}
-
-- (void) bindParameterDictionary: (NSDictionary *) parameters {
-    // TODO
 }
 
 
