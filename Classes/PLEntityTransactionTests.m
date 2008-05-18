@@ -39,6 +39,21 @@
 }
 @end
 
+@interface PLEntityTransactionExampleEntity : NSObject<PLEntity> {
+@private
+    NSNumber *_rowId;
+    NSString *_firstName;
+    NSString *_lastName;
+}
+
+- (id) initWithFirstName: (NSString *) firstName lastName: (NSString *) lastName;
+- (NSNumber *) rowId;
+- (NSString *) firstName;
+- (NSString *) lastName;
+
+@end
+
+
 @implementation PLEntityTransactionTests
 
 
@@ -59,7 +74,10 @@
 }
 
 - (void) testInsertEntity {
-    
+    PLEntityTransactionExampleEntity *entity;
+
+    entity = [[[PLEntityTransactionExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
+    // TODO STAssertTrue([_tx insertEntity: entity error: nil], @"Could not INSERT entity");
 }
 
 
@@ -102,3 +120,57 @@
 }
 
 @end
+
+@implementation PLEntityTransactionExampleEntity
+
++ (PLEntityDescription *) entityDescription {
+    PLEntityDescription *desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"People"];
+    
+    /* Define our columns */
+    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"] isPrimaryKey: YES];
+    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"firstName" columnName: @"first_name"]];
+    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"lastName" columnName: @"last_name"]];
+    
+    return desc;
+}
+
+- (id) init {
+    if ((self = [super init]) == nil)
+        return nil;
+    
+    return self;
+}
+
+- (id) initWithFirstName: (NSString *) firstName lastName: (NSString *) lastName {
+    if (![self init])
+        return nil;
+    
+    _firstName = [firstName retain];
+    _lastName = [lastName retain];
+    
+    return self;
+}
+
+- (void) dealloc {
+    [_rowId release];
+    [_firstName release];
+    [_lastName release];
+    
+    [super dealloc];
+}
+
+- (NSNumber *) rowId {
+    return _rowId;
+}
+
+- (NSString *) firstName {
+    return _firstName;
+}
+
+- (NSString *) lastName {
+    return _lastName;
+}
+
+@end
+
+
