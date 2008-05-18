@@ -29,6 +29,10 @@
 
 /**
  * Represents a set of results returned by an SQL query.
+ *
+ * @paragraph Thread Safety
+ * PLResultSet instances implement no locking and must not be shared between threads
+ * without external synchronization.
  */
 @protocol PLResultSet
 

@@ -46,6 +46,10 @@
  * The mapping of these scalar types to specific database types is implementation
  * defined. Refer to the database driver's documentation for the specific mapping
  * used.
+ *
+ * @paragraph Thread Safety
+ * PLDatabase instances implement no locking and must not be shared between threads
+ * without external synchronization.
  */
 @protocol PLDatabase
 

@@ -36,8 +36,8 @@
  * the '?' symbol in the query statement.
  *
  * @paragraph Thread Safety
- * PLPreparedStatement implementations are stateful, and access is not synchronized. It is not
- * safe to share instances between threads without external synchronization.
+ * PLPreparedStatement instances implement no locking and must not be shared between threads
+ * without external synchronization.
  *
  * @warning A prepared statement may not be re-used by simultaneous PLResultSet. Attempting to 
  * either re-execute a statement or rebind its parameters without first closing any PLResultSet previously
