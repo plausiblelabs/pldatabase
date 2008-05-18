@@ -29,10 +29,7 @@
 
 #ifdef PL_DB_PRIVATE
 
-@interface PLSqliteResultSet : NSObject <PLResultSet> {
-    /** The open database connection. */
-    PLSqliteDatabase *_db;
-    
+@interface PLSqliteResultSet : NSObject <PLResultSet> {    
     /** The prepared statement */
     PLSqlitePreparedStatement *_stmt;
     
@@ -46,7 +43,7 @@
     NSDictionary *_columnNames;
 }
 
-- (id) initWithDatabase: (PLSqliteDatabase *) db preparedStatement: (PLSqlitePreparedStatement *) stmt sqliteStatemet: (sqlite3_stmt *)sqlite_stmt;
+- (id) initWithPreparedStatement: (PLSqlitePreparedStatement *) stmt sqliteStatemet: (sqlite3_stmt *)sqlite_stmt;
 @end
 
 #endif

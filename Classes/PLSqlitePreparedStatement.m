@@ -254,7 +254,7 @@
     * that the statement reference will remain valid until checkinResultSet is called for
     * the new PLSqliteResultSet instance.
     */
-    return [[[PLSqliteResultSet alloc] initWithDatabase: _database preparedStatement: self sqliteStatemet: _sqlite_stmt] autorelease];
+    return [[[PLSqliteResultSet alloc] initWithPreparedStatement: self sqliteStatemet: _sqlite_stmt] autorelease];
 }
 
 /**

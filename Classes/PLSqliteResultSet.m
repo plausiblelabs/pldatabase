@@ -43,16 +43,14 @@
  * We are passed an sqlite3_stmt reference owned by the PLSqlitePreparedStatement.
  * It will remain valid insofar as the PLSqlitePreparedStatement reference is retained.
  */
-- (id) initWithDatabase: (PLSqliteDatabase *) db 
-      preparedStatement: (PLSqlitePreparedStatement *) stmt 
-         sqliteStatemet: (sqlite3_stmt *) sqlite_stmt
+- (id) initWithPreparedStatement: (PLSqlitePreparedStatement *) stmt 
+                  sqliteStatemet: (sqlite3_stmt *) sqlite_stmt
 {
     if ((self = [super init]) == nil) {
         return nil;
     }
     
     /* Save our database and statement references. */
-    _db = [db retain];
     _stmt = [stmt retain];
     _sqlite_stmt = sqlite_stmt;
 
@@ -72,8 +70,7 @@
 
 /* GC */
 - (void) finalize {
-    /* The statement must be released before the databse is released, as the statement has a reference
-     * to the database which would cause a SQLITE_BUSY error when the database is released. */
+    /* 'Check in' our prepared statement reference */
     [self close];
 
     [super finalize];
@@ -81,8 +78,7 @@
 
 /* Manual */
 - (void) dealloc {
-    /* The statement must be released before the databse is released, as the statement has a reference
-     * to the database which would cause a SQLITE_BUSY error when the database is released. */
+    /* 'Check in' our prepared statement reference */
     [self close];
 
     /* Release the column cache. */
@@ -90,9 +86,6 @@
     
     /* Release the statement. */
     [_stmt release];
-
-    /* Now release the database. */
-    [_db release];
     
     [super dealloc];
 }
@@ -132,7 +125,7 @@
         return YES;
     
     /* An error occurred. Log it and throw an exceptions. */
-    NSString *error = [NSString stringWithFormat: @"Error occurred calling next on a PLSqliteResultSet. Error: %@", [_db lastErrorMessage]];
+    NSString *error = [NSString stringWithFormat: @"Error occurred calling next on a PLSqliteResultSet. SQLite error #%d", ret];
     NSLog(@"%@", error);
 
     [NSException raise: PLSqliteException format: @"%@", error];
