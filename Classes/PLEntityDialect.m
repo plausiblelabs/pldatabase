@@ -65,6 +65,33 @@
 }
 
 /**
+ * @name Quoting
+ * @{
+ */
+
+/**
+ * Quote a table or column name (an identifier) for the
+ * database.
+ *
+ * @param identifier The identifier to be quoted
+ * @return Returns a quoted identifier.
+ *
+ * @par Default Value:
+ * The idenfitier is wrapped in double quotes, ie, "identifier".
+ *
+ * @warning This method does not provide escaping, and MUST NOT be
+ * used with non-identifiers (such as values).
+ */
+- (NSString *) quoteIdentifier: (NSString *) identifier {
+    return [NSString stringWithFormat: @"\"%@\"", identifier];
+}
+
+
+/*
+ * @} Quoting
+ */
+
+/**
  * @name Determining Insert Identity
  * @{
  */

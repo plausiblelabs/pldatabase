@@ -33,16 +33,27 @@
 
 @interface PLEntityDialectTests : SenTestCase {
 @private
+    PLEntityDialect *_dialect;
 }
 @end
 
 @implementation PLEntityDialectTests
 
-- (void) testDefaults {
-    PLEntityDialect *dialect = [[[PLEntityDialect alloc] init] autorelease];
+- (void) setUp {
+    _dialect = [[PLEntityDialect alloc] init];
+}
 
-    /* INSERT Identity */
-    STAssertFalse([dialect supportsLastInsertIdentity], nil);
+- (void) tearDown {
+    [_dialect release];
+}
+
+- (void) testQuoteIdentifier {
+    STAssertTrue([@"\"test\"" isEqual: [_dialect quoteIdentifier: @"test"]], @"Quoting failed");
+}
+
+- (void) testInsertIdentity {
+    STAssertFalse([_dialect supportsLastInsertIdentity], @"Should not support lastInsertIdentity");
+    STAssertNil([_dialect selectLastInsertIdentity], @"");
 }
 
 @end

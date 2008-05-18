@@ -36,6 +36,8 @@
     id *_reserved3;
 }
 
+- (NSString *) quoteIdentifier: (NSString *) identifier;
+
 - (BOOL) supportsLastInsertIdentity;
 - (NSString *) selectLastInsertIdentity;
 
