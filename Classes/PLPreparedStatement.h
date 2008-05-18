@@ -32,8 +32,8 @@
  * bound to that statement.
  *
  * @paragraph SQL Parameters
- * Query parameters may be specified as either named parameters (:name) or unamed parameters '?'.
- * XXX TODO described named vs unnamed parameter binding.
+ * Literal query values may be substituted via parameter binding, by using
+ * the '?' symbol in the query statement.
  *
  * @paragraph Thread Safety
  * PLPreparedStatement implementations are stateful, and access is not synchronized. It is not
