@@ -27,40 +27,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
+// Forward-declarations
+@class PLEntityManager;
+@class PLSqlBuilder;
 
-extern NSString *PLSqliteException;
-
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
+@interface PLEntityTransaction : NSObject {
 @private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+    /** Our parent entity manager. */
+    PLEntityManager *_entityManager;
+
+    /** The backing database connection */
+    NSObject<PLDatabase> *_database;
+
+    /** The SQL statement builder */
+    PLSqlBuilder *_sqlBuilder;
+
+    /** Marks the current transaction state (in transaction == YES) */
+    BOOL _inTransaction;
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
-
-- (id) initWithPath: (NSString*) dbPath;
-
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
-
-- (int64_t) lastInsertRowId;
-
-@end
-
-#ifdef PL_DB_PRIVATE
-
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
-
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
-
-@end
-
+/* Transactions should only be created by the PLEntityManager */
+#if PL_DB_PRIVATE
+- (id) initWithEntityManager: (PLEntityManager *) entityManager error: (NSError **) error;
 #endif
+
+- (BOOL) begin;
+- (BOOL) beginAndReturnError: (NSError **) error;
+
+
+- (BOOL) commit;
+- (BOOL) commitAndReturnError: (NSError **) error;
+
+
+- (BOOL) rollback;
+- (BOOL) rollbackAndReturnError: (NSError **) error;
+
+- (BOOL) inTransaction;
+
+- (BOOL) insertEntity: (NSObject<PLEntity> *) entity error: (NSError **) error;
+
+@end

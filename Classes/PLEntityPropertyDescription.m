@@ -27,40 +27,68 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
+#import "PlausibleDatabase.h"
 
-extern NSString *PLSqliteException;
+/**
+ * Represents a single database column.
+ */
+@implementation PLEntityPropertyDescription
 
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
-@private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+/**
+ * Create and return a description with the provided Key Value Coding key and
+ * database column name.
+ *
+ * @param key KVC key used to access the column value.
+ * @param columnName The corresponding database column.
+ */
++ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName {
+    return [[[PLEntityPropertyDescription alloc] initWithKey: key columnName: columnName] autorelease];
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
+/**
+ * Initialize with the Key Value Coding key and database column name.
+ *
+ * @param key KVC key used to access the column value.
+ * @param columnName The corresponding database column.
+ */
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName {
+    if ((self = [super init]) == nil)
+        return nil;
 
-- (id) initWithPath: (NSString*) dbPath;
+    _key = [key retain];
+    _columnName = [columnName retain];
+    
+    return self;
+}
 
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
+- (void) dealloc {
+    [_key release];
+    [_columnName release];
 
-- (int64_t) lastInsertRowId;
+    [super dealloc];
+}
 
 @end
 
-#ifdef PL_DB_PRIVATE
+/**
+ * @internal
+ * Private library methods.
+ */
+@implementation PLEntityPropertyDescription (PLEntityPropertyDescriptionLibraryPrivate)
 
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
+/**
+ * Return the the property's key.
+ */
+- (NSString *) key {
+    return _key;
+}
 
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
 
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
+/**
+ * Return the database column name.
+ */
+- (NSString *) columnName {
+    return _columnName;
+}
 
 @end
-
-#endif

@@ -26,41 +26,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+#import "PlausibleDatabase.h"
 
-#import <sqlite3.h>
+/**
+ * A primary key is defined by one or more PLEntityPropertyDescription instances.
+ */
+@implementation PLEntityPrimaryKey
 
-extern NSString *PLSqliteException;
-
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
-@private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
++ (PLEntityPrimaryKey *) primaryKeyWithPropertyDescription: (PLEntityPropertyDescription *) propertyDescription {
+    return [[[PLEntityPrimaryKey alloc] initWithPropertyDescription: propertyDescription] autorelease];
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
+- (id) initWithPropertyDescription: (PLEntityPropertyDescription *) propertyDescription {
+    if ((self = [super init]) == nil)
+        return nil;
 
-- (id) initWithPath: (NSString*) dbPath;
+    // XXX TODO
 
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
+    return self;
+}
 
-- (int64_t) lastInsertRowId;
-
-@end
-
-#ifdef PL_DB_PRIVATE
-
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
-
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
 
 @end
-
-#endif

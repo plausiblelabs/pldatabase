@@ -27,40 +27,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
-
-extern NSString *PLSqliteException;
-
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
+@interface PLEntityDescription : NSObject {
 @private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+    /** Database table name */
+    NSString *_tableName;
+
+    /** Map of column name to PLEntityPropertyDescription */
+    NSMutableDictionary *_columnProperties;
+
+    /** The described entity's class object */
+    Class _entityClass;
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
++ (PLEntityDescription *) descriptionForClass: (Class) entityClass tableName: (NSString *) tableName;
 
-- (id) initWithPath: (NSString*) dbPath;
+- (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName;
 
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
+- (void) addPropertyDescription: (PLEntityPropertyDescription *) description;
 
-- (int64_t) lastInsertRowId;
+- (void) addPropertyDescription: (PLEntityPropertyDescription *) description isPrimaryKey: (BOOL) isPrimaryKey;
+
 
 @end
+
 
 #ifdef PL_DB_PRIVATE
+@interface PLEntityDescription (PLEntityDescriptionLibraryPrivate)
 
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
+- (NSString *) tableName;
 
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
+- (NSDictionary *) columnValuesForEntity: (NSObject<PLEntity> *) entity;
 
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
+- (id) instantiateEntityWithColumnValues: (NSDictionary *) values error: (NSError **) outError;
 
 @end
-
 #endif

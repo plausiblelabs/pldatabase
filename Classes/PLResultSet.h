@@ -29,6 +29,10 @@
 
 /**
  * Represents a set of results returned by an SQL query.
+ *
+ * @paragraph Thread Safety
+ * PLResultSet instances implement no locking and must not be shared between threads
+ * without external synchronization.
  */
 @protocol PLResultSet
 
@@ -42,7 +46,7 @@
 
 /**
  * Close the result set, and return any held database resources. After calling,
- * NO OTHER METHODS may be called on the result set.
+ * no further PLResultSet methods may be called on the instance.
  *
  * As PLResultSet objects may be placed into autorelease pools, with indeterminate
  * release of database resources, this method should be used to ensure that the

@@ -40,16 +40,18 @@
  * Initialize the ResultSet with an open database and an sqlite3 prepare statement.
  *
  * MEMORY OWNERSHIP WARNING:
- * We are passed an sqlite3_stmt reference which now we now assume authority for releasing
- * that statement using sqlite3_finalize().
+ * We are passed an sqlite3_stmt reference owned by the PLSqlitePreparedStatement.
+ * It will remain valid insofar as the PLSqlitePreparedStatement reference is retained.
  */
-- (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt {
+- (id) initWithPreparedStatement: (PLSqlitePreparedStatement *) stmt 
+                  sqliteStatemet: (sqlite3_stmt *) sqlite_stmt
+{
     if ((self = [super init]) == nil) {
         return nil;
     }
     
-    /* Save our database and statement reference. */
-    _db = [db retain];
+    /* Save our database and statement references. */
+    _stmt = [stmt retain];
     _sqlite_stmt = sqlite_stmt;
 
     /* Save result information */
@@ -66,16 +68,24 @@
     return self;
 }
 
+/* GC */
+- (void) finalize {
+    /* 'Check in' our prepared statement reference */
+    [self close];
+
+    [super finalize];
+}
+
+/* Manual */
 - (void) dealloc {
-    /* The statement must be released before the databse is released, as the statement has a reference
-     * to the database which would cause a SQLITE_BUSY error when the database is released. */
+    /* 'Check in' our prepared statement reference */
     [self close];
 
     /* Release the column cache. */
     [_columnNames release];
-
-    /* Now release the database. */
-    [_db release];
+    
+    /* Release the statement. */
+    [_stmt release];
     
     [super dealloc];
 }
@@ -85,10 +95,9 @@
     if (_sqlite_stmt == nil)
         return;
 
-    /* The finalization may return the last error returned by sqlite3_next(), but this has already
-     * been handled by the -[PLSqliteResultSet next] implementation. Any remaining memory and
-     * resources are released regardless of the error code, so we do not check it here. */
-    sqlite3_finalize(_sqlite_stmt);
+    /* Check ourselves back in and give up our statement reference */
+    [_stmt checkinResultSet: self];
+    _sqlite_stmt = nil;
 }
 
 /**
@@ -116,7 +125,7 @@
         return YES;
     
     /* An error occurred. Log it and throw an exceptions. */
-    NSString *error = [NSString stringWithFormat: @"Error occurred calling next on a PLSqliteResultSet. Error: %@", [_db lastErrorMessage]];
+    NSString *error = [NSString stringWithFormat: @"Error occurred calling next on a PLSqliteResultSet. SQLite error #%d", ret];
     NSLog(@"%@", error);
 
     [NSException raise: PLSqliteException format: @"%@", error];

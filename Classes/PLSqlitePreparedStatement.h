@@ -27,39 +27,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
+#if PL_DB_PRIVATE
 
-extern NSString *PLSqliteException;
+@class PLSqliteResultSet;
 
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
+@interface PLSqlitePreparedStatement : NSObject <PLPreparedStatement> {
 @private
-    /** Path to the database file. */
-    NSString *_path;
+    /** Our backing database. */
+    PLSqliteDatabase *_database;
+
+    /** The prepared SQLite statement. */
+    sqlite3_stmt *_sqlite_stmt;
     
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+    /** The unprepared query string. */
+    NSString *_queryString;
+
+    /** Number of parameters. */
+    int _parameterCount;
+
+    /** Is the prepared statement in use by a PLResultSet */
+    BOOL _inUse;
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
+- (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt queryString: (NSString *) queryString;
 
-- (id) initWithPath: (NSString*) dbPath;
-
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
-
-- (int64_t) lastInsertRowId;
-
-@end
-
-#ifdef PL_DB_PRIVATE
-
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
-
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
+// DO NOT CALL. Must only be called from PLSqliteResultSet
+- (void) checkinResultSet: (PLSqliteResultSet *) resultSet;
 
 @end
 

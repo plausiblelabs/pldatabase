@@ -27,35 +27,58 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #import <SenTestingKit/SenTestingKit.h>
 
 #import "PlausibleDatabase.h"
 
-@interface PlausibleDatabaseTests : SenTestCase {
+@interface PLSqliteEntityDialectTests : SenTestCase {
 @private
+    PLSqliteDatabase *_db;
+    PLSqliteEntityDialect *_dialect;
 }
-
 @end
 
-@implementation PlausibleDatabaseTests
+@implementation PLSqliteEntityDialectTests
 
-/* Test NSError creation */
-- (void) testDatabaseError {
-    NSError *error = [PlausibleDatabase errorWithCode: PLDatabaseErrorFileNotFound 
-                                 localizedDescription: @"test"
-                                          queryString: @"query"
-                                          vendorError: [NSNumber numberWithInt: 42]
-                                    vendorErrorString: @"native"];
-
-    STAssertTrue([PLDatabaseErrorDomain isEqual: [error domain]], @"Domain incorrect");
-    STAssertEquals(PLDatabaseErrorFileNotFound, [error code], @"Code incorrect");
-    STAssertTrue([@"test" isEqual: [error localizedDescription]], @"Description incorrect");
-
-    STAssertTrue([@"query" isEqual: [[error userInfo] objectForKey: PLDatabaseErrorQueryStringKey]], @"Query string incorrect");
+- (void) setUp {
+    _dialect = [[PLSqliteEntityDialect alloc] init];
     
-    STAssertEquals(42, [[[error userInfo] objectForKey: PLDatabaseErrorVendorErrorKey] intValue], @"Native error code incorrect");
-    STAssertTrue([@"native" isEqual: [[error userInfo] objectForKey: PLDatabaseErrorVendorStringKey]], @"Native error string incorrect");
+    _db = [[PLSqliteDatabase alloc] initWithPath: @":memory:"];
+    STAssertTrue([_db open], @"Couldn't open in-memory database");
+
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE Test ("
+                  "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                  "name VARCHAR(255))"], @"Could not create Test table");
+
+}
+
+- (void) tearDown {
+    [_db release];
+    [_dialect release];
+}
+
+- (void) testLastInsertIdentity {
+    NSObject<PLResultSet> *result;
+    int32_t rowId;
+    
+    STAssertTrue([_dialect supportsLastInsertIdentity], nil);
+    STAssertNotNil([_dialect selectLastInsertIdentity], nil);
+
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO Test (name) VALUES (?)", @"Johnny"]), @"INSERT failed");
+    result = [_db executeQuery: [_dialect selectLastInsertIdentity]];
+
+    STAssertNotNil(result, @"Identity query failed");
+    STAssertTrue([result next], @"No identity results returned");
+
+    /* Get the row ID */
+    rowId = [result intForColumnIndex: 0];
+    [result close];
+
+    /* Try to fetch the value back out again */
+    result = [_db executeQuery: @"SELECT name FROM Test WHERE id = ?", [NSNumber numberWithInt: rowId]];
+    STAssertNotNil(result, @"Select query failed");
+    STAssertTrue([result next], @"Query returned no rows");
+    STAssertTrue([@"Johnny" isEqual: [result stringForColumn: @"name"]], @"Returned row incorrect");
 }
 
 @end

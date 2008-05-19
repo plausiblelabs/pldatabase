@@ -30,6 +30,26 @@
 
 /**
  * Protocol for interacting with an SQL database.
+ *
+ * @par Object Types
+ * All drivers support conversion to and from the following object types:
+ * - NSString
+ * - NSNumber
+ * - NSData
+ *
+ * @par Scalar Types
+ * All drivers implement conversion to and from the scalar types as defined in
+ * the Key Value Coding documentation, Scalar and Structure Support:
+ * http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/DataTypes.html#//apple_ref/doc/uid/20002171-184842-BCIJIBHC
+ *
+ * @par
+ * The mapping of these scalar types to specific database types is implementation
+ * defined. Refer to the database driver's documentation for the specific mapping
+ * used.
+ *
+ * @paragraph Thread Safety
+ * PLDatabase instances implement no locking and must not be shared between threads
+ * without external synchronization.
  */
 @protocol PLDatabase
 
@@ -37,6 +57,28 @@
  * Test that the connection is active.
  */
 - (BOOL) goodConnection;
+
+
+/**
+ * Prepare and return a new PLPreparedStatement.
+ *
+ * @param statement SQL statement to prepare.
+ * @return The prepared statement, or nil if it could not be prepared.
+ */
+- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement;
+
+/**
+ * Prepare and return a new PLPreparedStatement.
+ *
+ * @param statement SQL statement to prepare.
+ * @param outError A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the statement could not be prepared.
+ * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * parameter, and no error information will be provided.
+ * @return The prepared statement, or nil if it could not be prepared.
+ */
+- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement error: (NSError **) outError;
+
 
 /**
  * Execute an update, returning YES on success, NO on failure.
@@ -64,17 +106,18 @@
 - (BOOL) executeUpdateAndReturnError: (NSError **) error statement: (NSString *) statement, ...;
 
 /**
- * Execute a query, returning a #PLResultSet.
+ * Execute a query, returning a PLResultSet.
  *
  * Any arguments should be provided following the statement, and
  * referred to using standard '?' JDBC substitutions
  *
  * @param statement SQL statement to execute.
+ * @return PLResultSet on success, or nil on failure.
  */
 - (NSObject<PLResultSet> *) executeQuery: (NSString *) statement, ...;
 
 /**
- * Execute a query, returning a #PLResultSet.
+ * Execute a query, returning a PLResultSet.
  *
  * Any arguments should be provided following the statement, and
  * referred to using standard '?' JDBC substitutions
@@ -84,6 +127,7 @@
  * If no error occurs, this parameter will be left unmodified. You may specify nil for this
  * parameter, and no error information will be provided.
  * @param statement SQL statement to execute.
+ * @return PLResultSet on success, or nil on failure.
  */
 - (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement, ...;
 

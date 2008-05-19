@@ -27,40 +27,57 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
+#import "PlausibleDatabase.h"
 
-extern NSString *PLSqliteException;
+/**
+ * Provides new PLSqliteDatabase connections as per the PLEntityConnectionDelegate
+ * protocol. This class does no connection pooling, and should be combined
+ * with a generic connection pool implementation if pooling is required.
+ */
+@implementation PLSqliteEntityConnectionDelegate
 
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
-@private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+/**
+ * Initialize the database connection delegate with the provided
+ * file path.
+ *
+ * @param dbPath Path to the sqlite database file.
+ */
+- (id) initWithPath: (NSString *) dbPath {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    /* Path to our backing database */
+    _dbPath = [dbPath retain];
+
+    return self;
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
+- (void) dealloc {
+    [_dbPath release];
+    
+    [super dealloc];
+}
 
-- (id) initWithPath: (NSString*) dbPath;
+/* from PLEntityConnectionDelegate */
+- (NSObject<PLDatabase> *) getConnectionAndReturnError: (NSError **) error {
+    PLSqliteDatabase *database;
 
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
+    /* Create and attempt to open */
+    database = [[[PLSqliteDatabase alloc] initWithPath: _dbPath] autorelease];
+    if (![database openAndReturnError: error]) {
+        /* Error was filled in, simply return nil */
+        return nil;
+    }
 
-- (int64_t) lastInsertRowId;
+    /* All is well, and database connection is open */
+    return database;
+}
+
+
+/* from PLEntityConnectionDelegate */
+- (void) closeConnection: (NSObject<PLDatabase> *) connection {
+    // Nothing to do, no connection pooling
+}
+
 
 @end
-
-#ifdef PL_DB_PRIVATE
-
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
-
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
-
-@end
-
-#endif

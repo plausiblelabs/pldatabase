@@ -27,40 +27,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
+#import "PlausibleDatabase.h"
 
-extern NSString *PLSqliteException;
+/**
+ * Implementation of an SQLite PLEntityDialect.
+ */
+@implementation PLSqliteEntityDialect
 
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
-@private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+
+/*
+ * Insert Identity
+ */
+
+/* from PLEntityDialect */
+- (BOOL) supportsLastInsertIdentity {
+    return YES;
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
-
-- (id) initWithPath: (NSString*) dbPath;
-
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
-
-- (int64_t) lastInsertRowId;
+/* from PLEntityDialect */
+- (NSString *) selectLastInsertIdentity {
+    return @"SELECT last_insert_rowid()";
+}
 
 @end
-
-#ifdef PL_DB_PRIVATE
-
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
-
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
-
-@end
-
-#endif

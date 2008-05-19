@@ -27,40 +27,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
+#import <SenTestingKit/SenTestingKit.h>
 
-extern NSString *PLSqliteException;
+#import "PlausibleDatabase.h"
 
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
-@private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+@interface PLEntityPrimaryKeyTests : SenTestCase
+@end
+
+@implementation PLEntityPrimaryKeyTests
+
+- (void) testInit {
+    PLEntityPrimaryKey *primaryKey;
+
+    primaryKey = [PLEntityPrimaryKey primaryKeyWithPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"]];
+    STAssertNotNil(primaryKey, @"Could not initialize instance");
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
-
-- (id) initWithPath: (NSString*) dbPath;
-
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
-
-- (int64_t) lastInsertRowId;
-
 @end
-
-#ifdef PL_DB_PRIVATE
-
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
-
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
-
-@end
-
-#endif

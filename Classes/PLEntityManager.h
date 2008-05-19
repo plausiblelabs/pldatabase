@@ -27,40 +27,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
-
-extern NSString *PLSqliteException;
-
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
+@interface PLEntityManager : NSObject {
 @private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+    /** Our connection provider */
+    NSObject<PLEntityConnectionDelegate> *_connectionDelegate;
+
+    /** SQL dialect */
+    PLEntityDialect *_sqlDialect;
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
-
-- (id) initWithPath: (NSString*) dbPath;
-
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
-
-- (int64_t) lastInsertRowId;
+- (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) delegate sqlDialect: (PLEntityDialect *) sqlDialect;
 
 @end
 
 #ifdef PL_DB_PRIVATE
+@interface PLEntityManager (PLEntityManagerLibraryPrivate)
 
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
+- (NSObject<PLEntityConnectionDelegate> *) connectionDelegate;
+- (PLEntityDialect *) dialect;
 
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
+- (PLEntityDescription *) descriptionForEntity: (Class<PLEntity>) entity;
 
 @end
-
-#endif
+#endif /* PL_DB_PRIVATE */

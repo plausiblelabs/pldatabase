@@ -27,40 +27,51 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
+#import <SenTestingKit/SenTestingKit.h>
 
-extern NSString *PLSqliteException;
+#import "PlausibleDatabase.h"
 
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
+@interface PLSqliteEntityConnectionDelegateTests : SenTestCase {
 @private
-    /** Path to the database file. */
-    NSString *_path;
+    NSString *_dbPath;
+    PLSqliteDatabase *_db;
+}
+@end
+
+@implementation PLSqliteEntityConnectionDelegateTests
+
+- (void) setUp {
+    /* Create a temporary file for the database. Secure -- user owns enclosing directory. */
+    _dbPath = [[NSTemporaryDirectory() stringByAppendingPathComponent: [[NSProcessInfo processInfo] globallyUniqueString]] retain];
     
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+    /* Create the temporary database */
+    _db = [[PLSqliteDatabase alloc] initWithPath: _dbPath];
+    STAssertTrue([_db open], @"Could not open temporary database");
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
+- (void) tearDown {
+    /* Remove the temporary database file */
+    STAssertTrue([[NSFileManager defaultManager] removeItemAtPath: _dbPath error: nil], @"Could not clean up database %@", _dbPath);
 
-- (id) initWithPath: (NSString*) dbPath;
+    /* Release our objects */
+    [_dbPath release];
+    [_db release];
+}
 
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
+- (void) testInitWithPath {
+    PLSqliteEntityConnectionDelegate *delegate;
+    NSObject<PLDatabase> *db;
 
-- (int64_t) lastInsertRowId;
+    /* Create our delegate and request a connection */
+    delegate = [[[PLSqliteEntityConnectionDelegate alloc] initWithPath: _dbPath] autorelease];
+    db = [delegate getConnectionAndReturnError: nil];
+
+    /* Test the connection */
+    STAssertNotNil(db, @"Delegate returned nil.");
+    STAssertTrue([db goodConnection], @"Database connection claims to be bad.");
+
+    /* Try to be polite */
+    [delegate closeConnection: db];
+}
 
 @end
-
-#ifdef PL_DB_PRIVATE
-
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
-
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
-
-@end
-
-#endif

@@ -27,40 +27,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
+/**
+ * A delegate responsible for providing PLDatabase instances to the
+ * PLEntityManager.
+ */
+@protocol PLEntityConnectionDelegate
 
-extern NSString *PLSqliteException;
+/**
+ * Returns a database connection.
+ *
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the transaction could not
+ * be started.
+ *
+ * @return A database connection, or nil on error.
+ */
+- (NSObject<PLDatabase> *) getConnectionAndReturnError: (NSError **) error;
 
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
-@private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
-}
-
-+ (id) databaseWithPath: (NSString *) dbPath;
-
-- (id) initWithPath: (NSString*) dbPath;
-
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
-
-- (int64_t) lastInsertRowId;
-
-@end
-
-#ifdef PL_DB_PRIVATE
-
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
-
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
+/**
+ * Called to inform the delegate that the given connection may be re-used.
+ */
+- (void) closeConnection: (NSObject<PLDatabase> *) connection;
 
 @end
-
-#endif

@@ -27,40 +27,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
-
-extern NSString *PLSqliteException;
-
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
+@interface PLEntityDialect : NSObject {
 @private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+    // An extensible class, reserve instance variable space.
+    id *_reserved0;
+    id *_reserved1;
+    id *_reserved2;
+    id *_reserved3;
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
+- (NSString *) quoteIdentifier: (NSString *) identifier;
 
-- (id) initWithPath: (NSString*) dbPath;
-
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
-
-- (int64_t) lastInsertRowId;
+- (BOOL) supportsLastInsertIdentity;
+- (NSString *) selectLastInsertIdentity;
 
 @end
-
-#ifdef PL_DB_PRIVATE
-
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
-
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
-
-@end
-
-#endif

@@ -27,40 +27,74 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
+#import "PlausibleDatabase.h"
 
-extern NSString *PLSqliteException;
+/**
+ * Manages the object relational mapping between a database, and Objective-C objects
+ * conforming to the PLEntity protocol.
+ */
+@implementation PLEntityManager
 
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
-@private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+/**
+ * Initialize a new entity manager with the given connection provider delegate, and SQL dialect.
+ *
+ * @param connectionDelegate Delegate responsible for providing database connections.
+ * @param sqlDialect The SQL entity dialect for the given database.
+ */
+- (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) connectionDelegate sqlDialect: (PLEntityDialect *) sqlDialect {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    _connectionDelegate = [connectionDelegate retain];
+    _sqlDialect = [sqlDialect retain];
+
+    return self;
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
 
-- (id) initWithPath: (NSString*) dbPath;
+- (void) dealloc {
+    [_connectionDelegate release];
+    [_sqlDialect release];
 
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
-
-- (int64_t) lastInsertRowId;
-
-@end
-
-#ifdef PL_DB_PRIVATE
-
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
-
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
+    [super dealloc];
+}
 
 @end
 
-#endif
+/**
+ * @internal
+ * Library Private API
+ */
+@implementation PLEntityManager (PLEntityManagerLibraryPrivate)
+
+/**
+ * @internal
+ * Return the connection delegate.
+ */
+- (NSObject<PLEntityConnectionDelegate> *) connectionDelegate {
+    return _connectionDelegate;
+}
+
+/**
+ * @internal
+ * Return the entity dialect.
+ */
+- (PLEntityDialect *) dialect {
+    return _sqlDialect;
+}
+
+
+/**
+ * @internal
+ *
+ * Return the (potentially cached) entity description for the given
+ * class.
+ *
+ * @todo Implement LRU cache here, if measurements dictate.
+ */
+- (PLEntityDescription *) descriptionForEntity: (Class<PLEntity>) entity {
+    return [entity entityDescription];
+}
+
+
+@end

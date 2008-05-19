@@ -39,20 +39,13 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 @interface PLSqliteDatabase (PLSqliteDatabasePrivate)
 
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
-
 - (sqlite3_stmt *) createStatement: (NSString *) statement error: (NSError **) error;
-
-- (int) bindValueForParameter: (sqlite3_stmt *) sqlite_stmt withParameter: (int) parameterIndex withValue: (id) value;
-
-- (void) bindValuesForStatement: (sqlite3_stmt *) sqlite_stmt withArgs: (va_list) args;
 
 @end
 
 
 /**
- * SQLite #PLDatabase implementation.
+ * An SQLite PLDatabase driver.
  */
 @implementation PLSqliteDatabase
 
@@ -79,23 +72,35 @@ NSString *PLSqliteException = @"PLSqliteException";
     return self;
 }
 
-
-- (void) dealloc {
+/* Private shared finalization */
+- (void) sharedFinalization {
     int err;
 
     /* Close the connection and release any sqlite resources (if open was ever called) */
     if (_sqlite != nil) {
         err = sqlite3_close(_sqlite);
-
+        
         /* Leaking prepared statements is programmer error, and is the only cause for SQLITE_BUSY */
         if (err == SQLITE_BUSY)
             [NSException raise: PLSqliteException format: @"The SQLite database at '%@' can not be closed, as the implementation has leaked prepared statements", _path];
-
+        
         /* Unexpected! This should not happen */
         if (err != SQLITE_OK)
             NSLog(@"Unexpected error closing SQLite database at '%@': %s", sqlite3_errmsg(_sqlite));
     }
-    
+}
+
+/* GC */
+- (void) finalize {
+    [self sharedFinalization];
+
+    [super finalize];
+}
+
+/* Manual */
+- (void) dealloc {
+    [self sharedFinalization];
+
     /* Release our backing path */
     [_path release];
 
@@ -117,7 +122,7 @@ NSString *PLSqliteException = @"PLSqliteException";
  * Opens the database connection, and returns any errors. May
  * be called once and only once.
  *
- * @param A pointer to an NSError object variable. If an error occurs, this
+ * @param error A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the database could
  * not be opened. If no error occurs, this parameter will be left unmodified.
  * You may specify nil for this parameter, and no error information will be provided.
@@ -165,40 +170,81 @@ NSString *PLSqliteException = @"PLSqliteException";
     return YES;
 }
 
-/* varargs version */
-- (BOOL) executeUpdateAndReturnError: (NSError **) error statement: (NSString *) statement args: (va_list) args {
+
+/* from PLDatabase */
+- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement {
+    return [self prepareStatement: statement error: nil];
+}
+
+
+/* from PLDatabase */
+- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement error: (NSError **) outError {
     sqlite3_stmt *sqlite_stmt;
-    int ret;
     
     /* Prepare our statement */
-    sqlite_stmt = [self createStatement: statement error: error];
+    sqlite_stmt = [self createStatement: statement error: outError];
     if (sqlite_stmt == nil)
-        return NO;
+        return nil;
+
+    /* Create a new prepared statement.
+     *
+     * MEMORY OWNERSHIP WARNING:
+     * We pass our sqlite3_stmt reference to the PLSqlitePreparedStatement, which now must assume authority for releasing
+     * that statement using sqlite3_finalize(). */
+    return [[[PLSqlitePreparedStatement alloc] initWithDatabase: self sqliteStmt: sqlite_stmt queryString: statement] autorelease];
+}
+
+/**
+ * @internal
+ * Utility method to convert an va_list of objects to an NSArray
+ */
+- (NSArray *) arrayWithVaList: (va_list) ap count: (int) count {
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity: count];
     
-    /* Parameter binding */
-    [self bindValuesForStatement: sqlite_stmt withArgs: args];
-    
-    /* Call sqlite3_step() to run the virtual machine, and finalize the statement */
-    ret = sqlite3_step(sqlite_stmt);
-    sqlite3_finalize(sqlite_stmt);
-    
-    /* On success, return */
-    if (ret == SQLITE_DONE)
-        return YES;
-    
-    /* Programmer error */
-    if (ret == SQLITE_ROW) {
-        /* Since the SQL being executed is not a SELECT statement, we assume no data will be returned. */
-        [NSException raise: PLSqliteException format: @"SQLite -[PLSqliteDatabase executeUpdate:] query '%@' on database '%@' "
-         "returned result set. Perhaps the developer provided SELECT query to -[db executeUpdate:]?)", statement, _path];
+    /* Iterate over count and create our array */
+    for (int i = 0; i < count; i++) {
+        id obj;
+
+        /* Fetch value -- handle nil */
+        obj = va_arg(ap, id);
+        if (obj == nil)
+            obj = [NSNull null];
+        
+        [result addObject: obj];
     }
     
-    /* Query failed */
-    [self populateError: error
-          withErrorCode: PLDatabaseErrorQueryFailed
-            description: NSLocalizedString(@"An error occurred executing an SQL update.", @"")
-            queryString: statement];
-    return NO;
+    return result;
+}
+
+#pragma mark Execute Update
+
+/* varargs version */
+- (BOOL) executeUpdateAndReturnError: (NSError **) error statement: (NSString *) statement args: (va_list) args {
+    NSObject<PLPreparedStatement> *stmt;
+    BOOL ret;
+    
+    /* Create the statement */
+    stmt = [self prepareStatement: statement error: error];
+    if (stmt == nil)
+        return NO;
+    
+    /* Bind the arguments */
+    [stmt bindParameters: [self arrayWithVaList: args count: [stmt parameterCount]]];
+    ret = [stmt executeUpdateAndReturnError: error];
+    
+    return ret;
+}
+
+/* from PLDatabase. */
+- (BOOL) executeUpdateAndReturnError: (NSError **) error statement: (NSString *) statement, ... {
+    BOOL ret;
+    va_list ap;
+    
+    va_start(ap, statement);
+    ret = [self executeUpdateAndReturnError: error statement: statement args: ap];
+    va_end(ap);
+    
+    return ret;
 }
 
 /* from PLDatabase. */
@@ -213,48 +259,34 @@ NSString *PLSqliteException = @"PLSqliteException";
     return ret;
 }
 
-/* from PLDatabase. */
-- (BOOL) executeUpdateAndReturnError: (NSError **) error statement: (NSString *) statement, ... {
-    BOOL ret;
-    va_list ap;
-
-    va_start(ap, statement);
-    ret = [self executeUpdateAndReturnError: error statement: statement args: ap];
-    va_end(ap);
-
-    return ret;
-}
-
+#pragma mark Execute Query
 
 /* varargs version */
 - (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement args: (va_list) args {
-    sqlite3_stmt *sqlite_stmt;
+    NSObject<PLResultSet> *result;
+    NSObject<PLPreparedStatement> *stmt;
     
-    /* Prepare our statement */
-    sqlite_stmt = [self createStatement: statement error: error];
-    if (sqlite_stmt == nil)
-        return nil;
+    /* Create the statement */
+    stmt = [self prepareStatement: statement error: error];
+    if (stmt == nil)
+        return NO;
     
-    /* Varargs parsing */
-    [self bindValuesForStatement: sqlite_stmt withArgs: args];
+    /* Bind the arguments */
+    [stmt bindParameters: [self arrayWithVaList: args count: [stmt parameterCount]]];
+    result = [stmt executeQueryAndReturnError: error];
     
-    /* Create a new PLSqliteResultSet statement.
-     *
-     * MEMORY OWNERSHIP WARNING:
-     * We pass our sqlite3_stmt reference to the PLSqliteResultSet, which now must assume authority for releasing
-     * that statement using sqlite3_finalize(). */
-    return [[[PLSqliteResultSet alloc] initWithDatabase:self sqliteStmt:sqlite_stmt] autorelease];
+    return result;
 }
 
 
 - (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement, ... {
     NSObject<PLResultSet> *result;
     va_list ap;
-
+    
     va_start(ap, statement);
     result = [self executeQueryAndReturnError: error statement: statement args: ap];
     va_end(ap);
-
+    
     return result;
 }
 
@@ -271,6 +303,8 @@ NSString *PLSqliteException = @"PLSqliteException";
     return result;
 }
 
+
+#pragma mark Transactions
 
 /* from PLDatabase. */
 - (BOOL) beginTransaction {
@@ -305,6 +339,9 @@ NSString *PLSqliteException = @"PLSqliteException";
 }
 
 
+#pragma mark Metadata
+
+
 /* from PLDatabase */
 - (BOOL) tableExists: (NSString *) tableName {
     NSObject<PLResultSet> *rs;
@@ -322,12 +359,23 @@ NSString *PLSqliteException = @"PLSqliteException";
  * Returns the row ID of the most recent successful INSERT. If the table
  * has a column of type INTEGER PRIMARY KEY, then the value assigned will
  * be an alias for the row ID.
-*
- * @param Return the row ID (integer primary key) of the most recent successful INSERT.
+ *
+ * @return Returns the row ID (integer primary key) of the most recent successful INSERT.
  */
 - (int64_t) lastInsertRowId {
     return sqlite3_last_insert_rowid(_sqlite);
 }
+
+@end
+
+#pragma mark Library Private
+
+/**
+ * @internal
+ *
+ * Library Private PLSqliteDatabase methods
+ */
+@implementation PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
 
 /**
  * @internal
@@ -337,6 +385,7 @@ NSString *PLSqliteException = @"PLSqliteException";
     return sqlite3_errcode(_sqlite);
 }
 
+
 /**
  * @internal
  * Return the last error message encountered by the underlying sqlite database.
@@ -345,9 +394,6 @@ NSString *PLSqliteException = @"PLSqliteException";
     return [NSString stringWithUTF8String: sqlite3_errmsg(_sqlite)];
 }
 
-@end
-
-@implementation PLSqliteDatabase (PLSqliteDatabasePrivate)
 
 /**
  * @internal
@@ -365,21 +411,35 @@ NSString *PLSqliteException = @"PLSqliteException";
     NSString *vendorString = [self lastErrorMessage];
     NSNumber *vendorError = [NSNumber numberWithInt: [self lastErrorCode]];
     NSError *result;
-
+    
     /* Create the error */
     result = [PlausibleDatabase errorWithCode: errorCode
-                        localizedDescription: localizedDescription
-                                 queryString: queryString
-                                 vendorError: vendorError
-                           vendorErrorString: vendorString];    
-
+                         localizedDescription: localizedDescription
+                                  queryString: queryString
+                                  vendorError: vendorError
+                            vendorErrorString: vendorString];    
+    
     /* Log it and optionally return it */
     NSLog(@"A SQLite database error occurred on database '%@': %@ (SQLite #%@: %@) (query: '%@')", 
           _path, result, vendorError, vendorString, queryString != nil ? queryString : @"<none>");
-
+    
     if (error != nil)
         *error = result;
 }
+
+@end
+
+
+#pragma mark Private
+
+/**
+ * @internal
+ *
+ * Private PLSqliteDatabase methods.
+ */
+@implementation PLSqliteDatabase (PLSqliteDatabasePrivate)
+
+
 
 /**
  * @internal
@@ -413,95 +473,9 @@ NSString *PLSqliteException = @"PLSqliteException";
                 queryString: statement];
         return nil;
     }
-
+    
     return sqlite_stmt;
 }
 
-
-/**
- * @internal
- * Bind a value to a statement parameter, returning the SQLite bind result value.
- *
- * @param sqlite_stmt Statement containing to-be-bound parameter.
- * @param parameterIndex Index of parameter to be bound.
- * @param value Objective-C object to use as the value.
- */
-- (int) bindValueForParameter: (sqlite3_stmt *) sqlite_stmt withParameter: (int) parameterIndex withValue: (id) value {
-    /* NULL */
-    if (value == nil) {
-        return sqlite3_bind_null(sqlite_stmt, parameterIndex);
-    }
-    
-    /* Data */
-    else if ([value isKindOfClass: [NSData class]]) {
-        return sqlite3_bind_blob(sqlite_stmt, parameterIndex, [value bytes], [value length], SQLITE_TRANSIENT);
-    }
-    
-    /* Date */
-    else if ([value isKindOfClass: [NSDate class]]) {
-        return sqlite3_bind_double(sqlite_stmt, parameterIndex, [value timeIntervalSince1970]);
-    }
-    
-    /* String */
-    else if ([value isKindOfClass: [NSString class]]) {
-        return sqlite3_bind_text(sqlite_stmt, parameterIndex, [value UTF8String], -1, SQLITE_TRANSIENT);
-    }
-
-    /* Number */
-    else if ([value isKindOfClass: [NSNumber class]]) {
-        const char *objcType = [value objCType];
-        int64_t number = [value longLongValue];
-        
-        /* Handle floats and doubles */
-        if (strcmp(objcType, @encode(float)) == 0 || strcmp(objcType, @encode(double)) == 0) {
-            return sqlite3_bind_double(sqlite_stmt, parameterIndex, [value doubleValue]);
-        }
-
-        /* If the value can fit into a 32-bit value, use that bind type. */
-        else if (number <= INT32_MAX) {
-            return sqlite3_bind_int(sqlite_stmt, parameterIndex, number);
-
-        /* Otherwise use the 64-bit bind. */
-        } else {
-            return sqlite3_bind_int64(sqlite_stmt, parameterIndex, number);
-        }
-    }
-
-    /* Not a known type */
-    [NSException raise: PLSqliteException format: @"SQLite error binding unknown parameter type '%@' for database '%@'. Value: '%@'", [value class], _path, value];
-    
-    /* Unreachable */
-    abort();
-}
-
-
-/**
- * @internal
- * Bind all parameter values for an SQLite statement. Throws an exception on error.
- *
- * @param sqlite_stmt Statement containing to-be-bound parameters.
- * @param args Arguments to be bound. This MUST be a list of Objective-C object instances.
- */
-- (void) bindValuesForStatement: (sqlite3_stmt *) sqlite_stmt withArgs: (va_list) args {
-    int valueCount = sqlite3_bind_parameter_count(sqlite_stmt);
-    assert(valueCount >= 0);
-    
-    /* Sqlite counts parameters starting at 1. */
-    for (int valueIndex = 1; valueIndex <= valueCount; valueIndex++) {
-        /* Bind the parameter */
-        int ret = [self bindValueForParameter: sqlite_stmt
-                                 withParameter: valueIndex
-                                     withValue: va_arg(args, id)];
-        
-        /* If the bind fails, throw an exception (programmer error). */
-        if (ret != SQLITE_OK) {
-            [NSException raise: PLSqliteException
-                        format: @"SQlite error binding parameter %d for database '%@': %d", valueIndex, _path, ret];
-        }
-    }
-
-    /* If you get this far, all is well */
-    return;
-}
 
 @end

@@ -27,40 +27,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
+/* Forward declare */
+@class PLEntityDescription;
 
-extern NSString *PLSqliteException;
+/**
+ * Represents an entity that may be loaded and persisted to and
+ * from a database. Implementing classes must support initialization via
+ * the init method.
+ *
+ * XXX TODO Missing documentation
+ */
+@protocol PLEntity
+@required
 
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
-@private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
-}
+/**
+ * Return the entity definition.
+ */
++ (PLEntityDescription *) entityDescription;
 
-+ (id) databaseWithPath: (NSString *) dbPath;
 
-- (id) initWithPath: (NSString*) dbPath;
-
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
-
-- (int64_t) lastInsertRowId;
-
-@end
-
-#ifdef PL_DB_PRIVATE
-
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
-
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
+@optional
+/**
+ * Classes may implement this method to perform additional initialization after
+ * an object has been loaded from the database, and declared entity
+ * properties have been populated.
+ */
+- (void) awakeFromDatabase;
 
 @end
-
-#endif

@@ -27,40 +27,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
-
-extern NSString *PLSqliteException;
-
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
+@interface PLEntityPropertyDescription : NSObject {
 @private
-    /** Path to the database file. */
-    NSString *_path;
+    /** KVC key */
+    NSString *_key;
     
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+    /** Database column name */
+    NSString *_columnName;
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
++ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName;
 
-- (id) initWithPath: (NSString*) dbPath;
-
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
-
-- (int64_t) lastInsertRowId;
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName;
 
 @end
 
 #ifdef PL_DB_PRIVATE
+@interface PLEntityPropertyDescription (PLEntityPropertyDescriptionLibraryPrivate)
 
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
-
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
+- (NSString *) key;
+- (NSString *) columnName;
 
 @end
-
-#endif
+#endif /* PL_DB_PRIVATE */

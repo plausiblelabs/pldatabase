@@ -31,12 +31,8 @@
 /* Dependencies */
 #import <Foundation/Foundation.h>
 
-/* Library Includes */
-#import "PLResultSet.h"
-#import "PLDatabase.h"
-
-#import "PLSqliteDatabase.h"
-#import "PLSqliteResultSet.h"
+/* Exceptions */
+extern NSString *PLDatabaseException;
 
 /* Error Domain and Codes */
 extern NSString *PLDatabaseErrorDomain;
@@ -51,7 +47,7 @@ typedef enum {
     /** An unknown error has occured. If this
      * code is received, it is a bug, and should be reported. */
     PLDatabaseErrorUnknown = 0,
-
+    
     /** File not found. */
     PLDatabaseErrorFileNotFound = 1,
     
@@ -61,6 +57,30 @@ typedef enum {
     /** The provided SQL statement was invalid. */
     PLDatabaseErrorInvalidStatement = 3,
 } PLDatabaseError;
+
+
+/* Library Includes */
+#import "PLResultSet.h"
+#import "PLPreparedStatement.h"
+#import "PLDatabase.h"
+
+#import "PLSqliteDatabase.h"
+#import "PLSqlitePreparedStatement.h"
+#import "PLSqliteResultSet.h"
+
+#import "PLEntity.h"
+#import "PLEntityPropertyDescription.h"
+#import "PLEntityPrimaryKey.h"
+#import "PLEntityDescription.h"
+
+#import "PLEntityConnectionDelegate.h"
+#import "PLEntityDialect.h"
+#import "PLEntityTransaction.h"
+#import "PLEntityManager.h"
+#import "PLSqlBuilder.h"
+
+#import "PLSqliteEntityDialect.h"
+#import "PLSqliteEntityConnectionDelegate.h"
 
 #ifdef PL_DB_PRIVATE
 
@@ -90,6 +110,10 @@ typedef enum {
  * Plausible Database provides an Objective-C veneer over the underlying SQL database. Classes
  * are automatically bound to statement parameters, and converted to and from the underlying SQL datatypes.
  *
+ * Library classes supporting subclassing are explicitly documented. Due to Objective-C's fragile base classes,
+ * binary compatibility with subclasses is NOT guaranteed. You should avoid subclassing library
+ * classes -- use class composition instead.
+ *
  * @section create_conn Creating a Connection
  *
  * Open a connection to a database file:
@@ -114,7 +138,7 @@ typedef enum {
  * @section exec_query Query Statements
  *
  * Queries can be executed using -[PLDatabase executeQuery:]. To iterate over the returned results, an NSObject instance
- * conforming to #PLResultSet will be returned.
+ * conforming to PLResultSet will be returned.
  *
  * <pre>
  * NSObject<PLResultSet> *results = [db executeQuery: @"SELECT id FROM example WHERE id = ?", [NSNumber numberWithInteger: 42]];

@@ -27,40 +27,33 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <sqlite3.h>
+#import <SenTestingKit/SenTestingKit.h>
 
-extern NSString *PLSqliteException;
+#import "PlausibleDatabase.h"
 
-@interface PLSqliteDatabase : NSObject <PLDatabase> {
+@interface PLEntityDialectTests : SenTestCase {
 @private
-    /** Path to the database file. */
-    NSString *_path;
-    
-    /** Underlying sqlite database reference. */
-    sqlite3 *_sqlite;
+    PLEntityDialect *_dialect;
+}
+@end
+
+@implementation PLEntityDialectTests
+
+- (void) setUp {
+    _dialect = [[PLEntityDialect alloc] init];
 }
 
-+ (id) databaseWithPath: (NSString *) dbPath;
+- (void) tearDown {
+    [_dialect release];
+}
 
-- (id) initWithPath: (NSString*) dbPath;
+- (void) testQuoteIdentifier {
+    STAssertTrue([@"\"test\"" isEqual: [_dialect quoteIdentifier: @"test"]], @"Quoting failed");
+}
 
-- (BOOL) open;
-- (BOOL) openAndReturnError: (NSError **) error;
-
-- (int64_t) lastInsertRowId;
-
-@end
-
-#ifdef PL_DB_PRIVATE
-
-@interface PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
-
-- (int) lastErrorCode;
-- (NSString *) lastErrorMessage;
-
-- (void) populateError: (NSError **) result withErrorCode: (PLDatabaseError) errorCode
-           description: (NSString *) localizedDescription queryString: (NSString *) queryString;
+- (void) testInsertIdentity {
+    STAssertFalse([_dialect supportsLastInsertIdentity], @"Should not support lastInsertIdentity");
+    STAssertNil([_dialect selectLastInsertIdentity], @"");
+}
 
 @end
-
-#endif
