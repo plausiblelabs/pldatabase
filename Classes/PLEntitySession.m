@@ -66,16 +66,53 @@
 }
 
 
+/* GC */
+- (void) finalize {
+    /* Return our database connection */
+    [self close];
+    [super finalize];
+}
+
+
+/* Manual */
 - (void) dealloc {
     /* Return our database connection */
-    [[_entityManager connectionDelegate] closeConnection: _database];
-    
+    [self close];
+
     /* Free any memory */
-    [_database release];
     [_entityManager release];
     [_sqlBuilder release];
 
     [super dealloc];
+}
+
+
+/**
+ * Close the session, and return any held database resources. After calling,
+ * no further methods may be called on the instance.
+ *
+ * As PLEntitySession objects may be placed into autorelease pools, with indeterminate
+ * release of database resources, this method should be used to ensure timely
+ * release of the database connection.
+ *
+ * Failure to call close will not result in any memory leaks, but will prevent
+ * further use of the backing database connection until the session
+ * is released. This issue will be exacerbated in a garbage collection
+ * environment, where object finalization may not occur as regularly
+ * as with autorelease pools.
+ */
+- (void) close {
+    if (_database == nil)
+        return;
+
+    /* Return the connection */
+    [[_entityManager connectionDelegate] closeConnection: _database];
+
+    /* Release the database reference */
+    [_database release];
+
+    /* Mark ourselves finished */
+    _database = nil;
 }
 
 

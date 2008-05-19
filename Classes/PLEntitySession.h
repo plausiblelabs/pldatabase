@@ -66,4 +66,6 @@
 
 - (BOOL) insertEntity: (NSObject<PLEntity> *) entity error: (NSError **) error;
 
+- (void) close;
+
 @end
