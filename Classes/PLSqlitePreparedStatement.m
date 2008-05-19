@@ -29,9 +29,123 @@
 
 #import "PlausibleDatabase.h"
 
+#pragma mark Parameter Strategy
+
+/**
+ * @internal
+ * Parameter fetching strategy.
+ */
+@protocol PLSqliteParameterStrategy
+
+/**
+ * Return the number of available parameters
+ */
+- (int) count;
+
+/**
+ * Return the value for the given parameter. May
+ * return nil if the parameter is unavailable,
+ * and NSNull if the parameter's value is null.
+ */
+- (id) valueForParameter: (int) parameterIndex;
+
+@end
+
+/**
+ * @internal
+ * NSArray parameter strategy.
+ */
+@interface PLSqliteArrayParameterStrategy : NSObject <PLSqliteParameterStrategy> {
+@private
+    NSArray *_values;
+}
+@end
+
+@implementation PLSqliteArrayParameterStrategy
+
+- (id) initWithValues: (NSArray *) values {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    _values = [values retain];
+
+    return self;
+}
+
+- (void) dealloc {
+    [_values release];
+    [super dealloc];
+}
+
+- (int) count {
+    return [_values count];
+}
+
+- (id) valueForParameter: (int) parameterIndex {
+    /* Arrays are zero-index, sqlite is 1-indexed, so adjust the index
+     * for the array */
+    return [_values objectAtIndex: parameterIndex - 1];
+}
+
+@end
+
+
+/**
+ * @internal
+ * NSDictionary parameter strategy.
+ */
+@interface PLSqliteDictionaryParameterStrategy : NSObject <PLSqliteParameterStrategy> {
+@private
+    sqlite3_stmt *_sqlite_stmt;
+    NSDictionary *_values;
+}
+@end
+
+@implementation PLSqliteDictionaryParameterStrategy
+
+/* Memory warning -- sqlite_stmt is a borrowed weak reference */
+- (id) initWithStatement: (sqlite3_stmt *) sqlite_stmt values: (NSDictionary *) values {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    _sqlite_stmt = sqlite_stmt;
+    _values = [values retain];
+
+    return self;
+}
+
+- (void) dealloc {
+    [_values release];
+    [super dealloc];
+}
+
+- (int) count {
+    return [_values count];
+}
+
+- (id) valueForParameter: (int) parameterIndex {
+    const char *sqlite_name;
+
+    /* Fetch the parameter name. */
+    sqlite_name = sqlite3_bind_parameter_name(_sqlite_stmt, parameterIndex);
+    
+    /* If there is no name, or if it's blank, we can't retrieve the value. */
+    if (sqlite_name == NULL || *sqlite_name == '\0')
+        return NULL;
+
+    /* Fetch the value, stripping the initial ':' characeter. */
+    assert(*sqlite_name != '\0'); // checked above.
+    return [_values objectForKey: [NSString stringWithUTF8String: sqlite_name + 1]];
+}
+
+@end
+
+
+#pragma mark Private Declarations
+
 @interface PLSqlitePreparedStatement (PLSqlitePreparedStatementPrivate)
 
-- (int) bindValueForParameter: (sqlite3_stmt *) sqlite_stmt withParameter: (int) parameterIndex withValue: (id) value;
+- (int) bindValueForParameter: (int) parameterIndex withValue: (id) value;
 
 - (void) assertNotClosed;
 - (void) assertNotInUse;
@@ -40,6 +154,7 @@
 
 @end
 
+#pragma mark Public Implementation
 
 /**
  * @internal
@@ -62,8 +177,10 @@
     _database = [db retain];
     _sqlite_stmt = sqlite_stmt;
     _queryString = [queryString retain];
-    _parameterCount = sqlite3_bind_parameter_count(_sqlite_stmt);
     _inUse = NO;
+
+    /* Cache parameter count */
+    _parameterCount = sqlite3_bind_parameter_count(_sqlite_stmt);
     assert(_parameterCount >= 0); // sanity check
 
     return self;
@@ -114,28 +231,34 @@
 }
 
 
-/* from PLPreparedStatement */
-- (void) bindParameters: (NSArray *) parameters {
+/**
+ * @internal
+ * Bind all parameters, fetching their value using the provided selector.
+ */
+- (void) bindParametersWithStrategy: (NSObject<PLSqliteParameterStrategy> *) strategy {
     [self assertNotInUse];
     
     /* Verify that a complete parameter list was provided */
-    if ([parameters count] != _parameterCount)
+    if ([strategy count] != _parameterCount)
         [NSException raise: PLSqliteException 
-                    format: @"%@ prepared statement provided invalid parameter count (expected %d, but %d were provided)", [self class], _parameterCount, [parameters count]];
-
+                    format: @"%@ prepared statement provided invalid parameter count (expected %d, but %d were provided)", [self class], _parameterCount, [strategy count]];
+    
     /* Clear any existing bindings */
     sqlite3_clear_bindings(_sqlite_stmt);
-
+    
     /* Sqlite counts parameters starting at 1. */
     for (int valueIndex = 1; valueIndex <= _parameterCount; valueIndex++) {
         /* (Note that NSArray indexes from 0, so we subtract one to get the current value) */
-        id value = [parameters objectAtIndex: valueIndex - 1];
+        id value = [strategy valueForParameter: valueIndex];
+        if (value == nil) {
+            [NSException raise: PLSqliteException
+                        format: @"Missing parameter %d binding for query %@", valueIndex, _queryString];
+        }
 
         /* Bind the parameter */
-        int ret = [self bindValueForParameter: _sqlite_stmt
-                                withParameter: valueIndex
+        int ret = [self bindValueForParameter: valueIndex
                                     withValue: value];
-
+        
         /* If the bind fails, throw an exception (programmer error). */
         if (ret != SQLITE_OK) {
             [NSException raise: PLSqliteException
@@ -144,6 +267,21 @@
     }
     
     /* If you got this far, all is well */
+}
+
+/* from PLPreparedStatement */
+- (void) bindParameters: (NSArray *) parameters {
+    PLSqliteArrayParameterStrategy *strategy;
+    
+    strategy = [[[PLSqliteArrayParameterStrategy alloc] initWithValues: parameters] autorelease];
+    return [self bindParametersWithStrategy: strategy];
+}
+
+- (void) bindParameterDictionary: (NSDictionary *) parameters {
+    PLSqliteDictionaryParameterStrategy *strategy;
+    
+    strategy = [[[PLSqliteDictionaryParameterStrategy alloc] initWithStatement: _sqlite_stmt values: parameters] autorelease];
+    return [self bindParametersWithStrategy: strategy];
 }
 
 
@@ -207,6 +345,7 @@
 
 @end
 
+#pragma mark Private Implementation
 
 /**
  * @internal
@@ -261,29 +400,28 @@
  * @internal
  * Bind a value to a statement parameter, returning the SQLite bind result value.
  *
- * @param sqlite_stmt Statement containing to-be-bound parameter.
  * @param parameterIndex Index of parameter to be bound.
  * @param value Objective-C object to use as the value.
  */
-- (int) bindValueForParameter: (sqlite3_stmt *) sqlite_stmt withParameter: (int) parameterIndex withValue: (id) value {
+- (int) bindValueForParameter: (int) parameterIndex withValue: (id) value {
     /* NULL */
     if (value == nil || value == [NSNull null]) {
-        return sqlite3_bind_null(sqlite_stmt, parameterIndex);
+        return sqlite3_bind_null(_sqlite_stmt, parameterIndex);
     }
     
     /* Data */
     else if ([value isKindOfClass: [NSData class]]) {
-        return sqlite3_bind_blob(sqlite_stmt, parameterIndex, [value bytes], [value length], SQLITE_TRANSIENT);
+        return sqlite3_bind_blob(_sqlite_stmt, parameterIndex, [value bytes], [value length], SQLITE_TRANSIENT);
     }
     
     /* Date */
     else if ([value isKindOfClass: [NSDate class]]) {
-        return sqlite3_bind_double(sqlite_stmt, parameterIndex, [value timeIntervalSince1970]);
+        return sqlite3_bind_double(_sqlite_stmt, parameterIndex, [value timeIntervalSince1970]);
     }
     
     /* String */
     else if ([value isKindOfClass: [NSString class]]) {
-        return sqlite3_bind_text(sqlite_stmt, parameterIndex, [value UTF8String], -1, SQLITE_TRANSIENT);
+        return sqlite3_bind_text(_sqlite_stmt, parameterIndex, [value UTF8String], -1, SQLITE_TRANSIENT);
     }
     
     /* Number */
@@ -293,16 +431,16 @@
         
         /* Handle floats and doubles */
         if (strcmp(objcType, @encode(float)) == 0 || strcmp(objcType, @encode(double)) == 0) {
-            return sqlite3_bind_double(sqlite_stmt, parameterIndex, [value doubleValue]);
+            return sqlite3_bind_double(_sqlite_stmt, parameterIndex, [value doubleValue]);
         }
         
         /* If the value can fit into a 32-bit value, use that bind type. */
         else if (number <= INT32_MAX) {
-            return sqlite3_bind_int(sqlite_stmt, parameterIndex, number);
+            return sqlite3_bind_int(_sqlite_stmt, parameterIndex, number);
             
             /* Otherwise use the 64-bit bind. */
         } else {
-            return sqlite3_bind_int64(sqlite_stmt, parameterIndex, number);
+            return sqlite3_bind_int64(_sqlite_stmt, parameterIndex, number);
         }
     }
     

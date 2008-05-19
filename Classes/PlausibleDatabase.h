@@ -77,6 +77,7 @@ typedef enum {
 #import "PLEntityDialect.h"
 #import "PLEntityTransaction.h"
 #import "PLEntityManager.h"
+#import "PLSqlBuilder.h"
 
 #import "PLSqliteEntityDialect.h"
 #import "PLSqliteEntityConnectionDelegate.h"
