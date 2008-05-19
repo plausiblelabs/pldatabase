@@ -56,16 +56,19 @@
  */
 - (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName properties: (NSArray *) properties {
     NSMutableDictionary *columnProperties;
-    
+
     if ((self = [super init]) == nil)
         return nil;
 
     _entityClass = entityClass;
     _tableName = [tableName retain];
 
+    /*
+     * Populate our column -> property map, and a list of promary keys
+     */
+    NSMutableArray *primaryKeys = [NSMutableArray arrayWithCapacity: 1];
     _columnProperties = columnProperties = [[NSMutableDictionary alloc] initWithCapacity: [properties count]];
 
-    /* Populate our column -> property map */
     for (PLEntityPropertyDescription *desc in properties) {
         NSString *columnName = [desc columnName];
 
@@ -77,7 +80,11 @@
         }
 
         /* Save the description in our map */
-        [columnProperties setObject: desc forKey: [desc columnName]]; 
+        [columnProperties setObject: desc forKey: [desc columnName]];
+    
+        /* Primary key? */
+        if ([desc isPrimaryKey])
+            [primaryKeys addObject: desc];
     }
 
     return self;

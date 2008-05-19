@@ -108,4 +108,11 @@
     return _columnName;
 }
 
+/**
+ * Return YES if the property is part of the table's primary key.
+ */
+- (BOOL) isPrimaryKey {
+    return _primaryKey;
+}
+
 @end

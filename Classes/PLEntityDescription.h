@@ -34,7 +34,7 @@
 
     /** Map of column name to PLEntityPropertyDescription */
     NSDictionary *_columnProperties;
-
+    
     /** The described entity's class object */
     Class _entityClass;
 }

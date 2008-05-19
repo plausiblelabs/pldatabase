@@ -51,6 +51,7 @@
 
 - (NSString *) key;
 - (NSString *) columnName;
+- (BOOL) isPrimaryKey;
 
 @end
 #endif /* PL_DB_PRIVATE */
