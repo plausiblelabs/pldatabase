@@ -33,7 +33,13 @@
  *
  * @paragraph SQL Parameters
  * Literal query values may be substituted via parameter binding, by using
- * the '?' symbol in the query statement.
+ * the '?' symbol in the query statement and PLPreparedStatement::bindParameters.
+ *
+ * Additionally, PLPreparedStatement::bindParameterDictionary implements
+ * name-based parameter binding. To bind named parameters, use the ':<name>'
+ * syntax. All named parameters must be provided in the binding parameter
+ * dictionary, and it is not possible to mix named and unnamed parameters
+ * when using PLPreparedStatement::bindParameterDictionary.
  *
  * @paragraph Thread Safety
  * PLPreparedStatement instances implement no locking and must not be shared between threads
