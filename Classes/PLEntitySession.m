@@ -30,10 +30,9 @@
 #import "PlausibleDatabase.h"
 
 /**
- * The PLEntityTransaction is used to control transactions on its enclosing
- * PLEntityManager.
+ * The PLEntitySession represents a single database connection.
  */
-@implementation PLEntityTransaction
+@implementation PLEntitySession
 
 /**
  * @internal

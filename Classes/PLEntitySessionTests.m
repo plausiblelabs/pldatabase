@@ -32,15 +32,15 @@
 #import "PlausibleDatabase.h"
 #import "PLMockEntityManager.h"
 
-@interface PLEntityTransactionTests : SenTestCase {
+@interface PLEntitySessionTests : SenTestCase {
 @private
     PLMockEntityManager *_manager;
-    PLEntityTransaction *_tx;
+    PLEntitySession *_tx;
     PLSqliteDatabase *_db;
 }
 @end
 
-@interface PLEntityTransactionExampleEntity : NSObject<PLEntity> {
+@interface PLEntitySessionExampleEntity : NSObject<PLEntity> {
 @private
     NSNumber *_rowId;
     NSString *_firstName;
@@ -55,12 +55,12 @@
 @end
 
 
-@implementation PLEntityTransactionTests
+@implementation PLEntitySessionTests
 
 
 - (void) setUp {
     _manager = [[PLMockEntityManager alloc] init];
-    _tx = [[PLEntityTransaction alloc] initWithEntityManager: _manager error: nil];
+    _tx = [[PLEntitySession alloc] initWithEntityManager: _manager error: nil];
 
     /* Create our schema */
     _db = [[_manager database] retain];
@@ -78,17 +78,17 @@
 }
 
 - (void) testInit {
-    PLEntityTransaction *tx = [[[PLEntityTransaction alloc] initWithEntityManager: _manager error: nil] autorelease];
+    PLEntitySession *tx = [[[PLEntitySession alloc] initWithEntityManager: _manager error: nil] autorelease];
 
     STAssertNotNil(tx, @"Could not initialize transaction");
 }
 
 - (void) testInsertEntity {
-    PLEntityTransactionExampleEntity *entity;
+    PLEntitySessionExampleEntity *entity;
     NSError *error;
 
     /* Insert the entity */
-    entity = [[[PLEntityTransactionExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
+    entity = [[[PLEntitySessionExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
     STAssertTrue([_tx insertEntity: entity error: &error], @"Could not INSERT entity: %@", error);
 
     /* Verify that he arrived */
@@ -143,7 +143,7 @@
 
 @end
 
-@implementation PLEntityTransactionExampleEntity
+@implementation PLEntitySessionExampleEntity
 
 + (PLEntityDescription *) entityDescription {
     PLEntityDescription *desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"People"];

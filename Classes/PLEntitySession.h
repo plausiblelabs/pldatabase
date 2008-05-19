@@ -31,7 +31,7 @@
 @class PLEntityManager;
 @class PLSqlBuilder;
 
-@interface PLEntityTransaction : NSObject {
+@interface PLEntitySession : NSObject {
 @private
     /** Our parent entity manager. */
     PLEntityManager *_entityManager;
@@ -46,7 +46,7 @@
     BOOL _inTransaction;
 }
 
-/* Transactions should only be created by the PLEntityManager */
+/* Sessions should only be created by the PLEntityManager */
 #if PL_DB_PRIVATE
 - (id) initWithEntityManager: (PLEntityManager *) entityManager error: (NSError **) error;
 #endif
