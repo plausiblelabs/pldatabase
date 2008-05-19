@@ -59,6 +59,30 @@
     [super dealloc];
 }
 
+/**
+ * Opens a new entity session.
+ *
+ * @return Returns a new session, or nil if the session could not be opened.
+ * @sa PLEntityManager::openSessionAndReturnError:
+ */
+- (PLEntitySession *) openSession {
+    return [[[PLEntitySession alloc] initWithEntityManager: self error: nil] autorelease];
+}
+
+/**
+ * Opens a new entity session.
+ *
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the session could
+ * not be opened. If no error occurs, this parameter will be left unmodified.
+ * You may specify nil for this parameter, and no error information will be provided.
+ *
+ * @return Returns a new session, or nil if the session could not be opened.
+ */
+- (PLEntitySession *) openSessionAndReturnError: (NSError **) error {
+    return [[[PLEntitySession alloc] initWithEntityManager: self error: error] autorelease];
+}
+
 @end
 
 /**

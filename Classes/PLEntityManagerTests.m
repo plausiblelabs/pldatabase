@@ -73,6 +73,20 @@
     STAssertNotNil(entityManager, @"Could not initialize entity manager");
 }
 
+- (void) testOpenSession {
+    NSError *error;
+
+    PLEntitySession *session;
+
+    session = [_manager openSessionAndReturnError: &error];
+    STAssertNotNil(session, @"Could not open session: %@", error);
+    [session close];
+    
+    session = [_manager openSession];
+    STAssertNotNil(session, @"Could not open session");
+    [session close];
+}
+
 - (void) testConnectionDelegate {
     STAssertNotNil([_manager connectionDelegate], @"Could not retrieve connection delegate");
 }

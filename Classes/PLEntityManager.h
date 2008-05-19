@@ -38,6 +38,9 @@
 
 - (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) delegate sqlDialect: (PLEntityDialect *) sqlDialect;
 
+- (PLEntitySession *) openSession;
+- (PLEntitySession *) openSessionAndReturnError: (NSError **) outError;
+
 @end
 
 #ifdef PL_DB_PRIVATE
