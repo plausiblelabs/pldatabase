@@ -277,14 +277,14 @@
     PLSqliteArrayParameterStrategy *strategy;
     
     strategy = [[[PLSqliteArrayParameterStrategy alloc] initWithValues: parameters] autorelease];
-    return [self bindParametersWithStrategy: strategy];
+    [self bindParametersWithStrategy: strategy];
 }
 
 - (void) bindParameterDictionary: (NSDictionary *) parameters {
     PLSqliteDictionaryParameterStrategy *strategy;
     
     strategy = [[[PLSqliteDictionaryParameterStrategy alloc] initWithStatement: _sqlite_stmt values: parameters] autorelease];
-    return [self bindParametersWithStrategy: strategy];
+    [self bindParametersWithStrategy: strategy];
 }
 
 
