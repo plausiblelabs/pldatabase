@@ -94,12 +94,13 @@
 @implementation PLEntityManagerExampleEntity
 
 + (PLEntityDescription *) entityDescription {
-    PLEntityDescription *desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"People"];
-    
-    /* Define our columns */
-    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"] isPrimaryKey: YES];
-    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"name" columnName: @"name"]];    
-    return desc;
+    return [PLEntityDescription descriptionForClass: [self class] tableName: @"People" properties:
+        [NSArray arrayWithObjects:
+            [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id" isPrimaryKey: YES],
+            [PLEntityPropertyDescription descriptionWithKey: @"name" columnName: @"name"],
+            nil
+        ]
+    ];
 }
 
 @end

@@ -34,11 +34,15 @@
     
     /** Database column name */
     NSString *_columnName;
+
+    /** Part of primary key */
+    BOOL _primaryKey;
 }
 
 + (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName;
++ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey;
 
-- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName;
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey;
 
 @end
 

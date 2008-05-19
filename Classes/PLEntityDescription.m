@@ -42,9 +42,10 @@
  *
  * @param entityClass The class corresponding to the described entity.
  * @param tableName The database table corresponding to the described entity.
+ * @param properties A list of PLEntityPropertyDescription instances.
  */
-+ (PLEntityDescription *) descriptionForClass: (Class) entityClass tableName: (NSString *) tableName {
-    return [[[PLEntityDescription alloc] initWithClass: entityClass tableName: tableName] autorelease];
++ (PLEntityDescription *) descriptionForClass: (Class) entityClass tableName: (NSString *) tableName properties: (NSArray *) properties {
+    return [[[PLEntityDescription alloc] initWithClass: entityClass tableName: tableName properties: properties] autorelease];
 }
 
 /**
@@ -53,14 +54,32 @@
  * @param entityClass The class corresponding to the described entity.
  * @param tableName The database table corresponding to the described entity.
  */
-- (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName {
+- (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName properties: (NSArray *) properties {
+    NSMutableDictionary *columnProperties;
+    
     if ((self = [super init]) == nil)
         return nil;
 
     _entityClass = entityClass;
     _tableName = [tableName retain];
-    _columnProperties = [[NSMutableDictionary alloc] initWithCapacity: 2];
-    
+
+    _columnProperties = columnProperties = [[NSMutableDictionary alloc] initWithCapacity: [properties count]];
+
+    /* Populate our column -> property map */
+    for (PLEntityPropertyDescription *desc in properties) {
+        NSString *columnName = [desc columnName];
+
+        /* Sanity check -- verify that multiple entries aren't registered for the same column */
+        if ([columnProperties objectForKey: columnName] != nil) {
+            @throw [NSException exceptionWithName: PLDatabaseException 
+                                           reason: [NSString stringWithFormat: @"Multiple properties registered for column %@", columnName] 
+                                         userInfo: nil];
+        }
+
+        /* Save the description in our map */
+        [columnProperties setObject: desc forKey: [desc columnName]]; 
+    }
+
     return self;
 }
 
@@ -69,38 +88,6 @@
     [_columnProperties release];
 
     [super dealloc];
-}
-
-
-/**
- * Add a new property description to the PLEntityDescription.
- *
- * @param description A property description.
- * @throw An exception will be thrown if two properties maintain conflicting column names.
- */
-- (void) addPropertyDescription: (PLEntityPropertyDescription *) description {
-    [self addPropertyDescription: description isPrimaryKey: NO];
-}
-
-/**
- * Add a new property description to the PLEntityDescription.
- *
- * @param description A property description.
- * @param isPrimaryKey YES if the property comprises the object's primary key.
- * @throw An exception will be thrown if two properties maintain conflicting column names.
- */
-- (void) addPropertyDescription: (PLEntityPropertyDescription *) description isPrimaryKey: (BOOL) isPrimaryKey {
-    NSString *columnName = [description columnName];
-
-    /* Sanity check -- verify that multiple entries aren't registered for the same column */
-    if ([_columnProperties objectForKey: columnName] != nil) {
-        @throw [NSException exceptionWithName: PLDatabaseException 
-                                       reason: [NSString stringWithFormat: @"Multiple properties registered for column %@", columnName] 
-                                     userInfo: nil];
-    }
-
-    /* Save the description in our map */
-    [_columnProperties setObject: description forKey: [description columnName]]; 
 }
 
 @end

@@ -42,21 +42,38 @@
  * @param columnName The corresponding database column.
  */
 + (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName {
-    return [[[PLEntityPropertyDescription alloc] initWithKey: key columnName: columnName] autorelease];
+    return [PLEntityPropertyDescription descriptionWithKey: key columnName: columnName isPrimaryKey: NO];
 }
+
+
+/**
+ * Create and return a description with the provided Key Value Coding key and
+ * database column name.
+ *
+ * @param key KVC key used to access the column value.
+ * @param columnName The corresponding database column.
+ * @param isPrimaryKey YES if the property comprises the object's primary key.
+ */
++ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey {
+    return [[[PLEntityPropertyDescription alloc] initWithKey: key columnName: columnName isPrimaryKey: primaryKey] autorelease];
+}
+
+
 
 /**
  * Initialize with the Key Value Coding key and database column name.
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
+ * @param isPrimaryKey YES if the property comprises the object's primary key.
  */
-- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName {
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey {
     if ((self = [super init]) == nil)
         return nil;
 
     _key = [key retain];
     _columnName = [columnName retain];
+    _primaryKey = primaryKey;
     
     return self;
 }

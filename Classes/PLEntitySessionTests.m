@@ -146,13 +146,17 @@
 @implementation PLEntitySessionExampleEntity
 
 + (PLEntityDescription *) entityDescription {
-    PLEntityDescription *desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"People"];
+    PLEntityDescription *desc;
     
-    /* Define our columns */
-    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"] isPrimaryKey: YES];
-    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"firstName" columnName: @"first_name"]];
-    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"lastName" columnName: @"last_name"]];
-    
+    desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"People" properties:
+        [NSArray arrayWithObjects:
+            [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id" isPrimaryKey: YES],
+            [PLEntityPropertyDescription descriptionWithKey: @"firstName" columnName: @"first_name"],
+            [PLEntityPropertyDescription descriptionWithKey: @"lastName" columnName: @"last_name"],
+            nil
+        ]
+    ];
+
     return desc;
 }
 

@@ -55,14 +55,14 @@
 @implementation PLEntityDescExampleEntity
 
 + (PLEntityDescription *) entityDescription {
-    PLEntityDescription *desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"People"];
-
-    /* Define our columns */
-    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"] isPrimaryKey: YES];
-    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"firstName" columnName: @"first_name"]];
-    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"lastName" columnName: @"last_name"]];
-
-    return desc;
+    return [PLEntityDescription descriptionForClass: [self class] tableName: @"People" properties:
+        [NSArray arrayWithObjects:
+            [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id" isPrimaryKey: YES],
+            [PLEntityPropertyDescription descriptionWithKey: @"firstName" columnName: @"first_name"],
+            [PLEntityPropertyDescription descriptionWithKey: @"lastName" columnName: @"last_name"],
+            nil
+        ]
+    ];
 }
 
 - (id) init {
@@ -139,13 +139,16 @@
     PLEntityDescription *description;
 
     /* Create one */
-    description = [PLEntityDescription descriptionForClass: [self class] tableName: @"test"];
+    description = [PLEntityDescription descriptionForClass: [self class] tableName: @"test" properties:
+        [NSArray arrayWithObjects:
+            [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id" isPrimaryKey: YES],
+            [PLEntityPropertyDescription descriptionWithKey: @"name" columnName: @"name"],
+            nil
+        ]
+    ];
+
     STAssertNotNil(description, @"Could not initialize PLEntityDescription");
     STAssertTrue([@"test" isEqual: [description tableName]], @"Entity table name incorrect (%@)", [description tableName]);
-
-    /* Add some properties */
-    [description addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"] isPrimaryKey: YES];
-    [description addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"name" columnName: @"name"]];
 }
 
 - (void) testEntityColumnValues {

@@ -33,20 +33,15 @@
     NSString *_tableName;
 
     /** Map of column name to PLEntityPropertyDescription */
-    NSMutableDictionary *_columnProperties;
+    NSDictionary *_columnProperties;
 
     /** The described entity's class object */
     Class _entityClass;
 }
 
-+ (PLEntityDescription *) descriptionForClass: (Class) entityClass tableName: (NSString *) tableName;
++ (PLEntityDescription *) descriptionForClass: (Class) entityClass tableName: (NSString *) tableName properties: (NSArray *) properties;
 
-- (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName;
-
-- (void) addPropertyDescription: (PLEntityPropertyDescription *) description;
-
-- (void) addPropertyDescription: (PLEntityPropertyDescription *) description isPrimaryKey: (BOOL) isPrimaryKey;
-
+- (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName properties: (NSArray *) properties;
 
 @end
 
