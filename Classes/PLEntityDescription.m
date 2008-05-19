@@ -64,7 +64,7 @@
     _tableName = [tableName retain];
 
     /*
-     * Populate our column -> property map, and a list of promary keys
+     * Populate our column -> property map, and a list of primary keys
      */
     NSMutableArray *primaryKeys = [NSMutableArray arrayWithCapacity: 1];
     _columnProperties = columnProperties = [[NSMutableDictionary alloc] initWithCapacity: [properties count]];
