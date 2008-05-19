@@ -59,4 +59,34 @@
     [super dealloc];
 }
 
+
+/**
+ * @internal
+ * Create an INSERT prepared statement, with named bindings for the given column names.
+ *
+ * @param tableName The name of the table for the INSERT.
+ * @param columns A list of all the column names, which will be included in the INSERT as named parameters.
+ * @param outError If an error occurs, nil will be returned and outError will be populated with the error reason.
+ * @return A prepared statement that may be used for dictionary-based parameter binding. Nil if an error occurs.
+ */
+- (NSObject<PLPreparedStatement> *) insertForTable: (NSString *) tableName withColumns: (NSArray *) columnNames error: (NSError **) outError {
+    NSString *query;
+    NSObject<PLPreparedStatement> *stmt;
+
+    /* Create the query string */
+    query = [NSString stringWithFormat: @"INSERT INTO %@ (%@) VALUES (:%@)", 
+             [_dialect quoteIdentifier: tableName],
+             [columnNames componentsJoinedByString: @", "],
+             [columnNames componentsJoinedByString: @", :"]];
+
+    /* Prepare the statement */
+    stmt = [_db prepareStatement: query error: outError];
+    if (stmt == nil)
+        return nil;
+
+    /* All is well in prepared statement land */
+    return stmt;
+}
+
+
 @end

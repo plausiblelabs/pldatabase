@@ -40,6 +40,8 @@
 
 - (id) initWithDatabase: (NSObject<PLDatabase> *) database dialect: (PLEntityDialect *) dialect;
 
+- (NSObject<PLPreparedStatement> *) insertForTable: (NSString *) tableName withColumns: (NSArray *) columnNames error: (NSError **) outError;
+
 @end
 
 #endif /* PL_DB_PRIVATE */
