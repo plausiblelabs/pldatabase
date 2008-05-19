@@ -49,4 +49,13 @@
     [super dealloc];
 }
 
+
+/**
+ * @internal
+ * Return a new unopen connection to the backing database.
+ */
+- (PLSqliteDatabase *) database {
+    return [PLSqliteDatabase databaseWithPath: _dbPath];
+}
+
 @end

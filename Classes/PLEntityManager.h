@@ -44,7 +44,7 @@
 @interface PLEntityManager (PLEntityManagerLibraryPrivate)
 
 - (NSObject<PLEntityConnectionDelegate> *) connectionDelegate;
-- (PLEntityDialect *) sqlDialect;
+- (PLEntityDialect *) dialect;
 
 - (PLEntityDescription *) descriptionForEntity: (Class<PLEntity>) entity;
 

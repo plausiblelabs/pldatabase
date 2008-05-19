@@ -34,8 +34,9 @@
 
 @interface PLEntityTransactionTests : SenTestCase {
 @private
-    PLEntityManager *_manager;
+    PLMockEntityManager *_manager;
     PLEntityTransaction *_tx;
+    PLSqliteDatabase *_db;
 }
 @end
 
@@ -60,11 +61,20 @@
 - (void) setUp {
     _manager = [[PLMockEntityManager alloc] init];
     _tx = [[PLEntityTransaction alloc] initWithEntityManager: _manager error: nil];
+
+    /* Create our schema */
+    _db = [[_manager database] retain];
+    STAssertTrue([_db open], nil);
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE People ("
+                  "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                  "first_name VARCHAR(150),"
+                  "last_name VARCHAR(150))"], @"Could not create People table");
 }
 
 - (void) tearDown {
     [_manager release];
     [_tx release];
+    [_db release];
 }
 
 - (void) testInit {
@@ -75,9 +85,21 @@
 
 - (void) testInsertEntity {
     PLEntityTransactionExampleEntity *entity;
+    NSError *error;
 
+    /* Insert the entity */
     entity = [[[PLEntityTransactionExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
-    // TODO STAssertTrue([_tx insertEntity: entity error: nil], @"Could not INSERT entity");
+    STAssertTrue([_tx insertEntity: entity error: &error], @"Could not INSERT entity: %@", error);
+
+    /* Verify that he arrived */
+    NSObject<PLResultSet> *rs;
+    rs = [_db executeQueryAndReturnError: &error statement: @"SELECT * FROM People WHERE first_name = ?", @"Johnny"];
+    STAssertNotNil(rs, @"Could not execute query: %@", error);
+    STAssertTrue([rs next], @"No results returned");
+    
+    STAssertTrue([@"Johnny" isEqual: [rs stringForColumn: @"first_name"]], @"Unexpected name value");
+    STAssertTrue([@"Appleseed" isEqual: [rs stringForColumn: @"last_name"]], @"Unexpected name value");
+    [rs close];
 }
 
 

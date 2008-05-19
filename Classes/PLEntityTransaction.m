@@ -60,6 +60,9 @@
         return nil;
     }
 
+    /* Set up our statement builder */
+    _sqlBuilder = [[PLSqlBuilder alloc] initWithDatabase: _database dialect: [_entityManager dialect]];
+
     return self;
 }
 
@@ -71,6 +74,7 @@
     /* Free any memory */
     [_database release];
     [_entityManager release];
+    [_sqlBuilder release];
 
     [super dealloc];
 }
@@ -192,12 +196,28 @@
 - (BOOL) insertEntity: (NSObject<PLEntity> *) entity error: (NSError **) error {
     PLEntityDescription *desc;
     NSDictionary *values;
+    NSObject<PLPreparedStatement> *stmt;
+    BOOL ret;
 
     /* Fetch the data */
     desc = [_entityManager descriptionForEntity: [entity class]];
     values = [desc columnValuesForEntity: entity];
+
+    /* Create our insert statement */
+    stmt = [_sqlBuilder insertForTable: [desc tableName] withColumns: [values allKeys] error: error];
+    if (stmt == nil)
+        return NO;
+
+    /* Bind parameters */
+    [stmt bindParameterDictionary: values];
+
+    /* Execute our statement */
+    ret = [stmt executeUpdateAndReturnError: error];
+
+    /* Clean up */
+    [stmt close];
     
-    return NO; // XXX TODO
+    return ret;
 }
 
 @end

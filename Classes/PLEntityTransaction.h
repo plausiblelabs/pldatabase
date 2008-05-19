@@ -27,8 +27,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-// Forward-declare the entity manager
+// Forward-declarations
 @class PLEntityManager;
+@class PLSqlBuilder;
 
 @interface PLEntityTransaction : NSObject {
 @private
@@ -38,6 +39,9 @@
     /** The backing database connection */
     NSObject<PLDatabase> *_database;
 
+    /** The SQL statement builder */
+    PLSqlBuilder *_sqlBuilder;
+
     /** Marks the current transaction state (in transaction == YES) */
     BOOL _inTransaction;
 }
@@ -46,7 +50,6 @@
 #if PL_DB_PRIVATE
 - (id) initWithEntityManager: (PLEntityManager *) entityManager error: (NSError **) error;
 #endif
-
 
 - (BOOL) begin;
 - (BOOL) beginAndReturnError: (NSError **) error;

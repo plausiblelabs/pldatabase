@@ -202,9 +202,12 @@
     /* The statement must be released before the database is released, as the statement has a reference
      * to the database which would cause a SQLITE_BUSY error when the database is released. */
     [self close];
-
+    
     /* Now release the database. */
     [_database release];
+    
+    /* Release the query statement */
+    [_queryString release];
     
     [super dealloc];
 }

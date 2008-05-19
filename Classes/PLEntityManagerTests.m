@@ -77,8 +77,8 @@
     STAssertNotNil([_manager connectionDelegate], @"Could not retrieve connection delegate");
 }
 
-- (void) testSqlDialect {
-    STAssertNotNil([_manager sqlDialect], @"Could not retrieve sql dialect");
+- (void) testDialect {
+    STAssertNotNil([_manager dialect], @"Could not retrieve sql dialect");
 }
 
 - (void) testDescriptionForEntity {

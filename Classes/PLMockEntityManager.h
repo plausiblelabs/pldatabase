@@ -32,4 +32,6 @@
     NSString *_dbPath;
 }
 
+- (PLSqliteDatabase *) database;
+
 @end

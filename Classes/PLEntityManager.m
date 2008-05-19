@@ -79,7 +79,7 @@
  * @internal
  * Return the entity dialect.
  */
-- (PLEntityDialect *) sqlDialect {
+- (PLEntityDialect *) dialect {
     return _sqlDialect;
 }
 
