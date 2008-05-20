@@ -27,12 +27,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* Forward declare */
-@class PLEntityDescription;
+#import <SenTestingKit/SenTestingKit.h>
 
-@interface PLEntity : NSObject
+#import "PlausibleDatabase.h"
 
-+ (PLEntityDescription *) entityDescription;
-- (void) awakeFromDatabase;
+@interface PLEntityTests : SenTestCase
+@end
+
+@implementation PLEntityTests
+
+- (void) testAbstract {
+    STAssertThrows([PLEntity entityDescription], @"Did not throw abstract method exception");
+}
 
 @end

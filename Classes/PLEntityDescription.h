@@ -51,7 +51,7 @@
 
 - (NSString *) tableName;
 
-- (NSDictionary *) columnValuesForEntity: (NSObject<PLEntity> *) entity;
+- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity;
 
 - (id) instantiateEntityWithColumnValues: (NSDictionary *) values error: (NSError **) outError;
 

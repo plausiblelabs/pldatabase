@@ -125,7 +125,7 @@
  * Nil values are represented as NSNull, as per the Key-Value Coding
  * Programming Guidelines: http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/BasicPrinciples.html
  */
-- (NSDictionary *) columnValuesForEntity: (NSObject<PLEntity> *) entity {
+- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity {
     NSMutableDictionary *columnValues;
 
     /* Create our return dictionary */
@@ -161,7 +161,7 @@
  * @return Returns a new instance, or sets outError and returns nil on failure.
  */
 - (id) instantiateEntityWithColumnValues: (NSDictionary *) values error: (NSError **) outError {
-    NSObject<PLEntity> *entity;
+    PLEntity *entity;
 
     /* Create the new class instance */
     entity = [[[_entityClass alloc] init] autorelease];

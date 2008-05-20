@@ -40,7 +40,7 @@
 }
 @end
 
-@interface PLEntitySessionExampleEntity : NSObject<PLEntity> {
+@interface PLEntitySessionExampleEntity : PLEntity {
 @private
     NSNumber *_rowId;
     NSString *_firstName;

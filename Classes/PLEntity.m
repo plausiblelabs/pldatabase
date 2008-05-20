@@ -27,12 +27,53 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* Forward declare */
-@class PLEntityDescription;
+#import "PlausibleDatabase.h"
 
-@interface PLEntity : NSObject
+/**
+ * Abstract base class for entities that may be loaded and persisted to and
+ * from a database.
+ *
+ * Implementing classes must:
+ * - Provide an entity description via PLEntity::entityDescription
+ * - Support initialization via the no-argument init method.
+ * - Be KVC and KVO compatible.
+ *
+ * @par Determing Changes
+ * In performing updates to the corresponding database rows, only
+ * modified values are written to the database
+ */
+@implementation PLEntity
 
-+ (PLEntityDescription *) entityDescription;
-- (void) awakeFromDatabase;
+/**
+ * Abstract method that returns the entity's description.
+ * Must be overridden by subclasses. Do not call the superclass method.
+ */
++ (PLEntityDescription *) entityDescription {
+    [NSException raise:NSGenericException format: @"Method %s is abstract", _cmd];
+
+    // Unreachable
+    abort();
+}
+
+/**
+ * Designated initializer for the PLEntity superclass.
+ */ 
+- (id) init {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    return self;
+}
+
+/**
+ * Classes may implement this method to perform additional initialization after
+ * an object has been loaded from the database, and declared entity
+ * properties have been populated.
+ *
+ * Subclasses are not required to call the superclass implementation.
+ */
+- (void) awakeFromDatabase {
+    // Do nothing
+}
 
 @end

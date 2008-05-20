@@ -229,7 +229,7 @@
     return _inTransaction;
 }
 
-- (BOOL) insertEntity: (NSObject<PLEntity> *) entity error: (NSError **) error {
+- (BOOL) insertEntity: (PLEntity *) entity error: (NSError **) error {
     PLEntityDescription *desc;
     NSDictionary *values;
     NSObject<PLPreparedStatement> *stmt;
@@ -252,7 +252,7 @@
 
     /* Clean up */
     [stmt close];
-    
+
     return ret;
 }
 

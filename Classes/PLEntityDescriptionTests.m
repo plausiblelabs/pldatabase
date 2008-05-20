@@ -35,7 +35,7 @@
 @end
 
 
-@interface PLEntityDescExampleEntity : NSObject <PLEntity> {
+@interface PLEntityDescExampleEntity : PLEntity {
 @private
     /** Row id */
     NSNumber *_rowId;

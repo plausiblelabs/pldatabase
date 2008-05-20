@@ -64,7 +64,7 @@
 
 - (BOOL) inTransaction;
 
-- (BOOL) insertEntity: (NSObject<PLEntity> *) entity error: (NSError **) error;
+- (BOOL) insertEntity: (PLEntity *) entity error: (NSError **) error;
 
 - (void) close;
 

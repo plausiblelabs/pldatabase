@@ -116,7 +116,7 @@
  *
  * @todo Implement LRU cache here, if measurements dictate.
  */
-- (PLEntityDescription *) descriptionForEntity: (Class<PLEntity>) entity {
+- (PLEntityDescription *) descriptionForEntity: (Class) entity {
     return [entity entityDescription];
 }
 
