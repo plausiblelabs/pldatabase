@@ -202,7 +202,7 @@ VALUE_ACCESSORS(NSDate *, date, SQLITE_FLOAT,
 /* string */
 VALUE_ACCESSORS(NSString *, string, SQLITE_TEXT,
                     [NSString stringWithCharacters: sqlite3_column_text16(_sqlite_stmt, columnIndex)
-                                            length: sqlite3_column_bytes16(_sqlite_stmt, columnIndex)])
+                                            length: sqlite3_column_bytes16(_sqlite_stmt, columnIndex) / 2])
 
 /* float */
 VALUE_ACCESSORS(float, float, SQLITE_FLOAT, sqlite3_column_double(_sqlite_stmt, columnIndex))
