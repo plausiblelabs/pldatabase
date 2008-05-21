@@ -225,7 +225,7 @@ VALUE_ACCESSORS(NSData *, data, SQLITE_BLOB, [NSData dataWithBytes: sqlite3_colu
 
 
 /* From PLResultSet */
-- (NSObject *) objectForColumnIndex: (int) columnIndex {
+- (id) objectForColumnIndex: (int) columnIndex {
     [self assertNotClosed];
 
     int columnType = [self validateColumnIndex: columnIndex isNullable: NO];
@@ -252,7 +252,7 @@ VALUE_ACCESSORS(NSData *, data, SQLITE_BLOB, [NSData dataWithBytes: sqlite3_colu
 
 
 /* From PLResultSet */
-- (NSObject *) objectForColumn: (NSString *) columnName {
+- (id) objectForColumn: (NSString *) columnName {
     return [self objectForColumnIndex: [self columnIndexForName: columnName]];
 }
 

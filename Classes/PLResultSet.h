@@ -237,7 +237,7 @@
  *
  * @param columnName Name of column value to return.
  */
-- (NSObject *) objectForColumn: (NSString *) columnName;
+- (id) objectForColumn: (NSString *) columnName;
 
 /**
  * Return the value of the named column as a Foundation
@@ -249,6 +249,6 @@
  *
  * @param columnIndex Index of column value to return.
  */
-- (NSObject *) objectForColumnIndex: (int) columnIndex;
+- (id) objectForColumnIndex: (int) columnIndex;
 @end
 
