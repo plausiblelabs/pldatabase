@@ -173,6 +173,9 @@
 
         /* Get the property key */
         key = [[_columnProperties valueForKey: columnName] key];
+        if (key == nil)
+            [NSException raise: PLDatabaseException
+                        format: @"Attempt to instantiate object with unregistered column %@ for table %@", columnName, [self tableName]];
 
         /* Retrieve the column's value (may be nil, it's up to the validator to accept/reject a nil value) */
         value = [values objectForKey: columnName];
