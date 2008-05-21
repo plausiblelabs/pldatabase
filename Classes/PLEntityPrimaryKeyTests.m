@@ -39,7 +39,7 @@
 - (void) testInit {
     PLEntityPrimaryKey *primaryKey;
 
-    primaryKey = [PLEntityPrimaryKey primaryKeyWithPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"]];
+    primaryKey = [PLEntityPrimaryKey primaryKeyWithPropertyDescription: [PLEntityProperty descriptionWithKey: @"rowId" columnName: @"id"]];
     STAssertNotNil(primaryKey, @"Could not initialize instance");
 }
 

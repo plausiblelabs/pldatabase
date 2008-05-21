@@ -69,7 +69,7 @@
     NSMutableArray *primaryKeys = [NSMutableArray arrayWithCapacity: 1];
     _columnProperties = columnProperties = [[NSMutableDictionary alloc] initWithCapacity: [properties count]];
 
-    for (PLEntityPropertyDescription *desc in properties) {
+    for (PLEntityProperty *desc in properties) {
         NSString *columnName = [desc columnName];
 
         /* Sanity check -- verify that multiple entries aren't registered for the same column */
@@ -132,7 +132,7 @@
     columnValues = [NSMutableDictionary dictionaryWithCapacity: [_columnProperties count]];
 
     for (NSString *columnName in _columnProperties) {
-        PLEntityPropertyDescription *property;
+        PLEntityProperty *property;
         id value;
         
         /* Fetch the property description and the entity's value */

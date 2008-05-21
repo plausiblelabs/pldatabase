@@ -33,11 +33,11 @@
  */
 @implementation PLEntityPrimaryKey
 
-+ (PLEntityPrimaryKey *) primaryKeyWithPropertyDescription: (PLEntityPropertyDescription *) propertyDescription {
++ (PLEntityPrimaryKey *) primaryKeyWithPropertyDescription: (PLEntityProperty *) propertyDescription {
     return [[[PLEntityPrimaryKey alloc] initWithPropertyDescription: propertyDescription] autorelease];
 }
 
-- (id) initWithPropertyDescription: (PLEntityPropertyDescription *) propertyDescription {
+- (id) initWithPropertyDescription: (PLEntityProperty *) propertyDescription {
     if ((self = [super init]) == nil)
         return nil;
 

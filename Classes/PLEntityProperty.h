@@ -27,12 +27,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-@interface PLEntityPrimaryKey : NSObject {
+@interface PLEntityProperty : NSObject {
+@private
+    /** KVC key */
+    NSString *_key;
+    
+    /** Database column name */
+    NSString *_columnName;
 
+    /** Part of primary key */
+    BOOL _primaryKey;
 }
 
-+ (PLEntityPrimaryKey *) primaryKeyWithPropertyDescription: (PLEntityProperty *) propertyDescription;
++ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName;
++ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey;
 
-- (id) initWithPropertyDescription: (PLEntityProperty *) propertyDescription;
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey;
 
 @end
+
+#ifdef PL_DB_PRIVATE
+@interface PLEntityProperty (PLEntityPropertyDescriptionLibraryPrivate)
+
+- (NSString *) key;
+- (NSString *) columnName;
+- (BOOL) isPrimaryKey;
+
+@end
+#endif /* PL_DB_PRIVATE */

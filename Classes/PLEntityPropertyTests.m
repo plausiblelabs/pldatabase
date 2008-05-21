@@ -27,12 +27,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-@interface PLEntityPrimaryKey : NSObject {
+#import <SenTestingKit/SenTestingKit.h>
 
+#import "PlausibleDatabase.h"
+
+@interface PLEntityPropertyTests : SenTestCase
+@end
+
+@implementation PLEntityPropertyTests
+
+- (void) testInit {
+    PLEntityProperty *propertyDescription;
+
+    propertyDescription = [PLEntityProperty descriptionWithKey: @"rowId" columnName: @"id"];
+    STAssertNotNil(propertyDescription, @"Initializer returned nil");
+
+    STAssertTrue([@"rowId" isEqual: [propertyDescription key]], @"KVC key incorrect");
+    STAssertTrue([@"id" isEqual: [propertyDescription columnName]], @"Column name incorrect");
 }
-
-+ (PLEntityPrimaryKey *) primaryKeyWithPropertyDescription: (PLEntityProperty *) propertyDescription;
-
-- (id) initWithPropertyDescription: (PLEntityProperty *) propertyDescription;
 
 @end
