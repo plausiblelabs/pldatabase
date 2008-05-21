@@ -162,4 +162,32 @@
     STAssertThrows([result intForColumn: @"a"], @"Did not throw an exception for NULL column");
 }
 
+- (void) testObjectForColumn {
+    NSObject<PLResultSet> *result;
+    NSNumber *testInteger;
+    NSString *testString;
+    NSNumber *testDouble;
+    NSData *testBlob;
+    NSError *error;
+    
+    /* Initialize test data */
+    testInteger = [NSNumber numberWithInt: 42];
+    testString = @"Test string";
+    testDouble = [NSNumber numberWithDouble: 42.42];
+    testBlob = [@"Test data" dataUsingEncoding: NSUTF8StringEncoding]; 
+
+    STAssertTrue([_db executeUpdateAndReturnError: &error statement: @"CREATE TABLE test (a integer, b varchar(20), c double, d blob)"], @"Create table failed: %@", error);
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a, b, c, d) VALUES (?, ?, ?, ?)",
+                   testInteger, testString, testDouble, testBlob]), @"Could not insert row");
+    
+    /* Query the data */
+    result = [_db executeQuery: @"SELECT * FROM test"];
+    STAssertTrue([result next], @"No rows returned");
+    
+    STAssertTrue([testInteger isEqual: [result objectForColumn: @"a"]], @"Did not return correct integer value");
+    STAssertTrue([testString isEqual: [result objectForColumn: @"b"]], @"Did not return correct string value");
+    STAssertTrue([testDouble isEqual: [result objectForColumn: @"c"]], @"Did not return correct double value");
+    STAssertTrue([testBlob isEqual: [result objectForColumn: @"d"]], @"Did not return correct data value");
+}
+
 @end

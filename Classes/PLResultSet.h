@@ -227,5 +227,28 @@
  */
 - (NSData *) dataForColumnIndex: (int) columnIndex;
 
+/**
+ * Return the value of the named column as a Foundation
+ * Objective-C  object, using the database driver's built-in SQL and
+ * Foundation data-type mappings.
+ *
+ * Will throw NSException if the column name is unknown,
+ * or if the column value is NULL.
+ *
+ * @param columnName Name of column value to return.
+ */
+- (NSObject *) objectForColumn: (NSString *) columnName;
+
+/**
+ * Return the value of the named column as a Foundation
+ * Objective-C  object, using the database driver's built-in SQL and
+ * Foundation data-type mappings.
+ *
+ * Will throw NSException if the column index is out of range,
+ * or if the column value is NULL.
+ *
+ * @param columnIndex Index of column value to return.
+ */
+- (NSObject *) objectForColumnIndex: (int) columnIndex;
 @end
 

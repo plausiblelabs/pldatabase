@@ -109,7 +109,7 @@
         [NSException raise: PLSqliteException format: @"Attempt to access already-closed result set."];
 }
 
-// From PLResultSet
+/* From PLResultSet */
 - (BOOL) next {
     [self assertNotClosed];
 
@@ -222,6 +222,40 @@ VALUE_ACCESSORS(double, double, SQLITE_FLOAT, sqlite3_column_double(_sqlite_stmt
 /* data */
 VALUE_ACCESSORS(NSData *, data, SQLITE_BLOB, [NSData dataWithBytes: sqlite3_column_blob(_sqlite_stmt, columnIndex)
                                                             length: sqlite3_column_bytes(_sqlite_stmt, columnIndex)])
+
+
+/* From PLResultSet */
+- (NSObject *) objectForColumnIndex: (int) columnIndex {
+    [self assertNotClosed];
+
+    int columnType = [self validateColumnIndex: columnIndex isNullable: NO];
+    switch (columnType) {
+        case SQLITE_TEXT:
+            return [self stringForColumnIndex: columnIndex];
+
+        case SQLITE_INTEGER:
+            return [NSNumber numberWithLong: [self bigIntForColumnIndex: columnIndex]];
+
+        case SQLITE_FLOAT:
+            return [NSNumber numberWithDouble: [self doubleForColumnIndex: columnIndex]];
+
+        case SQLITE_BLOB:
+            return [self dataForColumnIndex: columnIndex];
+
+        default:
+            [NSException raise: PLDatabaseException format: @"Unhandled SQLite column type %d", columnType];
+    }
+
+    /* Unreachable */
+    abort();
+}
+
+
+/* From PLResultSet */
+- (NSObject *) objectForColumn: (NSString *) columnName {
+    return [self objectForColumnIndex: [self columnIndexForName: columnName]];
+}
+
 
 /* from PLResultSet */
 - (BOOL) isNullForColumnIndex: (int) columnIndex {
