@@ -39,8 +39,8 @@
     BOOL _primaryKey;
 }
 
-+ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName;
-+ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey;
++ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName;
++ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey;
 
 - (id) initWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey;
 

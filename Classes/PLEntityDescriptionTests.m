@@ -57,9 +57,9 @@
 + (PLEntityDescription *) entityDescription {
     return [PLEntityDescription descriptionForClass: [self class] tableName: @"People" properties:
         [NSArray arrayWithObjects:
-            [PLEntityProperty descriptionWithKey: @"rowId" columnName: @"id" isPrimaryKey: YES],
-            [PLEntityProperty descriptionWithKey: @"firstName" columnName: @"first_name"],
-            [PLEntityProperty descriptionWithKey: @"lastName" columnName: @"last_name"],
+            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" isPrimaryKey: YES],
+            [PLEntityProperty propertyWithKey: @"firstName" columnName: @"first_name"],
+            [PLEntityProperty propertyWithKey: @"lastName" columnName: @"last_name"],
             nil
         ]
     ];
@@ -141,8 +141,8 @@
     /* Create one */
     description = [PLEntityDescription descriptionForClass: [self class] tableName: @"test" properties:
         [NSArray arrayWithObjects:
-            [PLEntityProperty descriptionWithKey: @"rowId" columnName: @"id" isPrimaryKey: YES],
-            [PLEntityProperty descriptionWithKey: @"name" columnName: @"name"],
+            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" isPrimaryKey: YES],
+            [PLEntityProperty propertyWithKey: @"name" columnName: @"name"],
             nil
         ]
     ];

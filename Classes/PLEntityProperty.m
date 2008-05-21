@@ -41,8 +41,8 @@
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
  */
-+ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName {
-    return [PLEntityProperty descriptionWithKey: key columnName: columnName isPrimaryKey: NO];
++ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName {
+    return [PLEntityProperty propertyWithKey: key columnName: columnName isPrimaryKey: NO];
 }
 
 
@@ -54,7 +54,7 @@
  * @param columnName The corresponding database column.
  * @param isPrimaryKey YES if the property comprises the object's primary key.
  */
-+ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey {
++ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey {
     return [[[PLEntityProperty alloc] initWithKey: key columnName: columnName isPrimaryKey: primaryKey] autorelease];
 }
 

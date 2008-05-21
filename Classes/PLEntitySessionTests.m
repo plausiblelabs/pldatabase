@@ -150,9 +150,9 @@
     
     desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"People" properties:
         [NSArray arrayWithObjects:
-            [PLEntityProperty descriptionWithKey: @"rowId" columnName: @"id" isPrimaryKey: YES],
-            [PLEntityProperty descriptionWithKey: @"firstName" columnName: @"first_name"],
-            [PLEntityProperty descriptionWithKey: @"lastName" columnName: @"last_name"],
+            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" isPrimaryKey: YES],
+            [PLEntityProperty propertyWithKey: @"firstName" columnName: @"first_name"],
+            [PLEntityProperty propertyWithKey: @"lastName" columnName: @"last_name"],
             nil
         ]
     ];
