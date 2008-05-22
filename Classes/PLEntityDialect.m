@@ -49,6 +49,13 @@
     return [NSException exceptionWithName: PLDatabaseException reason: reason userInfo: nil];
 }
 
+
+/**
+ * Initialize the entity dialect.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLEntityDialect class.
+ */
 - (id) init {
     if ((self = [super init]) == nil)
         return nil;

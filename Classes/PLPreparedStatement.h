@@ -31,17 +31,17 @@
  * An object that represents a pre-compiled statement, and any parameters
  * bound to that statement.
  *
- * @paragraph SQL Parameters
+ * @par SQL Parameters
  * Literal query values may be substituted via parameter binding, by using
  * the '?' symbol in the query statement and PLPreparedStatement::bindParameters.
  *
  * Additionally, PLPreparedStatement::bindParameterDictionary implements
- * name-based parameter binding. To bind named parameters, use the ':<name>'
+ * name-based parameter binding. To bind named parameters, use the ':&lt;name&gt;'
  * syntax. All named parameters must be provided in the binding parameter
  * dictionary, and it is not possible to mix named and unnamed parameters
  * when using PLPreparedStatement::bindParameterDictionary.
  *
- * @paragraph Thread Safety
+ * @par Thread Safety
  * PLPreparedStatement instances implement no locking and must not be shared between threads
  * without external synchronization.
  *
@@ -91,8 +91,6 @@
  * pointer will contain an error object indicating why the statement could not be executed.
  * If no error occurs, this parameter will be left unmodified. You may specify nil for this
  * parameter, and no error information will be provided.
- * @param statement SQL statement to execute.
- *
  */
 - (BOOL) executeUpdateAndReturnError: (NSError **) outError;
 
@@ -112,7 +110,6 @@
  * pointer will contain an error object indicating why the statement could not be executed.
  * If no error occurs, this parameter will be left unmodified. You may specify nil for this
  * parameter, and no error information will be provided.
- * @param statement SQL statement to execute.
  * @return PLResultSet on success, or nil on failure.
  */
 - (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) outError;

@@ -47,7 +47,7 @@
  * defined. Refer to the database driver's documentation for the specific mapping
  * used.
  *
- * @paragraph Thread Safety
+ * @par Thread Safety
  * PLDatabase instances implement no locking and must not be shared between threads
  * without external synchronization.
  */

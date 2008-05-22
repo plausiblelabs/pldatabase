@@ -30,7 +30,7 @@
 /**
  * Represents a set of results returned by an SQL query.
  *
- * @paragraph Thread Safety
+ * @par Thread Safety
  * PLResultSet instances implement no locking and must not be shared between threads
  * without external synchronization.
  */

@@ -42,6 +42,9 @@
  * MEMORY OWNERSHIP WARNING:
  * We are passed an sqlite3_stmt reference owned by the PLSqlitePreparedStatement.
  * It will remain valid insofar as the PLSqlitePreparedStatement reference is retained.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLSqliteResultSet class.
  */
 - (id) initWithPreparedStatement: (PLSqlitePreparedStatement *) stmt 
                   sqliteStatemet: (sqlite3_stmt *) sqlite_stmt

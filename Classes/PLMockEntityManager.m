@@ -16,6 +16,12 @@
  */
 @implementation PLMockEntityManager
 
+/**
+ * @internal
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLMockEntityManager class.
+ */
 - (id) init {
     PLSqliteEntityConnectionDelegate *connectionDelegate;
     PLSqliteEntityDialect *sqlDialect;

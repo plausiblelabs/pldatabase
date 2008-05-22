@@ -42,7 +42,7 @@
  *
  * @param entityClass The class corresponding to the described entity.
  * @param tableName The database table corresponding to the described entity.
- * @param properties A list of PLEntityPropertyDescription instances.
+ * @param properties A list of PLEntityProperty instances.
  */
 + (PLEntityDescription *) descriptionForClass: (Class) entityClass tableName: (NSString *) tableName properties: (NSArray *) properties {
     return [[[PLEntityDescription alloc] initWithClass: entityClass tableName: tableName properties: properties] autorelease];
@@ -53,6 +53,10 @@
  *
  * @param entityClass The class corresponding to the described entity.
  * @param tableName The database table corresponding to the described entity.
+ * @param properties A list of PLEntityProperty instances.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLEntityDescription class.
  */
 - (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName properties: (NSArray *) properties {
     NSMutableDictionary *columnProperties;

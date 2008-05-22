@@ -40,6 +40,9 @@
  *
  * @param connectionDelegate Delegate responsible for providing database connections.
  * @param sqlDialect The SQL entity dialect for the given database.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLEntityManager class.
  */
 - (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) connectionDelegate sqlDialect: (PLEntityDialect *) sqlDialect {
     if ((self = [super init]) == nil)

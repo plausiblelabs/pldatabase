@@ -62,6 +62,9 @@ NSString *PLSqliteException = @"PLSqliteException";
  * file path.
  *
  * @param dbPath Path to the sqlite database file.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLSqliteDatabase class.
  */
 - (id) initWithPath: (NSString*) dbPath {
     if ((self = [super init]) == nil)

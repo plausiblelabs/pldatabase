@@ -163,11 +163,16 @@
 @implementation PLSqlitePreparedStatement
 
 /**
+ * @internal
+ *
  * Initialize the prepared statement with an open database and an sqlite3 prepared statement.
  *
  * MEMORY OWNERSHIP WARNING:
  * We are passed an sqlite3_stmt reference which now we now assume authority for releasing
  * that statement using sqlite3_finalize().
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLSqlitePreparedStatement class.
  */
 - (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt queryString: (NSString *) queryString {
     if ((self = [super init]) == nil)

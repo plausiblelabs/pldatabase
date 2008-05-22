@@ -70,7 +70,6 @@ typedef enum {
 
 #import "PLEntity.h"
 #import "PLEntityProperty.h"
-#import "PLEntityPrimaryKey.h"
 #import "PLEntityDescription.h"
 
 #import "PLEntityConnectionDelegate.h"

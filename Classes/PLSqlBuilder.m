@@ -41,6 +41,9 @@
  *
  * @param database Database to use for generating prepared statements.
  * @param dialect Database dialect definition.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLSqlBuilder class.
  */
 - (id) initWithDatabase: (NSObject<PLDatabase> *) database dialect: (PLEntityDialect *) dialect {
     if ((self = [super init]) == nil)

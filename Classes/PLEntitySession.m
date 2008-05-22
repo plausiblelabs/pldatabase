@@ -36,7 +36,20 @@
 
 /**
  * @internal
+ *
+ * Disallow direct initialization.
+ */
+- (id) init {
+    [self doesNotRecognizeSelector: _cmd];
+    return nil;
+}
+
+/**
+ * @internal
  * Initialize with the given entity manager.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLEntityProperty class.
  */
 - (id) initWithEntityManager: (PLEntityManager *) entityManager error: (NSError **) error {
     if ((self = [super init]) == nil) {

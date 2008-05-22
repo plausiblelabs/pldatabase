@@ -52,7 +52,7 @@
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
- * @param isPrimaryKey YES if the property comprises the object's primary key.
+ * @param primaryKey YES if the property comprises the object's primary key.
  */
 + (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey {
     return [[[PLEntityProperty alloc] initWithKey: key columnName: columnName isPrimaryKey: primaryKey] autorelease];
@@ -65,7 +65,10 @@
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
- * @param isPrimaryKey YES if the property comprises the object's primary key.
+ * @param primaryKey YES if the property comprises the object's primary key.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLEntityProperty class.
  */
 - (id) initWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey {
     if ((self = [super init]) == nil)

@@ -35,6 +35,19 @@
 @implementation PLSqliteEntityDialect
 
 
+/**
+ * Initialize the SQLite PLEntityDialect.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLSqliteEntityDialect class.
+ */
+- (id) init {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    return self;
+}
+
 /*
  * Insert Identity
  */
