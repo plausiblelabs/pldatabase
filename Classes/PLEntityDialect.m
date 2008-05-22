@@ -42,6 +42,10 @@
  * between multiple threads and potentially unrelated database connections.
  *
  * @warning The PLEntityDialect API is experimental and subject to change.
+ *
+ * @par Thread Safety
+ * PLEntityDialect instances must be immutable, and support concurrent
+ * access from multiple threads.
  */
 @implementation PLEntityDialect
 

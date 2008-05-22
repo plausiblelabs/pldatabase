@@ -40,6 +40,10 @@
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
+ *
+ * @par Thread Safety
+ * PLEntityProperty instances are immutable, and may be shared between threads
+ * without synchronization.
  */
 + (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName {
     return [PLEntityProperty propertyWithKey: key columnName: columnName isPrimaryKey: NO];

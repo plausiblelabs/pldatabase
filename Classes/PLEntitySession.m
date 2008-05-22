@@ -31,6 +31,10 @@
 
 /**
  * The PLEntitySession represents a single database connection.
+ *
+ * @par Thread Safety
+ * PLEntitySession instances implement no locking and must not be shared between threads
+ * without external synchronization.
  */
 @implementation PLEntitySession
 

@@ -44,6 +44,10 @@
  *
  * @par Designated Initializer
  * This method is the designated initializer for the PLSqlBuilder class.
+ *
+ * @par Thread Safety
+ * PLSqlBuilder instances must be immutable, and support concurrent access
+ * from multiple threads.
  */
 - (id) initWithDatabase: (NSObject<PLDatabase> *) database dialect: (PLEntityDialect *) dialect {
     if ((self = [super init]) == nil)

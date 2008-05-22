@@ -159,6 +159,10 @@
 /**
  * @internal
  * SQLite prepared query implementation.
+ *
+ * @par Thread Safety
+ * PLSqlitePreparedStatement instances implement no locking and must not be shared between threads
+ * without external synchronization.
  */
 @implementation PLSqlitePreparedStatement
 

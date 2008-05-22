@@ -33,6 +33,10 @@
  * @internal
  *
  * SQLite #PLResultSet implementation.
+ *
+ * @par Thread Safety
+ * PLSqliteResultSet instances implement no locking and must not be shared between threads
+ * without external synchronization.
  */
  @implementation PLSqliteResultSet
 

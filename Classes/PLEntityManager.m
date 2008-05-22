@@ -32,6 +32,10 @@
 /**
  * Manages the object relational mapping between a database, and Objective-C objects
  * conforming to the PLEntity protocol.
+ *
+ * @par Thread Safety
+ * PLEntityManager instances implement no locking and must not be shared between threads
+ * without external synchronization. This may change in a future revision of the API.
  */
 @implementation PLEntityManager
 

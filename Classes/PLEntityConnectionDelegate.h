@@ -30,6 +30,10 @@
 /**
  * A delegate responsible for providing PLDatabase instances to the
  * PLEntityManager.
+ *
+ * @par Thread Safety
+ * PLEntityConnectionDelegate instances must be thread-safe, and support concurrent
+ * access from multiple threads.
  */
 @protocol PLEntityConnectionDelegate
 

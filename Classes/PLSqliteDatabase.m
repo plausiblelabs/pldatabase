@@ -46,6 +46,10 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /**
  * An SQLite PLDatabase driver.
+ *
+ * @par Thread Safety
+ * PLSqliteDatabase instances implement no locking and must not be shared between threads
+ * without external synchronization.
  */
 @implementation PLSqliteDatabase
 
