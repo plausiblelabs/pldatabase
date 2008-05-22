@@ -37,6 +37,8 @@
 #ifdef PL_DB_PRIVATE
 
 /**
+ * @internal
+ *
  * Inserts the supplied entity into the database, using the stategy defined by this class.
  *
  * @param entity The entity to be inserted.

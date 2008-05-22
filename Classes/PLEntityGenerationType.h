@@ -36,6 +36,8 @@
 #ifdef PL_DB_PRIVATE
 
 /**
+ * @internal
+ *
  * Create the insertion stategy which implements the field value generation method described by this instance.
  *
  * @param dialect The database dialect which may be used when determining the insertion stategy to return.
