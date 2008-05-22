@@ -58,6 +58,20 @@
  */
 - (BOOL) goodConnection;
 
+/**
+ * Close the database connection, releasing any held database resources.
+ * After calling, no further PLDatabase methods may be called on the instance.
+ *
+ * As PLDatabase objects may be placed into autorelease pools, with indeterminate
+ * release of database resources, this method should be used to ensure that the database
+ * connection is closed in a timely manner. 
+ *
+ * Failure to call close will not result in any resource leaks, but may result in
+ * database connections unexpectedly remaining open, especially in a garbage collection
+ * environment.
+ */
+- (void) close;
+
 
 /**
  * Prepare and return a new PLPreparedStatement.

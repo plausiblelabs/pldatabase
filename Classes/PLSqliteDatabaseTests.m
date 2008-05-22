@@ -60,6 +60,7 @@
     PLSqliteDatabase *db = [[[PLSqliteDatabase alloc] initWithPath:  @":memory:"] autorelease];
     STAssertTrue([db open], @"Could not open the database");
     STAssertTrue([db goodConnection], @"The database did not report a good connection");
+    [db close];
 }
 
 
@@ -70,6 +71,15 @@
     STAssertFalse([db openAndReturnError: &error], @"Database was opened, and it should not have been");
     STAssertNotNil(error, @"Returned error was nil");
     STAssertTrue([PLDatabaseErrorDomain isEqual: [error domain]], @"Incorrect error domain");
+    [db close];
+}
+
+- (void) testGoodConnection {
+    PLSqliteDatabase *db = [[[PLSqliteDatabase alloc] initWithPath:  @":memory:"] autorelease];
+    STAssertTrue([db open], @"Could not open the database");
+    STAssertTrue([db goodConnection], @"The database did not report a good connection");
+    [db close];
+    STAssertFalse([db goodConnection], @"The database reported a good connection");
 }
 
 
