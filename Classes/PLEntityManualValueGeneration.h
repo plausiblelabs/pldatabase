@@ -6,8 +6,7 @@
 //  Copyright 2008 Plausible Labs Cooperative, Inc.. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
-
+#import <Foundation/Foundation.h>
 
 @interface PLEntityManualValueGeneration : NSObject {
 
