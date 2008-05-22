@@ -27,35 +27,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-@interface PLEntityProperty : NSObject {
-@private
-    /** KVC key */
-    NSString *_key;
-    
-    /** Database column name */
-    NSString *_columnName;
+/**
+ * Describes a stategy for generating field values from the database.
+ */
+@protocol PLEntityValueGenerator
 
-    /** Part of primary key */
-    BOOL _primaryKey;
-
-    /** Value generator */
-    NSObject<PLEntityValueGenerator> *_valueGenerator;
-}
-
-+ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName;
-+ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey;
-+ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey valueGenerator: (NSObject<PLEntityValueGenerator> *) valueGenerator;
-
-- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey valueGenerator: (NSObject<PLEntityValueGenerator> *) valueGenerator;
-
-@end
-
+/* Implementation methods are private */
 #ifdef PL_DB_PRIVATE
-@interface PLEntityProperty (PLEntityPropertyDescriptionLibraryPrivate)
 
-- (NSString *) key;
-- (NSString *) columnName;
-- (BOOL) isPrimaryKey;
+#endif /* PL_DB_PRIVATE */
 
 @end
-#endif /* PL_DB_PRIVATE */

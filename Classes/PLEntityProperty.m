@@ -59,10 +59,21 @@
  * @param primaryKey YES if the property comprises the object's primary key.
  */
 + (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey {
-    return [[[PLEntityProperty alloc] initWithKey: key columnName: columnName isPrimaryKey: primaryKey] autorelease];
+    return [PLEntityProperty propertyWithKey: key columnName: columnName isPrimaryKey: primaryKey valueGenerator: nil];
 }
 
-
+/**
+ * Create and return a description with the provided Key Value Coding key and
+ * database column name.
+ *
+ * @param key KVC key used to access the column value.
+ * @param columnName The corresponding database column.
+ * @param primaryKey YES if the property comprises the object's primary key.
+ * @param valueGenerator Generator used to provide automatic field values.
+ */
++ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey valueGenerator: (NSObject<PLEntityValueGenerator> *) valueGenerator {
+    return [[[PLEntityProperty alloc] initWithKey: key columnName: columnName isPrimaryKey: primaryKey valueGenerator: valueGenerator] autorelease];
+}
 
 /**
  * Initialize with the Key Value Coding key and database column name.
@@ -70,17 +81,23 @@
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
  * @param primaryKey YES if the property comprises the object's primary key.
+ * @param valueGenerator Generator used to provide automatic field values.
  *
  * @par Designated Initializer
  * This method is the designated initializer for the PLEntityProperty class.
  */
-- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey {
+- (id) initWithKey: (NSString *) key
+        columnName: (NSString *) columnName
+      isPrimaryKey: (BOOL) primaryKey
+    valueGenerator: (NSObject<PLEntityValueGenerator> *) valueGenerator
+{
     if ((self = [super init]) == nil)
         return nil;
 
     _key = [key retain];
     _columnName = [columnName retain];
     _primaryKey = primaryKey;
+    _valueGenerator = [valueGenerator retain];
     
     return self;
 }
@@ -88,6 +105,7 @@
 - (void) dealloc {
     [_key release];
     [_columnName release];
+    [_valueGenerator release];
 
     [super dealloc];
 }
