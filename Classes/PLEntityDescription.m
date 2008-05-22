@@ -33,7 +33,7 @@
  * Defines the object entity mapping of a class and database table.
  *
  * @par Thread Safety
- * PLEntityProperty instances are immutable, and may be shared between threads
+ * PLEntityDescription instances are immutable, and may be shared between threads
  * without synchronization.
  */
 @implementation PLEntityDescription
