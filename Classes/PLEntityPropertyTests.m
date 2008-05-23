@@ -59,7 +59,7 @@
     STAssertTrue([@"id" isEqual: [propertyDescription columnName]], @"Column name incorrect");
 
     /* Verify that the value generator is set correctly */
-    STAssertTrue([[propertyDescription valueGenerator] isKindOfClass: [PLEntityNativeValueGenerator class]], @"Did not default to manual value generator");
+    STAssertTrue([[propertyDescription valueGenerator] isKindOfClass: [PLEntityNativeValueGenerator class]], @"Did not default to native value generator");
 }
 
 @end
