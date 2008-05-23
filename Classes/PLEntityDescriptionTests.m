@@ -188,8 +188,7 @@
     STAssertEquals(42, [[entity rowId] intValue], @"Incorrect row id");
     STAssertTrue([@"Johnny" isEqual: [entity firstName]], @"Incorrect firstName");
     STAssertTrue([@"Appleseed" isEqual: [entity lastName]], @"Incorrect lastName");
-
-
+    
     
     /*
      * Try creating the entity with a name that will be changed (Sarah -> Sara) 
@@ -210,6 +209,33 @@
 
     STAssertNil(entity, @"Entity was incorrect instantiated");
     STAssertNotNil(error, @"No NSError value was provided");
+}
+
+- (void) testPrimaryKeys {
+    PLEntityDescription *description;
+    PLEntityProperty *rowId;
+    PLEntityProperty *anotherId;
+    NSArray *keys;
+    
+    rowId = [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" isPrimaryKey: YES];
+    anotherId = [PLEntityProperty propertyWithKey: @"anotherId" columnName: @"anotherId" isPrimaryKey: YES];
+    
+    /* Create one */
+    description = [PLEntityDescription descriptionForClass: [self class] tableName: @"test" properties:
+        [NSArray arrayWithObjects:
+            rowId,
+            [PLEntityProperty propertyWithKey: @"name" columnName: @"name"],
+            anotherId,
+            nil
+         ]
+    ];
+    
+    /* Get the primary keys */
+    keys = [description primaryKeys];
+    
+    STAssertEquals((NSUInteger)2, [keys count], @"Incorrect number of primary keys found");
+    STAssertTrue([keys containsObject: rowId], @"Primary keys missing primary key");
+    STAssertTrue([keys containsObject: anotherId], @"Primary keys missing primary key");
 }
 
 @end

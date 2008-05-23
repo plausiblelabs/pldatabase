@@ -32,8 +32,11 @@
     /** Database table name */
     NSString *_tableName;
 
-    /** Map of column name to PLEntityPropertyDescription */
+    /** Map of column name to PLEntityProperty */
     NSDictionary *_columnProperties;
+    
+    /** A list of PLEntityProperty objects which are primary keys */
+    NSArray *_primaryKeys;
     
     /** The described entity's class object */
     Class _entityClass;
@@ -54,6 +57,8 @@
 - (NSDictionary *) columnValuesForEntity: (PLEntity *) entity;
 
 - (id) instantiateEntityWithColumnValues: (NSDictionary *) values error: (NSError **) outError;
+
+- (NSArray *) primaryKeys;
 
 @end
 #endif

@@ -64,6 +64,7 @@
  */
 - (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName properties: (NSArray *) properties {
     NSMutableDictionary *columnProperties;
+    NSMutableArray *primaryKeys;
 
     if ((self = [super init]) == nil)
         return nil;
@@ -74,8 +75,8 @@
     /*
      * Populate our column -> property map, and a list of primary keys
      */
-    NSMutableArray *primaryKeys = [NSMutableArray arrayWithCapacity: 1];
     _columnProperties = columnProperties = [[NSMutableDictionary alloc] initWithCapacity: [properties count]];
+    _primaryKeys =  primaryKeys = [NSMutableArray arrayWithCapacity: 1];
 
     for (PLEntityProperty *desc in properties) {
         NSString *columnName = [desc columnName];
@@ -203,5 +204,15 @@
     return entity;
 }
 
+/**
+ * @internal
+ *
+ * Returns the primary keys defined in this entity description.
+ *
+ * @return An NSArray containing PLEntityProperty objects.
+ */
+- (NSArray *) primaryKeys {
+    return _primaryKeys;
+}
 
 @end
