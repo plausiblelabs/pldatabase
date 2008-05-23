@@ -56,10 +56,18 @@
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
- * @param primaryKey YES if the property comprises the object's primary key.
+ * @param primaryKey YES if the property comprises the object's primary key. If set to YES, the
+ * instance will default to using a PLEntityNativeValueGenerator for generating/determining identity values.
  */
 + (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey {
-    return [PLEntityProperty propertyWithKey: key columnName: columnName isPrimaryKey: primaryKey valueGenerator: nil];
+    NSObject<PLEntityValueGenerator> *valueGenerator;
+
+    if (primaryKey)
+        valueGenerator = [PLEntityNativeValueGenerator nativeGenerator];
+    else
+        valueGenerator = [PLEntityManualValueGenerator manualGenerator];
+
+    return [PLEntityProperty propertyWithKey: key columnName: columnName isPrimaryKey: primaryKey valueGenerator: valueGenerator];
 }
 
 /**

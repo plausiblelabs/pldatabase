@@ -68,8 +68,11 @@ typedef enum {
 #import "PLSqlitePreparedStatement.h"
 #import "PLSqliteResultSet.h"
 
-#import "PLEntity.h"
 #import "PLEntityValueGenerator.h"
+#import "PLEntityManualValueGenerator.h"
+#import "PLEntityNativeValueGenerator.h"
+
+#import "PLEntity.h"
 #import "PLEntityProperty.h"
 #import "PLEntityDescription.h"
 
