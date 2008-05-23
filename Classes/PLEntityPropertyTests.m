@@ -36,7 +36,7 @@
 
 @implementation PLEntityPropertyTests
 
-- (void) testInit {
+- (void) testInitNotPrimaryKey {
     PLEntityProperty *propertyDescription;
 
     propertyDescription = [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id"];
@@ -44,6 +44,22 @@
 
     STAssertTrue([@"rowId" isEqual: [propertyDescription key]], @"KVC key incorrect");
     STAssertTrue([@"id" isEqual: [propertyDescription columnName]], @"Column name incorrect");
+
+    /* Verify that the value generator is set correctly */
+    STAssertTrue([[propertyDescription valueGenerator] isKindOfClass: [PLEntityManualValueGenerator class]], @"Did not default to manual value generator");
+}
+
+- (void) testInitPrimaryKey {
+    PLEntityProperty *propertyDescription;
+    
+    propertyDescription = [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" isPrimaryKey: YES];
+    STAssertNotNil(propertyDescription, @"Initializer returned nil");
+    
+    STAssertTrue([@"rowId" isEqual: [propertyDescription key]], @"KVC key incorrect");
+    STAssertTrue([@"id" isEqual: [propertyDescription columnName]], @"Column name incorrect");
+
+    /* Verify that the value generator is set correctly */
+    STAssertTrue([[propertyDescription valueGenerator] isKindOfClass: [PLEntityNativeValueGenerator class]], @"Did not default to manual value generator");
 }
 
 @end

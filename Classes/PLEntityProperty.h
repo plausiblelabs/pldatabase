@@ -56,6 +56,7 @@
 - (NSString *) key;
 - (NSString *) columnName;
 - (BOOL) isPrimaryKey;
+- (NSObject<PLEntityValueGenerator> *) valueGenerator;
 
 @end
 #endif /* PL_DB_PRIVATE */

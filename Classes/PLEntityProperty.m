@@ -148,4 +148,11 @@
     return _primaryKey;
 }
 
+/**
+ * Return the property value generator.
+ */
+- (NSObject<PLEntityValueGenerator> *) valueGenerator {
+    return _valueGenerator;
+}
+
 @end
