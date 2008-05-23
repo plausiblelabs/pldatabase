@@ -32,8 +32,7 @@
 #import <Foundation/Foundation.h>
 
 /**
- * @defgroup constants
- * Plausible Database Constants Reference
+ * @defgroup constants Plausible Database Constants Reference
  */
 
 /**
@@ -134,6 +133,22 @@ typedef enum {
  * binary compatibility with subclasses is NOT guaranteed. You should avoid subclassing library
  * classes -- use class composition instead.
  *
+ *
+ * @section doc_sections Documentation Sections
+ * - @subpage exec_sql
+ * - @subpage error_handling
+ *
+ *
+ * @section services Integration & Development Services
+ * Plausible Database is provided free of charge under the BSD license, and may be freely integrated with any application.
+ * We can provide assistance with integrating our code in your own iPhone or Mac application, as well as development of additional features --
+ * including support for additional databases --  under a license of your choosing (higher rates apply for non BSD-licensed work).
+ * Contact Plausible Labs for more information: http://www.plausiblelabs.com
+ */
+
+/**
+ * @page exec_sql Basic SQL Programming Guide
+ *
  * @section create_conn Creating a Connection
  *
  * Open a connection to a database file:
@@ -170,10 +185,16 @@ typedef enum {
  * // retain database resources until the instance is deallocated.
  * [results close];
  * </pre>
- *
- * @section error_handling Error Handling
+ */
+
+
+/**
+ * @page error_handling Error Handling Programming Guide
+ * @section error_intro Introduction
  *
  * All database operations support a selector which will return an NSError in the event of failure, as per the Cocoa Error Handling Programming Guide.
+ *
+ * @section Error Domains, Codes, and User Info
  *
  * An error that occurs in the Plausible Database library will use the #PLDatabaseErrorDomain, and one of the error codes defined in #PLDatabaseError. Additionally, the
  * following optional keys may be available in the NSError user info dictionary:
