@@ -29,6 +29,10 @@
 
 /**
  * Describes a stategy for generating field values from the database.
+ *
+ * @par Thread Safety
+ * PLEntityValueGenerator instances are immutable, and may be shared between threads
+ * without synchronization.
  */
 @protocol PLEntityValueGenerator
 
