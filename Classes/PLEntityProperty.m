@@ -57,24 +57,11 @@ NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
-
  */
 + (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName {
-    return [PLEntityProperty propertyWithKey: key columnName: columnName isPrimaryKey: NO];
+    return [PLEntityProperty propertyWithKey: key columnName: columnName options: nil];
 }
 
-
-/**
- * Create and return a description with the provided Key Value Coding key and
- * database column name.
- *
- * @param key KVC key used to access the column value.
- * @param columnName The corresponding database column.
- * @param primaryKey YES if the property comprises the object's primary key.
- */
-+ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey {
-    return [[[PLEntityProperty alloc] initWithKey: key columnName: columnName isPrimaryKey: primaryKey] autorelease];
-}
 
 /**
  * @internal
@@ -85,6 +72,8 @@ NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
  * @param firstOption A nil-terminated list of property options.
+ *
+ * This method is the true designated initializer.
  */
 - (id) initWithKey: (NSString *) key columnName: (NSString *) columnName option: (NSString *) firstOption optionsv: (va_list) optionsv {
     if ((self = [super init]) == nil)
@@ -113,7 +102,6 @@ NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
     /*
      * Option validation.
      */
-    // Validate our object state.
 
     return self;
 }
@@ -126,19 +114,8 @@ NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
  * @param columnName The corresponding database column.
  * @param firstOption A nil-terminated list of property options.
  *
- * @par Property Options
- *
- * The property options is a nil-terminated list of option constants, and associated
- * option values.
- *
- * The presence of a boolean option implies a value of YES, while its absence implies a value of NO.
- *
- * @par Boolean Options
- * The existence of boolean options imply a YES value. The available boolean options are:
- * - #PLEntityPAPrimaryKey\n
- * If present, this option indicates that this property composes all or part of the PLEntityDescription's primary key.
- * - #PLEntityPAGenerated\n
- * If present, this option indicates that this property is a database-generated value.
+ * @see PLEntityProperty::initWithKey:columnName:options: for the list of supported property options.
+ * values.
  */
 + (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName options: (NSString *) firstOption, ... {
     PLEntityProperty *ret;
@@ -157,18 +134,34 @@ NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
- * @param primaryKey YES if the property comprises the object's primary key.
+ * @param firstOption A nil-terminated list of property options.
+ * 
+ * @par Property Options
+ *
+ * The property options is a nil-terminated list of option constants, and associated
+ * option values.
+ *
+ * The presence of a boolean option implies a value of YES, while its absence implies a value of NO.
+ *
+ * @par Boolean Options
+ * The existence of boolean options imply a YES value. The available boolean options are:
+ * - #PLEntityPAPrimaryKey\n
+ * If present, this option indicates that this property composes all or part of the PLEntityDescription's primary key.
+ * - #PLEntityPAGenerated\n
+ * If present, this option indicates that this property is a database-generated value.
  *
  * @par Designated Initializer
  * This method is the designated initializer for the PLEntityProperty class.
+ *
+ * @internal
+ * This method calls the true designated initializer with our vararg options.
  */
-- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey {
-    if ((self = [super init]) == nil)
-        return nil;
-
-    _key = [key retain];
-    _columnName = [columnName retain];
-    _primaryKey = primaryKey;
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName options: (NSString *) firstOption, ... {
+    va_list args;
+    
+    va_start(args, firstOption);
+    [self initWithKey: key columnName: columnName option: firstOption optionsv: args];
+    va_end(args);
     
     return self;
 }
