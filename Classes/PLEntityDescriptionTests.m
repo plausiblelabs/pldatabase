@@ -57,7 +57,7 @@
 + (PLEntityDescription *) entityDescription {
     return [PLEntityDescription descriptionForClass: [self class] tableName: @"People" properties:
         [NSArray arrayWithObjects:
-            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" options: PLEntityPAPrimaryKey, PLEntityPAGenerated, nil],
+            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" options: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil],
             [PLEntityProperty propertyWithKey: @"firstName" columnName: @"first_name"],
             [PLEntityProperty propertyWithKey: @"lastName" columnName: @"last_name"],
             nil
@@ -141,7 +141,7 @@
     /* Create one */
     description = [PLEntityDescription descriptionForClass: [self class] tableName: @"test" properties:
         [NSArray arrayWithObjects:
-            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" options: PLEntityPAPrimaryKey, PLEntityPAGenerated, nil],
+            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" options: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil],
             [PLEntityProperty propertyWithKey: @"name" columnName: @"name"],
             nil
         ]
@@ -217,8 +217,8 @@
     PLEntityProperty *anotherId;
     NSArray *keys;
     
-    rowId = [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" options: PLEntityPAPrimaryKey, PLEntityPAGenerated, nil];
-    anotherId = [PLEntityProperty propertyWithKey: @"anotherId" columnName: @"anotherId" options: PLEntityPAPrimaryKey, PLEntityPAGenerated, nil];
+    rowId = [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" options: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil];
+    anotherId = [PLEntityProperty propertyWithKey: @"anotherId" columnName: @"anotherId" options: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil];
     
     /* Create one */
     description = [PLEntityDescription descriptionForClass: [self class] tableName: @"test" properties:

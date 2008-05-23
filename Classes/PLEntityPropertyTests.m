@@ -51,7 +51,7 @@
 - (void) testInitPrimaryKey {    
     PLEntityProperty *propertyDescription;
     
-    propertyDescription = [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" options: PLEntityPAPrimaryKey, PLEntityPAGenerated, nil];
+    propertyDescription = [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" options: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil];
     STAssertNotNil(propertyDescription, @"Initializer returned nil");
     
     STAssertTrue([@"rowId" isEqual: [propertyDescription key]], @"KVC key incorrect");

@@ -28,7 +28,7 @@
  */
 
 extern NSString *PLEntityPAPrimaryKey;
-extern NSString *PLEntityPAGenerated;
+extern NSString *PLEntityPAGeneratedValue;
 
 @interface PLEntityProperty : NSObject {
 @private

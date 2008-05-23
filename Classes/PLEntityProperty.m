@@ -39,7 +39,7 @@ NSString *PLEntityPAPrimaryKey = @"PLEntityPAPrimaryKey";
   * If present, the value will be considered generated.
   * @ingroup globals
   */
-NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
+NSString *PLEntityPAGeneratedValue = @"PLEntityPAGeneratedValue";
 
 
 /**
@@ -96,7 +96,7 @@ NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
             _primaryKey = YES;
         }
         /* Is a generated value */
-        else if ([PLEntityPAGenerated isEqual: option]) {
+        else if ([PLEntityPAGeneratedValue isEqual: option]) {
             _generatedValue = YES;
         } else {
             [NSException raise: PLDatabaseException format: @"Undefined PLEntityProperty option value %@", option];

@@ -110,7 +110,7 @@
 + (PLEntityDescription *) entityDescription {
     return [PLEntityDescription descriptionForClass: [self class] tableName: @"People" properties:
         [NSArray arrayWithObjects:
-            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" options: PLEntityPAPrimaryKey, PLEntityPAGenerated, nil],
+            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" options: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil],
             [PLEntityProperty propertyWithKey: @"name" columnName: @"name"],
             nil
         ]
