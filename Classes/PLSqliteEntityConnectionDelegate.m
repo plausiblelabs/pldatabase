@@ -43,7 +43,7 @@
  * @param dbPath Path to the sqlite database file.
  *
  * @par Designated Initializer
- * This method is the designated initializer for the PLEntityProperty class.
+ * This method is the designated initializer for the PLSqliteEntityConnectionDelegate class.
  */
 - (id) initWithPath: (NSString *) dbPath {
     if ((self = [super init]) == nil)

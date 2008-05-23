@@ -45,8 +45,9 @@
 @implementation PLEntity
 
 /**
- * Abstract method that returns the entity's description.
- * Must be overridden by subclasses. Do not call the superclass method.
+ * Returns the entity database description.
+ *
+ * This abstract method must be overridden.
  */
 + (PLEntityDescription *) entityDescription {
     [NSException raise:NSGenericException format: @"Method %s is abstract", _cmd];
