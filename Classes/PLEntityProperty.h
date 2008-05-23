@@ -27,6 +27,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+extern NSString *PLEntityPAPrimaryKey;
+extern NSString *PLEntityPAGenerated;
+
 @interface PLEntityProperty : NSObject {
 @private
     /** KVC key */
@@ -37,16 +40,14 @@
 
     /** Part of primary key */
     BOOL _primaryKey;
-
-    /** Value generator */
-    NSObject<PLEntityValueGenerator> *_valueGenerator;
 }
 
 + (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName;
 + (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey;
-+ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey valueGenerator: (NSObject<PLEntityValueGenerator> *) valueGenerator;
 
-- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey valueGenerator: (NSObject<PLEntityValueGenerator> *) valueGenerator;
++ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName options: (NSString *) firstOption, ... NS_REQUIRES_NIL_TERMINATION;
+
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey;
 
 @end
 
@@ -56,7 +57,6 @@
 - (NSString *) key;
 - (NSString *) columnName;
 - (BOOL) isPrimaryKey;
-- (NSObject<PLEntityValueGenerator> *) valueGenerator;
 
 @end
 #endif /* PL_DB_PRIVATE */

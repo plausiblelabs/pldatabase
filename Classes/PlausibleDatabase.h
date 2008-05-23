@@ -41,7 +41,7 @@ extern NSString *PLDatabaseErrorVendorErrorKey;
 extern NSString *PLDatabaseErrorVendorStringKey;
 
 /**
- * Database error codes.
+ * NSError codes in the Plausible Database error domain.
  */
 typedef enum {
     /** An unknown error has occured. If this
@@ -67,10 +67,6 @@ typedef enum {
 #import "PLSqliteDatabase.h"
 #import "PLSqlitePreparedStatement.h"
 #import "PLSqliteResultSet.h"
-
-#import "PLEntityValueGenerator.h"
-#import "PLEntityManualValueGenerator.h"
-#import "PLEntityNativeValueGenerator.h"
 
 #import "PLEntity.h"
 #import "PLEntityProperty.h"

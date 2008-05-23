@@ -29,8 +29,27 @@
 
 #import "PlausibleDatabase.h"
 
+/*
+ * @name Property Options
+ * @{
+ */
+
+/** If present, the property is considered a primary key value. */
+NSString *PLEntityPAPrimaryKey = @"PLEntityPAPrimaryKey";
+
+/** If present, the value will be considered generated. */
+NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
+
+/*
+ * @} Property Options
+ */
+
 /**
  * Represents a single database column.
+ *
+ * @par Thread Safety
+ * PLEntityProperty instances are immutable, and may be shared between threads
+ * without synchronization.
  */
 @implementation PLEntityProperty
 
@@ -40,10 +59,7 @@
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
- *
- * @par Thread Safety
- * PLEntityProperty instances are immutable, and may be shared between threads
- * without synchronization.
+
  */
 + (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName {
     return [PLEntityProperty propertyWithKey: key columnName: columnName isPrimaryKey: NO];
@@ -56,18 +72,23 @@
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
- * @param primaryKey YES if the property comprises the object's primary key. If set to YES, the
- * instance will default to using a PLEntityNativeValueGenerator for generating/determining identity values.
+ * @param primaryKey YES if the property comprises the object's primary key.
  */
 + (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey {
-    NSObject<PLEntityValueGenerator> *valueGenerator;
+    return [[[PLEntityProperty alloc] initWithKey: key columnName: columnName isPrimaryKey: primaryKey] autorelease];
+}
 
-    if (primaryKey)
-        valueGenerator = [PLEntityNativeValueGenerator nativeGenerator];
-    else
-        valueGenerator = [PLEntityManualValueGenerator manualGenerator];
+/**
+ * @internal
+ */
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName option: (NSString *) firstOption optionsv: (va_list) optionsv {
+    NSString *option = firstOption;
 
-    return [PLEntityProperty propertyWithKey: key columnName: columnName isPrimaryKey: primaryKey valueGenerator: valueGenerator];
+    for (option = firstOption; option != nil; option = va_arg(optionsv, id)) {
+        NSLog(@"GOT OPTION %@\n", option);
+    }
+
+    return nil;
 }
 
 /**
@@ -76,12 +97,18 @@
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
- * @param primaryKey YES if the property comprises the object's primary key.
- * @param valueGenerator Generator used to provide automatic field values.
  */
-+ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey valueGenerator: (NSObject<PLEntityValueGenerator> *) valueGenerator {
-    return [[[PLEntityProperty alloc] initWithKey: key columnName: columnName isPrimaryKey: primaryKey valueGenerator: valueGenerator] autorelease];
++ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName options: (NSString *) firstOption, ... {
+    PLEntityProperty *ret;
+    va_list args;
+
+    va_start(args, firstOption);
+    ret = [[[PLEntityProperty alloc] initWithKey: key columnName: columnName option: firstOption optionsv: args] autorelease];
+    va_end(args);
+
+    return ret;
 }
+
 
 /**
  * Initialize with the Key Value Coding key and database column name.
@@ -89,23 +116,17 @@
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
  * @param primaryKey YES if the property comprises the object's primary key.
- * @param valueGenerator Generator used to provide automatic field values.
  *
  * @par Designated Initializer
  * This method is the designated initializer for the PLEntityProperty class.
  */
-- (id) initWithKey: (NSString *) key
-        columnName: (NSString *) columnName
-      isPrimaryKey: (BOOL) primaryKey
-    valueGenerator: (NSObject<PLEntityValueGenerator> *) valueGenerator
-{
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName isPrimaryKey: (BOOL) primaryKey {
     if ((self = [super init]) == nil)
         return nil;
 
     _key = [key retain];
     _columnName = [columnName retain];
     _primaryKey = primaryKey;
-    _valueGenerator = [valueGenerator retain];
     
     return self;
 }
@@ -113,7 +134,6 @@
 - (void) dealloc {
     [_key release];
     [_columnName release];
-    [_valueGenerator release];
 
     [super dealloc];
 }
@@ -148,11 +168,5 @@
     return _primaryKey;
 }
 
-/**
- * Return the property value generator.
- */
-- (NSObject<PLEntityValueGenerator> *) valueGenerator {
-    return _valueGenerator;
-}
 
 @end
