@@ -76,6 +76,10 @@ NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
  * This method is the true designated initializer.
  */
 - (id) initWithKey: (NSString *) key columnName: (NSString *) columnName option: (NSString *) firstOption optionsv: (va_list) optionsv {
+    
+    /*
+     * Standard initialization
+     */
     if ((self = [super init]) == nil)
         return nil;
     
