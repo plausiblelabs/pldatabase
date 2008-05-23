@@ -66,11 +66,11 @@
 }
 
 /**
- * Classes may implement this method to perform additional initialization after
+ * Prepares the receiver for service after it has been loaded from the database.
+ *
+ * You may implement this method to perform additional initialization after
  * an object has been loaded from the database, and declared entity
  * properties have been populated.
- *
- * Subclasses are not required to call the superclass implementation.
  */
 - (void) awakeFromDatabase {
     // Do nothing
