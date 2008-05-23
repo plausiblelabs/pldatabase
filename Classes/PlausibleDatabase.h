@@ -176,7 +176,7 @@ typedef enum {
  * All database operations support a selector which will return an NSError in the event of failure, as per the Cocoa Error Handling Programming Guide.
  *
  * An error that occurs in the Plausible Database library will use the #PLDatabaseErrorDomain, and one of the error codes defined in #PLDatabaseError. Additionally, the
- * following optional keys may be available in the NSError userInfo dictionary:
+ * following optional keys may be available in the NSError user info dictionary:
  * - #PLDatabaseErrorQueryStringKey - Query which caused the error.
  * - #PLDatabaseErrorVendorErrorKey - The native database error code.
  * - #PLDatabaseErrorVendorStringKey - The native database error string.
