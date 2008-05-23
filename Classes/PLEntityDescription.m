@@ -175,6 +175,11 @@
     /* Create the new class instance */
     entity = [[[_entityClass alloc] init] autorelease];
 
+    /* Should not fail. */
+    if (entity == nil) {
+        [NSException raise: PLDatabaseException format: @"Could not instantiate %@", _entityClass];
+    }
+
     /* Iterate over defined columns */
     for (NSString *columnName in _columnProperties) {
         NSString *key;
@@ -182,16 +187,20 @@
 
         /* Get the property key */
         key = [[_columnProperties valueForKey: columnName] key];
-        if (key == nil)
-            [NSException raise: PLDatabaseException
-                        format: @"Attempt to instantiate object with unregistered column %@ for table %@", columnName, [self tableName]];
 
         /* Retrieve the column's value (may be nil, it's up to the validator to accept/reject a nil value) */
         value = [values objectForKey: columnName];
         
         /* Validate the value (might replace value!) */
-        if (![entity validateValue: &value forKey: key error: outError])
+        if (![entity validateValue: &value forKey: key error: outError]) {
+            NSLog(@"Validation for key '%@', column '%@', value '%@' failed", key, columnName, value);
+            if (outError) {
+                *outError = [NSError errorWithDomain: PLEntityErrorDomain  code: PLEntityValidationError userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
+                                NSLocalizedString(@"Could not validate property value provided by the database.", @""), NSLocalizedDescriptionKey,
+                                nil]];
+            }
             return nil;
+        }
 
         /* Set the value */
         [entity setValue: value forKey: key];
@@ -202,6 +211,10 @@
         [entity awakeFromDatabase];
 
     return entity;
+}
+
+- (BOOL) mergeColumnValuesForEntity: (PLEntity *) entity error: (NSError **) outError {
+    return NO; // XXX TODO
 }
 
 /**

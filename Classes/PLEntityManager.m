@@ -29,6 +29,10 @@
 
 #import "PlausibleDatabase.h"
 
+/** Plausible Database Entity NSError Domain
+ * @ingroup globals */
+NSString *PLEntityErrorDomain = @"com.plausiblelabs.pldatabase.entity";
+
 /**
  * Manages the object relational mapping between a database, and Objective-C objects
  * conforming to the PLEntity protocol.

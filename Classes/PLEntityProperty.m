@@ -152,7 +152,7 @@ NSString *PLEntityPAGeneratedValue = @"PLEntityPAGeneratedValue";
  * The existence of boolean attributes imply a YES value. The available boolean attributes are:
  * - #PLEntityPAPrimaryKey\n
  * If present, this attribute indicates that this property composes all or part of the PLEntityDescription's primary key.
- * - #PLEntityPAGenerated\n
+ * - #PLEntityPAGeneratedValue\n
  * If present, this attribute indicates that this property is a database-generated value.
  *
  * @par Designated Initializer

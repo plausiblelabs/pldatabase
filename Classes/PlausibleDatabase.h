@@ -190,15 +190,24 @@ typedef enum {
 
 /**
  * @page error_handling Error Handling Programming Guide
- * @section error_intro Introduction
  *
- * All database operations support a selector which will return an NSError in the event of failure, as per the Cocoa Error Handling Programming Guide.
+ * Where a method may return an error, Plausible Database provides access to the underlying cause via an optional NSError argument.
+ *
+ * All returned errors will be a member of one of the below defined domains, however, new domains and error codes may be added at any time.
+ * If you do not wish to report on the error cause, many methods support a simple form that requires no NSError argument.
  *
  * @section Error Domains, Codes, and User Info
  *
- * An error that occurs in the Plausible Database library will use the #PLDatabaseErrorDomain, and one of the error codes defined in #PLDatabaseError. Additionally, the
- * following optional keys may be available in the NSError user info dictionary:
- * - #PLDatabaseErrorQueryStringKey - Query which caused the error.
+ * @subsection entity_errors Entity Manager Errors
+ *
+ * The entity manager has its own domain for errors, #PLEntityErrorDomain error domain. Entity manager error codes are defined in #PLEntityError.
+ *
+ * @subsection database_errors Database Errors
+ *
+ * Any errors in the database driver use the #PLDatabaseErrorDomain error domain, and and one of the error codes defined in #PLDatabaseError. Additionally, the
+ * following keys will be available in the NSError user info dictionary:
+ *
+ * - #PLDatabaseErrorQueryStringKey - Query which caused the error (optional).
  * - #PLDatabaseErrorVendorErrorKey - The native database error code.
  * - #PLDatabaseErrorVendorStringKey - The native database error string.
  */

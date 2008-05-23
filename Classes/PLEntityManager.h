@@ -27,6 +27,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/* Error Domain and Codes */
+extern NSString *PLEntityErrorDomain;
+
+/**
+ * NSError codes in the Plausible Database error domain.
+ * @ingroup enums
+ */
+typedef enum {
+    /** An unknown error has occured. If this code is received, it is a bug, and should be reported. */
+    PLEntityErrorUnknown = 0,
+    
+    /** A database entity returned NO validating an entity property value. */
+    PLEntityValidationError = 1
+} PLEntityError;
+
 @interface PLEntityManager : NSObject {
 @private
     /** Our connection provider */

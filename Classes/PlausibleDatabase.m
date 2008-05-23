@@ -35,7 +35,7 @@
  */
 NSString *PLDatabaseException = @"com.plausiblelabs.pldatabase.exception.generic";
 
-/** PlausibleDatabase NSError Domain
+/** Plausible Database NSError Domain
  * @ingroup globals */
 NSString *PLDatabaseErrorDomain = @"com.plausiblelabs.pldatabase";
 
