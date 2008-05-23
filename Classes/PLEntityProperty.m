@@ -52,30 +52,19 @@ NSString *PLEntityPAGeneratedValue = @"PLEntityPAGeneratedValue";
 @implementation PLEntityProperty
 
 /**
- * Create and return a description with the provided Key Value Coding key and
- * database column name.
- *
- * @param key KVC key used to access the column value.
- * @param columnName The corresponding database column.
- */
-+ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName {
-    return [PLEntityProperty propertyWithKey: key columnName: columnName options: nil];
-}
-
-
-/**
  * @internal
  *
- * Internal implementation -- parses the varargs options, and then creates and return a description with the provided
- * Key Value Coding key and database column name. See the public API documentation for a list of supported options.
+ * Internal implementation -- parses the varargs attributes, and then creates and return a description with the provided
+ * Key Value Coding key and database column name. See the public API documentation for a list of supported attributes.
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
- * @param firstOption A nil-terminated list of property options.
+ * @param firstAttribute The first property attribute (or nil, if there are none).
+ * @param attributesv A nil-terminated list of property attributes.
  *
  * This method is the true designated initializer.
  */
-- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName option: (NSString *) firstOption optionsv: (va_list) optionsv {
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName attribute: (NSString *) firstAttribute attributesv: (va_list) attributesv {
     
     /*
      * Standard initialization
@@ -85,30 +74,30 @@ NSString *PLEntityPAGeneratedValue = @"PLEntityPAGeneratedValue";
     
     _key = [key retain];
     _columnName = [columnName retain];
-
+    
     /*
      * Option Parsing.
      */
-    NSString *option = firstOption;
-    for (option = firstOption; option != nil; option = va_arg(optionsv, id)) {
+    for (NSString *attribute = firstAttribute; attribute != nil; attribute = va_arg(attributesv, id)) {
         /* Is a primary key */
-        if ([PLEntityPAPrimaryKey isEqual: option]) {
+        if ([PLEntityPAPrimaryKey isEqual: attribute]) {
             _primaryKey = YES;
         }
         /* Is a generated value */
-        else if ([PLEntityPAGeneratedValue isEqual: option]) {
+        else if ([PLEntityPAGeneratedValue isEqual: attribute]) {
             _generatedValue = YES;
         } else {
-            [NSException raise: PLDatabaseException format: @"Undefined PLEntityProperty option value %@", option];
+            [NSException raise: PLDatabaseException format: @"Undefined PLEntityProperty attribute: %@", attribute];
         }
     }
-
+    
     /*
      * Option validation.
      */
-
+    
     return self;
 }
+
 
 /**
  * Create and return a description with the provided Key Value Coding key and
@@ -116,17 +105,29 @@ NSString *PLEntityPAGeneratedValue = @"PLEntityPAGeneratedValue";
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
- * @param firstOption A nil-terminated list of property options.
+ */
++ (PLEntityProperty *) propertyWithKey: (NSString *) key columnName: (NSString *) columnName {
+    return [PLEntityProperty propertyWithKey: key columnName: columnName attributes: nil];
+}
+
+
+/**
+ * Create and return a description with the provided Key Value Coding key and
+ * database column name.
  *
- * @see PLEntityProperty::initWithKey:columnName:options: for the list of supported property options.
+ * @param key KVC key used to access the column value.
+ * @param columnName The corresponding database column.
+ * @param firstAttribute A nil-terminated list of property attributes.
+ *
+ * @see PLEntityProperty::initWithKey:columnName:attributes: for the list of supported property attributes.
  * values.
  */
-+ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName options: (NSString *) firstOption, ... {
++ (PLEntityProperty *) propertyWithKey: (NSString *) key columnName: (NSString *) columnName attributes: (NSString *) firstAttribute, ... {
     PLEntityProperty *ret;
     va_list args;
 
-    va_start(args, firstOption);
-    ret = [[[PLEntityProperty alloc] initWithKey: key columnName: columnName option: firstOption optionsv: args] autorelease];
+    va_start(args, firstAttribute);
+    ret = [[[PLEntityProperty alloc] initWithKey: key columnName: columnName attribute: firstAttribute attributesv: args] autorelease];
     va_end(args);
 
     return ret;
@@ -138,33 +139,33 @@ NSString *PLEntityPAGeneratedValue = @"PLEntityPAGeneratedValue";
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
- * @param firstOption A nil-terminated list of property options.
+ * @param firstAttribute A nil-terminated list of property attributes.
  * 
- * @par Property Options
+ * @par Property Attributes
  *
- * The property options is a nil-terminated list of option constants, and associated
- * option values.
+ * The property attributes are a nil-terminated list of attribute constants and associated
+ * attribute values.
  *
- * The presence of a boolean option implies a value of YES, while its absence implies a value of NO.
+ * The presence of a boolean attribute implies a value of YES, while its absence implies a value of NO.
  *
- * @par Boolean Options
- * The existence of boolean options imply a YES value. The available boolean options are:
+ * @par Boolean Attributes
+ * The existence of boolean attributes imply a YES value. The available boolean attributes are:
  * - #PLEntityPAPrimaryKey\n
- * If present, this option indicates that this property composes all or part of the PLEntityDescription's primary key.
+ * If present, this attribute indicates that this property composes all or part of the PLEntityDescription's primary key.
  * - #PLEntityPAGenerated\n
- * If present, this option indicates that this property is a database-generated value.
+ * If present, this attribute indicates that this property is a database-generated value.
  *
  * @par Designated Initializer
  * This method is the designated initializer for the PLEntityProperty class.
  *
  * @internal
- * This method calls the true designated initializer with our vararg options.
+ * This method calls the true designated initializer with our vararg attributes.
  */
-- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName options: (NSString *) firstOption, ... {
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName attributes: (NSString *) firstAttribute, ... {
     va_list args;
     
-    va_start(args, firstOption);
-    [self initWithKey: key columnName: columnName option: firstOption optionsv: args];
+    va_start(args, firstAttribute);
+    [self initWithKey: key columnName: columnName attribute: firstAttribute attributesv: args];
     va_end(args);
     
     return self;
@@ -176,6 +177,7 @@ NSString *PLEntityPAGeneratedValue = @"PLEntityPAGeneratedValue";
 
     [super dealloc];
 }
+
 
 @end
 

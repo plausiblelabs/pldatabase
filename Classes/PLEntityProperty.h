@@ -45,9 +45,9 @@ extern NSString *PLEntityPAGeneratedValue;
     BOOL _generatedValue;
 }
 
-+ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName;
-+ (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName options: (NSString *) firstOption, ... NS_REQUIRES_NIL_TERMINATION;
-- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName options: (NSString *) firstOption, ... NS_REQUIRES_NIL_TERMINATION;
++ (PLEntityProperty *) propertyWithKey: (NSString *) key columnName: (NSString *) columnName;
++ (PLEntityProperty *) propertyWithKey: (NSString *) key columnName: (NSString *) columnName attributes: (NSString *) firstOption, ... NS_REQUIRES_NIL_TERMINATION;
+- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName attributes: (NSString *) firstOption, ... NS_REQUIRES_NIL_TERMINATION;
 
 @end
 
