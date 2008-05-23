@@ -54,18 +54,19 @@
     
     STAssertTrue([@"rowId" isEqual: [propertyDescription key]], @"KVC key incorrect");
     STAssertTrue([@"id" isEqual: [propertyDescription columnName]], @"Column name incorrect");
+    STAssertFalse([propertyDescription isGeneratedValue], @"Property not set as generated value");
 }
 
 - (void) testInitNewPrimaryKey {    
     PLEntityProperty *propertyDescription;
     
     propertyDescription = [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" options: PLEntityPAPrimaryKey, PLEntityPAGenerated, nil];
-#if 0
     STAssertNotNil(propertyDescription, @"Initializer returned nil");
     
     STAssertTrue([@"rowId" isEqual: [propertyDescription key]], @"KVC key incorrect");
     STAssertTrue([@"id" isEqual: [propertyDescription columnName]], @"Column name incorrect");
-#endif
+    STAssertTrue([propertyDescription isPrimaryKey], @"Property not set to primary key");
+    STAssertTrue([propertyDescription isGeneratedValue], @"Property not set as generated value");
 }
 
 @end

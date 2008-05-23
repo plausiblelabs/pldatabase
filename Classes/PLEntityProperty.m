@@ -29,11 +29,6 @@
 
 #import "PlausibleDatabase.h"
 
-/*
- * @name Property Options
- * @{
- */
-
 /**
   * If present, the property is considered a primary key value.
   * @ingroup globals
@@ -46,9 +41,6 @@ NSString *PLEntityPAPrimaryKey = @"PLEntityPAPrimaryKey";
   */
 NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
 
-/*
- * @} Property Options
- */
 
 /**
  * Represents a single database column.
@@ -86,15 +78,44 @@ NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
 
 /**
  * @internal
+ *
+ * Internal implementation -- parses the varargs options, and then creates and return a description with the provided
+ * Key Value Coding key and database column name. See the public API documentation for a list of supported options.
+ *
+ * @param key KVC key used to access the column value.
+ * @param columnName The corresponding database column.
+ * @param firstOption A nil-terminated list of property options.
  */
 - (id) initWithKey: (NSString *) key columnName: (NSString *) columnName option: (NSString *) firstOption optionsv: (va_list) optionsv {
-    NSString *option = firstOption;
+    if ((self = [super init]) == nil)
+        return nil;
+    
+    _key = [key retain];
+    _columnName = [columnName retain];
 
+    /*
+     * Option Parsing.
+     */
+    NSString *option = firstOption;
     for (option = firstOption; option != nil; option = va_arg(optionsv, id)) {
-        NSLog(@"GOT OPTION %@\n", option);
+        /* Is a primary key */
+        if ([PLEntityPAPrimaryKey isEqual: option]) {
+            _primaryKey = YES;
+        }
+        /* Is a generated value */
+        else if ([PLEntityPAGenerated isEqual: option]) {
+            _generatedValue = YES;
+        } else {
+            [NSException raise: PLDatabaseException format: @"Undefined PLEntityProperty option value %@", option];
+        }
     }
 
-    return nil;
+    /*
+     * Option validation.
+     */
+    // Validate our object state.
+
+    return self;
 }
 
 /**
@@ -103,6 +124,21 @@ NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
  *
  * @param key KVC key used to access the column value.
  * @param columnName The corresponding database column.
+ * @param firstOption A nil-terminated list of property options.
+ *
+ * @par Property Options
+ *
+ * The property options is a nil-terminated list of option constants, and associated
+ * option values.
+ *
+ * The presence of a boolean option implies a value of YES, while its absence implies a value of NO.
+ *
+ * @par Boolean Options
+ * The existence of boolean options imply a YES value. The available boolean options are:
+ * - #PLEntityPAPrimaryKey\n
+ * If present, this option indicates that this property composes all or part of the PLEntityDescription's primary key.
+ * - #PLEntityPAGenerated\n
+ * If present, this option indicates that this property is a database-generated value.
  */
 + (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName options: (NSString *) firstOption, ... {
     PLEntityProperty *ret;
@@ -174,5 +210,11 @@ NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
     return _primaryKey;
 }
 
+/**
+ * Returns YES if the property is a database-generated value.
+ */
+- (BOOL) isGeneratedValue {
+    return _generatedValue;
+}
 
 @end

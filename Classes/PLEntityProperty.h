@@ -40,6 +40,9 @@ extern NSString *PLEntityPAGenerated;
 
     /** Part of primary key */
     BOOL _primaryKey;
+
+    /** Generated value */
+    BOOL _generatedValue;
 }
 
 + (id) propertyWithKey: (NSString *) key columnName: (NSString *) columnName;
@@ -57,6 +60,7 @@ extern NSString *PLEntityPAGenerated;
 - (NSString *) key;
 - (NSString *) columnName;
 - (BOOL) isPrimaryKey;
+- (BOOL) isGeneratedValue;
 
 @end
 #endif /* PL_DB_PRIVATE */
