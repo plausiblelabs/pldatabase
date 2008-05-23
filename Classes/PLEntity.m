@@ -33,6 +33,7 @@
  * Abstract base class for entities that may be loaded and persisted to and
  * from a database.
  *
+ * @par Implementation Requirements
  * Implementing classes must:
  * - Provide an entity description via PLEntity::entityDescription
  * - Support initialization via the no-argument init method.

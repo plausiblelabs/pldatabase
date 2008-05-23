@@ -31,6 +31,26 @@
 /* Dependencies */
 #import <Foundation/Foundation.h>
 
+/**
+ * @defgroup constants
+ * Plausible Database Constants Reference
+ */
+
+/**
+ * @defgroup enums Enumerations
+ * @ingroup constants
+ */
+
+/**
+ * @defgroup globals Global Variables
+ * @ingroup constants
+ */
+
+/**
+ * @defgroup exceptions Exceptions
+ * @ingroup constants
+ */
+
 /* Exceptions */
 extern NSString *PLDatabaseException;
 
@@ -42,6 +62,7 @@ extern NSString *PLDatabaseErrorVendorStringKey;
 
 /**
  * NSError codes in the Plausible Database error domain.
+ * @ingroup enums
  */
 typedef enum {
     /** An unknown error has occured. If this

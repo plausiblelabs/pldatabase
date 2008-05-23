@@ -34,10 +34,16 @@
  * @{
  */
 
-/** If present, the property is considered a primary key value. */
+/**
+  * If present, the property is considered a primary key value.
+  * @ingroup globals
+  */
 NSString *PLEntityPAPrimaryKey = @"PLEntityPAPrimaryKey";
 
-/** If present, the value will be considered generated. */
+/**
+  * If present, the value will be considered generated.
+  * @ingroup globals
+  */
 NSString *PLEntityPAGenerated = @"PLEntityPAGenerated";
 
 /*
