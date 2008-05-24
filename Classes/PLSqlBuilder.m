@@ -32,6 +32,7 @@
 /* Private methods */
 @interface PLSqlBuilder (PLSqlBuilderPrivate)
 
+- (NSString *) identifiersWithQuoting: (NSArray *) identifiers;
 - (NSString *) columnsWithEquality: (NSArray *) columnNames;
 
 @end
@@ -104,15 +105,88 @@
 
 /**
  * @internal
+ *
+ * Create a SELECT statement for the given table, with named bindings for the given column names.
+ * The statement will be written such that all columns will be checked for equality when executing the SELECT. This
+ * is primarily useful for implementing a select on a specific entity.
+ *
+ * @param tableName The name of the table for the INSERT.
+ * @param columnNames A list of column values which will be returned.
+ * @param primaryKeys A list of all the column names which will be included in the SELECT as named WHERE parameters, tested for equality.
+ * @param outError If an error occurs, nil will be returned and outError will be populated with the error reason.
+ * @return A prepared statement that may be used for dictionary-based parameter binding. Nil if an error occurs.
+ */
+- (NSObject<PLPreparedStatement> *) selectForTable: (NSString *) tableName 
+                                       withColumns: (NSArray *) columnNames
+                                       primaryKeys: (NSArray *) primaryKeys
+                                             error: (NSError **) outError
+{    
+    NSString *query;
+    NSObject<PLPreparedStatement> *stmt;
+    
+    /* Create the query string */
+    query = [NSString stringWithFormat: @"SELECT %@ FROM %@ WHERE %@",
+             [self identifiersWithQuoting: columnNames],
+             [_dialect quoteIdentifier: tableName],
+             [self columnsWithEquality: primaryKeys]];
+
+    /* Prepare the statement */
+    stmt = [_db prepareStatement: query error: outError];
+    if (stmt == nil)
+        return nil;
+    
+    /* All is well in prepared statement land */
+    return stmt;
+}
+
+/**
+ * @internal
+ *
+ * Create a SELECT statement for the last INSERT on the given table. Relies on the result of PLEntityDialect::selectLastInsertIdentity.
+ *
+ * The backing dialect MUST return YES from PLEntityDialect::supportsLastInsertIdentity
+ *
+ * @param tableName The name of the table for the SELECT.
+ * @param columnNames A list of column values which will be returned.
+ * @param primaryKey The name of the primary key column that will be compared against the last insert ID as provided by the database.
+ * @param outError If an error occurs, nil will be returned and outError will be populated with the error reason.
+ */
+- (NSObject<PLPreparedStatement> *) selectLastInsertForTable: (NSString *) tableName 
+                                                 withColumns: (NSArray *) columnNames 
+                                                  primaryKey: (NSString *) primaryKey
+                                                       error: (NSError **) outError
+{
+    NSString *query;
+    NSObject<PLPreparedStatement> *stmt;
+    
+    /* Create the query string */
+    assert([_dialect supportsLastInsertIdentity]);
+    query = [NSString stringWithFormat: @"SELECT %@ FROM %@ WHERE %@ = %@",
+             [self identifiersWithQuoting: columnNames],
+             [_dialect quoteIdentifier: tableName],
+             [_dialect quoteIdentifier: primaryKey],
+             [_dialect lastInsertIdentity]];
+
+    /* Prepare the statement */
+    stmt = [_db prepareStatement: query error: outError];
+    if (stmt == nil)
+        return nil;
+    
+    /* All is well in prepared statement land */
+    return stmt;
+}
+
+/**
+ * @internal
  * Create a DELETE prepared statement, with named bindings for the given column names.
  * The statement will be written such that all columns will be checked for equality when executing the DELETE.
  *
  * @param tableName The name of the table for the DELETE.
- * @param columnNames A list of all the column names, which will be included in the DELETE as named parameters.
+ * @param primaryKeys A list of all the primary key column names, which will be included in the DELETE as named parameters.
  * @param outError If an error occurs, nil will be returned and outError will be populated with the error reason.
  * @return A prepared statement that may be used for dictionary-based parameter binding. Nil if an error occurs.
  */
-- (NSObject<PLPreparedStatement> *) deleteForTable: (NSString *) tableName withColumns: (NSArray *) columnNames error: (NSError **) outError {
+- (NSObject<PLPreparedStatement> *) deleteForTable: (NSString *) tableName primaryKeys: (NSArray *) columnNames error: (NSError **) outError {
     NSString *query;
     NSObject<PLPreparedStatement> *stmt;
     
@@ -137,6 +211,25 @@
  * Class-private methods.
  */
 @implementation PLSqlBuilder (PLSqlBuilderPrivate)
+
+/**
+ * @internal
+ * Private helper method to turn a list of identifiers into a comma-seperated list of quoted identifiers.
+ */
+- (NSString *) identifiersWithQuoting: (NSArray *) identifiers {
+    NSMutableString *identifierString;
+    
+    /* Create the column list */
+    identifierString = [NSMutableString stringWithCapacity: [identifiers count] * 10];
+    for (NSString *identifier in identifiers) {
+        if ([identifierString length] != 0)
+            [identifierString appendString: @", "];
+        
+        [identifierString appendString: [_dialect quoteIdentifier: identifier]];
+    }
+
+    return identifierString;
+}
 
 /**
  * @internal

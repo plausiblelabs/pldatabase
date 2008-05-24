@@ -76,8 +76,6 @@
  */
 - (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName properties: (NSArray *) properties {
     NSMutableDictionary *columnProperties;
-    NSMutableArray *primaryKeys;
-    BOOL seenGeneratedPrimaryKey = NO;
 
     if ((self = [super init]) == nil)
         return nil;
@@ -89,7 +87,6 @@
      * Populate our column -> property map, and a list of primary keys
      */
     _columnProperties = columnProperties = [[NSMutableDictionary alloc] initWithCapacity: [properties count]];
-    _primaryKeys =  primaryKeys = [NSMutableArray arrayWithCapacity: 1];
 
     for (PLEntityProperty *desc in properties) {
         NSString *columnName = [desc columnName];
@@ -104,15 +101,14 @@
         /* Save the description in our map */
         [columnProperties setObject: desc forKey: [desc columnName]];
     
-        /* Primary key? */
+        /* Validate any primary keys, and save the generated primary key property, if any. */
         if ([desc isPrimaryKey]) {
-            [primaryKeys addObject: desc];
             
-            /* Prevent the definition of more than one generated primary key. */
-            if ([desc isGeneratedValue] && seenGeneratedPrimaryKey) {
+            if ([desc isGeneratedValue] && _generatedPrimaryKeyProperty != nil) {
                 [NSException raise: PLDatabaseException format: @"More than one generated primary key was defined. This is not supported."];
+                
             } else if ([desc isGeneratedValue]) {
-                seenGeneratedPrimaryKey = YES;
+                _generatedPrimaryKeyProperty = [desc retain];
             }
         }
     }
@@ -123,6 +119,7 @@
 - (void) dealloc {
     [_tableName release];
     [_columnProperties release];
+    [_generatedPrimaryKeyProperty release]; // may be nil
 
     [super dealloc];
 }
@@ -145,6 +142,16 @@
     return _tableName;
 }
 
+
+/**
+ * @internal
+ *
+ * Return the entity's generated primary key, if any.
+ * If no generated primary key has been defined, returns nil.
+ */
+- (PLEntityProperty *) generatedPrimaryKeyProperty {
+    return _generatedPrimaryKeyProperty;
+}
 
 /**
  * @internal
@@ -190,6 +197,59 @@ BOOL PLEntityPropertyFilterGeneratedPrimaryKeys (PLEntityProperty *property, voi
         return YES;
     
     return NO;
+}
+
+
+/**
+ * @internal
+ *
+ * Retrieve all defined column properties for this entity description
+ */
+- (NSArray *) properties {
+    return [self propertiesWithFilter: PLEntityPropertyFilterAllowAllValues];
+}
+
+
+/**
+ * @internal
+ *
+ * Retrieve all defined column properties that match the provided PLEntityDescriptionPropertyFilter.
+ *
+ * @param entity Entity from which to retrieve the values
+ * @param filter Filter to run on entity properties.
+ * @param filterContext Context variable to pass to filter.
+ *
+ * The filter context will be set to NULL.
+ * @see PLEntityDescription::propertiesWithFilter:filterContext:
+ */
+- (NSArray *) propertiesWithFilter: (PLEntityDescriptionPropertyFilter) filter {
+    return [self propertiesWithFilter: filter filterContext: NULL];
+}
+
+
+/**
+ * @internal
+ *
+ * Retrieve all defined column properties that match the provided PLEntityDescriptionPropertyFilter.
+ *
+ * @param entity Entity from which to retrieve the values
+ * @param filter Filter to run on entity properties.
+ *
+ * The filter context will be set to NULL.
+ * @see PLEntityDescription::propertiesWithFilter:filterContext:
+ */
+- (NSArray *) propertiesWithFilter: (PLEntityDescriptionPropertyFilter) filter filterContext: (void *) filterContext {
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity: [_columnProperties count]];
+    
+    for (PLEntityProperty *property in [_columnProperties allValues]) {
+        /* Skip any that do not match the filter */
+        if (!filter(property, filterContext))
+            continue;
+
+        [result addObject: property];
+    }
+
+    return result;
 }
 
 
@@ -274,16 +334,24 @@ BOOL PLEntityPropertyFilterGeneratedPrimaryKeys (PLEntityProperty *property, voi
 }
 
 - (BOOL) setValue: (id) value forKey: (NSString *) key withEntity: (PLEntity *) entity error: (NSError **) outError {
+    id validatedValue;
+
+    /* Handle NSNull */
+    if (value == [NSNull null])
+        validatedValue = nil;
+    else
+        validatedValue = value;
+    
     /*
      * Validate the value (might replace value!)
      */
-    if (![entity validateValue: &value forKey: key error: outError])
+    if (![entity validateValue: &validatedValue forKey: key error: outError])
         return NO;
 
     /*
      * Set the value
      */
-    [entity setValue: value forKey: key];
+    [entity setValue: validatedValue forKey: key];
     return YES;
 }
 

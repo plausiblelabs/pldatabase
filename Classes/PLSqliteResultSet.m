@@ -235,7 +235,7 @@ VALUE_ACCESSORS(NSData *, data, SQLITE_BLOB, [NSData dataWithBytes: sqlite3_colu
 - (id) objectForColumnIndex: (int) columnIndex {
     [self assertNotClosed];
 
-    int columnType = [self validateColumnIndex: columnIndex isNullable: NO];
+    int columnType = [self validateColumnIndex: columnIndex isNullable: YES];
     switch (columnType) {
         case SQLITE_TEXT:
             return [self stringForColumnIndex: columnIndex];
@@ -248,6 +248,9 @@ VALUE_ACCESSORS(NSData *, data, SQLITE_BLOB, [NSData dataWithBytes: sqlite3_colu
 
         case SQLITE_BLOB:
             return [self dataForColumnIndex: columnIndex];
+
+        case SQLITE_NULL:
+            return [NSNull null];
 
         default:
             [NSException raise: PLDatabaseException format: @"Unhandled SQLite column type %d", columnType];

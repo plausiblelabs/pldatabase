@@ -35,11 +35,11 @@
     /** Map of column name to PLEntityProperty */
     NSDictionary *_columnProperties;
     
-    /** A list of PLEntityProperty objects which are primary keys */
-    NSArray *_primaryKeys;
-    
     /** The described entity's class object */
     Class _entityClass;
+
+    /** The described entity's generated primary key property, if any. May be nil */
+    PLEntityProperty *_generatedPrimaryKeyProperty;
 }
 
 + (PLEntityDescription *) descriptionForClass: (Class) entityClass tableName: (NSString *) tableName properties: (NSArray *) properties;
@@ -70,6 +70,12 @@ extern BOOL PLEntityPropertyFilterGeneratedPrimaryKeys (PLEntityProperty *proper
 @interface PLEntityDescription (PLEntityDescriptionLibraryPrivate)
 
 - (NSString *) tableName;
+
+- (PLEntityProperty *) generatedPrimaryKeyProperty;
+
+- (NSArray *) properties;
+- (NSArray *) propertiesWithFilter: (PLEntityDescriptionPropertyFilter) filter;
+- (NSArray *) propertiesWithFilter: (PLEntityDescriptionPropertyFilter) filter filterContext: (void *) filterContext;
 
 - (NSDictionary *) columnValuesForEntity: (PLEntity *) entity;
 - (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter;

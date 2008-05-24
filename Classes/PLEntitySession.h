@@ -38,6 +38,9 @@
 
     /** The backing database connection */
     NSObject<PLDatabase> *_database;
+    
+    /** The SQL dialect */
+    PLEntityDialect *_sqlDialect;
 
     /** The SQL statement builder */
     PLSqlBuilder *_sqlBuilder;

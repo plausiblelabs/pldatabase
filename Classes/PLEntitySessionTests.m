@@ -83,6 +83,7 @@
     STAssertNotNil(tx, @"Could not initialize transaction");
 }
 
+/* Test insert with a generated primary key */
 - (void) testInsertEntity {
     PLEntitySessionExampleEntity *entity;
     NSError *error;
@@ -90,6 +91,7 @@
     /* Insert the entity */
     entity = [[[PLEntitySessionExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
     STAssertTrue([_tx insertEntity: entity error: &error], @"Could not INSERT entity: %@", error);
+    STAssertNotNil([entity rowId], @"Entity primary key was not populated");
 
     /* Verify that he arrived */
     NSObject<PLResultSet> *rs;
@@ -100,6 +102,29 @@
     STAssertTrue([@"Johnny" isEqual: [rs stringForColumn: @"first_name"]], @"Unexpected name value");
     STAssertTrue([@"Appleseed" isEqual: [rs stringForColumn: @"last_name"]], @"Unexpected name value");
     [rs close];
+}
+
+/* Test insert with a previously generated primary key */
+- (void) testInsertEntityWithPrimaryKey {
+    PLEntitySessionExampleEntity *entity;
+    NSError *error;
+    
+    /* Insert the entity */
+    entity = [[[PLEntitySessionExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
+    [entity setValue: [NSNumber numberWithInt: 42] forKey: @"rowId"];
+    STAssertTrue([_tx insertEntity: entity error: &error], @"Could not INSERT entity: %@", error);
+    STAssertNotNil([entity rowId], @"Entity primary key was not populated");
+    
+    /* Verify that he arrived */
+    NSObject<PLResultSet> *rs;
+    rs = [_db executeQueryAndReturnError: &error statement: @"SELECT * FROM People WHERE id = ?", [NSNumber numberWithInt: 42]];
+    STAssertNotNil(rs, @"Could not execute query: %@", error);
+    STAssertTrue([rs next], @"No results returned");
+
+    STAssertEquals([rs intForColumn: @"id"], 42, @"Unexpected id value");
+    STAssertTrue([@"Johnny" isEqual: [rs stringForColumn: @"first_name"]], @"Unexpected name value");
+    STAssertTrue([@"Appleseed" isEqual: [rs stringForColumn: @"last_name"]], @"Unexpected name value");
+    [rs close];    
 }
 
 - (void) testDeleteEntity {

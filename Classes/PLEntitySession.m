@@ -66,6 +66,9 @@
     /* Retain a reference to our entity manager */
     _entityManager = [entityManager retain];
     
+    /* Retain our dialect */
+    _sqlDialect = [[entityManager dialect] retain];
+    
     /* Initialize transaction state */
     _inTransaction = NO;
 
@@ -77,7 +80,7 @@
     }
 
     /* Set up our statement builder */
-    _sqlBuilder = [[PLSqlBuilder alloc] initWithDatabase: _database dialect: [_entityManager dialect]];
+    _sqlBuilder = [[PLSqlBuilder alloc] initWithDatabase: _database dialect: _sqlDialect];
 
     return self;
 }
@@ -246,32 +249,147 @@
     return _inTransaction;
 }
 
-- (BOOL) insertEntity: (PLEntity *) entity error: (NSError **) error {
+
+/* Filter for all generated values */
+static BOOL propertyfilter_filter_generated (PLEntityProperty *property, void *context) {
+    if ([property isGeneratedValue])
+        return YES;
+
+    return NO;
+}
+
+/**
+ * @internal
+ *
+ * Implements entity insert via a post-insert SELECT for identity.
+ */
+- (BOOL) insertEntitySelectLastIdentity: (PLEntity *) entity error: (NSError **) error {
+    PLEntityProperty *generatedPrimaryKey;
     PLEntityDescription *desc;
     NSDictionary *values;
-    NSObject<PLPreparedStatement> *stmt;
-    BOOL ret;
-
-    /* Fetch the data */
+    NSMutableDictionary *updateValues;
+    
+    NSObject<PLPreparedStatement> *stmt = nil;
+    NSObject<PLResultSet> *rs = nil;
+    
+    /* Fetch the entity description */
     desc = [_entityManager descriptionForEntity: [entity class]];
+    generatedPrimaryKey = [desc generatedPrimaryKeyProperty];
+
+    /*
+     * Perform the insert
+     */
+    /* Fetch the insert data */
     values = [desc columnValuesForEntity: entity];
 
     /* Create our insert statement */
     stmt = [_sqlBuilder insertForTable: [desc tableName] withColumns: [values allKeys] error: error];
     if (stmt == nil)
-        return NO;
-
+        goto error;
+    
     /* Bind parameters */
     [stmt bindParameterDictionary: values];
-
+    
     /* Execute our statement */
-    ret = [stmt executeUpdateAndReturnError: error];
+    if (![stmt executeUpdateAndReturnError: error])
+        goto error;
 
+    /*
+     * Fetch all generated values
+     */
+    
+    /* Determine the generated column names */
+    NSArray *generatedProperties;
+    NSMutableArray *columnNames;
+
+    generatedProperties = [desc propertiesWithFilter: propertyfilter_filter_generated];
+    columnNames = [NSMutableArray arrayWithCapacity: [generatedProperties count]];
+    for (PLEntityProperty *property in generatedProperties)
+        [columnNames addObject: [property columnName]];
+
+    /* Generate a SELECT statement for the generated primary key */
+    if (generatedPrimaryKey != nil && [values objectForKey: [generatedPrimaryKey columnName]] == [NSNull null]) {
+        /* Create the select statement */
+        stmt = [_sqlBuilder selectLastInsertForTable: [desc tableName] 
+                                         withColumns: columnNames
+                                          primaryKey: [generatedPrimaryKey columnName]
+                                               error: error];
+
+        if (stmt == nil)
+            goto error;
+    }
+    /* Otherwise, generate SELECT for the known primary key values */
+    else {
+        NSDictionary *primaryKeyValues = [desc columnValuesForEntity: entity withFilter: PLEntityPropertyFilterPrimaryKeys];
+
+        /* Create the select statement */
+        stmt = [_sqlBuilder selectForTable: [desc tableName]
+                               withColumns: columnNames
+                               primaryKeys: [primaryKeyValues allKeys]
+                                     error: error];
+        if (stmt == nil)
+            goto error;
+        [stmt bindParameterDictionary: primaryKeyValues];
+    }
+        
+    /* Execute our statement */
+    rs = [stmt executeQueryAndReturnError: error];
+    if (rs == nil)
+        goto error;
+
+    /* Has our just inserted entity gone missing? */
+    if (![rs next]) {
+        if (error) {
+            NSString *description = NSLocalizedString(@"The entity could not be located in the database after an INSERT.", @"");
+            *error = [NSError errorWithDomain: PLEntityErrorDomain 
+                                         code: PLEntityNotFoundError 
+                                     userInfo: [NSDictionary dictionaryWithObjectsAndKeys: description, NSLocalizedDescriptionKey, nil]];
+        }
+        goto error;
+    }
+
+    /* Fetch our value dictionary */
+    updateValues = [NSMutableDictionary dictionaryWithCapacity: [columnNames count]];
+    for (NSString *columnName in columnNames) {
+        [updateValues setObject: [rs objectForColumn: columnName] forKey: columnName];
+    }
+    
     /* Clean up */
-    [stmt close];
+    [rs close];
 
-    return ret;
+    /* Update our entity */
+    if (![desc updateEntity: entity withColumnValues: updateValues error: error])
+        goto error;
+
+    /* All is well */
+    return YES;
+
+
+error:
+    /* An error occured, clean up and return NO */
+
+    if (rs != nil)
+        [rs close];
+
+    if (stmt != nil)
+        [stmt close];
+
+    return NO;
 }
+
+
+- (BOOL) insertEntity: (PLEntity *) entity error: (NSError **) error {
+    if ([_sqlDialect supportsLastInsertIdentity])
+        return [self insertEntitySelectLastIdentity: entity error: error];
+    else
+        [NSException raise: PLDatabaseException format: @"Do not know how to determine INSERT row identity for this database"];
+
+    /* Add support for INSERT ... RETURNING here */
+
+    /* Unreachable */
+    abort();
+}
+
 
 /**
  * Delete an entity.
@@ -311,7 +429,7 @@
     columnValues = [desc columnValuesForEntity: entity withFilter: PLEntityPropertyFilterPrimaryKeys];
     
     /* Create our delete statement */
-    stmt = [_sqlBuilder deleteForTable: [desc tableName] withColumns: [columnValues allKeys] error: error];
+    stmt = [_sqlBuilder deleteForTable: [desc tableName] primaryKeys: [columnValues allKeys] error: error];
     if (stmt == nil)
         return NO;
     

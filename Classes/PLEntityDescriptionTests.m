@@ -165,6 +165,40 @@
 }
 
 
+- (void) testGeneratedPrimaryKeyProperty {
+    PLEntityDescription *desc;
+    
+    /* Create one */
+    desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"test" properties:
+        [NSArray arrayWithObjects:
+            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" attributes: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil],
+            [PLEntityProperty propertyWithKey: @"name" columnName: @"name"],
+            nil
+        ]
+    ];
+
+    STAssertNotNil([desc generatedPrimaryKeyProperty], @"Generated primary key property was nil");
+    STAssertTrue([[[desc generatedPrimaryKeyProperty] columnName] isEqual: @"id"], @"Generated primary key column name was incorrect");
+}
+
+
+- (void) testProperties {
+    PLEntityDescription *desc;
+
+    /* Create one */
+    desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"test" properties:
+        [NSArray arrayWithObjects:
+            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" attributes: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil],
+            [PLEntityProperty propertyWithKey: @"name" columnName: @"name"],
+            nil
+        ]
+    ];
+
+    STAssertEquals([[desc properties] count], (NSUInteger) 2, @"Expected 2 returned properties");
+    STAssertEquals([[desc propertiesWithFilter: PLEntityPropertyFilterPrimaryKeys] count], (NSUInteger) 1, @"Expected only 1 returned property");
+}
+
+
 /* Test the PLEntityPropertyFilterAllowAllValues filter */
 - (void) testEntityAllColumnValues {
     PLEntityDescExampleEntity *entity;
@@ -224,7 +258,7 @@
     /* Set some example values */
     [values setObject: [NSNumber numberWithInt: 42] forKey: @"id"];
     [values setObject: @"Johnny" forKey: @"first_name"];
-    [values setObject: @"Appleseed" forKey: @"last_name"];
+    [values setObject: [NSNull null] forKey: @"last_name"];
 
     
     /*
@@ -236,7 +270,7 @@
     STAssertTrue([entity awoken], @"awakeFromDatabase was not called");
     STAssertEquals(42, [[entity rowId] intValue], @"Incorrect row id");
     STAssertTrue([@"Johnny" isEqual: [entity firstName]], @"Incorrect firstName");
-    STAssertTrue([@"Appleseed" isEqual: [entity lastName]], @"Incorrect lastName");
+    STAssertNil([entity lastName], @"lastName is not nil");
     
     
     /*

@@ -53,7 +53,7 @@
 
 - (void) testInsertIdentity {
     STAssertFalse([_dialect supportsLastInsertIdentity], @"Should not support lastInsertIdentity");
-    STAssertNil([_dialect selectLastInsertIdentity], @"");
+    STAssertNil([_dialect lastInsertIdentity], @"");
 }
 
 @end

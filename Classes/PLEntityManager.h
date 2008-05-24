@@ -39,7 +39,10 @@ typedef enum {
     PLEntityErrorUnknown = 0,
     
     /** A database entity returned NO validating an entity property value. */
-    PLEntityValidationError = 1
+    PLEntityValidationError = 1,
+
+    /** The requested entity could not be found. */
+    PLEntityNotFoundError = 2
 } PLEntityError;
 
 @interface PLEntityManager : NSObject {

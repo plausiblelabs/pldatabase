@@ -176,9 +176,9 @@
     testDouble = [NSNumber numberWithDouble: 42.42];
     testBlob = [@"Test data" dataUsingEncoding: NSUTF8StringEncoding]; 
 
-    STAssertTrue([_db executeUpdateAndReturnError: &error statement: @"CREATE TABLE test (a integer, b varchar(20), c double, d blob)"], @"Create table failed: %@", error);
-    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a, b, c, d) VALUES (?, ?, ?, ?)",
-                   testInteger, testString, testDouble, testBlob]), @"Could not insert row");
+    STAssertTrue([_db executeUpdateAndReturnError: &error statement: @"CREATE TABLE test (a integer, b varchar(20), c double, d blob, e varchar(20))"], @"Create table failed: %@", error);
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a, b, c, d, e) VALUES (?, ?, ?, ?, ?)",
+                   testInteger, testString, testDouble, testBlob, nil]), @"Could not insert row");
     
     /* Query the data */
     result = [_db executeQuery: @"SELECT * FROM test"];
@@ -188,6 +188,7 @@
     STAssertTrue([testString isEqual: [result objectForColumn: @"b"]], @"Did not return correct string value");
     STAssertTrue([testDouble isEqual: [result objectForColumn: @"c"]], @"Did not return correct double value");
     STAssertTrue([testBlob isEqual: [result objectForColumn: @"d"]], @"Did not return correct data value");
+    STAssertTrue([NSNull null] == [result objectForColumn: @"e"], @"Did not return correct NSNull value");
 }
 
 @end

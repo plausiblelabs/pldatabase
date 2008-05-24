@@ -58,8 +58,8 @@
 }
 
 /* from PLEntityDialect */
-- (NSString *) selectLastInsertIdentity {
-    return @"SELECT last_insert_rowid()";
+- (NSString *) lastInsertIdentity {
+    return @"last_insert_rowid()";
 }
 
 @end

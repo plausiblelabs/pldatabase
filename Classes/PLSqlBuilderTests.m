@@ -61,7 +61,7 @@
     [_sqlBuilder release];
 }
 
-- (void) testInsertWithTable {
+- (void) testInsertForTable {
     NSObject<PLPreparedStatement> *stmt;
     NSMutableDictionary *values;
     NSError *error;
@@ -91,7 +91,51 @@
     STAssertEquals(42, [rs intForColumn: @"age"], @"Unexpected age value");
 }
 
-- (void) testDeleteWithTable {
+
+- (void) testSelectLastInsertForTable {
+    NSObject<PLPreparedStatement> *stmt;
+    NSObject<PLResultSet> *rs;
+    NSError *error;
+
+    /* Execute an INSERT */
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (name, age) VALUES (?, ?)", @"Jacob", [NSNumber numberWithInt: 42]]), @"INSERT failed");
+
+    /* Create the query and fetch the data back out */
+    stmt = [_sqlBuilder selectLastInsertForTable: @"test" withColumns: [NSArray arrayWithObjects: @"id", @"name", @"age", nil] primaryKey: @"id" error: &error];
+    STAssertNotNil(stmt, @"Prepared statement creation failed: %@", error);
+    rs = [stmt executeQueryAndReturnError: &error];
+    STAssertNotNil(rs, @"Could note execute query: %@", error);
+    STAssertTrue([rs next], @"No results returned");
+
+    STAssertFalse([rs isNullForColumn: @"id"], @"Id column was not populated");
+    STAssertTrue([@"Jacob" isEqual: [rs stringForColumn: @"name"]], @"Unexpected name value");
+    STAssertEquals(42, [rs intForColumn: @"age"], @"Unexpected age value");
+}
+
+- (void) testSelectForTable {
+    NSObject<PLPreparedStatement> *stmt;
+    NSObject<PLResultSet> *rs;
+    NSError *error;
+    
+    /* Execute an INSERT */
+    STAssertTrue(([_db executeUpdateAndReturnError: &error statement: @"INSERT INTO test (id, name, age) VALUES (?, ?, ?)", [NSNumber numberWithInt: 1], @"Jacob", [NSNumber numberWithInt: 42]]), @"INSERT failed: %@", error);
+    
+    /* Create the query and fetch the data back out */
+    stmt = [_sqlBuilder selectForTable: @"test" withColumns: [NSArray arrayWithObjects: @"id", @"name", @"age", nil] primaryKeys: [NSArray arrayWithObjects: @"id", nil] error: &error];
+    [stmt bindParameterDictionary: [NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithInt: 1], @"id", nil]];
+    
+    STAssertNotNil(stmt, @"Prepared statement creation failed: %@", error);
+    rs = [stmt executeQueryAndReturnError: &error];
+    STAssertNotNil(rs, @"Could note execute query: %@", error);
+    STAssertTrue([rs next], @"No results returned");
+    
+    STAssertEquals([rs intForColumn: @"id"], 1, @"Id column incorrect");
+    STAssertTrue([@"Jacob" isEqual: [rs stringForColumn: @"name"]], @"Unexpected name value");
+    STAssertEquals(42, [rs intForColumn: @"age"], @"Unexpected age value");
+}
+
+
+- (void) testDeleteForTable {
     NSObject<PLPreparedStatement> *stmt;
     NSMutableDictionary *values;
     NSArray *primaryKeys;
@@ -105,7 +149,7 @@
     rowId = [NSNumber numberWithInt:[_db lastInsertRowId]];
     
     /* Create the prepared statement */
-    stmt = [_sqlBuilder deleteForTable: @"test" withColumns: primaryKeys error: &error];
+    stmt = [_sqlBuilder deleteForTable: @"test" primaryKeys: primaryKeys error: &error];
     STAssertNotNil(stmt, @"Prepared statement creation failed: %@", error);
     
     /* Set up the values we want to delete */
@@ -123,7 +167,7 @@
     STAssertFalse([rs next], @"Unexpected result returned");
 }
 
-- (void) testDeleteWithTableMultiplePrimaryKeys {
+- (void) testDeleteForTableMultiplePrimaryKeys {
     NSObject<PLPreparedStatement> *stmt;
     NSMutableDictionary *primaryValues;
     NSArray *primaryKeys;
@@ -145,7 +189,7 @@
                    [NSNumber numberWithInt: 2], [NSNumber numberWithInt: 100], @"Marley", [NSNumber numberWithInt: 24]]), @"Could not insert row");
     
     /* Create the prepared statement */
-    stmt = [_sqlBuilder deleteForTable: @"test_two_keys" withColumns: primaryKeys error: &error];
+    stmt = [_sqlBuilder deleteForTable: @"test_two_keys" primaryKeys: primaryKeys error: &error];
     STAssertNotNil(stmt, @"Prepared statement creation failed: %@", error);
     
     /* Set up the values we want to delete */

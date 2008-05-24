@@ -70,7 +70,7 @@
 
     /* Determining Insert Identity */
     if ([self supportsLastInsertIdentity])
-        assert([self selectLastInsertIdentity] != nil);
+        assert([self lastInsertIdentity] != nil);
 
     return self;
 }
@@ -121,18 +121,21 @@
 }
 
 /**
- * Returns the statement used to get the last generated IDENTITY value.
+ * Returns the expression used to get the last generated IDENTITY value.
  *
  * If PLEntityDialect::supportsLastInsertIdentity returns NO, this method may
  * return a nil value.
  *
- * @return Returns a SQL statement that provides the last generated IDENTITY value for the previous INSERT.
+ * @return Returns a SQL expression that provides the last generated IDENTITY value for the previous INSERT.
  *
  * @par Default Value:
  * Method returns nil by default.
  *
+ * @par Example
+ * - For SQLite, this would be "last_insert_rowid()"
+ * - For MySQL, this would be "LAST_INSERT_ID()"
  */
-- (NSString *) selectLastInsertIdentity {
+- (NSString *) lastInsertIdentity {
     return nil;
 }
 

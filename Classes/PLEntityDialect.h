@@ -39,6 +39,6 @@
 - (NSString *) quoteIdentifier: (NSString *) identifier;
 
 - (BOOL) supportsLastInsertIdentity;
-- (NSString *) selectLastInsertIdentity;
+- (NSString *) lastInsertIdentity;
 
 @end
