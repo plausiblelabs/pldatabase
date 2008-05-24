@@ -136,7 +136,7 @@
  * e.g columnName = (:columnName)
  */
 - (NSString *) columnsWithEquality: (NSArray *) columnNames {
-    NSMutableString *builder = [NSMutableString stringWithCapacity: 0];
+    NSMutableString *builder = [NSMutableString stringWithCapacity: 15];
     
     for (NSString *columnName in columnNames) {
         if ([builder length] > 0)
