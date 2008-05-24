@@ -101,6 +101,7 @@
 
     /* Free any memory */
     [_entityManager release];
+    [_sqlDialect release];
     [_sqlBuilder release];
 
     [super dealloc];
