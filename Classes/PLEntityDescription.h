@@ -48,13 +48,31 @@
 
 @end
 
-
 #ifdef PL_DB_PRIVATE
+
+/**
+ * @internal
+ * Implement to filter returned column values from PLEntityDescription::columnValuesForEntity:withFilter:filterContext:
+ *
+ * Must return YES if the value should be included in the result, otherwise NO.
+ *
+ * @ingroup functions
+ */
+typedef BOOL (*PLEntityDescriptionPropertyFilter) (PLEntityProperty *property, void *context);
+
+/*
+ * Pre-packaged filters.
+ */
+extern BOOL PLEntityPropertyFilterAllowAllValues (PLEntityProperty *property, void *context);
+
+
 @interface PLEntityDescription (PLEntityDescriptionLibraryPrivate)
 
 - (NSString *) tableName;
 
 - (NSDictionary *) columnValuesForEntity: (PLEntity *) entity;
+- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter;
+- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter filterContext: (void *) filterContext;
 
 - (id) instantiateEntityWithColumnValues: (NSDictionary *) values error: (NSError **) outError;
 

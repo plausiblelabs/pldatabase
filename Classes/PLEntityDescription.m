@@ -29,12 +29,6 @@
 
 #import "PlausibleDatabase.h"
 
-/**
- * @internal
- * Implement to filter returned column values from PLEntityDescription::columnValuesForEntity:withFilter:
- */
-typedef BOOL (*PLEntityDescriptionPropertyFilter)(PLEntityProperty *property, void *context);
-
 /* Private methods */
 @interface PLEntityDescription (PLEntityDescriptionPrivate)
 
@@ -140,10 +134,15 @@ typedef BOOL (*PLEntityDescriptionPropertyFilter)(PLEntityProperty *property, vo
 
 
 /**
- * A PLEntityDescriptionPropertyFilter that accepts any and all
- * properties.
+ * @internal
+ * A #PLEntityDescriptionPropertyFilter that accepts any and all properties.
+ * No filter context is required.
+ *
+ * @see PLEntityDescription::columnValuesForEntity:withFilter:filterContext:
+ *
+ * @ingroup functions
  */
-static BOOL propertyfilter_allow_all_values (PLEntityProperty *property, void *context) {
+BOOL PLEntityPropertyFilterAllowAllValues (PLEntityProperty *property, void *context) {
     return YES;
 }
 
@@ -155,9 +154,76 @@ static BOOL propertyfilter_allow_all_values (PLEntityProperty *property, void *c
  *
  * Nil values are represented as NSNull, as per the Key-Value Coding
  * Programming Guidelines: http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/BasicPrinciples.html
+ *
+ * @param entity Entity from which to retrieve the values
  */
 - (NSDictionary *) columnValuesForEntity: (PLEntity *) entity {
-    return [self columnValuesForEntity: entity withFilter: propertyfilter_allow_all_values filterContext: NULL];
+    return [self columnValuesForEntity: entity withFilter: PLEntityPropertyFilterAllowAllValues];
+}
+
+/**
+ * @internal
+ *
+ * Retrieve all filtered column values from the given entity instance,
+ * using the object's declared PLEntityPropertyDescription instances.
+ *
+ * Nil values are represented as NSNull, as per the Key-Value Coding
+ * Programming Guidelines: http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/BasicPrinciples.html
+ *
+ * @param entity Entity from which to retrieve the values
+ * @param filter Filter to run on entity properties.
+ *
+ * The filter context will be set to NULL.
+ * @see PLEntityDescription::columnValuesForEntity:withFilter:filterContext:
+ */
+- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter {
+    return [self columnValuesForEntity: entity withFilter: filter filterContext: NULL];
+}
+
+/**
+ * @internal
+ *
+ * Retrieve all filtered column values from the given entity instance,
+ * using the object's declared PLEntityPropertyDescription instances.
+ *
+ * Nil values are represented as NSNull, as per the Key-Value Coding
+ * Programming Guidelines: http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/BasicPrinciples.html
+ *
+ * @param entity Entity from which to retrieve the values
+ * @param filter Filter to run on entity properties.
+ * @param filterContext Context variable to pass to filter.
+ *
+ * @par Supplied Filter Functions
+ * A number of filter functions are included with this class implementation:
+ * - #PLEntityPropertyFilterAllowAllValues - Returns all properties (does not filter).
+ */
+- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter filterContext: (void *) filterContext {
+    NSMutableDictionary *columnValues;
+    
+    /* Create our return dictionary */
+    columnValues = [NSMutableDictionary dictionaryWithCapacity: [_columnProperties count]];
+    
+    for (NSString *columnName in _columnProperties) {
+        PLEntityProperty *property;
+        id value;
+        
+        /* Fetch the property description, skipping any that do not match the filter */
+        property = [_columnProperties objectForKey: columnName];
+        if (!filter(property, filterContext))
+            continue;
+        
+        /* Fetch the value */
+        value = [entity valueForKey: [property key]];
+        
+        /* Handle nil (NSDictionary values can't be nil) */
+        if (value == nil)
+            value = [NSNull null];
+        
+        /* Add column, value */
+        [columnValues setObject: value forKey: [property columnName]];
+    }
+    
+    return columnValues;
 }
 
 - (BOOL) setValue: (id) value forKey: (NSString *) key withEntity: (PLEntity *) entity error: (NSError **) outError {
@@ -243,51 +309,3 @@ static BOOL propertyfilter_allow_all_values (PLEntityProperty *property, void *c
 }
 
 @end
-
-
-/**
- * @internal
- * Private class methods for PLEntityDescription
- */
-@implementation PLEntityDescription (PLEntityDescriptionPrivate)
-
-/**
- * @internal
- *
- * Retrieve all filtered column values from the given entity instance,
- * using the object's declared PLEntityPropertyDescription instances.
- *
- * Nil values are represented as NSNull, as per the Key-Value Coding
- * Programming Guidelines: http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/BasicPrinciples.html
- */
-- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter filterContext: (void *) filterContext {
-    NSMutableDictionary *columnValues;
-    
-    /* Create our return dictionary */
-    columnValues = [NSMutableDictionary dictionaryWithCapacity: [_columnProperties count]];
-    
-    for (NSString *columnName in _columnProperties) {
-        PLEntityProperty *property;
-        id value;
-        
-        /* Fetch the property description, skipping any that do not match the filter */
-        property = [_columnProperties objectForKey: columnName];
-        if (!filter(property, filterContext))
-            continue;
-        
-        /* Fetch the value */
-        value = [entity valueForKey: [property key]];
-        
-        /* Handle nil (NSDictionary values can't be nil) */
-        if (value == nil)
-            value = [NSNull null];
-        
-        /* Add column, value */
-        [columnValues setObject: value forKey: [property columnName]];
-    }
-    
-    return columnValues;
-}
-
-@end
-

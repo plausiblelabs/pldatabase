@@ -32,6 +32,10 @@
 #import <Foundation/Foundation.h>
 
 /**
+ * @defgroup functions Plausible Database Functions Reference
+ */
+
+/**
  * @defgroup constants Plausible Database Constants Reference
  */
 
