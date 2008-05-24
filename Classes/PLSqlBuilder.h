@@ -42,6 +42,14 @@
 
 - (NSObject<PLPreparedStatement> *) insertForTable: (NSString *) tableName withColumns: (NSArray *) columnNames error: (NSError **) outError;
 
+- (NSObject<PLPreparedStatement> *) deleteForTable: (NSString *) tableName withPrimaryKeys: (NSArray *) primaryKeys error: (NSError **) outError;
+
+@end
+
+@interface PLSqlBuilder (PLSqlBuilderPrivate)
+
+- (NSString *) columnsWithEquality: (NSArray *) columnNames;
+
 @end
 
 #endif /* PL_DB_PRIVATE */

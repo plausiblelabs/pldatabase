@@ -95,5 +95,57 @@
     return stmt;
 }
 
+/**
+ * @internal
+ * Create a DELETE prepared statement, with named bindings for the given primary key column names.
+ *
+ * @param tableName The name of the table for the DELETE.
+ * @param primaryKeys A list of all the primary key column names, which will be included in the DELETE as named parameters.
+ * @param outError If an error occurs, nil will be returned and outError will be populated with the error reason.
+ * @return A prepared statement that may be used for dictionary-based parameter binding. Nil if an error occurs.
+ */
+- (NSObject<PLPreparedStatement> *) deleteForTable: (NSString *) tableName withPrimaryKeys: (NSArray *) primaryKeys error: (NSError **) outError {
+    NSString *query;
+    NSObject<PLPreparedStatement> *stmt;
+    
+    /* Create the query string */
+    query = [NSString stringWithFormat: @"DELETE FROM %@ WHERE %@", 
+             [_dialect quoteIdentifier: tableName],
+             [self columnsWithEquality: primaryKeys]];
+    
+    /* Prepare the statement */
+    stmt = [_db prepareStatement: query error: outError];
+    if (stmt == nil)
+        return nil;
+    
+    /* All is well in prepared statement land */
+    return stmt;
+}
+
+@end
+
+/**
+ * @internal
+ * Class-private methods.
+ */
+@implementation PLSqlBuilder (PLSqlBuilderPrivate)
+
+/**
+ * @internal
+ * Private helper method to turn a list of column names into a named parameter list with SQL equality operators
+ * e.g columnName = (:columnName)
+ */
+- (NSString *) columnsWithEquality: (NSArray *) columnNames {
+    NSMutableString *builder = [NSMutableString stringWithCapacity: 0];
+    
+    for (NSString *columnName in columnNames) {
+        if ([builder length] > 0)
+            [builder appendString: @" AND "];
+        
+        [builder appendFormat: @"%@ = (:%@)", [_dialect quoteIdentifier: columnName], columnName];
+    }
+    
+    return builder;
+}
 
 @end
