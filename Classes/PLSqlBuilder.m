@@ -29,6 +29,13 @@
 
 #import "PlausibleDatabase.h"
 
+/* Private methods */
+@interface PLSqlBuilder (PLSqlBuilderPrivate)
+
+- (NSString *) columnsWithEquality: (NSArray *) columnNames;
+
+@end
+
 /**
  * @internal
  *

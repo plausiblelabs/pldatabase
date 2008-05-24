@@ -46,10 +46,4 @@
 
 @end
 
-@interface PLSqlBuilder (PLSqlBuilderPrivate)
-
-- (NSString *) columnsWithEquality: (NSArray *) columnNames;
-
-@end
-
 #endif /* PL_DB_PRIVATE */
