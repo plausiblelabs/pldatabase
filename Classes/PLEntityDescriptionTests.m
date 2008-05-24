@@ -151,6 +151,8 @@
     STAssertTrue([@"test" isEqual: [description tableName]], @"Entity table name incorrect (%@)", [description tableName]);
 }
 
+
+/* Test the PLEntityPropertyFilterAllowAllValues filter */
 - (void) testEntityAllColumnValues {
     PLEntityDescExampleEntity *entity;
     NSDictionary *columnValues;
@@ -167,6 +169,8 @@
     STAssertTrue([@"Appleseed" isEqual: [columnValues objectForKey: @"last_name"]], @"Returned last name was incorrect");
 }
 
+
+/* Test the PLEntityPropertyFilterPrimaryKeys filter */
 - (void) testEntityPrimaryKeyColumnValues {
     PLEntityDescExampleEntity *entity;
     NSDictionary *columnValues;
@@ -181,6 +185,7 @@
     STAssertEquals([columnValues count], (NSUInteger) 1, @"Extra values returned");
     STAssertEquals([NSNull null], [columnValues objectForKey: @"id"], @"Row id was not NSNull instance");
 }
+
 
 - (void) testInstantiateEntityWithColumnValues {
     NSMutableDictionary *values = [NSMutableDictionary dictionaryWithCapacity: 3];
