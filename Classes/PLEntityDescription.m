@@ -33,12 +33,12 @@
  * @internal
  * Implement to filter returned column values from PLEntityDescription::columnValuesForEntity:withFilter:
  */
-typedef BOOL (*PLEntityDescriptionPropertyFilter)(PLEntityProperty *property);
+typedef BOOL (*PLEntityDescriptionPropertyFilter)(PLEntityProperty *property, void *context);
 
 /* Private methods */
 @interface PLEntityDescription (PLEntityDescriptionPrivate)
 
-- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter;
+- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter filterContext: (void *) filterContext;
 
 @end
 
@@ -143,7 +143,7 @@ typedef BOOL (*PLEntityDescriptionPropertyFilter)(PLEntityProperty *property);
  * A PLEntityDescriptionPropertyFilter that accepts any and all
  * properties.
  */
-static BOOL propertyfilter_allow_all_values (PLEntityProperty *property) {
+static BOOL propertyfilter_allow_all_values (PLEntityProperty *property, void *context) {
     return YES;
 }
 
@@ -157,7 +157,7 @@ static BOOL propertyfilter_allow_all_values (PLEntityProperty *property) {
  * Programming Guidelines: http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/BasicPrinciples.html
  */
 - (NSDictionary *) columnValuesForEntity: (PLEntity *) entity {
-    return [self columnValuesForEntity: entity withFilter: propertyfilter_allow_all_values];
+    return [self columnValuesForEntity: entity withFilter: propertyfilter_allow_all_values filterContext: NULL];
 }
 
 - (BOOL) setValue: (id) value forKey: (NSString *) key withEntity: (PLEntity *) entity error: (NSError **) outError {
@@ -260,7 +260,7 @@ static BOOL propertyfilter_allow_all_values (PLEntityProperty *property) {
  * Nil values are represented as NSNull, as per the Key-Value Coding
  * Programming Guidelines: http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/BasicPrinciples.html
  */
-- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter {
+- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter filterContext: (void *) filterContext {
     NSMutableDictionary *columnValues;
     
     /* Create our return dictionary */
@@ -272,7 +272,7 @@ static BOOL propertyfilter_allow_all_values (PLEntityProperty *property) {
         
         /* Fetch the property description, skipping any that do not match the filter */
         property = [_columnProperties objectForKey: columnName];
-        if (!filter(property))
+        if (!filter(property, filterContext))
             continue;
         
         /* Fetch the value */
