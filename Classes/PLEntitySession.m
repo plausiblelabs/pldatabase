@@ -379,6 +379,34 @@ error:
 }
 
 
+/**
+ * Insert an entity into the database.
+ *
+ * Any generated values (including the primary key) will be loaded from the database
+ * and the entity will be updated accordingly
+ *
+ * @param entity The entity to insert.
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) insertEntity: (PLEntity *) entity {
+    return [self insertEntity: entity error: nil];
+}
+
+
+/**
+ * Insert an entity into the database.
+ *
+ * Any generated values (including the primary key) will be loaded from the database
+ * and the entity will be updated accordingly
+ *
+ * @param entity The entity to insert.
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the entity could not
+ * be inserted.
+ *
+ * @return YES on success, NO on failure.
+ */
 - (BOOL) insertEntity: (PLEntity *) entity error: (NSError **) error {
     if ([_sqlDialect supportsLastInsertIdentity])
         return [self insertEntitySelectLastIdentity: entity error: error];
