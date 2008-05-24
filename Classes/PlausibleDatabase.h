@@ -140,6 +140,7 @@ typedef enum {
  *
  * @section doc_sections Documentation Sections
  * - @subpage exec_sql
+ * - @subpage entity_sql
  * - @subpage error_handling
  *
  *
@@ -189,6 +190,21 @@ typedef enum {
  * // retain database resources until the instance is deallocated.
  * [results close];
  * </pre>
+ */
+
+/**
+ * @page entity_sql Entity Manager Programming Guide
+ *
+ * @section introduction Introduction
+ * The Plausible Database Entity Manager provides an <a href="http://en.wikipedia.org/wiki/Object-relational_mapping">Object Relational Mapping</a> for
+ * interacting with the underlying database.
+ *
+ * @section define_entities Defining Entities
+ *
+ * @section create_manager Creating an Entity Manager
+ *
+ * @section create_session Creating a Session
+ *
  */
 
 
