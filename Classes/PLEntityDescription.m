@@ -105,6 +105,7 @@
         if ([desc isPrimaryKey]) {
             
             if ([desc isGeneratedValue] && _generatedPrimaryKeyProperty != nil) {
+                [self release];
                 [NSException raise: PLDatabaseException format: @"More than one generated primary key was defined. This is not supported."];
                 
             } else if ([desc isGeneratedValue]) {
