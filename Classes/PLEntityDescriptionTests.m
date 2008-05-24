@@ -230,31 +230,4 @@
     STAssertTrue([@"Appleseed" isEqual: [entity lastName]], @"Incorrect lastName");
 }
 
-- (void) testPrimaryKeys {
-    PLEntityDescription *description;
-    PLEntityProperty *rowId;
-    PLEntityProperty *anotherId;
-    NSArray *keys;
-    
-    rowId = [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" attributes: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil];
-    anotherId = [PLEntityProperty propertyWithKey: @"anotherId" columnName: @"anotherId" attributes: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil];
-    
-    /* Create one */
-    description = [PLEntityDescription descriptionForClass: [self class] tableName: @"test" properties:
-        [NSArray arrayWithObjects:
-            rowId,
-            [PLEntityProperty propertyWithKey: @"name" columnName: @"name"],
-            anotherId,
-            nil
-         ]
-    ];
-    
-    /* Get the primary keys */
-    keys = [description primaryKeys];
-    
-    STAssertEquals((NSUInteger)2, [keys count], @"Incorrect number of primary keys found");
-    STAssertTrue([keys containsObject: rowId], @"Primary keys missing primary key");
-    STAssertTrue([keys containsObject: anotherId], @"Primary keys missing primary key");
-}
-
 @end

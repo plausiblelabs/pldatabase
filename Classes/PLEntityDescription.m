@@ -30,6 +30,20 @@
 #import "PlausibleDatabase.h"
 
 /**
+ * @internal
+ * Implement to filter returned column values from PLEntityDescription::columnValuesForEntity:withFilter:
+ */
+typedef BOOL (*PLEntityDescriptionPropertyFilter)(PLEntityProperty *property);
+
+/* Private methods */
+@interface PLEntityDescription (PLEntityDescriptionPrivate)
+
+- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter;
+
+@end
+
+
+/**
  * Defines the object entity mapping of a class and database table.
  *
  * @par Thread Safety
@@ -126,6 +140,14 @@
 
 
 /**
+ * A PLEntityDescriptionPropertyFilter that accepts any and all
+ * properties.
+ */
+static BOOL propertyfilter_allow_all_values (PLEntityProperty *property) {
+    return YES;
+}
+
+/**
  * @internal
  *
  * Retrieve all available column values from the given entity instance,
@@ -135,28 +157,7 @@
  * Programming Guidelines: http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/BasicPrinciples.html
  */
 - (NSDictionary *) columnValuesForEntity: (PLEntity *) entity {
-    NSMutableDictionary *columnValues;
-
-    /* Create our return dictionary */
-    columnValues = [NSMutableDictionary dictionaryWithCapacity: [_columnProperties count]];
-
-    for (NSString *columnName in _columnProperties) {
-        PLEntityProperty *property;
-        id value;
-        
-        /* Fetch the property description and the entity's value */
-        property = [_columnProperties objectForKey: columnName];
-        value = [entity valueForKey: [property key]];
-
-        /* Handle nil (NSDictionary values can't be nil) */
-        if (value == nil)
-            value = [NSNull null];
-
-        /* Add column, value */
-        [columnValues setObject: value forKey: [property columnName]];
-    }
-
-    return columnValues;
+    return [self columnValuesForEntity: entity withFilter: propertyfilter_allow_all_values];
 }
 
 - (BOOL) setValue: (id) value forKey: (NSString *) key withEntity: (PLEntity *) entity error: (NSError **) outError {
@@ -241,15 +242,52 @@
     return YES;
 }
 
+@end
+
+
+/**
+ * @internal
+ * Private class methods for PLEntityDescription
+ */
+@implementation PLEntityDescription (PLEntityDescriptionPrivate)
+
 /**
  * @internal
  *
- * Returns the primary keys defined in this entity description.
+ * Retrieve all filtered column values from the given entity instance,
+ * using the object's declared PLEntityPropertyDescription instances.
  *
- * @return An NSArray containing PLEntityProperty objects.
+ * Nil values are represented as NSNull, as per the Key-Value Coding
+ * Programming Guidelines: http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/BasicPrinciples.html
  */
-- (NSArray *) primaryKeys {
-    return _primaryKeys;
+- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter {
+    NSMutableDictionary *columnValues;
+    
+    /* Create our return dictionary */
+    columnValues = [NSMutableDictionary dictionaryWithCapacity: [_columnProperties count]];
+    
+    for (NSString *columnName in _columnProperties) {
+        PLEntityProperty *property;
+        id value;
+        
+        /* Fetch the property description, skipping any that do not match the filter */
+        property = [_columnProperties objectForKey: columnName];
+        if (!filter(property))
+            continue;
+        
+        /* Fetch the value */
+        value = [entity valueForKey: [property key]];
+        
+        /* Handle nil (NSDictionary values can't be nil) */
+        if (value == nil)
+            value = [NSNull null];
+        
+        /* Add column, value */
+        [columnValues setObject: value forKey: [property columnName]];
+    }
+    
+    return columnValues;
 }
 
 @end
+

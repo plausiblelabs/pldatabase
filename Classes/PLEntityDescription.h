@@ -60,7 +60,5 @@
 
 - (BOOL) updateEntity: (PLEntity *) entity withColumnValues: (NSDictionary *) values error: (NSError **) outError;
 
-- (NSArray *) primaryKeys;
-
 @end
 #endif
