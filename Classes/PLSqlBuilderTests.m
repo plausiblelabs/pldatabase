@@ -105,7 +105,7 @@
     rowId = [NSNumber numberWithInt:[_db lastInsertRowId]];
     
     /* Create the prepared statement */
-    stmt = [_sqlBuilder deleteForTable: @"test" withPrimaryKeys: primaryKeys error: &error];
+    stmt = [_sqlBuilder deleteForTable: @"test" withColumns: primaryKeys error: &error];
     STAssertNotNil(stmt, @"Prepared statement creation failed: %@", error);
     
     /* Set up the values we want to delete */
@@ -145,7 +145,7 @@
                    [NSNumber numberWithInt: 2], [NSNumber numberWithInt: 100], @"Marley", [NSNumber numberWithInt: 24]]), @"Could not insert row");
     
     /* Create the prepared statement */
-    stmt = [_sqlBuilder deleteForTable: @"test_two_keys" withPrimaryKeys: primaryKeys error: &error];
+    stmt = [_sqlBuilder deleteForTable: @"test_two_keys" withColumns: primaryKeys error: &error];
     STAssertNotNil(stmt, @"Prepared statement creation failed: %@", error);
     
     /* Set up the values we want to delete */

@@ -42,7 +42,7 @@
 
 - (NSObject<PLPreparedStatement> *) insertForTable: (NSString *) tableName withColumns: (NSArray *) columnNames error: (NSError **) outError;
 
-- (NSObject<PLPreparedStatement> *) deleteForTable: (NSString *) tableName withPrimaryKeys: (NSArray *) primaryKeys error: (NSError **) outError;
+- (NSObject<PLPreparedStatement> *) deleteForTable: (NSString *) tableName withColumns: (NSArray *) columnNames error: (NSError **) outError;
 
 @end
 
