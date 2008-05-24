@@ -152,6 +152,19 @@
 }
 
 
+/* Verify that we throw an exception if a user attempts to define multiple generated primary keys */
+- (void) testMultipleGeneratedKeys {    
+    /* Create one */
+    STAssertThrows(([PLEntityDescription descriptionForClass: [self class] tableName: @"test" properties:
+                        [NSArray arrayWithObjects:
+                            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" attributes: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil],
+                            [PLEntityProperty propertyWithKey: @"anotherId" columnName: @"anotherId" attributes: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil],
+                            nil
+                        ]
+                    ]), @"Defining two primary keys as generated values did not throw the expected exception");
+}
+
+
 /* Test the PLEntityPropertyFilterAllowAllValues filter */
 - (void) testEntityAllColumnValues {
     PLEntityDescExampleEntity *entity;
@@ -182,6 +195,22 @@
     columnValues = [[PLEntityDescExampleEntity entityDescription] columnValuesForEntity: entity withFilter: PLEntityPropertyFilterPrimaryKeys];
     STAssertNotNil(columnValues, @"Could not fetch column values");
 
+    STAssertEquals([columnValues count], (NSUInteger) 1, @"Extra values returned");
+    STAssertEquals([NSNull null], [columnValues objectForKey: @"id"], @"Row id was not NSNull instance");
+}
+
+/* Test the PLEntityPropertyFilterGeneratedPrimaryKeys filter */
+- (void) testEntityGeneratedPrimaryKeyColumnValues {
+    PLEntityDescExampleEntity *entity;
+    NSDictionary *columnValues;
+    
+    /* Create a new entity */
+    entity = [[[PLEntityDescExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
+    
+    /* Try to fetch the column values */
+    columnValues = [[PLEntityDescExampleEntity entityDescription] columnValuesForEntity: entity withFilter: PLEntityPropertyFilterGeneratedPrimaryKeys];
+    STAssertNotNil(columnValues, @"Could not fetch column values");
+    
     STAssertEquals([columnValues count], (NSUInteger) 1, @"Extra values returned");
     STAssertEquals([NSNull null], [columnValues objectForKey: @"id"], @"Row id was not NSNull instance");
 }

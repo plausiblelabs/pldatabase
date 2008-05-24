@@ -40,6 +40,10 @@
 /**
  * Defines the object entity mapping of a class and database table.
  *
+ * @par Composite Primary Keys
+ * Composite primary keys are supported, however, only ONE primary key
+ * property may have the PLEntityPAGeneratedValue attribute.
+ *
  * @par Thread Safety
  * PLEntityDescription instances are immutable, and may be shared between threads
  * without synchronization.
@@ -73,6 +77,7 @@
 - (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName properties: (NSArray *) properties {
     NSMutableDictionary *columnProperties;
     NSMutableArray *primaryKeys;
+    BOOL seenGeneratedPrimaryKey = NO;
 
     if ((self = [super init]) == nil)
         return nil;
@@ -100,8 +105,16 @@
         [columnProperties setObject: desc forKey: [desc columnName]];
     
         /* Primary key? */
-        if ([desc isPrimaryKey])
+        if ([desc isPrimaryKey]) {
             [primaryKeys addObject: desc];
+            
+            /* Prevent the definition of more than one generated primary key. */
+            if ([desc isGeneratedValue] && seenGeneratedPrimaryKey) {
+                [NSException raise: PLDatabaseException format: @"More than one generated primary key was defined. This is not supported."];
+            } else if ([desc isGeneratedValue]) {
+                seenGeneratedPrimaryKey = YES;
+            }
+        }
     }
 
     return self;
@@ -161,6 +174,22 @@ BOOL PLEntityPropertyFilterPrimaryKeys (PLEntityProperty *property, void *contex
         return YES;
     else
         return NO;
+}
+
+/**
+ * @internal
+ * A #PLEntityDescriptionPropertyFilter that accepts only generated primary keys.
+ * No filter context is required.
+ *
+ * @see PLEntityDescription::columnValuesForEntity:withFilter:filterContext:
+ *
+ * @ingroup functions
+ */
+BOOL PLEntityPropertyFilterGeneratedPrimaryKeys (PLEntityProperty *property, void *context) {
+    if ([property isPrimaryKey] && [property isGeneratedValue])
+        return YES;
+    
+    return NO;
 }
 
 
