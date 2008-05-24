@@ -151,7 +151,7 @@
     STAssertTrue([@"test" isEqual: [description tableName]], @"Entity table name incorrect (%@)", [description tableName]);
 }
 
-- (void) testEntityColumnValues {
+- (void) testEntityAllColumnValues {
     PLEntityDescExampleEntity *entity;
     NSDictionary *columnValues;
 
@@ -165,6 +165,21 @@
     STAssertEquals([NSNull null], [columnValues objectForKey: @"id"], @"Row id was not NSNull instance");
     STAssertTrue([@"Johnny" isEqual: [columnValues objectForKey: @"first_name"]], @"Returned first name was incorrect");
     STAssertTrue([@"Appleseed" isEqual: [columnValues objectForKey: @"last_name"]], @"Returned last name was incorrect");
+}
+
+- (void) testEntityPrimaryKeyColumnValues {
+    PLEntityDescExampleEntity *entity;
+    NSDictionary *columnValues;
+    
+    /* Create a new entity */
+    entity = [[[PLEntityDescExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
+    
+    /* Try to fetch the column values */
+    columnValues = [[PLEntityDescExampleEntity entityDescription] columnValuesForEntity: entity withFilter: PLEntityPropertyFilterPrimaryKeys];
+    STAssertNotNil(columnValues, @"Could not fetch column values");
+
+    STAssertEquals([columnValues count], (NSUInteger) 1, @"Extra values returned");
+    STAssertEquals([NSNull null], [columnValues objectForKey: @"id"], @"Row id was not NSNull instance");
 }
 
 - (void) testInstantiateEntityWithColumnValues {

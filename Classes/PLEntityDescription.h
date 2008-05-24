@@ -64,7 +64,7 @@ typedef BOOL (*PLEntityDescriptionPropertyFilter) (PLEntityProperty *property, v
  * Pre-packaged filters.
  */
 extern BOOL PLEntityPropertyFilterAllowAllValues (PLEntityProperty *property, void *context);
-
+extern BOOL PLEntityPropertyFilterPrimaryKeys (PLEntityProperty *property, void *context);
 
 @interface PLEntityDescription (PLEntityDescriptionLibraryPrivate)
 

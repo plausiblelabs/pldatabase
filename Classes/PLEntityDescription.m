@@ -146,6 +146,24 @@ BOOL PLEntityPropertyFilterAllowAllValues (PLEntityProperty *property, void *con
     return YES;
 }
 
+
+/**
+ * @internal
+ * A #PLEntityDescriptionPropertyFilter that accepts only primary keys.
+ * No filter context is required.
+ *
+ * @see PLEntityDescription::columnValuesForEntity:withFilter:filterContext:
+ *
+ * @ingroup functions
+ */
+BOOL PLEntityPropertyFilterPrimaryKeys (PLEntityProperty *property, void *context) {
+    if ([property isPrimaryKey])
+        return YES;
+    else
+        return NO;
+}
+
+
 /**
  * @internal
  *
