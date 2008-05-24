@@ -120,7 +120,7 @@
     NSObject<PLResultSet> *rs;
     rs = [_db executeQueryAndReturnError: &error statement: @"SELECT * FROM test WHERE id = ?", rowId];
     STAssertNotNil(rs, @"Could not execute query: %@", error);
-    STAssertFalse([rs next], @"No results returned");
+    STAssertFalse([rs next], @"Unexpected result returned");
 }
 
 - (void) testDeleteWithTableMultiplePrimaryKeys {
@@ -162,7 +162,7 @@
     rs = [_db executeQueryAndReturnError: &error statement: @"SELECT * FROM test_two_keys WHERE firstId = ? AND secondId = ?",
           [NSNumber numberWithInt: 1], [NSNumber numberWithInt: 100]];
     STAssertNotNil(rs, @"Could not execute query: %@", error);
-    STAssertFalse([rs next], @"No results returned");
+    STAssertFalse([rs next], @"Unexpected result returned");
     
     /* Verify the other row was untouched */
     rs = [_db executeQueryAndReturnError: &error statement: @"SELECT * FROM test_two_keys WHERE firstId = ? AND secondId = ?",
