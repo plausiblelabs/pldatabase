@@ -66,6 +66,9 @@
 
 - (BOOL) insertEntity: (PLEntity *) entity error: (NSError **) error;
 
+- (BOOL) deleteEntity: (PLEntity *) entity;
+- (BOOL) deleteEntity: (PLEntity *) entity error: (NSError **) error;
+
 - (void) close;
 
 @end

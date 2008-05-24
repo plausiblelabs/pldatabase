@@ -102,6 +102,30 @@
     [rs close];
 }
 
+- (void) testDeleteEntity {
+    PLEntitySessionExampleEntity *entity;
+    NSError *error;
+    
+    /* Insert the entity */
+    entity = [[[PLEntitySessionExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
+    STAssertTrue([_tx insertEntity: entity error: &error], @"Could not INSERT entity: %@", error);
+    
+    /* Verify that he arrived */
+    NSObject<PLResultSet> *rs;
+    rs = [_db executeQueryAndReturnError: &error statement: @"SELECT * FROM People WHERE first_name = ?", @"Johnny"];
+    STAssertNotNil(rs, @"Could not execute query: %@", error);
+    STAssertTrue([rs next], @"No results returned");
+    [rs close];
+
+    /* Delete the entity */
+    STAssertTrue([_tx deleteEntity: entity error: &error], @"Could not DELETE entity: %@", error);
+
+    /* Verify the entry was deleted */
+    rs = [_db executeQueryAndReturnError: &error statement: @"SELECT * FROM People WHERE first_name = ?", @"Johnny"];
+    STAssertNotNil(rs, @"Could not execute query: %@", error);
+    STAssertFalse([rs next], @"Result returned when not expected");
+    [rs close];
+}
 
 - (void) testInTransaction {
     STAssertFalse([_tx inTransaction], @"Transaction started active");

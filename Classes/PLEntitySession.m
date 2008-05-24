@@ -273,4 +273,58 @@
     return ret;
 }
 
+/**
+ * Delete an entity.
+ *
+ * If the entity was not loaded from the database, this operation will fail
+ * and return NO.
+ *
+ * @param entity The entity to delete.
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) deleteEntity: (PLEntity *) entity {
+    return [self deleteEntity: entity error: nil];
+}
+
+/**
+ * Delete an entity.
+ *
+ * If the entity was not loaded from the database, this operation will fail
+ * and return NO.
+ *
+ * @param entity The entity to delete.
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the entity could not
+ * be deleted.
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) deleteEntity: (PLEntity *) entity error: (NSError **) error {
+    PLEntityDescription *desc;
+    NSDictionary *columnValues;                            
+    NSObject<PLPreparedStatement> *stmt;
+    BOOL ret;
+    
+    /* Fetch the data */
+    desc = [_entityManager descriptionForEntity: [entity class]];
+    columnValues = [desc columnValuesForEntity: entity withFilter: PLEntityPropertyFilterPrimaryKeys];
+    
+    /* Create our delete statement */
+    stmt = [_sqlBuilder deleteForTable: [desc tableName] withColumns: [columnValues allKeys] error: error];
+    if (stmt == nil)
+        return NO;
+    
+    /* Bind parameters */
+    [stmt bindParameterDictionary: columnValues];
+    
+    /* Execute our statement */
+    ret = [stmt executeUpdateAndReturnError: error];
+    
+    /* Clean up */
+    [stmt close];
+    
+    return ret;
+}
+
 @end

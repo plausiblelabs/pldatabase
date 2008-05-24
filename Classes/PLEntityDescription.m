@@ -168,7 +168,7 @@ BOOL PLEntityPropertyFilterPrimaryKeys (PLEntityProperty *property, void *contex
  * @internal
  *
  * Retrieve all available column values from the given entity instance,
- * using the object's declared PLEntityPropertyDescription instances.
+ * using the object's declared PLEntityProperty instances.
  *
  * Nil values are represented as NSNull, as per the Key-Value Coding
  * Programming Guidelines: http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/BasicPrinciples.html
