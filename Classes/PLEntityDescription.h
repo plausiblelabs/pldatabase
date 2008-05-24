@@ -58,7 +58,7 @@
 
 - (id) instantiateEntityWithColumnValues: (NSDictionary *) values error: (NSError **) outError;
 
-- (BOOL) mergeColumnValuesForEntity: (PLEntity *) entity error: (NSError **) outError;
+- (BOOL) updateEntity: (PLEntity *) entity withColumnValues: (NSDictionary *) values error: (NSError **) outError;
 
 - (NSArray *) primaryKeys;
 

@@ -211,6 +211,25 @@
     STAssertNotNil(error, @"No NSError value was provided");
 }
 
+- (void) testMergeEntity {
+    NSMutableDictionary *values = [NSMutableDictionary dictionaryWithCapacity: 3];
+    PLEntityDescExampleEntity *entity;
+    NSError *error;
+    
+    /* Set up our entity */
+    entity = [[[PLEntityDescExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
+    
+    /* Set some example values */
+    [values setObject: [NSNumber numberWithInt: 42] forKey: @"id"];
+
+    /* Try merging them in */
+    STAssertTrue([[[entity class] entityDescription] updateEntity: entity withColumnValues: values error: &error], @"Could not merge values: %@", error);
+
+    STAssertEquals([[entity rowId] intValue], 42, @"rowId not correctly merged");
+    STAssertTrue([@"Johnny" isEqual: [entity firstName]], @"Incorrect firstName");
+    STAssertTrue([@"Appleseed" isEqual: [entity lastName]], @"Incorrect lastName");
+}
+
 - (void) testPrimaryKeys {
     PLEntityDescription *description;
     PLEntityProperty *rowId;

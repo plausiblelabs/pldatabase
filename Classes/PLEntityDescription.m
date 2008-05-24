@@ -159,6 +159,19 @@
     return columnValues;
 }
 
+- (BOOL) setValue: (id) value forKey: (NSString *) key withEntity: (PLEntity *) entity error: (NSError **) outError {
+    /*
+     * Validate the value (might replace value!)
+     */
+    if (![entity validateValue: &value forKey: key error: outError])
+        return NO;
+
+    /*
+     * Set the value
+     */
+    [entity setValue: value forKey: key];
+    return YES;
+}
 
 /**
  * @internal
@@ -191,19 +204,8 @@
         /* Retrieve the column's value (may be nil, it's up to the validator to accept/reject a nil value) */
         value = [values objectForKey: columnName];
         
-        /* Validate the value (might replace value!) */
-        if (![entity validateValue: &value forKey: key error: outError]) {
-            NSLog(@"Validation for key '%@', column '%@', value '%@' failed", key, columnName, value);
-            if (outError) {
-                *outError = [NSError errorWithDomain: PLEntityErrorDomain  code: PLEntityValidationError userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
-                                NSLocalizedString(@"Could not validate property value provided by the database.", @""), NSLocalizedDescriptionKey,
-                                nil]];
-            }
+        if (![self setValue: value forKey: key withEntity: entity error: outError])
             return nil;
-        }
-
-        /* Set the value */
-        [entity setValue: value forKey: key];
     }
 
     /* Wake the object up */
@@ -213,8 +215,30 @@
     return entity;
 }
 
-- (BOOL) mergeColumnValuesForEntity: (PLEntity *) entity error: (NSError **) outError {
-    return NO; // XXX TODO
+/**
+ * @internal
+ *
+ * Update the entity with the provided column values.
+ * @param entity The entity to modify.
+ * @param values Dictionary mapping column names (not property keys) to values.
+ * @param outError A pointer to an NSError instance that will be set if an error occurs. May be nil.
+ */
+- (BOOL) updateEntity: (PLEntity *) entity withColumnValues: (NSDictionary *) values error: (NSError **) outError {
+    for (NSString *column in [values allKeys]) {
+        NSString *key;
+
+        /* Get the property key */
+        key = [[_columnProperties objectForKey: column] key];
+        if (key == nil) {
+            [NSException raise: PLDatabaseException format: @"Attempted to merge value for column '%@' on entity '%@'", column, entity];
+        }
+
+        /* Set the value */
+        if (![self setValue: [values objectForKey: column] forKey: key withEntity: entity error: outError])
+            return NO;
+    }
+
+    return YES;
 }
 
 /**
