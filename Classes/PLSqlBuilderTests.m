@@ -149,7 +149,7 @@
     STAssertNotNil(stmt, @"Prepared statement creation failed: %@", error);
     
     /* Set up the values we want to delete */
-    primaryValues = [NSMutableDictionary dictionaryWithCapacity: 1];
+    primaryValues = [NSMutableDictionary dictionaryWithCapacity: 2];
     [primaryValues setObject: [NSNumber numberWithInt: 1] forKey: @"firstId"];
     [primaryValues setObject: [NSNumber numberWithInt: 100] forKey: @"secondId"];
     
