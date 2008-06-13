@@ -127,7 +127,6 @@ typedef enum {
  *
  * @section doc_sections Documentation Sections
  * - @subpage exec_sql
- * - @subpage entity_sql
  * - @subpage error_handling
  *
  *
@@ -177,23 +176,46 @@ typedef enum {
  * // retain database resources until the instance is deallocated.
  * [results close];
  * </pre>
+ *
+ * @section prepared_stmt Prepared Statements
+ *
+ * Pre-compilation of SQL statements and advanced parameter binding
+ * are supported by PLPreparedStatement. A prepared statement can
+ * be constructed using -[PLDatabase prepareStatement:].
+ *
+ * <pre>
+ * NSObject<PLPreparedStatement> *stmt = [db prepareStatement: @"INSERT INTO example (name, color) VALUES (?, ?)"];
+ 
+ * // Bind the parameters
+ * [stmt bindParameters: [NSArray arrayWithObjects: @"Widget", @"Blue", nil]];
+ *
+ * // Execute the INSERT
+ * if ([stmt executeUpdate] == NO)
+ *     NSLog(@"INSERT failed");
+ *
+ * </pre>
+ *
+ * @subsection named_params Name-based Parameter Binding
+ *
+ * Name-based parameter binding is also supported:
+ *
+ * <pre>
+ * // Prepare the statement
+ * NSObject<PLPreparedStatement> *stmt = [db prepareStatement: @"INSERT INTO test (name, color) VALUES (:name, :color)"];
+ *
+ * // Bind the parameters using a dictionary
+ * NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithCapacity: 2];
+ * [parameters setObject: @"Widget" forKey: @"name"];
+ * [parameters setObject: @"Blue" forKey: @"color"];
+ *
+ * [stmt bindParameterDictionary: parameters];
+ *
+ * // Execute the INSERT
+ * if ([stmt executeUpdate] == NO)
+ *     NSLog(@"INSERT failed");
+ *
+ * </pre>
  */
-
-/**
- * @page entity_sql Entity Manager Programming Guide
- *
- * @section introduction Introduction
- * The Plausible Database Entity Manager provides an <a href="http://en.wikipedia.org/wiki/Object-relational_mapping">Object Relational Mapping</a> for
- * interacting with the underlying database.
- *
- * @section define_entities Defining Entities
- *
- * @section create_manager Creating an Entity Manager
- *
- * @section create_session Creating a Session
- *
- */
-
 
 /**
  * @page error_handling Error Handling Programming Guide
@@ -204,10 +226,6 @@ typedef enum {
  * If you do not wish to report on the error cause, many methods support a simple form that requires no NSError argument.
  *
  * @section Error Domains, Codes, and User Info
- *
- * @subsection entity_errors Entity Manager Errors
- *
- * The entity manager has its own domain for errors, #PLEntityErrorDomain error domain. Entity manager error codes are defined in #PLEntityError.
  *
  * @subsection database_errors Database Errors
  *
