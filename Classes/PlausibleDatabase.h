@@ -190,6 +190,45 @@ typedef enum {
  * // retain database resources until the instance is deallocated.
  * [results close];
  * </pre>
+ *
+ * @section prepared_stmt Prepared Statements
+ *
+ * Pre-compilation of SQL statements and advanced parameter binding
+ * are supported by PLPreparedStatement. A prepared statement can
+ * be constructed using -[PLDatabase prepareStatement:].
+ *
+ * <pre>
+ * NSObject<PLPreparedStatement> *stmt = [db prepareStatement: @"INSERT INTO example (name, color) VALUES (?, ?)"];
+ 
+ * // Bind the parameters
+ * [stmt bindParameters: [NSArray arrayWithObjects: @"Widget", @"Blue", nil]];
+ *
+ * // Execute the INSERT
+ * if ([stmt executeUpdate] == NO)
+ *     NSLog(@"INSERT failed");
+ *
+ * </pre>
+ *
+ * @subsection named_params Name-based Parameter Binding
+ *
+ * Name-based parameter binding is also supported:
+ *
+ * <pre>
+ * // Prepare the statement
+ * NSObject<PLPreparedStatement> *stmt = [db prepareStatement: @"INSERT INTO test (name, color) VALUES (:name, :color)"];
+ *
+ * // Bind the parameters using a dictionary
+ * NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithCapacity: 2];
+ * [parameters setObject: @"Widget" forKey: @"name"];
+ * [parameters setObject: @"Blue" forKey: @"color"];
+ *
+ * [stmt bindParameterDictionary: parameters];
+ *
+ * // Execute the INSERT
+ * if ([stmt executeUpdate] == NO)
+ *     NSLog(@"INSERT failed");
+ *
+ * </pre>
  */
 
 /**
