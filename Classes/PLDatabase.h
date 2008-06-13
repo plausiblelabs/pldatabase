@@ -64,7 +64,7 @@
 - (BOOL) executeUpdateAndReturnError: (NSError **) error statement: (NSString *) statement, ...;
 
 /**
- * Execute a query, returning a #PLResultSet.
+ * Execute a query, returning a PLResultSet.
  *
  * Any arguments should be provided following the statement, and
  * referred to using standard '?' JDBC substitutions
@@ -74,7 +74,7 @@
 - (NSObject<PLResultSet> *) executeQuery: (NSString *) statement, ...;
 
 /**
- * Execute a query, returning a #PLResultSet.
+ * Execute a query, returning a PLResultSet.
  *
  * Any arguments should be provided following the statement, and
  * referred to using standard '?' JDBC substitutions

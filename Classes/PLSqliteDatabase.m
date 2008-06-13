@@ -52,7 +52,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 
 /**
- * SQLite #PLDatabase implementation.
+ * SQLite PLDatabase implementation.
  */
 @implementation PLSqliteDatabase
 
@@ -117,7 +117,7 @@ NSString *PLSqliteException = @"PLSqliteException";
  * Opens the database connection, and returns any errors. May
  * be called once and only once.
  *
- * @param A pointer to an NSError object variable. If an error occurs, this
+ * @param error A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the database could
  * not be opened. If no error occurs, this parameter will be left unmodified.
  * You may specify nil for this parameter, and no error information will be provided.
@@ -323,7 +323,7 @@ NSString *PLSqliteException = @"PLSqliteException";
  * has a column of type INTEGER PRIMARY KEY, then the value assigned will
  * be an alias for the row ID.
 *
- * @param Return the row ID (integer primary key) of the most recent successful INSERT.
+ * @result Returns the row ID (integer primary key) of the most recent successful INSERT.
  */
 - (int64_t) lastInsertRowId {
     return sqlite3_last_insert_rowid(_sqlite);
