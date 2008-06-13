@@ -92,19 +92,6 @@ typedef enum {
 #import "PLSqlitePreparedStatement.h"
 #import "PLSqliteResultSet.h"
 
-#import "PLEntity.h"
-#import "PLEntityProperty.h"
-#import "PLEntityDescription.h"
-
-#import "PLEntityConnectionDelegate.h"
-#import "PLEntityDialect.h"
-#import "PLEntitySession.h"
-#import "PLEntityManager.h"
-#import "PLSqlBuilder.h"
-
-#import "PLSqliteEntityDialect.h"
-#import "PLSqliteEntityConnectionDelegate.h"
-
 #ifdef PL_DB_PRIVATE
 
 @interface PlausibleDatabase : NSObject {
