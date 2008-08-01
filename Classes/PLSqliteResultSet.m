@@ -89,6 +89,7 @@
      * been handled by the -[PLSqliteResultSet next] implementation. Any remaining memory and
      * resources are released regardless of the error code, so we do not check it here. */
     sqlite3_finalize(_sqlite_stmt);
+    _sqlite_stmt = nil;
 }
 
 /**
