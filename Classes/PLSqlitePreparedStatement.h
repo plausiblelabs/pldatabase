@@ -47,9 +47,12 @@
 
     /** Is the prepared statement in use by a PLResultSet */
     BOOL _inUse;
+    
+    /** If YES, the prepared statement is closed when the first result set is checked in. */
+    BOOL _closeAtCheckin;
 }
 
-- (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt queryString: (NSString *) queryString;
+- (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt queryString: (NSString *) queryString closeAtCheckin: (BOOL) closeAtCheckin;
 
 // DO NOT CALL. Must only be called from PLSqliteResultSet
 - (void) checkinResultSet: (PLSqliteResultSet *) resultSet;

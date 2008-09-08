@@ -101,6 +101,49 @@
 }
 
 
+/* Verify that the autoreleased statements are explicitly closed when using executeUpdate
+ * Issue #6 */
+- (void) testUpdateStatementClosure {
+    PLSqliteDatabase *db = [[PLSqliteDatabase alloc] initWithPath: @":memory:"];
+    NSError *error = nil;
+    [db open];
+
+    STAssertTrue([db executeUpdateAndReturnError: &error statement: @"CREATE TABLE test (a VARCHAR(12), b VARCHAR(20))"], @"Create table failed: %@", error);
+    
+	NSObject<PLPreparedStatement> *stmt = [db prepareStatement:@"INSERT INTO test (a, b) VALUES(:a, :b)"];
+	NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+	[dict setObject:@"test category" forKey:@"a"];
+	[dict setObject:@"test domain" forKey:@"b"];
+	[stmt bindParameterDictionary:dict];
+    
+	[db beginTransaction];
+	STAssertTrue([stmt executeUpdate], @"INSERT failed");
+	[db commitTransaction];
+
+	[stmt close];
+	[db close];
+	[db release];
+}
+
+
+/* Verify that the autoreleased statements are explicitly closed when using executeQuery
+ * Issue #6 */
+- (void) testExecuteStatementClosure {
+    PLSqliteDatabase *db = [[PLSqliteDatabase alloc] initWithPath: @":memory:"];
+    NSError *error = nil;
+    [db open];
+    
+    STAssertTrue([db executeUpdateAndReturnError: &error statement: @"CREATE TABLE test (a VARCHAR(12), b VARCHAR(20))"], @"Create table failed: %@", error);
+    STAssertTrue(([db executeUpdateAndReturnError: &error statement: @"INSERT INTO test VALUES (?, ?)", @"foo", @"bar"]), @"Data insert failed %@", error);
+    
+    NSObject<PLResultSet> *resultSet = [db executeQuery: @"SELECT * FROM test"];
+
+	[resultSet close];
+	[db close];
+	[db release];
+}
+
+
 - (void) testExecuteUpdateQueryParams {
     NSObject<PLResultSet> *rs;
 

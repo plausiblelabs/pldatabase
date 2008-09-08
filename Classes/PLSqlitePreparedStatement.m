@@ -171,6 +171,12 @@
  *
  * Initialize the prepared statement with an open database and an sqlite3 prepared statement.
  *
+ * @param db A reference to the managing PLSqliteDatabase instance.
+ * @param sqliteStmt The prepared sqlite statement. This class will assume ownership of the reference.
+ * @param queryString The original SQL query string, used for error reporting.
+ * @param closeAtCheckin A flag specifying whether the statement should be closed at first checkin. Used to support returning
+ * only the result set to a caller. When the result set is closed, the prepared statement is closed.
+ *
  * MEMORY OWNERSHIP WARNING:
  * We are passed an sqlite3_stmt reference which now we now assume authority for releasing
  * that statement using sqlite3_finalize().
@@ -178,9 +184,16 @@
  * @par Designated Initializer
  * This method is the designated initializer for the PLSqlitePreparedStatement class.
  */
-- (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt queryString: (NSString *) queryString {
+- (id) initWithDatabase: (PLSqliteDatabase *) db 
+             sqliteStmt: (sqlite3_stmt *) sqlite_stmt
+            queryString: (NSString *) queryString 
+         closeAtCheckin: (BOOL) closeAtCheckin 
+{
     if ((self = [super init]) == nil)
         return nil;
+
+    /* Mark whether we should close when the first result set is checked in */
+    _closeAtCheckin = closeAtCheckin;
 
     /* Save our database and statement reference. */
     _database = [db retain];
@@ -353,6 +366,11 @@
 
     _inUse = NO;
     sqlite3_reset(_sqlite_stmt);
+
+    /* If the statement is to be closed on the first checkin, do so, and
+     * release our database resources */
+    if (_closeAtCheckin)
+        [self close];
 }
 
 @end

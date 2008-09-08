@@ -39,6 +39,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 @interface PLSqliteDatabase (PLSqliteDatabasePrivate)
 
+- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement error: (NSError **) outError closeAtCheckin: (BOOL) closeAtCheckin;
 - (sqlite3_stmt *) createStatement: (NSString *) statement error: (NSError **) error;
 
 @end
@@ -191,19 +192,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* from PLDatabase */
 - (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement error: (NSError **) outError {
-    sqlite3_stmt *sqlite_stmt;
-    
-    /* Prepare our statement */
-    sqlite_stmt = [self createStatement: statement error: outError];
-    if (sqlite_stmt == nil)
-        return nil;
-
-    /* Create a new prepared statement.
-     *
-     * MEMORY OWNERSHIP WARNING:
-     * We pass our sqlite3_stmt reference to the PLSqlitePreparedStatement, which now must assume authority for releasing
-     * that statement using sqlite3_finalize(). */
-    return [[[PLSqlitePreparedStatement alloc] initWithDatabase: self sqliteStmt: sqlite_stmt queryString: statement] autorelease];
+    return [self prepareStatement: statement error: outError closeAtCheckin: NO];
 }
 
 /**
@@ -240,10 +229,13 @@ NSString *PLSqliteException = @"PLSqliteException";
     if (stmt == nil)
         return NO;
     
-    /* Bind the arguments */
+    /* Bind the arguments and execute the update */
     [stmt bindParameters: [self arrayWithVaList: args count: [stmt parameterCount]]];
     ret = [stmt executeUpdateAndReturnError: error];
-    
+
+    /* Close the statement */
+    [stmt close];
+
     return ret;
 }
 
@@ -279,7 +271,7 @@ NSString *PLSqliteException = @"PLSqliteException";
     NSObject<PLPreparedStatement> *stmt;
     
     /* Create the statement */
-    stmt = [self prepareStatement: statement error: error];
+    stmt = [self prepareStatement: statement error: error closeAtCheckin: YES];
     if (stmt == nil)
         return NO;
     
@@ -452,6 +444,29 @@ NSString *PLSqliteException = @"PLSqliteException";
 @implementation PLSqliteDatabase (PLSqliteDatabasePrivate)
 
 
+/**
+ * @internal
+ *
+ * Prepare and return a new PLPreparedStatement. If closeAtCheckin is YES, the statement
+ * will be closed upon the first checkin from its child PLSqliteResultSet. This should
+ * only be used when returning a result set directly to an API client, in which case the statement
+ * is not available and can not otherwise be explicitly closed.
+ */
+- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement error: (NSError **) outError closeAtCheckin: (BOOL) closeAtCheckin {
+    sqlite3_stmt *sqlite_stmt;
+    
+    /* Prepare our statement */
+    sqlite_stmt = [self createStatement: statement error: outError];
+    if (sqlite_stmt == nil)
+        return nil;
+    
+    /* Create a new prepared statement.
+     *
+     * MEMORY OWNERSHIP WARNING:
+     * We pass our sqlite3_stmt reference to the PLSqlitePreparedStatement, which now must assume authority for releasing
+     * that statement using sqlite3_finalize(). */
+    return [[[PLSqlitePreparedStatement alloc] initWithDatabase: self sqliteStmt: sqlite_stmt queryString: statement closeAtCheckin: closeAtCheckin] autorelease];
+}
 
 /**
  * @internal
