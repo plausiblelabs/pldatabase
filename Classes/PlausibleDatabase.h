@@ -92,19 +92,6 @@ typedef enum {
 #import "PLSqlitePreparedStatement.h"
 #import "PLSqliteResultSet.h"
 
-#import "PLEntity.h"
-#import "PLEntityProperty.h"
-#import "PLEntityDescription.h"
-
-#import "PLEntityConnectionDelegate.h"
-#import "PLEntityDialect.h"
-#import "PLEntitySession.h"
-#import "PLEntityManager.h"
-#import "PLSqlBuilder.h"
-
-#import "PLSqliteEntityDialect.h"
-#import "PLSqliteEntityConnectionDelegate.h"
-
 #ifdef PL_DB_PRIVATE
 
 @interface PlausibleDatabase : NSObject {
@@ -140,7 +127,6 @@ typedef enum {
  *
  * @section doc_sections Documentation Sections
  * - @subpage exec_sql
- * - @subpage entity_sql
  * - @subpage error_handling
  *
  *
@@ -232,22 +218,6 @@ typedef enum {
  */
 
 /**
- * @page entity_sql Entity Manager Programming Guide
- *
- * @section introduction Introduction
- * The Plausible Database Entity Manager provides an <a href="http://en.wikipedia.org/wiki/Object-relational_mapping">Object Relational Mapping</a> for
- * interacting with the underlying database.
- *
- * @section define_entities Defining Entities
- *
- * @section create_manager Creating an Entity Manager
- *
- * @section create_session Creating a Session
- *
- */
-
-
-/**
  * @page error_handling Error Handling Programming Guide
  *
  * Where a method may return an error, Plausible Database provides access to the underlying cause via an optional NSError argument.
@@ -256,10 +226,6 @@ typedef enum {
  * If you do not wish to report on the error cause, many methods support a simple form that requires no NSError argument.
  *
  * @section Error Domains, Codes, and User Info
- *
- * @subsection entity_errors Entity Manager Errors
- *
- * The entity manager has its own domain for errors, #PLEntityErrorDomain error domain. Entity manager error codes are defined in #PLEntityError.
  *
  * @subsection database_errors Database Errors
  *
