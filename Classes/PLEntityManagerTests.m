@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,7 @@
 }
 @end
 
-@interface PLEntityManagerExampleEntity : NSObject <PLEntity> {
+@interface PLEntityManagerExampleEntity : PLEntity {
 @private
     /** Row id */
     NSNumber *_rowId;
@@ -73,6 +73,20 @@
     STAssertNotNil(entityManager, @"Could not initialize entity manager");
 }
 
+- (void) testOpenSession {
+    NSError *error;
+
+    PLEntitySession *session;
+
+    session = [_manager openSessionAndReturnError: &error];
+    STAssertNotNil(session, @"Could not open session: %@", error);
+    [session close];
+    
+    session = [_manager openSession];
+    STAssertNotNil(session, @"Could not open session");
+    [session close];
+}
+
 - (void) testConnectionDelegate {
     STAssertNotNil([_manager connectionDelegate], @"Could not retrieve connection delegate");
 }
@@ -94,12 +108,13 @@
 @implementation PLEntityManagerExampleEntity
 
 + (PLEntityDescription *) entityDescription {
-    PLEntityDescription *desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"People"];
-    
-    /* Define our columns */
-    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"] isPrimaryKey: YES];
-    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"name" columnName: @"name"]];    
-    return desc;
+    return [PLEntityDescription descriptionForClass: [self class] tableName: @"People" properties:
+        [NSArray arrayWithObjects:
+            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" attributes: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil],
+            [PLEntityProperty propertyWithKey: @"name" columnName: @"name"],
+            nil
+        ]
+    ];
 }
 
 @end

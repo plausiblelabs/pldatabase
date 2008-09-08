@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,16 +31,33 @@
 
 #import "PlausibleDatabase.h"
 
-@interface PLEntityPrimaryKeyTests : SenTestCase
+@interface PLEntityPropertyTests : SenTestCase
 @end
 
-@implementation PLEntityPrimaryKeyTests
+@implementation PLEntityPropertyTests
 
-- (void) testInit {
-    PLEntityPrimaryKey *primaryKey;
+- (void) testInitNotPrimaryKey {
+    PLEntityProperty *propertyDescription;
 
-    primaryKey = [PLEntityPrimaryKey primaryKeyWithPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"]];
-    STAssertNotNil(primaryKey, @"Could not initialize instance");
+    propertyDescription = [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id"];
+    STAssertNotNil(propertyDescription, @"Initializer returned nil");
+
+    STAssertTrue([@"rowId" isEqual: [propertyDescription key]], @"KVC key incorrect");
+    STAssertTrue([@"id" isEqual: [propertyDescription columnName]], @"Column name incorrect");
+    STAssertFalse([propertyDescription isPrimaryKey], @"Property set as primary key");
+    STAssertFalse([propertyDescription isGeneratedValue], @"Property set as generated value");
+}
+
+- (void) testInitPrimaryKey {    
+    PLEntityProperty *propertyDescription;
+    
+    propertyDescription = [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" attributes: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil];
+    STAssertNotNil(propertyDescription, @"Initializer returned nil");
+    
+    STAssertTrue([@"rowId" isEqual: [propertyDescription key]], @"KVC key incorrect");
+    STAssertTrue([@"id" isEqual: [propertyDescription columnName]], @"Column name incorrect");
+    STAssertTrue([propertyDescription isPrimaryKey], @"Property not set to primary key");
+    STAssertTrue([propertyDescription isGeneratedValue], @"Property not set as generated value");
 }
 
 @end

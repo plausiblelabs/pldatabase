@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,10 +62,10 @@
     int32_t rowId;
     
     STAssertTrue([_dialect supportsLastInsertIdentity], nil);
-    STAssertNotNil([_dialect selectLastInsertIdentity], nil);
+    STAssertNotNil([_dialect lastInsertIdentity], nil);
 
     STAssertTrue(([_db executeUpdate: @"INSERT INTO Test (name) VALUES (?)", @"Johnny"]), @"INSERT failed");
-    result = [_db executeQuery: [_dialect selectLastInsertIdentity]];
+    result = [_db executeQuery: [NSString stringWithFormat: @"SELECT %@", [_dialect lastInsertIdentity]]];
 
     STAssertNotNil(result, @"Identity query failed");
     STAssertTrue([result next], @"No identity results returned");

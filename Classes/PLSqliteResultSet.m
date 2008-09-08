@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,10 @@
  * @internal
  *
  * SQLite #PLResultSet implementation.
+ *
+ * @par Thread Safety
+ * PLSqliteResultSet instances implement no locking and must not be shared between threads
+ * without external synchronization.
  */
  @implementation PLSqliteResultSet
 
@@ -42,6 +46,9 @@
  * MEMORY OWNERSHIP WARNING:
  * We are passed an sqlite3_stmt reference owned by the PLSqlitePreparedStatement.
  * It will remain valid insofar as the PLSqlitePreparedStatement reference is retained.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLSqliteResultSet class.
  */
 - (id) initWithPreparedStatement: (PLSqlitePreparedStatement *) stmt 
                   sqliteStatemet: (sqlite3_stmt *) sqlite_stmt
@@ -109,7 +116,7 @@
         [NSException raise: PLSqliteException format: @"Attempt to access already-closed result set."];
 }
 
-// From PLResultSet
+/* From PLResultSet */
 - (BOOL) next {
     [self assertNotClosed];
 
@@ -211,7 +218,7 @@ VALUE_ACCESSORS(NSDate *, date, SQLITE_FLOAT,
 /* string */
 VALUE_ACCESSORS(NSString *, string, SQLITE_TEXT,
                     [NSString stringWithCharacters: sqlite3_column_text16(_sqlite_stmt, columnIndex)
-                                            length: sqlite3_column_bytes16(_sqlite_stmt, columnIndex)])
+                                            length: sqlite3_column_bytes16(_sqlite_stmt, columnIndex) / 2])
 
 /* float */
 VALUE_ACCESSORS(float, float, SQLITE_FLOAT, sqlite3_column_double(_sqlite_stmt, columnIndex))
@@ -222,6 +229,43 @@ VALUE_ACCESSORS(double, double, SQLITE_FLOAT, sqlite3_column_double(_sqlite_stmt
 /* data */
 VALUE_ACCESSORS(NSData *, data, SQLITE_BLOB, [NSData dataWithBytes: sqlite3_column_blob(_sqlite_stmt, columnIndex)
                                                             length: sqlite3_column_bytes(_sqlite_stmt, columnIndex)])
+
+
+/* From PLResultSet */
+- (id) objectForColumnIndex: (int) columnIndex {
+    [self assertNotClosed];
+
+    int columnType = [self validateColumnIndex: columnIndex isNullable: YES];
+    switch (columnType) {
+        case SQLITE_TEXT:
+            return [self stringForColumnIndex: columnIndex];
+
+        case SQLITE_INTEGER:
+            return [NSNumber numberWithLong: [self bigIntForColumnIndex: columnIndex]];
+
+        case SQLITE_FLOAT:
+            return [NSNumber numberWithDouble: [self doubleForColumnIndex: columnIndex]];
+
+        case SQLITE_BLOB:
+            return [self dataForColumnIndex: columnIndex];
+
+        case SQLITE_NULL:
+            return [NSNull null];
+
+        default:
+            [NSException raise: PLDatabaseException format: @"Unhandled SQLite column type %d", columnType];
+    }
+
+    /* Unreachable */
+    abort();
+}
+
+
+/* From PLResultSet */
+- (id) objectForColumn: (NSString *) columnName {
+    return [self objectForColumnIndex: [self columnIndexForName: columnName]];
+}
+
 
 /* from PLResultSet */
 - (BOOL) isNullForColumnIndex: (int) columnIndex {

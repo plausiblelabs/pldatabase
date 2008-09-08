@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,6 +27,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/* Error Domain and Codes */
+extern NSString *PLEntityErrorDomain;
+
+/**
+ * NSError codes in the Plausible Database error domain.
+ * @ingroup enums
+ */
+typedef enum {
+    /** An unknown error has occured. If this code is received, it is a bug, and should be reported. */
+    PLEntityErrorUnknown = 0,
+    
+    /** A database entity returned NO validating an entity property value. */
+    PLEntityValidationError = 1,
+
+    /** The requested entity could not be found. */
+    PLEntityNotFoundError = 2
+} PLEntityError;
+
 @interface PLEntityManager : NSObject {
 @private
     /** Our connection provider */
@@ -38,6 +56,9 @@
 
 - (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) delegate sqlDialect: (PLEntityDialect *) sqlDialect;
 
+- (PLEntitySession *) openSession;
+- (PLEntitySession *) openSessionAndReturnError: (NSError **) outError;
+
 @end
 
 #ifdef PL_DB_PRIVATE
@@ -46,7 +67,7 @@
 - (NSObject<PLEntityConnectionDelegate> *) connectionDelegate;
 - (PLEntityDialect *) dialect;
 
-- (PLEntityDescription *) descriptionForEntity: (Class<PLEntity>) entity;
+- (PLEntityDescription *) descriptionForEntity: (Class) entity;
 
 @end
 #endif /* PL_DB_PRIVATE */

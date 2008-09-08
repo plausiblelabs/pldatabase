@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,68 +27,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <SenTestingKit/SenTestingKit.h>
+
 #import "PlausibleDatabase.h"
 
-/**
- * Represents a single database column.
- */
-@implementation PLEntityPropertyDescription
-
-/**
- * Create and return a description with the provided Key Value Coding key and
- * database column name.
- *
- * @param key KVC key used to access the column value.
- * @param columnName The corresponding database column.
- */
-+ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName {
-    return [[[PLEntityPropertyDescription alloc] initWithKey: key columnName: columnName] autorelease];
-}
-
-/**
- * Initialize with the Key Value Coding key and database column name.
- *
- * @param key KVC key used to access the column value.
- * @param columnName The corresponding database column.
- */
-- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName {
-    if ((self = [super init]) == nil)
-        return nil;
-
-    _key = [key retain];
-    _columnName = [columnName retain];
-    
-    return self;
-}
-
-- (void) dealloc {
-    [_key release];
-    [_columnName release];
-
-    [super dealloc];
-}
-
+@interface PLEntityTests : SenTestCase
 @end
 
-/**
- * @internal
- * Private library methods.
- */
-@implementation PLEntityPropertyDescription (PLEntityPropertyDescriptionLibraryPrivate)
+@implementation PLEntityTests
 
-/**
- * Return the the property's key.
- */
-- (NSString *) key {
-    return _key;
-}
-
-
-/**
- * Return the database column name.
- */
-- (NSString *) columnName {
-    return _columnName;
+- (void) testAbstract {
+    STAssertThrows([PLEntity entityDescription], @"Did not throw abstract method exception");
 }
 
 @end

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,6 +39,6 @@
 - (NSString *) quoteIdentifier: (NSString *) identifier;
 
 - (BOOL) supportsLastInsertIdentity;
-- (NSString *) selectLastInsertIdentity;
+- (NSString *) lastInsertIdentity;
 
 @end

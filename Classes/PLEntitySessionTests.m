@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,15 +32,15 @@
 #import "PlausibleDatabase.h"
 #import "PLMockEntityManager.h"
 
-@interface PLEntityTransactionTests : SenTestCase {
+@interface PLEntitySessionTests : SenTestCase {
 @private
     PLMockEntityManager *_manager;
-    PLEntityTransaction *_tx;
+    PLEntitySession *_tx;
     PLSqliteDatabase *_db;
 }
 @end
 
-@interface PLEntityTransactionExampleEntity : NSObject<PLEntity> {
+@interface PLEntitySessionExampleEntity : PLEntity {
 @private
     NSNumber *_rowId;
     NSString *_firstName;
@@ -55,12 +55,12 @@
 @end
 
 
-@implementation PLEntityTransactionTests
+@implementation PLEntitySessionTests
 
 
 - (void) setUp {
     _manager = [[PLMockEntityManager alloc] init];
-    _tx = [[PLEntityTransaction alloc] initWithEntityManager: _manager error: nil];
+    _tx = [[PLEntitySession alloc] initWithEntityManager: _manager error: nil];
 
     /* Create our schema */
     _db = [[_manager database] retain];
@@ -78,18 +78,20 @@
 }
 
 - (void) testInit {
-    PLEntityTransaction *tx = [[[PLEntityTransaction alloc] initWithEntityManager: _manager error: nil] autorelease];
+    PLEntitySession *tx = [[[PLEntitySession alloc] initWithEntityManager: _manager error: nil] autorelease];
 
     STAssertNotNil(tx, @"Could not initialize transaction");
 }
 
+/* Test insert with a generated primary key */
 - (void) testInsertEntity {
-    PLEntityTransactionExampleEntity *entity;
+    PLEntitySessionExampleEntity *entity;
     NSError *error;
 
     /* Insert the entity */
-    entity = [[[PLEntityTransactionExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
+    entity = [[[PLEntitySessionExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
     STAssertTrue([_tx insertEntity: entity error: &error], @"Could not INSERT entity: %@", error);
+    STAssertNotNil([entity rowId], @"Entity primary key was not populated");
 
     /* Verify that he arrived */
     NSObject<PLResultSet> *rs;
@@ -102,6 +104,53 @@
     [rs close];
 }
 
+/* Test insert with a previously generated primary key */
+- (void) testInsertEntityWithPrimaryKey {
+    PLEntitySessionExampleEntity *entity;
+    NSError *error;
+    
+    /* Insert the entity */
+    entity = [[[PLEntitySessionExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
+    [entity setValue: [NSNumber numberWithInt: 42] forKey: @"rowId"];
+    STAssertTrue([_tx insertEntity: entity error: &error], @"Could not INSERT entity: %@", error);
+    STAssertNotNil([entity rowId], @"Entity primary key was not populated");
+    
+    /* Verify that he arrived */
+    NSObject<PLResultSet> *rs;
+    rs = [_db executeQueryAndReturnError: &error statement: @"SELECT * FROM People WHERE id = ?", [NSNumber numberWithInt: 42]];
+    STAssertNotNil(rs, @"Could not execute query: %@", error);
+    STAssertTrue([rs next], @"No results returned");
+
+    STAssertEquals([rs intForColumn: @"id"], 42, @"Unexpected id value");
+    STAssertTrue([@"Johnny" isEqual: [rs stringForColumn: @"first_name"]], @"Unexpected name value");
+    STAssertTrue([@"Appleseed" isEqual: [rs stringForColumn: @"last_name"]], @"Unexpected name value");
+    [rs close];    
+}
+
+- (void) testDeleteEntity {
+    PLEntitySessionExampleEntity *entity;
+    NSError *error;
+    
+    /* Insert the entity */
+    entity = [[[PLEntitySessionExampleEntity alloc] initWithFirstName: @"Johnny" lastName: @"Appleseed"] autorelease];
+    STAssertTrue([_tx insertEntity: entity error: &error], @"Could not INSERT entity: %@", error);
+    
+    /* Verify that he arrived */
+    NSObject<PLResultSet> *rs;
+    rs = [_db executeQueryAndReturnError: &error statement: @"SELECT * FROM People WHERE first_name = ?", @"Johnny"];
+    STAssertNotNil(rs, @"Could not execute query: %@", error);
+    STAssertTrue([rs next], @"No results returned");
+    [rs close];
+
+    /* Delete the entity */
+    STAssertTrue([_tx deleteEntity: entity error: &error], @"Could not DELETE entity: %@", error);
+
+    /* Verify the entry was deleted */
+    rs = [_db executeQueryAndReturnError: &error statement: @"SELECT * FROM People WHERE first_name = ?", @"Johnny"];
+    STAssertNotNil(rs, @"Could not execute query: %@", error);
+    STAssertFalse([rs next], @"Result returned when not expected");
+    [rs close];
+}
 
 - (void) testInTransaction {
     STAssertFalse([_tx inTransaction], @"Transaction started active");
@@ -143,16 +192,20 @@
 
 @end
 
-@implementation PLEntityTransactionExampleEntity
+@implementation PLEntitySessionExampleEntity
 
 + (PLEntityDescription *) entityDescription {
-    PLEntityDescription *desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"People"];
+    PLEntityDescription *desc;
     
-    /* Define our columns */
-    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"rowId" columnName: @"id"] isPrimaryKey: YES];
-    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"firstName" columnName: @"first_name"]];
-    [desc addPropertyDescription: [PLEntityPropertyDescription descriptionWithKey: @"lastName" columnName: @"last_name"]];
-    
+    desc = [PLEntityDescription descriptionForClass: [self class] tableName: @"People" properties:
+        [NSArray arrayWithObjects:
+            [PLEntityProperty propertyWithKey: @"rowId" columnName: @"id" attributes: PLEntityPAPrimaryKey, PLEntityPAGeneratedValue, nil],
+            [PLEntityProperty propertyWithKey: @"firstName" columnName: @"first_name"],
+            [PLEntityProperty propertyWithKey: @"lastName" columnName: @"last_name"],
+            nil
+        ]
+    ];
+
     return desc;
 }
 

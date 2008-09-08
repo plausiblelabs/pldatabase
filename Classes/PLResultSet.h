@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
 /**
  * Represents a set of results returned by an SQL query.
  *
- * @paragraph Thread Safety
+ * @par Thread Safety
  * PLResultSet instances implement no locking and must not be shared between threads
  * without external synchronization.
  */
@@ -227,5 +227,28 @@
  */
 - (NSData *) dataForColumnIndex: (int) columnIndex;
 
+/**
+ * Return the value of the named column as a Foundation
+ * Objective-C  object, using the database driver's built-in SQL and
+ * Foundation data-type mappings.
+ *
+ * Will throw NSException if the column name is unknown,
+ * or if the column value is NULL.
+ *
+ * @param columnName Name of column value to return.
+ */
+- (id) objectForColumn: (NSString *) columnName;
+
+/**
+ * Return the value of the named column as a Foundation
+ * Objective-C  object, using the database driver's built-in SQL and
+ * Foundation data-type mappings.
+ *
+ * Will throw NSException if the column index is out of range,
+ * or if the column value is NULL.
+ *
+ * @param columnIndex Index of column value to return.
+ */
+- (id) objectForColumnIndex: (int) columnIndex;
 @end
 

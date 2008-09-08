@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -159,15 +159,24 @@
 /**
  * @internal
  * SQLite prepared query implementation.
+ *
+ * @par Thread Safety
+ * PLSqlitePreparedStatement instances implement no locking and must not be shared between threads
+ * without external synchronization.
  */
 @implementation PLSqlitePreparedStatement
 
 /**
+ * @internal
+ *
  * Initialize the prepared statement with an open database and an sqlite3 prepared statement.
  *
  * MEMORY OWNERSHIP WARNING:
  * We are passed an sqlite3_stmt reference which now we now assume authority for releasing
  * that statement using sqlite3_finalize().
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLSqlitePreparedStatement class.
  */
 - (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt queryString: (NSString *) queryString {
     if ((self = [super init]) == nil)
@@ -277,14 +286,14 @@
     PLSqliteArrayParameterStrategy *strategy;
     
     strategy = [[[PLSqliteArrayParameterStrategy alloc] initWithValues: parameters] autorelease];
-    return [self bindParametersWithStrategy: strategy];
+    [self bindParametersWithStrategy: strategy];
 }
 
 - (void) bindParameterDictionary: (NSDictionary *) parameters {
     PLSqliteDictionaryParameterStrategy *strategy;
     
     strategy = [[[PLSqliteDictionaryParameterStrategy alloc] initWithStatement: _sqlite_stmt values: parameters] autorelease];
-    return [self bindParametersWithStrategy: strategy];
+    [self bindParametersWithStrategy: strategy];
 }
 
 

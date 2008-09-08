@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,19 @@
 @implementation PLSqliteEntityDialect
 
 
+/**
+ * Initialize the SQLite PLEntityDialect.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLSqliteEntityDialect class.
+ */
+- (id) init {
+    if ((self = [super init]) == nil)
+        return nil;
+
+    return self;
+}
+
 /*
  * Insert Identity
  */
@@ -45,8 +58,8 @@
 }
 
 /* from PLEntityDialect */
-- (NSString *) selectLastInsertIdentity {
-    return @"SELECT last_insert_rowid()";
+- (NSString *) lastInsertIdentity {
+    return @"last_insert_rowid()";
 }
 
 @end

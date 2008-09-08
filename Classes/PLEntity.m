@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,26 +27,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-@interface PLEntityPropertyDescription : NSObject {
-@private
-    /** KVC key */
-    NSString *_key;
-    
-    /** Database column name */
-    NSString *_columnName;
+#import "PlausibleDatabase.h"
+
+/**
+ * Abstract base class for entities that may be loaded and persisted to and
+ * from a database.
+ *
+ * @par Implementation Requirements
+ * Implementing classes must:
+ * - Provide an entity description via PLEntity::entityDescription
+ * - Support initialization via the no-argument init method.
+ * - Be KVC and KVO compatible.
+ *
+ * @par Determing Changes
+ * In performing updates to the corresponding database rows, only
+ * modified values are written to the database
+ */
+@implementation PLEntity
+
+/**
+ * Returns the entity database description.
+ *
+ * This abstract method must be overridden.
+ */
++ (PLEntityDescription *) entityDescription {
+    [NSException raise:NSGenericException format: @"Method %s is abstract", _cmd];
+
+    // Unreachable
+    abort();
 }
 
-+ (id) descriptionWithKey: (NSString *) key columnName: (NSString *) columnName;
+/**
+ * Designated initializer for the PLEntity superclass.
+ */ 
+- (id) init {
+    if ((self = [super init]) == nil)
+        return nil;
 
-- (id) initWithKey: (NSString *) key columnName: (NSString *) columnName;
+    return self;
+}
+
+/**
+ * Prepares the receiver for service after it has been loaded from the database.
+ *
+ * You may implement this method to perform additional initialization after
+ * an object has been loaded from the database, and declared entity
+ * properties have been populated.
+ */
+- (void) awakeFromDatabase {
+    // Do nothing
+}
 
 @end
-
-#ifdef PL_DB_PRIVATE
-@interface PLEntityPropertyDescription (PLEntityPropertyDescriptionLibraryPrivate)
-
-- (NSString *) key;
-- (NSString *) columnName;
-
-@end
-#endif /* PL_DB_PRIVATE */

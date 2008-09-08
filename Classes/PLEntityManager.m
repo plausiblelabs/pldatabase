@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,9 +29,17 @@
 
 #import "PlausibleDatabase.h"
 
+/** Plausible Database Entity NSError Domain
+ * @ingroup globals */
+NSString *PLEntityErrorDomain = @"com.plausiblelabs.pldatabase.entity";
+
 /**
  * Manages the object relational mapping between a database, and Objective-C objects
  * conforming to the PLEntity protocol.
+ *
+ * @par Thread Safety
+ * PLEntityManager instances implement no locking and must not be shared between threads
+ * without external synchronization. This may change in a future revision of the API.
  */
 @implementation PLEntityManager
 
@@ -40,6 +48,9 @@
  *
  * @param connectionDelegate Delegate responsible for providing database connections.
  * @param sqlDialect The SQL entity dialect for the given database.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLEntityManager class.
  */
 - (id) initWithConnectionDelegate: (NSObject<PLEntityConnectionDelegate> *) connectionDelegate sqlDialect: (PLEntityDialect *) sqlDialect {
     if ((self = [super init]) == nil)
@@ -57,6 +68,30 @@
     [_sqlDialect release];
 
     [super dealloc];
+}
+
+/**
+ * Opens a new entity session.
+ *
+ * @return Returns a new session, or nil if the session could not be opened.
+ * @sa PLEntityManager::openSessionAndReturnError:
+ */
+- (PLEntitySession *) openSession {
+    return [[[PLEntitySession alloc] initWithEntityManager: self error: nil] autorelease];
+}
+
+/**
+ * Opens a new entity session.
+ *
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the session could
+ * not be opened. If no error occurs, this parameter will be left unmodified.
+ * You may specify nil for this parameter, and no error information will be provided.
+ *
+ * @return Returns a new session, or nil if the session could not be opened.
+ */
+- (PLEntitySession *) openSessionAndReturnError: (NSError **) error {
+    return [[[PLEntitySession alloc] initWithEntityManager: self error: error] autorelease];
 }
 
 @end
@@ -92,7 +127,7 @@
  *
  * @todo Implement LRU cache here, if measurements dictate.
  */
-- (PLEntityDescription *) descriptionForEntity: (Class<PLEntity>) entity {
+- (PLEntityDescription *) descriptionForEntity: (Class) entity {
     return [entity entityDescription];
 }
 

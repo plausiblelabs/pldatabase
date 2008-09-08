@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,7 +53,7 @@
 
 - (void) testInsertIdentity {
     STAssertFalse([_dialect supportsLastInsertIdentity], @"Should not support lastInsertIdentity");
-    STAssertNil([_dialect selectLastInsertIdentity], @"");
+    STAssertNil([_dialect lastInsertIdentity], @"");
 }
 
 @end

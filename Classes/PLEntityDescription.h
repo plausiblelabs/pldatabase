@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,33 +32,58 @@
     /** Database table name */
     NSString *_tableName;
 
-    /** Map of column name to PLEntityPropertyDescription */
-    NSMutableDictionary *_columnProperties;
-
+    /** Map of column name to PLEntityProperty */
+    NSDictionary *_columnProperties;
+    
     /** The described entity's class object */
     Class _entityClass;
+
+    /** The described entity's generated primary key property, if any. May be nil */
+    PLEntityProperty *_generatedPrimaryKeyProperty;
 }
 
-+ (PLEntityDescription *) descriptionForClass: (Class) entityClass tableName: (NSString *) tableName;
++ (PLEntityDescription *) descriptionForClass: (Class) entityClass tableName: (NSString *) tableName properties: (NSArray *) properties;
 
-- (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName;
-
-- (void) addPropertyDescription: (PLEntityPropertyDescription *) description;
-
-- (void) addPropertyDescription: (PLEntityPropertyDescription *) description isPrimaryKey: (BOOL) isPrimaryKey;
-
+- (id) initWithClass: (Class) entityClass tableName: (NSString *) tableName properties: (NSArray *) properties;
 
 @end
 
-
 #ifdef PL_DB_PRIVATE
+
+/**
+ * @internal
+ * Implement to filter returned column values from PLEntityDescription::columnValuesForEntity:withFilter:filterContext:
+ *
+ * Must return YES if the value should be included in the result, otherwise NO.
+ *
+ * @ingroup functions
+ */
+typedef BOOL (*PLEntityDescriptionPropertyFilter) (PLEntityProperty *property, void *context);
+
+/*
+ * Pre-packaged filters.
+ */
+extern BOOL PLEntityPropertyFilterAllowAllValues (PLEntityProperty *property, void *context);
+extern BOOL PLEntityPropertyFilterPrimaryKeys (PLEntityProperty *property, void *context);
+extern BOOL PLEntityPropertyFilterGeneratedPrimaryKeys (PLEntityProperty *property, void *context);
+
 @interface PLEntityDescription (PLEntityDescriptionLibraryPrivate)
 
 - (NSString *) tableName;
 
-- (NSDictionary *) columnValuesForEntity: (NSObject<PLEntity> *) entity;
+- (PLEntityProperty *) generatedPrimaryKeyProperty;
+
+- (NSArray *) properties;
+- (NSArray *) propertiesWithFilter: (PLEntityDescriptionPropertyFilter) filter;
+- (NSArray *) propertiesWithFilter: (PLEntityDescriptionPropertyFilter) filter filterContext: (void *) filterContext;
+
+- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity;
+- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter;
+- (NSDictionary *) columnValuesForEntity: (PLEntity *) entity withFilter: (PLEntityDescriptionPropertyFilter) filter filterContext: (void *) filterContext;
 
 - (id) instantiateEntityWithColumnValues: (NSDictionary *) values error: (NSError **) outError;
+
+- (BOOL) updateEntity: (PLEntity *) entity withColumnValues: (NSDictionary *) values error: (NSError **) outError;
 
 @end
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,6 +41,9 @@
  * file path.
  *
  * @param dbPath Path to the sqlite database file.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLSqliteEntityConnectionDelegate class.
  */
 - (id) initWithPath: (NSString *) dbPath {
     if ((self = [super init]) == nil)

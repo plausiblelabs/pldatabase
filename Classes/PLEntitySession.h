@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,12 +27,52 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-@interface PLEntityPrimaryKey : NSObject {
+// Forward-declarations
+@class PLEntityManager;
+@class PLSqlBuilder;
 
+@interface PLEntitySession : NSObject {
+@private
+    /** Our parent entity manager. */
+    PLEntityManager *_entityManager;
+
+    /** The backing database connection */
+    NSObject<PLDatabase> *_database;
+    
+    /** The SQL dialect */
+    PLEntityDialect *_sqlDialect;
+
+    /** The SQL statement builder */
+    PLSqlBuilder *_sqlBuilder;
+
+    /** Marks the current transaction state (in transaction == YES) */
+    BOOL _inTransaction;
 }
 
-+ (PLEntityPrimaryKey *) primaryKeyWithPropertyDescription: (PLEntityPropertyDescription *) propertyDescription;
+/* Sessions should only be created by the PLEntityManager */
+#if PL_DB_PRIVATE
+- (id) initWithEntityManager: (PLEntityManager *) entityManager error: (NSError **) error;
+#endif
 
-- (id) initWithPropertyDescription: (PLEntityPropertyDescription *) propertyDescription;
+- (BOOL) begin;
+- (BOOL) beginAndReturnError: (NSError **) error;
+
+
+- (BOOL) commit;
+- (BOOL) commitAndReturnError: (NSError **) error;
+
+
+- (BOOL) rollback;
+- (BOOL) rollbackAndReturnError: (NSError **) error;
+
+- (BOOL) inTransaction;
+
+- (BOOL) insertEntity: (PLEntity *) entity;
+- (BOOL) insertEntity: (PLEntity *) entity error: (NSError **) error;
+
+- (BOOL) deleteEntity: (PLEntity *) entity;
+- (BOOL) deleteEntity: (PLEntity *) entity error: (NSError **) error;
+
+- (void) close;
 
 @end

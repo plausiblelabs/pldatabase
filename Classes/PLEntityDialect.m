@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,6 +42,10 @@
  * between multiple threads and potentially unrelated database connections.
  *
  * @warning The PLEntityDialect API is experimental and subject to change.
+ *
+ * @par Thread Safety
+ * PLEntityDialect instances must be immutable, and support concurrent
+ * access from multiple threads.
  */
 @implementation PLEntityDialect
 
@@ -49,6 +53,13 @@
     return [NSException exceptionWithName: PLDatabaseException reason: reason userInfo: nil];
 }
 
+
+/**
+ * Initialize the entity dialect.
+ *
+ * @par Designated Initializer
+ * This method is the designated initializer for the PLEntityDialect class.
+ */
 - (id) init {
     if ((self = [super init]) == nil)
         return nil;
@@ -59,7 +70,7 @@
 
     /* Determining Insert Identity */
     if ([self supportsLastInsertIdentity])
-        assert([self selectLastInsertIdentity] != nil);
+        assert([self lastInsertIdentity] != nil);
 
     return self;
 }
@@ -110,18 +121,21 @@
 }
 
 /**
- * Returns the statement used to get the last generated IDENTITY value.
+ * Returns the expression used to get the last generated IDENTITY value.
  *
  * If PLEntityDialect::supportsLastInsertIdentity returns NO, this method may
  * return a nil value.
  *
- * @return Returns a SQL statement that provides the last generated IDENTITY value for the previous INSERT.
+ * @return Returns a SQL expression that provides the last generated IDENTITY value for the previous INSERT.
  *
  * @par Default Value:
  * Method returns nil by default.
  *
+ * @par Example
+ * - For SQLite, this would be "last_insert_rowid()"
+ * - For MySQL, this would be "LAST_INSERT_ID()"
  */
-- (NSString *) selectLastInsertIdentity {
+- (NSString *) lastInsertIdentity {
     return nil;
 }
 

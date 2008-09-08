@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,28 +30,9 @@
 /* Forward declare */
 @class PLEntityDescription;
 
-/**
- * Represents an entity that may be loaded and persisted to and
- * from a database. Implementing classes must support initialization via
- * the init method.
- *
- * XXX TODO Missing documentation
- */
-@protocol PLEntity
-@required
+@interface PLEntity : NSObject
 
-/**
- * Return the entity definition.
- */
 + (PLEntityDescription *) entityDescription;
-
-
-@optional
-/**
- * Classes may implement this method to perform additional initialization after
- * an object has been loaded from the database, and declared entity
- * properties have been populated.
- */
 - (void) awakeFromDatabase;
 
 @end
