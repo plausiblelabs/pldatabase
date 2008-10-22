@@ -92,6 +92,9 @@ typedef enum {
 #import "PLSqlitePreparedStatement.h"
 #import "PLSqliteResultSet.h"
 
+#import "PLDatabaseConnectionProvider.h"
+#import "PLSqliteConnectionProvider.h"
+
 #ifdef PL_DB_PRIVATE
 
 @interface PlausibleDatabase : NSObject {
