@@ -27,30 +27,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import "PlausibleDatabase.h"
+
 /**
- * A protocol for creating, or providing existing PLDatabase connections, and checking those connections back
- * in for re-use upon completion.
+ * The PLDatabaseMigrationDelegate is responsible for applying any migration necessary to update
+ * a database to the latest schema/data required by an application.
  *
  * @par Thread Safety
- * PLDatabaseConnectionProvider instances implement no locking and must not be shared between threads
- * without external synchronization.
+ * PLDatabaseMigrationDelegate instances are not required to implement any locking and must not be
+ * shared between threads.
  */
-@protocol PLDatabaseConnectionProvider <NSObject>
+@protocol PLDatabaseMigrationDelegate <NSObject>
 
 /**
- * Returns a database connection.
+ * Called by the PLDatabaseMigrationManager to perform migrations.
  *
- * @param error A pointer to an NSError object variable. If an error occurs, this
- * pointer will contain an error object indicating why the transaction could not
- * be started.
+ * A transaction will be opened prior to this method being called. The transaction will
+ * be committed upon the return of a success value (YES). If this method returns NO,
+ * the entire transaction will be aborted, and no changes made to the database.
  *
- * @return A database connection, or nil on error.
+ * @param database The database to modify.
+ * @param currentVersion The current version of the database. This always defaults to 0 in an uninitialized database.
+ * @param newVersion Must be used to supply the new version of the database (or the current version, if nothing has changed).
+ * @param outError A pointer to an NSError object variable. If an error occurs, this pointer will contain an error object indicating
+ * why the migration could not be completed. If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * parameter, and no error information will be provided.
  */
-- (NSObject<PLDatabase> *) getConnectionAndReturnError: (NSError **) error;
-
-/**
- * Called to inform the delegate that the given connection may be re-used.
- */
-- (void) closeConnection: (NSObject<PLDatabase> *) connection;
+- (BOOL) migrateDatabase: (NSObject<PLDatabase> *) database currentVersion: (NSInteger) currentVersion newVersion: (NSInteger *) newVersion error: (NSError **) outError;
 
 @end

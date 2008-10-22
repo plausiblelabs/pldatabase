@@ -27,30 +27,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * A protocol for creating, or providing existing PLDatabase connections, and checking those connections back
- * in for re-use upon completion.
- *
- * @par Thread Safety
- * PLDatabaseConnectionProvider instances implement no locking and must not be shared between threads
- * without external synchronization.
- */
-@protocol PLDatabaseConnectionProvider <NSObject>
+@protocol PLDatabaseMigrationDelegate;
 
-/**
- * Returns a database connection.
- *
- * @param error A pointer to an NSError object variable. If an error occurs, this
- * pointer will contain an error object indicating why the transaction could not
- * be started.
- *
- * @return A database connection, or nil on error.
- */
-- (NSObject<PLDatabase> *) getConnectionAndReturnError: (NSError **) error;
+@interface PLDatabaseMigrationManager : NSObject {
+@private
+    /** The connection provider. */
+    id<PLDatabaseConnectionProvider> _connectionProvider;
 
-/**
- * Called to inform the delegate that the given connection may be re-used.
- */
-- (void) closeConnection: (NSObject<PLDatabase> *) connection;
+    /** The version manager used to read/set the database version. */
+    id<PLDatabaseMigrationVersionManager> _versionManager;
+
+    /** The delegate used to perform migrations. */
+    id<PLDatabaseMigrationDelegate> _delegate;
+}
+
+- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) connectionProvider
+                   versionManager: (id<PLDatabaseMigrationVersionManager>) versionManager
+                         delegate: (id<PLDatabaseMigrationDelegate>) delegate;
+
+- (BOOL) migrateAndReturnError: (NSError **) outError;
 
 @end
