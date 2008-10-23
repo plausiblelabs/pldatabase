@@ -44,8 +44,9 @@
 		058ABBC80DE6386000C995C9 /* PLSqliteResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B00DD16BDC001E992F /* PLSqliteResultSet.m */; };
 		058ABCAF0DE63A4000C995C9 /* PlausibleDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */; };
 		058ABCE30DE63A4B00C995C9 /* PlausibleDatabase.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */; };
-		05D196680EAFC9C800F7079D /* PLSqliteMigrationVersionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D196670EAFC9C800F7079D /* PLSqliteMigrationVersionManager.m */; };
 		05D196810EAFD2E700F7079D /* PLSqliteMigrationVersionManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D196800EAFD2E700F7079D /* PLSqliteMigrationVersionManagerTests.m */; };
+		05D198920EB1248400F7079D /* PLSqliteMigrationVersionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D196670EAFC9C800F7079D /* PLSqliteMigrationVersionManager.m */; };
+		05D198930EB1248B00F7079D /* PLSqliteMigrationVersionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D196670EAFC9C800F7079D /* PLSqliteMigrationVersionManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -442,7 +443,6 @@
 				0502A84D0DDE9F81006F4613 /* PLSqlitePreparedStatementTests.m in Sources */,
 				0578D9A50EAEEF4F003F848A /* PLSqliteConnectionProviderTests.m in Sources */,
 				0578D9DE0EAEF1F5003F848A /* PLDatabaseMigrationManagerTests.m in Sources */,
-				05D196680EAFC9C800F7079D /* PLSqliteMigrationVersionManager.m in Sources */,
 				05D196810EAFD2E700F7079D /* PLSqliteMigrationVersionManagerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -457,6 +457,7 @@
 				0502A8450DDE9EDD006F4613 /* PLSqlitePreparedStatement.m in Sources */,
 				0578D99F0EAEEECB003F848A /* PLSqliteConnectionProvider.m in Sources */,
 				0578D9DA0EAEF1EF003F848A /* PLDatabaseMigrationManager.m in Sources */,
+				05D198920EB1248400F7079D /* PLSqliteMigrationVersionManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,6 +471,7 @@
 				058ABBC80DE6386000C995C9 /* PLSqliteResultSet.m in Sources */,
 				0578D99C0EAEEECB003F848A /* PLSqliteConnectionProvider.m in Sources */,
 				0578D9D50EAEF1EF003F848A /* PLDatabaseMigrationManager.m in Sources */,
+				05D198930EB1248B00F7079D /* PLSqliteMigrationVersionManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
