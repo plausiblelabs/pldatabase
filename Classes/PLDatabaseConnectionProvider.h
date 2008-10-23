@@ -46,11 +46,11 @@
  *
  * @return A database connection, or nil on error.
  */
-- (NSObject<PLDatabase> *) getConnectionAndReturnError: (NSError **) error;
+- (id<PLDatabase>) getConnectionAndReturnError: (NSError **) error;
 
 /**
  * Called to inform the delegate that the given connection may be re-used.
  */
-- (void) closeConnection: (NSObject<PLDatabase> *) connection;
+- (void) closeConnection: (id<PLDatabase>) connection;
 
 @end

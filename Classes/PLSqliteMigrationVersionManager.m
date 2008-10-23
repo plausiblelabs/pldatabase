@@ -44,7 +44,7 @@
 
 // from PLDatabaseMigrationVersionManager protocol
 - (BOOL) version: (NSInteger *) version forDatabase: (id<PLDatabase>) database error: (NSError **) outError {
-    NSObject<PLResultSet> *rs;
+    id<PLResultSet> rs;
     
     assert(version != NULL);
     

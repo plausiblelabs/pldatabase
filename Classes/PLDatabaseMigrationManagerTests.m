@@ -61,7 +61,7 @@
     return self;
 }
 
-- (BOOL) migrateDatabase: (NSObject<PLDatabase> *) database 
+- (BOOL) migrateDatabase: (id<PLDatabase>) database 
           currentVersion: (NSInteger) currentVersion 
               newVersion: (NSInteger *) newVersion 
                    error: (NSError **) outError
@@ -93,7 +93,7 @@
  */
 @implementation PLDatabaseMigrationManagerTestsDelegateDoNothingMock
 
-- (BOOL) migrateDatabase: (NSObject<PLDatabase> *) database 
+- (BOOL) migrateDatabase: (id<PLDatabase>) database 
           currentVersion: (NSInteger) currentVersion 
               newVersion: (NSInteger *) newVersion 
                    error: (NSError **) outError
@@ -147,7 +147,7 @@
 - (void) testMigrate {
     NSError *error;
     NSInteger version;
-    NSObject<PLDatabase> *database;
+    id<PLDatabase> database;
 
     database = [_connProvider getConnectionAndReturnError: &error];
     STAssertNotNil(database, @"Could not open database: %@", database);
@@ -185,7 +185,7 @@
     STAssertFalse([dbManager migrateAndReturnError: nil], @"Migration was expected to fail");
 
     /* Verify that our table was not created and the version remains at 0 */
-    NSObject<PLDatabase> *db = [_connProvider getConnectionAndReturnError: nil];
+    id<PLDatabase> db = [_connProvider getConnectionAndReturnError: nil];
     STAssertNotNil(db, @"Could not get db connection");
 
     NSInteger version;
@@ -208,7 +208,7 @@
     dbPath = [_testDir stringByAppendingPathComponent: @"testdb"];
     
     /* Fetch a db connection */
-    NSObject<PLDatabase> *db = [_connProvider getConnectionAndReturnError: &error];
+    id<PLDatabase> db = [_connProvider getConnectionAndReturnError: &error];
     STAssertNotNil(db, @"Could not get db connection: %@", error);
 
     /* Start with a non-zero version */

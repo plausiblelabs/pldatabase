@@ -62,7 +62,7 @@
 }
 
 /* from PLEntityConnectionDelegate */
-- (NSObject<PLDatabase> *) getConnectionAndReturnError: (NSError **) error {
+- (id<PLDatabase>) getConnectionAndReturnError: (NSError **) error {
     PLSqliteDatabase *database;
 
     /* Create and attempt to open */
@@ -78,7 +78,7 @@
 
 
 /* from PLEntityConnectionDelegate */
-- (void) closeConnection: (NSObject<PLDatabase> *) connection {
+- (void) closeConnection: (id<PLDatabase>) connection {
     // Nothing to do, no connection pooling
 }
 

@@ -84,7 +84,7 @@
 
 
 - (void) testPrepareStatement {
-    NSObject<PLPreparedStatement> *stmt;
+    id<PLPreparedStatement> stmt;
 
     /* Create a test table */
     STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a VARCHAR(10), b VARCHAR(20), c BOOL)"], @"Create table failed");
@@ -110,7 +110,7 @@
 
     STAssertTrue([db executeUpdateAndReturnError: &error statement: @"CREATE TABLE test (a VARCHAR(12), b VARCHAR(20))"], @"Create table failed: %@", error);
     
-	NSObject<PLPreparedStatement> *stmt = [db prepareStatement:@"INSERT INTO test (a, b) VALUES(:a, :b)"];
+	id<PLPreparedStatement> stmt = [db prepareStatement:@"INSERT INTO test (a, b) VALUES(:a, :b)"];
 	NSMutableDictionary *dict = [NSMutableDictionary dictionary];
 	[dict setObject:@"test category" forKey:@"a"];
 	[dict setObject:@"test domain" forKey:@"b"];
@@ -136,7 +136,7 @@
     STAssertTrue([db executeUpdateAndReturnError: &error statement: @"CREATE TABLE test (a VARCHAR(12), b VARCHAR(20))"], @"Create table failed: %@", error);
     STAssertTrue(([db executeUpdateAndReturnError: &error statement: @"INSERT INTO test VALUES (?, ?)", @"foo", @"bar"]), @"Data insert failed %@", error);
     
-    NSObject<PLResultSet> *resultSet = [db executeQuery: @"SELECT * FROM test"];
+    id<PLResultSet> resultSet = [db executeQuery: @"SELECT * FROM test"];
 
 	[resultSet close];
 	[db close];
@@ -145,7 +145,7 @@
 
 
 - (void) testExecuteUpdateQueryParams {
-    NSObject<PLResultSet> *rs;
+    id<PLResultSet> rs;
 
     STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Create table failed");
     STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a) VALUES (?)", [NSNumber numberWithInt: 42]]), @"Could not insert row");
@@ -156,14 +156,14 @@
 
 
 - (void) testExecuteQueryNoParameters {
-    NSObject<PLResultSet> *result = [_db executeQuery: @"PRAGMA user_version"];
+    id<PLResultSet> result = [_db executeQuery: @"PRAGMA user_version"];
     STAssertNotNil(result, @"No result returned from query");
     STAssertTrue([result next], @"No rows were returned");
 }
 
 /* Test handling of all supported parameter data types */
 - (void) testParameterHandling {
-	NSObject<PLResultSet> *rs;
+	id<PLResultSet> rs;
 	BOOL ret;
     NSDate *now = [NSDate date];
     const char bytes[] = "This is some example test data";
@@ -251,7 +251,7 @@
 }
 
 - (void) testLastInsertRowId {
-    NSObject<PLResultSet> *rs;
+    id<PLResultSet> rs;
     int64_t rowId;
     
     /* Create test table */

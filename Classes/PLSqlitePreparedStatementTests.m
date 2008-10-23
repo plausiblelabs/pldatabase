@@ -56,15 +56,15 @@
 }
 
 - (void) testParameterCount {
-    NSObject<PLPreparedStatement> *stmt;
+    id<PLPreparedStatement> stmt;
 
     stmt = [_db prepareStatement: @"SELECT * FROM test WHERE name = (?)"];
     STAssertEquals(1, [stmt parameterCount], @"Incorrect parameter count");
 }
 
 - (void) testInUseHandling {
-    NSObject<PLPreparedStatement> *stmt;
-    NSObject<PLResultSet> *rs;
+    id<PLPreparedStatement> stmt;
+    id<PLResultSet> rs;
     
     /* Prepare the statement */
     stmt = [_db prepareStatement: @"SELECT * FROM test WHERE name = ?"];
@@ -84,7 +84,7 @@
 }
 
 - (void) testClose {
-    NSObject<PLPreparedStatement> *stmt;
+    id<PLPreparedStatement> stmt;
 
     stmt = [_db prepareStatement: @"SELECT * FROM test WHERE name = ?"];
     [stmt close];
@@ -94,8 +94,8 @@
 
 /* Test basic update and query support */
 - (void) testUpdateAndQuery {
-    NSObject<PLPreparedStatement> *stmt;
-    NSObject<PLResultSet> *rs;
+    id<PLPreparedStatement> stmt;
+    id<PLResultSet> rs;
 
     /* Prepare the statement */
     stmt = [_db prepareStatement: @"INSERT INTO test (name, color) VALUES (?, ?)"];
@@ -138,7 +138,7 @@
 
 /* Test dictionary-based binding */
 - (void) testBindParameterDictionary {
-    NSObject<PLPreparedStatement> *stmt;
+    id<PLPreparedStatement> stmt;
     NSMutableDictionary *parameters;
 
     /* Prepare the statement */
@@ -154,7 +154,7 @@
     STAssertTrue([stmt executeUpdate], @"INSERT failed");
 
     /* Fetch the inserted data */
-    NSObject<PLResultSet> *rs = [_db executeQuery: @"SELECT * FROM test WHERE color = ?", @"blue"];
+    id<PLResultSet> rs = [_db executeQuery: @"SELECT * FROM test WHERE color = ?", @"blue"];
     STAssertTrue([rs next], @"No data returned");
     STAssertTrue([@"Appleseed" isEqual: [rs stringForColumn: @"name"]], @"Name incorrectly bound");
     STAssertTrue([@"blue" isEqual: [rs stringForColumn: @"color"]], @"Color incorrectly bound");
@@ -163,8 +163,8 @@
 
 /* Test handling of all supported parameter data types */
 - (void) testBindParameters {
-    NSObject<PLPreparedStatement> *stmt;
-    NSObject<PLResultSet> *rs;
+    id<PLPreparedStatement> stmt;
+    id<PLResultSet> rs;
 
     /* Create the data table */
     STAssertTrue([_db executeUpdate: @"CREATE TABLE data ("

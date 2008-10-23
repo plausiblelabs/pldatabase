@@ -39,7 +39,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 @interface PLSqliteDatabase (PLSqliteDatabasePrivate)
 
-- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement error: (NSError **) outError closeAtCheckin: (BOOL) closeAtCheckin;
+- (id<PLPreparedStatement>) prepareStatement: (NSString *) statement error: (NSError **) outError closeAtCheckin: (BOOL) closeAtCheckin;
 - (sqlite3_stmt *) createStatement: (NSString *) statement error: (NSError **) error;
 
 @end
@@ -185,13 +185,13 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 
 /* from PLDatabase */
-- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement {
+- (id<PLPreparedStatement>) prepareStatement: (NSString *) statement {
     return [self prepareStatement: statement error: nil];
 }
 
 
 /* from PLDatabase */
-- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement error: (NSError **) outError {
+- (id<PLPreparedStatement>) prepareStatement: (NSString *) statement error: (NSError **) outError {
     return [self prepareStatement: statement error: outError closeAtCheckin: NO];
 }
 
@@ -221,7 +221,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* varargs version */
 - (BOOL) executeUpdateAndReturnError: (NSError **) error statement: (NSString *) statement args: (va_list) args {
-    NSObject<PLPreparedStatement> *stmt;
+    id<PLPreparedStatement> stmt;
     BOOL ret;
     
     /* Create the statement */
@@ -266,9 +266,9 @@ NSString *PLSqliteException = @"PLSqliteException";
 #pragma mark Execute Query
 
 /* varargs version */
-- (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement args: (va_list) args {
-    NSObject<PLResultSet> *result;
-    NSObject<PLPreparedStatement> *stmt;
+- (id<PLResultSet>) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement args: (va_list) args {
+    id<PLResultSet> result;
+    id<PLPreparedStatement> stmt;
     
     /* Create the statement */
     stmt = [self prepareStatement: statement error: error closeAtCheckin: YES];
@@ -283,8 +283,8 @@ NSString *PLSqliteException = @"PLSqliteException";
 }
 
 
-- (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement, ... {
-    NSObject<PLResultSet> *result;
+- (id<PLResultSet>) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement, ... {
+    id<PLResultSet> result;
     va_list ap;
     
     va_start(ap, statement);
@@ -296,8 +296,8 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 
 /* from PLDatabase. */
-- (NSObject<PLResultSet> *) executeQuery: (NSString *) statement, ... {
-    NSObject<PLResultSet> *result;
+- (id<PLResultSet>) executeQuery: (NSString *) statement, ... {
+    id<PLResultSet> result;
     va_list ap;
     
     va_start(ap, statement);
@@ -348,7 +348,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* from PLDatabase */
 - (BOOL) tableExists: (NSString *) tableName {
-    NSObject<PLResultSet> *rs;
+    id<PLResultSet> rs;
     BOOL exists;
 
     /* If there are any results, the table exists */
@@ -452,7 +452,7 @@ NSString *PLSqliteException = @"PLSqliteException";
  * only be used when returning a result set directly to an API client, in which case the statement
  * is not available and can not otherwise be explicitly closed.
  */
-- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement error: (NSError **) outError closeAtCheckin: (BOOL) closeAtCheckin {
+- (id<PLPreparedStatement>) prepareStatement: (NSString *) statement error: (NSError **) outError closeAtCheckin: (BOOL) closeAtCheckin {
     sqlite3_stmt *sqlite_stmt;
     
     /* Prepare our statement */

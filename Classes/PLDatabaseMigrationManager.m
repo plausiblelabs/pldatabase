@@ -109,7 +109,7 @@
 - (BOOL) migrateAndReturnError: (NSError **) outError {
     NSInteger currentVersion;
     NSInteger newVersion;
-    NSObject<PLDatabase> *db;
+    id<PLDatabase> db;
     
     /* Open the database connection */
     db = [_connectionProvider getConnectionAndReturnError: outError];

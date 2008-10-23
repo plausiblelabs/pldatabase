@@ -60,7 +60,7 @@
 
 - (void) testInitWithPath {
     PLSqliteConnectionProvider *provider;
-    NSObject<PLDatabase> *db;
+    id<PLDatabase> db;
 
     /* Create our delegate and request a connection */
     provider = [[[PLSqliteConnectionProvider alloc] initWithPath: _dbPath] autorelease];

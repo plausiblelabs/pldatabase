@@ -35,7 +35,7 @@
  * @internal
  * Parameter fetching strategy.
  */
-@protocol PLSqliteParameterStrategy
+@protocol PLSqliteParameterStrategy <NSObject>
 
 /**
  * Return the number of available parameters
@@ -260,7 +260,7 @@
  * @internal
  * Bind all parameters, fetching their value using the provided selector.
  */
-- (void) bindParametersWithStrategy: (NSObject<PLSqliteParameterStrategy> *) strategy {
+- (void) bindParametersWithStrategy: (id<PLSqliteParameterStrategy>) strategy {
     [self assertNotInUse];
     
     /* Verify that a complete parameter list was provided */
@@ -342,12 +342,12 @@
 
 
 /* from PLPreparedStatement */
-- (NSObject<PLResultSet> *) executeQuery {
+- (id<PLResultSet>) executeQuery {
     return [self executeQueryAndReturnError: nil];
 }
 
 /* from PLPreparedStatement */
-- (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) outError {
+- (id<PLResultSet>) executeQueryAndReturnError: (NSError **) outError {
     /*
      * Check out a new PLSqliteResultSet statement.
      * At this point, is there any way for the query to actually fail? It has already been compiled and verified.

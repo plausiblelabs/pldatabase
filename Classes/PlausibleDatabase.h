@@ -176,7 +176,7 @@ typedef enum {
  * conforming to PLResultSet will be returned.
  *
  * <pre>
- * NSObject<PLResultSet> *results = [db executeQuery: @"SELECT id FROM example WHERE id = ?", [NSNumber numberWithInteger: 42]];
+ * id<PLResultSet> results = [db executeQuery: @"SELECT id FROM example WHERE id = ?", [NSNumber numberWithInteger: 42]];
  * while ([results next]) {
  *     NSLog(@"Value of column id is %d", [results intForColumn: @"id"]);
  * }
@@ -193,7 +193,7 @@ typedef enum {
  * be constructed using -[PLDatabase prepareStatement:].
  *
  * <pre>
- * NSObject<PLPreparedStatement> *stmt = [db prepareStatement: @"INSERT INTO example (name, color) VALUES (?, ?)"];
+ * id<PLPreparedStatement> stmt = [db prepareStatement: @"INSERT INTO example (name, color) VALUES (?, ?)"];
  
  * // Bind the parameters
  * [stmt bindParameters: [NSArray arrayWithObjects: @"Widget", @"Blue", nil]];
@@ -210,7 +210,7 @@ typedef enum {
  *
  * <pre>
  * // Prepare the statement
- * NSObject<PLPreparedStatement> *stmt = [db prepareStatement: @"INSERT INTO test (name, color) VALUES (:name, :color)"];
+ * id<PLPreparedStatement> stmt = [db prepareStatement: @"INSERT INTO test (name, color) VALUES (:name, :color)"];
  *
  * // Bind the parameters using a dictionary
  * NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithCapacity: 2];

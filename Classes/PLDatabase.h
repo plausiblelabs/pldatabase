@@ -51,7 +51,7 @@
  * PLDatabase instances implement no locking and must not be shared between threads
  * without external synchronization.
  */
-@protocol PLDatabase
+@protocol PLDatabase <NSObject>
 
 /**
  * Test that the connection is active.
@@ -79,7 +79,7 @@
  * @param statement SQL statement to prepare.
  * @return The prepared statement, or nil if it could not be prepared.
  */
-- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement;
+- (id<PLPreparedStatement>) prepareStatement: (NSString *) statement;
 
 /**
  * Prepare and return a new PLPreparedStatement.
@@ -91,7 +91,7 @@
  * parameter, and no error information will be provided.
  * @return The prepared statement, or nil if it could not be prepared.
  */
-- (NSObject<PLPreparedStatement> *) prepareStatement: (NSString *) statement error: (NSError **) outError;
+- (id<PLPreparedStatement>) prepareStatement: (NSString *) statement error: (NSError **) outError;
 
 
 /**
@@ -128,7 +128,7 @@
  * @param statement SQL statement to execute.
  * @return PLResultSet on success, or nil on failure.
  */
-- (NSObject<PLResultSet> *) executeQuery: (NSString *) statement, ...;
+- (id<PLResultSet>) executeQuery: (NSString *) statement, ...;
 
 /**
  * Execute a query, returning a PLResultSet.
@@ -143,7 +143,7 @@
  * @param statement SQL statement to execute.
  * @return PLResultSet on success, or nil on failure.
  */
-- (NSObject<PLResultSet> *) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement, ...;
+- (id<PLResultSet>) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement, ...;
 
 
 /**
