@@ -30,7 +30,7 @@
 #import "PlausibleDatabase.h"
 
 /**
- * Provides new PLSqliteDatabase connections as per the PLEntityConnectionProvider
+ * Provides new PLSqliteDatabase connections as per the PLDatabaseConnectionProvider
  * protocol. This class does no connection pooling, and should be combined
  * with a generic connection pool implementation if pooling is required.
  */
