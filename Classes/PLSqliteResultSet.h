@@ -40,7 +40,7 @@
     uint32_t _columnCount;
 
     /** Cache of column name to column index */
-    NSDictionary *_columnNames;
+    CFDictionaryRef _columnNames;
 }
 
 - (id) initWithPreparedStatement: (PLSqlitePreparedStatement *) stmt sqliteStatemet: (sqlite3_stmt *)sqlite_stmt;

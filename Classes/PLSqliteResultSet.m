@@ -29,6 +29,24 @@
 
 #import "PlausibleDatabase.h"
 
+static const void *plsqlite_rs_value_retain (CFAllocatorRef allocator, const void *value);
+static void plsqlite_rs_value_release (CFAllocatorRef allocator, const void *value);
+static CFStringRef plsqlite_rs_value_copy_description (const void *value);
+static Boolean plsqlite_rs_value_equals (const void *value1, const void *value2);
+
+/**
+ * @internal
+ * Dictionary value callbacks used to store column name to column index mappings.
+ * The index number is stored directly in the item pointer.
+ */
+static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallbacks = {
+    .version = 0,
+    .retain = &plsqlite_rs_value_retain,
+    .release = &plsqlite_rs_value_release,
+    .copyDescription = &plsqlite_rs_value_copy_description,
+    .equal = &plsqlite_rs_value_equals
+};
+
 /**
  * @internal
  *
@@ -64,12 +82,30 @@
     /* Save result information */
     _columnCount = sqlite3_column_count(_sqlite_stmt);
     
-    /* Create a column name cache. Optimization possibility: Using CFDictionary may
-     * provide an optimization here, since dictionary values do not need to be boxed as objects */
-    _columnNames = [[NSMutableDictionary alloc] initWithCapacity: _columnCount];
+    /* Create a column name cache. Using CFDictionary allows us to store the integer index
+     * values without boxing them as objects. iPhone profiling demonstrates not insignificant overhead
+     * using NSDictionary here. */
+    CFMutableDictionaryRef columnNames = CFDictionaryCreateMutable(kCFAllocatorDefault,
+                                                                   _columnCount, 
+                                                                   &kCFTypeDictionaryKeyCallBacks, 
+                                                                   &kPLSqliteResultSetColumnCacheValueCallbacks);
+    _columnNames = columnNames;
     for (int columnIndex = 0; columnIndex < _columnCount; columnIndex++) {
-        NSString *name = [[NSString stringWithUTF8String: sqlite3_column_name(_sqlite_stmt, columnIndex)] lowercaseString];
-        [_columnNames setValue: [NSNumber numberWithInt: columnIndex] forKey: name];
+        /* Fetch the name */
+        CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, 
+                                                     sqlite3_column_name(_sqlite_stmt, columnIndex),
+                                                     kCFStringEncodingUTF8);
+
+        /* Lowercase the name */
+        CFMutableStringRef lower = CFStringCreateMutableCopy(kCFAllocatorDefault, 0, name);
+        CFStringLowercase(lower, NULL);
+
+        /* Set the dictionary value */
+        CFDictionarySetValue(columnNames, lower, (void *) columnIndex);
+
+        /* Clean up */
+        CFRelease(name);
+        CFRelease(lower);
     }
 
     return self;
@@ -80,6 +116,8 @@
     /* 'Check in' our prepared statement reference */
     [self close];
 
+    CFRelease(_columnNames);
+
     [super finalize];
 }
 
@@ -89,7 +127,7 @@
     [self close];
 
     /* Release the column cache. */
-    [_columnNames release];
+    CFRelease(_columnNames);
     
     /* Release the statement. */
     [_stmt release];
@@ -146,9 +184,10 @@
 - (int) columnIndexForName: (NSString *) name {
     [self assertNotClosed];
 
-    NSNumber *number = [_columnNames objectForKey: [name lowercaseString]];
-    if (number != nil)
-        return [number intValue];
+    NSString *key = [name lowercaseString];
+    if (CFDictionaryContainsKey(_columnNames, key)) {
+        return (int) CFDictionaryGetValue(_columnNames, key);
+    }
     
     /* Not found */
     [NSException raise: PLSqliteException format: @"Attempted to access unknown result column %@", name];
@@ -288,4 +327,23 @@ VALUE_ACCESSORS(NSData *, data, SQLITE_BLOB, [NSData dataWithBytes: sqlite3_colu
 
 @end
 
+// from CFDictionaryValueCallBacks
+static const void *plsqlite_rs_value_retain (CFAllocatorRef allocator, const void *value) {
+    // Nothing to do, values are integers
+    return value;
+}
 
+// from CFDictionaryValueCallBacks
+static void plsqlite_rs_value_release (CFAllocatorRef allocator, const void *value) {
+    // Nothing to do, values are integers
+}
+
+// from CFDictionaryValueCallBacks
+static CFStringRef plsqlite_rs_value_copy_description (const void *value) {
+    return CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%p"), value);
+}
+
+// from CFDictionaryValueCallBacks
+static Boolean plsqlite_rs_value_equals (const void *value1, const void *value2) {
+    return (value1 == value2);
+}
