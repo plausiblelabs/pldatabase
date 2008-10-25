@@ -65,7 +65,7 @@
         return nil;
 
     /* Save the delegates/providers */
-    _delegate = [delegate retain];
+    _delegate = delegate; // cyclic reference, can not retain
     _connectionProvider = [connectionProvider retain];
     _versionManager = [versionManager retain];
 
@@ -74,7 +74,6 @@
 
 
 - (void) dealloc {
-    [_delegate release];
     [_connectionProvider release];
     [_versionManager release];
 
