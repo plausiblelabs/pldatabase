@@ -10,6 +10,7 @@
 		0502A8440DDE9EDD006F4613 /* PLSqlitePreparedStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = 0502A8420DDE9EDD006F4613 /* PLSqlitePreparedStatement.h */; };
 		0502A8450DDE9EDD006F4613 /* PLSqlitePreparedStatement.m in Sources */ = {isa = PBXBuildFile; fileRef = 0502A8430DDE9EDD006F4613 /* PLSqlitePreparedStatement.m */; };
 		0502A84D0DDE9F81006F4613 /* PLSqlitePreparedStatementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0502A84C0DDE9F81006F4613 /* PLSqlitePreparedStatementTests.m */; };
+		0518D4750EB6EE8D00201CE4 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0551CA530DCBEB5000E31E46 /* libsqlite3.dylib */; };
 		051D15590DD36FAB0083CC76 /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
 		051D157C0DD377F00083CC76 /* PlausibleDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */; };
 		0551CA780DCBED7A00E31E46 /* PLSqliteDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */; };
@@ -118,6 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0518D4750EB6EE8D00201CE4 /* libsqlite3.dylib in Frameworks */,
 				058ABCAF0DE63A4000C995C9 /* PlausibleDatabase.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

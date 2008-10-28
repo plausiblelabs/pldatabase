@@ -54,6 +54,8 @@
 
 - (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt queryString: (NSString *) queryString closeAtCheckin: (BOOL) closeAtCheckin;
 
+- (void) populateError: (NSError **) error withErrorCode: (PLDatabaseError) errorCode description: (NSString *) localizedDescription;
+
 // DO NOT CALL. Must only be called from PLSqliteResultSet
 - (void) checkinResultSet: (PLSqliteResultSet *) resultSet;
 

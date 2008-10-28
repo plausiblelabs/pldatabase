@@ -58,8 +58,10 @@
 
 - (void) testOpen {
     PLSqliteDatabase *db = [[[PLSqliteDatabase alloc] initWithPath:  @":memory:"] autorelease];
+    STAssertTrue([db sqliteHandle] == NULL, @"The returned database handle is not NULL");
     STAssertTrue([db open], @"Could not open the database");
     STAssertTrue([db goodConnection], @"The database did not report a good connection");
+    STAssertTrue([db sqliteHandle] != NULL, @"The returned database handle is NULL");
     [db close];
 }
 

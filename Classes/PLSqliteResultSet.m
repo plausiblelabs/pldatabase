@@ -158,25 +158,31 @@ static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallba
 - (BOOL) next {
     [self assertNotClosed];
 
+    if ([self nextAndReturnError: nil] == PLResultSetStatusRow)
+        return YES;
+
+    /* This depreciated API can not differentiate between an error or
+     * the end of the result set. */
+    return NO;
+}
+
+- (PLResultSetStatus) nextAndReturnError: (NSError **) error {
+    [self assertNotClosed];
+    
     int ret;
     ret = sqlite3_step(_sqlite_stmt);
     
-    /* No more rows available, return NO. */
+    /* No more rows available. */
     if (ret == SQLITE_DONE)
-        return NO;
+        return PLResultSetStatusDone;
     
-    /* A row is available, return YES. */
+    /* A row is available */
     if (ret == SQLITE_ROW)
-        return YES;
-    
-    /* An error occurred. Log it and throw an exceptions. */
-    NSString *error = [NSString stringWithFormat: @"Error occurred calling next on a PLSqliteResultSet. SQLite error #%d", ret];
-    NSLog(@"%@", error);
+        return PLResultSetStatusRow;
 
-    [NSException raise: PLSqliteException format: @"%@", error];
-
-    /* Unreachable */
-    abort();
+    /* An error has occured */
+    [_stmt populateError: error withErrorCode: PLDatabaseErrorQueryFailed description: NSLocalizedString(@"Could not retrieve the next result row", @"Generic result row error")];
+    return PLResultSetStatusError;
 }
 
 

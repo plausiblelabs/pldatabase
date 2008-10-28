@@ -47,6 +47,7 @@ extern NSString *PLSqliteException;
 - (BOOL) open;
 - (BOOL) openAndReturnError: (NSError **) error;
 
+- (sqlite3 *) sqliteHandle;
 - (int64_t) lastInsertRowId;
 
 @end

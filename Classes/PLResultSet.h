@@ -28,6 +28,22 @@
  */
 
 /**
+ * Result values returned when iterating PLResetSet rows.
+ *
+ * @ingroup constants
+ */
+typedef enum {
+    /** No further rows available */
+    PLResultSetStatusDone = 0,
+
+    /** An additional row is available. */
+    PLResultSetStatusRow = 1,
+
+    /** An error occured retrieving the row. */
+    PLResultSetStatusError = 2
+} PLResultSetStatus;
+
+/**
  * Represents a set of results returned by an SQL query.
  *
  * @par Thread Safety
@@ -38,11 +54,29 @@
 
 /**
  * Move the result cursor to the next available row. If no further rows
- * are available, returns NO.
+ * are available or an error occurs, returns NO.
  *
- * @return YES if the cursor was moved to the next row, NO if no further rows were available.
+ * @return YES if the cursor was moved to the next row, NO if no further rows were available or an error
+ * has occured.
+ *
+ * @deprecated This method fails to differentiate between end of rows and an error condition. New code should be
+ * written to use -[PLResultSet nextAndReturnError:].
  */
 - (BOOL) next;
+
+/**
+ * Move the result cursor to the next available row. If no further rows
+ * are available or an error occurs, returns NO.
+ *
+ * @param outError A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the statement could not be executed.
+ * If no error occurs, this parameter's value will not be modified. You may specify nil for this
+ * parameter, and no error information will be provided.
+ *
+ * @return Returns #PLResultSetStatusRow if the next row is available, or #PLResultSetStatusDone if no
+ * further rows are available. If an error occurs, #PLResultSetStatusError will be returned.
+ */
+- (PLResultSetStatus) nextAndReturnError: (NSError **) error;
 
 /**
  * Close the result set, and return any held database resources. After calling,

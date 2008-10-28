@@ -63,6 +63,18 @@
     STAssertTrue([_db rollbackTransaction], @"Could not roll back, was result actually closed?");
 }
 
+- (void) testNextErrorHandling {
+    NSError *error;
+
+    /* Trigger an error by over iterating the result set. (Is there a better way to trigger this error?) */
+    id<PLResultSet> result = [_db executeQuery: @"PRAGMA user_version"];
+    [result nextAndReturnError: nil];
+    [result nextAndReturnError: nil];
+    [result nextAndReturnError: nil];
+    STAssertEquals(PLResultSetStatusError, [result nextAndReturnError: &error], @"Result set did not return an error");
+}
+
+
 - (void) testColumnIndexForName {
     id<PLResultSet> result = [_db executeQuery: @"PRAGMA user_version"];
     STAssertEquals(0, [result columnIndexForName: @"user_version"], @"user_version column not found");

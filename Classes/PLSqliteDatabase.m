@@ -29,8 +29,8 @@
 
 #import "PlausibleDatabase.h"
 
-/* Keep trying for up to 5 seconds */
-#define SQLITE_BUSY_TIMEOUT 5000
+/* Keep trying for up to 10 minutes. We do not modify the busy timeout handler. */
+#define PL_SQLITE_BUSY_TIMEOUT 10 * 60 * 1000
 
 
 /** A generic SQLite exception. */
@@ -137,7 +137,7 @@ NSString *PLSqliteException = @"PLSqliteException";
     }
     
     /* Set a busy timeout */
-    err = sqlite3_busy_timeout(_sqlite, SQLITE_BUSY_TIMEOUT);
+    err = sqlite3_busy_timeout(_sqlite, PL_SQLITE_BUSY_TIMEOUT);
     if (err != SQLITE_OK) {
         /* This should never happen. */
         [self populateError: error
@@ -160,6 +160,13 @@ NSString *PLSqliteException = @"PLSqliteException";
     return YES;
 }
 
+/**
+ * Returns a borrowed reference to the underlying SQLite3 database handle.
+ * If the database has not yet been opened, this method will return NULL.
+*/
+- (sqlite3 *) sqliteHandle {
+    return _sqlite;
+}
 
 /* From PLDatabase */
 - (void) close {
@@ -402,7 +409,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 /**
  * @internal
  *
- * Populate an NSError (if not nil) and log it.
+ * Populate an NSError (if not nil) and log it, filling in the last database error code and message.
  *
  * @param error Pointer to NSError instance to populate. If nil, the error message will be logged instead.
  * @param errorCode A PLDatabaseError error code.

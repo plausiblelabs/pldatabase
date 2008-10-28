@@ -29,7 +29,8 @@
 
 #ifdef PL_DB_PRIVATE
 
-@interface PLSqliteResultSet : NSObject <PLResultSet> {    
+@interface PLSqliteResultSet : NSObject <PLResultSet> {
+@private
     /** The prepared statement */
     PLSqlitePreparedStatement *_stmt;
     

@@ -247,6 +247,21 @@
     _sqlite_stmt = nil;
 }
 
+/**
+ * @internal
+ *
+ * Populate an NSError (if not nil) and log it, using this prepared statement's query string
+ * and database connection. The vendor error code and message will be populated.
+ *
+ * Should only be called by PLSqliteResultSet.
+ *
+ * @param error Pointer to NSError instance to populate. If nil, the error message will be logged instead.
+ * @param errorCode A PLDatabaseError error code.
+ * @param description A localized description of the error message.
+ */
+- (void) populateError: (NSError **) error withErrorCode: (PLDatabaseError) errorCode description: (NSString *) localizedDescription {
+    [_database populateError: error withErrorCode: errorCode description: localizedDescription queryString: _queryString];
+}
 
 /* from PLPreparedStatement */
 - (int) parameterCount {
