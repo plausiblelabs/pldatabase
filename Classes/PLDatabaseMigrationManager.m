@@ -50,14 +50,17 @@
  * Manages database migration and initialization.
  *
  * @param connectionProvider Database conection provider.
+ * @param lockManager An object implementing the PLDatabaseMigrationTransactionManager protocol.
  * @param versionManager An object implementing the PLDatabaseMigrationVersionManager protocol.
  * @param delegate An object implementing the formal PLDatabaseMigrationDelegate protocol.
  */
 - (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) connectionProvider
+                      transactionManager: (id<PLDatabaseMigrationTransactionManager>) lockManager
                    versionManager: (id<PLDatabaseMigrationVersionManager>) versionManager
-                         delegate: (id<PLDatabaseMigrationDelegate>) delegate
+                         delegate: (id<PLDatabaseMigrationDelegate>) delegate;
 {
     assert(delegate != nil);
+    assert(lockManager != nil);
     assert(versionManager != nil);
     assert(connectionProvider != nil);
 
@@ -67,6 +70,7 @@
     /* Save the delegates/providers */
     _delegate = delegate; // cyclic reference, can not retain
     _connectionProvider = [connectionProvider retain];
+    _txManager = [lockManager retain];
     _versionManager = [versionManager retain];
 
     return self;
@@ -75,6 +79,7 @@
 
 - (void) dealloc {
     [_connectionProvider release];
+    [_txManager release];
     [_versionManager release];
 
     [super dealloc];
@@ -117,7 +122,7 @@
     }
 
     /* Start a transaction, we'll do *all modifications* within this one transaction */
-    if (![db beginTransactionAndReturnError: outError])
+    if (![_txManager beginExclusiveTransactionForDatabase: db error: outError])
         goto cleanup;
 
     /* Fetch the current version. We default the new version to the current version -- failure to do so
@@ -135,7 +140,7 @@
     if (![_versionManager setVersion: newVersion forDatabase: db error: outError])
         goto rollback;
 
-    if (![db commitTransactionAndReturnError: outError])
+    if (![_txManager commitTransactionForDatabase: db error: outError])
         goto rollback;
 
     /* Return our connection to the provider */
@@ -145,7 +150,7 @@
     return YES;
 
 rollback:
-    [db rollbackTransaction];
+    [_txManager rollbackTransactionForDatabase: db error: nil];
 cleanup:
     [_connectionProvider closeConnection: db];
     return NO;

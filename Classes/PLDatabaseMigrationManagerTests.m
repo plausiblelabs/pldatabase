@@ -124,7 +124,10 @@
 
     _connProvider = [[PLSqliteConnectionProvider alloc] initWithPath: [_testDir stringByAppendingPathComponent: @"shared-test-db"]];
     _versionManager = [[PLSqliteMigrationVersionManager alloc] init];
-    _dbManager = [[PLDatabaseMigrationManager alloc] initWithConnectionProvider: _connProvider versionManager: _versionManager delegate: delegate];
+    _dbManager = [[PLDatabaseMigrationManager alloc] initWithConnectionProvider: _connProvider
+                                                                    transactionManager: _versionManager
+                                                                 versionManager: _versionManager 
+                                                                       delegate: delegate];
     STAssertNotNil(_dbManager, @"Could not create a new db manager");
 }
 
@@ -179,7 +182,10 @@
     
     /* Set up our delegate */
     delegate = [[[PLDatabaseMigrationManagerTestsDelegateMock alloc] initWithNewVersion: TEST_DATABASE_VERSION shouldFail: YES] autorelease];    
-    dbManager = [[[PLDatabaseMigrationManager alloc] initWithConnectionProvider: _connProvider versionManager: _versionManager delegate: delegate] autorelease];
+    dbManager = [[[PLDatabaseMigrationManager alloc] initWithConnectionProvider: _connProvider 
+                                                                    transactionManager: _versionManager
+                                                                 versionManager: _versionManager 
+                                                                       delegate: delegate] autorelease];
 
     /* Run the migration (will fail, should roll back)  */
     STAssertFalse([dbManager migrateAndReturnError: nil], @"Migration was expected to fail");
@@ -217,7 +223,10 @@
 
     /* Set up our delegate (will fail, should roll back) */
     delegate = [[[PLDatabaseMigrationManagerTestsDelegateDoNothingMock alloc] init] autorelease];
-    dbManager = [[[PLDatabaseMigrationManager alloc] initWithConnectionProvider: _connProvider versionManager: _versionManager delegate: delegate] autorelease];
+    dbManager = [[[PLDatabaseMigrationManager alloc] initWithConnectionProvider: _connProvider
+                                                                    transactionManager: _versionManager
+                                                                 versionManager: _versionManager 
+                                                                       delegate: delegate] autorelease];
     
     /* Run the migration */
     STAssertTrue([dbManager migrateAndReturnError: &error], @"Migration failed: %@", error);

@@ -107,6 +107,7 @@
 		058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlausibleDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		058ABB650DE6361300C995C9 /* PlausibleDatabase-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PlausibleDatabase-Info.plist"; sourceTree = "<group>"; };
 		05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLResultSet.h; sourceTree = "<group>"; };
+		05BE86970EC2D7BE00CCAA2A /* PLDatabaseMigrationTransactionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabaseMigrationTransactionManager.h; sourceTree = "<group>"; };
 		05D196660EAFC9C800F7079D /* PLSqliteMigrationVersionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteMigrationVersionManager.h; sourceTree = "<group>"; };
 		05D196670EAFC9C800F7079D /* PLSqliteMigrationVersionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteMigrationVersionManager.m; sourceTree = "<group>"; };
 		05D196800EAFD2E700F7079D /* PLSqliteMigrationVersionManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteMigrationVersionManagerTests.m; sourceTree = "<group>"; };
@@ -184,6 +185,7 @@
 				0578D9CF0EAEF1EF003F848A /* PLDatabaseMigrationManager.h */,
 				0578D9D00EAEF1EF003F848A /* PLDatabaseMigrationManager.m */,
 				0578D9D10EAEF1EF003F848A /* PLDatabaseMigrationManagerTests.m */,
+				05BE86970EC2D7BE00CCAA2A /* PLDatabaseMigrationTransactionManager.h */,
 				0578DA3C0EAF02A5003F848A /* PLDatabaseMigrationVersionManager.h */,
 				0578D9D20EAEF1EF003F848A /* PLDatabaseMigrationDelegate.h */,
 				0578DA440EAF03DB003F848A /* SQLite */,

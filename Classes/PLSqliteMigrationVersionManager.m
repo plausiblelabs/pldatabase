@@ -33,6 +33,8 @@
  * Implements database schema versioning using SQLite's per-database user_version field
  * (see http://www.sqlite.org/pragma.html#version).
  *
+ * Additionally implements the requisite SQLite locking.
+ *
  * @warning This class depends on, and modifies, the SQLite per-database user_version
  * field. Users of this class must not modify or rely upon the value of the user_version. This class
  * will not correctly function if the user_version is externally modified.
@@ -41,6 +43,24 @@
  * PLSqliteMigrationVersionManager instances implement no locking and must not be shared between threads.
  */
 @implementation PLSqliteMigrationVersionManager
+
+// from PLDatabaseMigrationVersionManager protocol
+- (BOOL) beginExclusiveTransactionForDatabase: (id<PLDatabase>) database error: (NSError **) outError {
+    return [database executeUpdateAndReturnError: outError statement: @"BEGIN EXCLUSIVE TRANSACTION"];
+}
+
+
+// from PLDatabaseMigrationVersionManager protocol
+- (BOOL) rollbackTransactionForDatabase: (id<PLDatabase>) database error: (NSError **) outError {
+    return [database rollbackTransactionAndReturnError: outError];
+}
+
+
+// from PLDatabaseMigrationVersionManager protocol
+- (BOOL) commitTransactionForDatabase: (id<PLDatabase>) database error: (NSError **) outError {
+    return [database commitTransactionAndReturnError: outError];
+}
+
 
 // from PLDatabaseMigrationVersionManager protocol
 - (BOOL) version: (NSInteger *) version forDatabase: (id<PLDatabase>) database error: (NSError **) outError {

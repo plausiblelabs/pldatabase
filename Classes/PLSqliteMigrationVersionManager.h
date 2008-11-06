@@ -29,6 +29,6 @@
 
 #import "PlausibleDatabase.h"
 
-@interface PLSqliteMigrationVersionManager : NSObject <PLDatabaseMigrationVersionManager>
+@interface PLSqliteMigrationVersionManager : NSObject <PLDatabaseMigrationVersionManager, PLDatabaseMigrationTransactionManager>
 
 @end

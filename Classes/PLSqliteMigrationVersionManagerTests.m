@@ -81,4 +81,32 @@
     STAssertEquals(5, version, @"Version should be 5, is %d", version);
 }
 
+- (void) testBeginAndRollbackTransaction {
+    NSError *error;
+
+    STAssertTrue([_versionManager beginExclusiveTransactionForDatabase: _db error: &error], @"Could not start a transaction: %@", error);
+
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a) VALUES (?)", [NSNumber numberWithInt: 42]]), @"Inserting test data failed");
+
+    STAssertTrue([_db tableExists: @"test"], @"Table was not created");
+    STAssertTrue([_versionManager rollbackTransactionForDatabase: _db error: &error], @"Could not roll back");
+    STAssertFalse([_db tableExists: @"test"], @"Table was not rolled back");
+}
+
+
+- (void) testBeginAndCommitTransaction {
+    NSError *error;
+
+    STAssertTrue([_versionManager beginExclusiveTransactionForDatabase: _db error: &error], @"Could not start a transaction: %@", error);
+
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a) VALUES (?)", [NSNumber numberWithInt: 42]]), @"Inserting test data failed");
+    STAssertTrue([_db tableExists: @"test"], @"Table was not created");
+
+    STAssertTrue([_versionManager commitTransactionForDatabase: _db error: &error], @"Could not commit transaction");
+    
+    STAssertTrue([_db tableExists: @"test"], @"Table was not comitted");
+}
+
 @end

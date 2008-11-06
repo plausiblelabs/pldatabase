@@ -34,6 +34,9 @@
     /** The connection provider. */
     id<PLDatabaseConnectionProvider> _connectionProvider;
 
+    /** Lock manager used to start/commit transactions */
+    id<PLDatabaseMigrationTransactionManager> _txManager;
+
     /** The version manager used to read/set the database version. */
     id<PLDatabaseMigrationVersionManager> _versionManager;
 
@@ -42,6 +45,7 @@
 }
 
 - (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) connectionProvider
+                      transactionManager: (id<PLDatabaseMigrationTransactionManager>) lockManager
                    versionManager: (id<PLDatabaseMigrationVersionManager>) versionManager
                          delegate: (id<PLDatabaseMigrationDelegate>) delegate;
 

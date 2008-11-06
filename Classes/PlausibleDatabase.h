@@ -96,6 +96,7 @@ typedef enum {
 #import "PLSqliteConnectionProvider.h"
 
 #import "PLDatabaseMigrationVersionManager.h"
+#import "PLDatabaseMigrationTransactionManager.h"
 #import "PLDatabaseMigrationManager.h"
 #import "PLDatabaseMigrationDelegate.h"
 
