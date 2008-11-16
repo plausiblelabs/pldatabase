@@ -53,6 +53,6 @@
  * why the migration could not be completed. If no error occurs, this parameter will be left unmodified. You may specify nil for this
  * parameter, and no error information will be provided.
  */
-- (BOOL) migrateDatabase: (id<PLDatabase>) database currentVersion: (NSInteger) currentVersion newVersion: (NSInteger *) newVersion error: (NSError **) outError;
+- (BOOL) migrateDatabase: (id<PLDatabase>) database currentVersion: (int) currentVersion newVersion: (int *) newVersion error: (NSError **) outError;
 
 @end

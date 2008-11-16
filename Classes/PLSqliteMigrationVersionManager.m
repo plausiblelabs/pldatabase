@@ -63,7 +63,7 @@
 
 
 // from PLDatabaseMigrationVersionManager protocol
-- (BOOL) version: (NSInteger *) version forDatabase: (id<PLDatabase>) database error: (NSError **) outError {
+- (BOOL) version: (int *) version forDatabase: (id<PLDatabase>) database error: (NSError **) outError {
     id<PLResultSet> rs;
     
     assert(version != NULL);
@@ -84,7 +84,7 @@
 
 
 // from PLDatabaseMigrationVersionManager protocol
-- (BOOL) setVersion: (NSInteger) version forDatabase: (id<PLDatabase>) database error: (NSError **) outError {    
+- (BOOL) setVersion: (int) version forDatabase: (id<PLDatabase>) database error: (NSError **) outError {    
     /* NOTE! We use stringWithFormat because:
      *   A) It's safe (only inserting an integer)
      *   B) Pragma doesn't seem to work with prepared statements.

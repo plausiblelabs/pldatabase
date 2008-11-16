@@ -30,6 +30,7 @@
 
 /* Dependencies */
 #import <Foundation/Foundation.h>
+#import <AvailabilityMacros.h>
 
 /**
  * @defgroup functions Plausible Database Functions Reference
@@ -81,7 +82,6 @@ typedef enum {
     /** The provided SQL statement was invalid. */
     PLDatabaseErrorInvalidStatement = 3,
 } PLDatabaseError;
-
 
 /* Library Includes */
 #import "PLResultSet.h"

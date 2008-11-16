@@ -282,10 +282,7 @@
     if ([strategy count] != _parameterCount)
         [NSException raise: PLSqliteException 
                     format: @"%@ prepared statement provided invalid parameter count (expected %d, but %d were provided)", [self class], _parameterCount, [strategy count]];
-    
-    /* Clear any existing bindings */
-    sqlite3_clear_bindings(_sqlite_stmt);
-    
+
     /* Sqlite counts parameters starting at 1. */
     for (int valueIndex = 1; valueIndex <= _parameterCount; valueIndex++) {
         /* (Note that NSArray indexes from 0, so we subtract one to get the current value) */

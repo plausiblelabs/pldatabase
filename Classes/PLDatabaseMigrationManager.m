@@ -111,8 +111,8 @@
  * will be rolled back.
  */
 - (BOOL) migrateAndReturnError: (NSError **) outError {
-    NSInteger currentVersion;
-    NSInteger newVersion;
+    int currentVersion;
+    int newVersion;
     id<PLDatabase> db;
     
     /* Open the database connection */

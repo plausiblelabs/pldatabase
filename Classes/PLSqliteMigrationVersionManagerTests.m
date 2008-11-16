@@ -56,7 +56,7 @@
 
 - (void) tearDown {
     /* Remove the temporary database file */
-    STAssertTrue([[NSFileManager defaultManager] removeItemAtPath: _dbPath error: nil], @"Could not clean up database %@", _dbPath);
+    STAssertTrue([[NSFileManager defaultManager] removeFileAtPath: _dbPath handler: nil], @"Could not clean up database %@", _dbPath);
     
     /* Release our objects */
     [_dbPath release];
@@ -66,7 +66,7 @@
 
 - (void) testDefaultVersion {
     NSError *error;
-    NSInteger version;
+    int version;
 
     STAssertTrue([_versionManager version: &version forDatabase: _db error: &error], @"Could not retrieve version: %@", error);
     STAssertEquals(0, version, @"Default version should be 0, is %d", version);
@@ -74,7 +74,7 @@
 
 - (void) testSetGetVersion {
     NSError *error;
-    NSInteger version;
+    int version;
     
     STAssertTrue([_versionManager setVersion: 5 forDatabase: _db error: &error], @"Could not set version: %@", error);
     STAssertTrue([_versionManager version: &version forDatabase: _db error: &error], @"Could not retrieve version: %@", error);

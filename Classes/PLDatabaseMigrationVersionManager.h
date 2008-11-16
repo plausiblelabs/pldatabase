@@ -52,7 +52,7 @@
  * If no error occurs, this parameter will be left unmodified. You may specify nil for this
  * parameter, and no error information will be provided.
  */
-- (BOOL) version: (NSInteger *) version forDatabase: (id<PLDatabase>) database error: (NSError **) outError;
+- (BOOL) version: (int *) version forDatabase: (id<PLDatabase>) database error: (NSError **) outError;
 
 /**
  * Set the database's migration version, returning YES on success, or NO on failure.
@@ -68,6 +68,6 @@
  * If no error occurs, this parameter will be left unmodified. You may specify nil for this
  * parameter, and no error information will be provided.
  */
-- (BOOL) setVersion: (NSInteger) version forDatabase: (id<PLDatabase>) database error: (NSError **) outError;
+- (BOOL) setVersion: (int) version forDatabase: (id<PLDatabase>) database error: (NSError **) outError;
 
 @end

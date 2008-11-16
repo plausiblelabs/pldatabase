@@ -44,14 +44,14 @@
 
 @interface PLDatabaseMigrationManagerTestsDelegateMock : NSObject <PLDatabaseMigrationDelegate> {
 @private
-    NSInteger _newVersion;
+    int _newVersion;
     BOOL _shouldFail;
 }
 @end
 
 @implementation PLDatabaseMigrationManagerTestsDelegateMock
 
-- (id) initWithNewVersion: (NSInteger) newVersion shouldFail: (BOOL) shouldFail {
+- (id) initWithNewVersion: (int) newVersion shouldFail: (BOOL) shouldFail {
     if((self = [super init]) == nil)
         return nil;
 
@@ -62,8 +62,8 @@
 }
 
 - (BOOL) migrateDatabase: (id<PLDatabase>) database 
-          currentVersion: (NSInteger) currentVersion 
-              newVersion: (NSInteger *) newVersion 
+          currentVersion: (int) currentVersion 
+              newVersion: (int *) newVersion 
                    error: (NSError **) outError
 {
     *newVersion = _newVersion;
@@ -94,8 +94,8 @@
 @implementation PLDatabaseMigrationManagerTestsDelegateDoNothingMock
 
 - (BOOL) migrateDatabase: (id<PLDatabase>) database 
-          currentVersion: (NSInteger) currentVersion 
-              newVersion: (NSInteger *) newVersion 
+          currentVersion: (int) currentVersion 
+              newVersion: (int *) newVersion 
                    error: (NSError **) outError
 {
     /* Do nothing */
@@ -114,10 +114,7 @@
 
     /* Create a temporary directory. Secure, as the user owns enclosing directory. */
     _testDir = [[NSTemporaryDirectory() stringByAppendingPathComponent: [[NSProcessInfo processInfo] globallyUniqueString]] retain];
-    STAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath: _testDir
-                                           withIntermediateDirectories: YES 
-                                                            attributes: nil 
-                                                                 error: &error], @"Could not create test directory: %@", error);
+    STAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath: _testDir attributes: nil], @"Could not create test directory: %@", error);
     
     /* A new database manager */
     PLDatabaseMigrationManagerTestsDelegateMock *delegate = [[[PLDatabaseMigrationManagerTestsDelegateMock alloc] initWithNewVersion: TEST_DATABASE_VERSION shouldFail: NO] autorelease];
@@ -137,7 +134,7 @@
 	BOOL result;
     
 	/* Clean out the test directory */
-	result = [[NSFileManager defaultManager] removeItemAtPath:_testDir error: &error];
+    result = [[NSFileManager defaultManager] removeFileAtPath: _testDir handler: nil];
 	STAssertTrue(result, @"Deletion of test directory returned error: %@", error);
     
 	[_testDir release];
@@ -149,7 +146,7 @@
 
 - (void) testMigrate {
     NSError *error;
-    NSInteger version;
+    int version;
     id<PLDatabase> database;
 
     database = [_connProvider getConnectionAndReturnError: &error];
@@ -194,7 +191,7 @@
     id<PLDatabase> db = [_connProvider getConnectionAndReturnError: nil];
     STAssertNotNil(db, @"Could not get db connection");
 
-    NSInteger version;
+    int version;
     STAssertTrue([_versionManager version: &version forDatabase: db error: &error], @"Could not retrieve database version: %@", error);
     STAssertEquals(0, version, @"The transaction was not rolled back, version is not 0");
     STAssertFalse([db tableExists: @"testtable"], @"The transaction was not rolled back, table exists");
@@ -232,7 +229,7 @@
     STAssertTrue([dbManager migrateAndReturnError: &error], @"Migration failed: %@", error);
     
     /* Verify that the version remains at TEST_DATABASE_VERSION */
-    NSInteger version;
+    int version;
     STAssertTrue([_versionManager version: &version forDatabase: db error: &error], @"Could not retrieve database version: %@", error);
     STAssertEquals(TEST_DATABASE_VERSION, version, @"The database version was reset");
 

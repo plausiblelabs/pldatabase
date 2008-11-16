@@ -672,7 +672,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
 				PREBINDING = NO;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.4;
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Werror",
@@ -692,7 +692,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
 				PREBINDING = NO;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.4;
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Werror",
