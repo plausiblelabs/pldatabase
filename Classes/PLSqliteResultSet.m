@@ -82,32 +82,6 @@ static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallba
     /* Save result information */
     _columnCount = sqlite3_column_count(_sqlite_stmt);
     
-    /* Create a column name cache. Using CFDictionary allows us to store the integer index
-     * values without boxing them as objects. iPhone profiling demonstrates not insignificant overhead
-     * using NSDictionary here. */
-    CFMutableDictionaryRef columnNames = CFDictionaryCreateMutable(kCFAllocatorDefault,
-                                                                   _columnCount, 
-                                                                   &kCFTypeDictionaryKeyCallBacks, 
-                                                                   &kPLSqliteResultSetColumnCacheValueCallbacks);
-    _columnNames = columnNames;
-    for (int columnIndex = 0; columnIndex < _columnCount; columnIndex++) {
-        /* Fetch the name */
-        CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, 
-                                                     sqlite3_column_name(_sqlite_stmt, columnIndex),
-                                                     kCFStringEncodingUTF8);
-
-        /* Lowercase the name */
-        CFMutableStringRef lower = CFStringCreateMutableCopy(kCFAllocatorDefault, 0, name);
-        CFStringLowercase(lower, NULL);
-
-        /* Set the dictionary value */
-        CFDictionarySetValue(columnNames, lower, (void *) columnIndex);
-
-        /* Clean up */
-        CFRelease(name);
-        CFRelease(lower);
-    }
-
     return self;
 }
 
@@ -116,7 +90,8 @@ static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallba
     /* 'Check in' our prepared statement reference */
     [self close];
 
-    CFRelease(_columnNames);
+    if (_columnNames != NULL)
+        CFRelease(_columnNames);
 
     [super finalize];
 }
@@ -127,7 +102,8 @@ static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallba
     [self close];
 
     /* Release the column cache. */
-    CFRelease(_columnNames);
+    if (_columnNames != NULL)
+        CFRelease(_columnNames);
     
     /* Release the statement. */
     [_stmt release];
@@ -189,6 +165,36 @@ static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallba
 /* From PLResultSet */
 - (int) columnIndexForName: (NSString *) name {
     [self assertNotClosed];
+    
+    /* Lazy initialization of the column name mapping. Profiling demonstrates that iPhone code doing a high
+     * volume of queries avoids a significant performance penalty if the column name mapping is not used. */
+    if (_columnNames == nil) {
+        /* Create a column name cache. Using CFDictionary allows us to store the integer index
+         * values without boxing them as objects. iPhone profiling demonstrates not insignificant overhead
+         * using NSDictionary here. */
+        CFMutableDictionaryRef columnNames = CFDictionaryCreateMutable(kCFAllocatorDefault,
+                                                                       _columnCount, 
+                                                                       &kCFTypeDictionaryKeyCallBacks, 
+                                                                       &kPLSqliteResultSetColumnCacheValueCallbacks);
+        _columnNames = columnNames;
+        for (int columnIndex = 0; columnIndex < _columnCount; columnIndex++) {
+            /* Fetch the name */
+            CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, 
+                                                         sqlite3_column_name(_sqlite_stmt, columnIndex),
+                                                         kCFStringEncodingUTF8);
+            
+            /* Lowercase the name */
+            CFMutableStringRef lower = CFStringCreateMutableCopy(kCFAllocatorDefault, 0, name);
+            CFStringLowercase(lower, NULL);
+            
+            /* Set the dictionary value */
+            CFDictionarySetValue(columnNames, lower, (void *) columnIndex);
+            
+            /* Clean up */
+            CFRelease(name);
+            CFRelease(lower);
+        }        
+    }
 
     NSString *key = [name lowercaseString];
     if (CFDictionaryContainsKey(_columnNames, key)) {

@@ -40,7 +40,7 @@
     /** The number of columns in the result. */
     uint32_t _columnCount;
 
-    /** Cache of column name to column index */
+    /** Cache of column name to column index. This value is lazy initialized and may be NULL. */
     CFDictionaryRef _columnNames;
 }
 
