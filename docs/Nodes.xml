@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DocSetNodes version="1.0">
+  <TOC>
+    <Node>
+      <Name>Root</Name>
+      <Path>index.html</Path>
+      <Subnodes>
+       <Node>
+        <Name>Plausible Database</Name>
+        <Path>index.html</Path>
+        <Subnodes>
+         <Node>
+          <Name>Basic SQL Programming Guide</Name>
+          <Path>exec_sql.html</Path>
+          <Subnodes>
+          </Subnodes>
+         </Node>
+         <Node>
+          <Name>Error Handling Programming Guide</Name>
+          <Path>error_handling.html</Path>
+          <Subnodes>
+          </Subnodes>
+         </Node>
+        </Subnodes>
+       </Node>
+       <Node>
+        <Name>Modules</Name>
+        <Path>modules.html</Path>
+        <Subnodes>
+         <Node>
+          <Name>Plausible Database Functions Reference</Name>
+          <Path>group__functions.html</Path>
+          <Subnodes>
+          </Subnodes>
+         </Node>
+         <Node>
+          <Name>Plausible Database Constants Reference</Name>
+          <Path>group__constants.html</Path>
+          <Subnodes>
+           <Node>
+            <Name>Enumerations</Name>
+            <Path>group__enums.html</Path>
+            <Subnodes>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>Global Variables</Name>
+            <Path>group__globals.html</Path>
+            <Subnodes>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>Exceptions</Name>
+            <Path>group__exceptions.html</Path>
+            <Subnodes>
+            </Subnodes>
+           </Node>
+          </Subnodes>
+         </Node>
+        </Subnodes>
+       </Node>
+       <Node>
+        <Name>Class List</Name>
+        <Path>annotated.html</Path>
+        <Subnodes>
+         <Node>
+          <Name>&lt; PLDatabase &gt;</Name>
+          <Path>protocol_p_l_database-p.html</Path>
+         </Node>
+         <Node>
+          <Name>&lt; PLPreparedStatement &gt;</Name>
+          <Path>protocol_p_l_prepared_statement-p.html</Path>
+         </Node>
+         <Node>
+          <Name>&lt; PLResultSet &gt;</Name>
+          <Path>protocol_p_l_result_set-p.html</Path>
+         </Node>
+         <Node>
+          <Name>PLSqliteDatabase</Name>
+          <Path>interface_p_l_sqlite_database.html</Path>
+         </Node>
+        </Subnodes>
+       </Node>
+       <Node>
+        <Name>Class Hierarchy</Name>
+        <Path>hierarchy.html</Path>
+        <Subnodes>
+         <Node>
+          <Name>&lt; PLDatabase &gt;</Name>
+          <Path>protocol_p_l_database-p.html</Path>
+          <Subnodes>
+           <Node>
+            <Name>PLSqliteDatabase</Name>
+            <Path>interface_p_l_sqlite_database.html</Path>
+           </Node>
+          </Subnodes>
+         </Node>
+         <Node>
+          <Name>&lt; PLPreparedStatement &gt;</Name>
+          <Path>protocol_p_l_prepared_statement-p.html</Path>
+         </Node>
+         <Node>
+          <Name>&lt; PLResultSet &gt;</Name>
+          <Path>protocol_p_l_result_set-p.html</Path>
+         </Node>
+        </Subnodes>
+       </Node>
+       <Node>
+        <Name>Class Members</Name>
+        <Path>functions.html</Path>
+       </Node>
+       <Node>
+        <Name>Graphical Class Hierarchy</Name>
+        <Path>inherits.html</Path>
+       </Node>
+       <Node>
+        <Name>File List</Name>
+        <Path>files.html</Path>
+        <Subnodes>
+        </Subnodes>
+       </Node>
+      </Subnodes>
+    </Node>
+  </TOC>
+</DocSetNodes>
