@@ -63,6 +63,38 @@
     STAssertTrue([_db rollbackTransaction], @"Could not roll back, was result actually closed?");
 }
 
+/* Test handling of schema changes when iterating over an already prepared statement.
+ * This is handled automatically in SQLite 3.3.9 and later by using sqlite3_prepare_v2().
+ *
+ * Earlier versions of SQLite (eg, Mac OS X 10.4) require manually re-preparing the statement
+ * after the first call to sqlite3_step() fails with SQLITE_SCHEMA. They also require
+ * calling sqlite3_reset() to return the actual sqlite3_step() error.
+ */
+- (void) testSchemaChangeHandling {
+    id<PLResultSet> result;
+    id<PLPreparedStatement> stmt;
+    NSError *error = nil;
+    
+    /* Create a test table, prepare a statement, then modify the test table from underneath it */
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Create table failed");
+    stmt = [_db prepareStatement: @"SELECT * from test"];
+    STAssertTrue([_db executeUpdateAndReturnError: &error statement: @"ALTER TABLE test ADD COLUMN b int"], @"Alter table failed: %@", error);
+
+    /* Execute the prepared statement */
+    result = [stmt executeQueryAndReturnError: &error];
+    STAssertNotNil(result, @"Statement execute failed: %@", error);
+
+    /* Try stepping. Should not return an error */
+    error = nil;
+    STAssertEquals(PLResultSetStatusDone, [result nextAndReturnError: &error], @"Error occured stepping the result set: %@", error);
+
+    /* The above should not fail, but if it does, we should verify that the returned error is non-generic */
+    if (error != nil) {
+        int errCode = [[[error userInfo] objectForKey: PLDatabaseErrorVendorErrorKey] intValue];
+        STAssertEquals(SQLITE_SCHEMA, errCode, @"Expected SQLITE_SCHEMA error code");
+    }
+}
+
 - (void) testNextErrorHandling {
     NSError *error;
 
