@@ -332,24 +332,28 @@
 - (BOOL) executeUpdateAndReturnError: (NSError **) outError {
     [self assertNotInUse];
 
-    int ret;
-    
-    /* Call sqlite3_step() to run the virtual machine */
-    ret = sqlite3_step(_sqlite_stmt);
+    PLSqliteResultSet *rs;
+    BOOL ret;
 
-    /* Reset the statement */
-    sqlite3_reset(_sqlite_stmt);
-    
-    /* On success, return (even if data was provided) */
-    if (ret == SQLITE_DONE || ret == SQLITE_ROW)
-        return YES;
-    
-    /* Query failed */
-    [_database populateError: outError
-               withErrorCode: PLDatabaseErrorQueryFailed
-                 description: NSLocalizedString(@"An error occurred executing an SQL update.", @"")
-                 queryString: _queryString];
-    return NO;
+    /* Execute the query */
+    rs = [self executeQueryAndReturnError: outError];
+    if (rs == nil)
+        return NO;
+
+
+    /* Step the virtual machine once to execute the statement. */
+    if ([rs nextAndReturnError: outError] == PLResultSetStatusError) {
+        /* Error occured. outError has been populated. */
+        ret = NO;
+    } else {
+        ret = YES;
+    }
+
+    /* Clean up the result set */
+    [rs close];
+
+    /* Finished */
+    return ret;
 }
 
 
