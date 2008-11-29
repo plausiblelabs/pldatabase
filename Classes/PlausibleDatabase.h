@@ -124,9 +124,6 @@ typedef enum {
  * SQL databases. SQLite is the initial and primary target, but the API has been
  * designed to support more traditional databases.
  *
- * While the code is stable and unit tested, the API has not yet been finalized,
- * and may see incompatible changes prior to the 1.0 release.
- *
  * Plausible Database provides an Objective-C veneer over the underlying SQL database. Objects
  * are automatically bound to statement parameters, and converted to and from the underlying SQL datatypes.
  *
