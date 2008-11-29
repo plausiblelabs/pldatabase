@@ -275,5 +275,21 @@
     STAssertEquals(SQLITE_OK, [_db lastErrorCode], @"Initial last error code was not SQLITE_OK");
 }
 
+#ifdef PL_SQLITE_LEGACY_STMT_PREPARE
+- (void) testCreateStatement {
+    NSError *error;
+    sqlite3_stmt *stmt;
+    
+    /* Create the statement */
+    stmt = [_db createStatement: @"PRAGMA user_version" error: &error];
+    STAssertTrue(stmt != NULL, @"Could not prepare statement: %@", error);
+
+    /* Try stepping */
+    STAssertEquals(SQLITE_ROW, sqlite3_step(stmt), @"Could not step prepared statement");
+
+    /* Clean up */
+    sqlite3_finalize(stmt);
+}
+#endif
 
 @end

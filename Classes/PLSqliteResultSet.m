@@ -148,11 +148,20 @@ static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallba
     int ret;
     ret = sqlite3_step(_sqlite_stmt);
     
-#if SQLITE_VERSION_NUMBER < 3003009
+#ifdef PL_SQLITE_LEGACY_STMT_PREPARE
     /* Earlier versions of SQLite require a call to sqlite3_reset to return
      * a non-generic error */
     if (ret == SQLITE_ERROR)
         ret = sqlite3_reset(_sqlite_stmt);
+
+    if (ret == SQLITE_SCHEMA) {
+        sqlite3_stmt *newStmt = [_stmt reloadStatementAndReturnError: error];
+        if (newStmt == NULL)
+            return PLResultSetStatusError;
+        
+        _sqlite_stmt = newStmt;
+        return [self nextAndReturnError: error];
+    }
 #endif
 
     /* No more rows available. */

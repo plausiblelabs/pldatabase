@@ -69,24 +69,26 @@
  * Earlier versions of SQLite (eg, Mac OS X 10.4) require manually re-preparing the statement
  * after the first call to sqlite3_step() fails with SQLITE_SCHEMA. They also require
  * calling sqlite3_reset() to return the actual sqlite3_step() error.
+ *
+ * Our test uses a bound parameter to ensure that any bound parameters are correctly copied
+ * across to a newly created statement.
  */
 - (void) testSchemaChangeHandling {
-    id<PLResultSet> result;
     id<PLPreparedStatement> stmt;
     NSError *error = nil;
     
     /* Create a test table, prepare a statement, then modify the test table from underneath it */
     STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Create table failed");
-    stmt = [_db prepareStatement: @"SELECT * from test"];
-    STAssertTrue([_db executeUpdateAndReturnError: &error statement: @"ALTER TABLE test ADD COLUMN b int"], @"Alter table failed: %@", error);
+    stmt = [_db prepareStatement: @"INSERT INTO test (a) VALUES (?)"];
+    STAssertNotNil(stmt, @"Could not parse statement");
+    STAssertTrue([_db executeUpdateAndReturnError: &error statement: @"ALTER TABLE test ADD COLUMN b int DEFAULT 0"], @"Alter table failed: %@", error);
 
-    /* Execute the prepared statement */
-    result = [stmt executeQueryAndReturnError: &error];
-    STAssertNotNil(result, @"Statement execute failed: %@", error);
+    /* Bind parameters */
+    [stmt bindParameters: [NSArray arrayWithObject: [NSNumber numberWithInt: 1]]];
 
-    /* Try stepping. Should not return an error */
+    /* Execute update */
     error = nil;
-    STAssertEquals(PLResultSetStatusDone, [result nextAndReturnError: &error], @"Error occured stepping the result set: %@", error);
+    STAssertTrue([stmt executeUpdateAndReturnError: &error], @"Statement execute failed: %@ (%@)", error, [[error userInfo] objectForKey: PLDatabaseErrorVendorStringKey]);
 
     /* The above should not fail, but if it does, we should verify that the returned error is non-generic */
     if (error != nil) {

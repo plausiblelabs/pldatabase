@@ -30,6 +30,7 @@
 #if PL_DB_PRIVATE
 
 @class PLSqliteResultSet;
+@protocol PLSqliteParameterStrategy;
 
 @interface PLSqlitePreparedStatement : NSObject <PLPreparedStatement> {
 @private
@@ -45,6 +46,11 @@
     /** Number of parameters. */
     int _parameterCount;
 
+#ifdef PL_SQLITE_LEGACY_STMT_PREPARE
+    /** Currently bound parameters, if any. May be nil. */
+    id<PLSqliteParameterStrategy> _boundParameterStrategy;
+#endif
+    
     /** Is the prepared statement in use by a PLResultSet */
     BOOL _inUse;
     
@@ -55,6 +61,11 @@
 - (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt queryString: (NSString *) queryString closeAtCheckin: (BOOL) closeAtCheckin;
 
 - (void) populateError: (NSError **) error withErrorCode: (PLDatabaseError) errorCode description: (NSString *) localizedDescription;
+
+#ifdef PL_SQLITE_LEGACY_STMT_PREPARE
+// DO NOT CALL. Must only be called from PLSqliteResultSet
+- (sqlite3_stmt *) reloadStatementAndReturnError: (NSError **) error;
+#endif
 
 // DO NOT CALL. Must only be called from PLSqliteResultSet
 - (void) checkinResultSet: (PLSqliteResultSet *) resultSet;

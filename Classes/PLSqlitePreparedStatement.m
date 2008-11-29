@@ -47,7 +47,7 @@
  * return nil if the parameter is unavailable,
  * and NSNull if the parameter's value is null.
  */
-- (id) valueForParameter: (int) parameterIndex;
+- (id) valueForParameter: (int) parameterIndex withStatement: (sqlite3_stmt *) stmt;
 
 @end
 
@@ -81,7 +81,7 @@
     return [_values count];
 }
 
-- (id) valueForParameter: (int) parameterIndex {
+- (id) valueForParameter: (int) parameterIndex withStatement: (sqlite3_stmt *) stmt {
     /* Arrays are zero-index, sqlite is 1-indexed, so adjust the index
      * for the array */
     return [_values objectAtIndex: parameterIndex - 1];
@@ -96,19 +96,16 @@
  */
 @interface PLSqliteDictionaryParameterStrategy : NSObject <PLSqliteParameterStrategy> {
 @private
-    sqlite3_stmt *_sqlite_stmt;
     NSDictionary *_values;
 }
 @end
 
 @implementation PLSqliteDictionaryParameterStrategy
 
-/* Memory warning -- sqlite_stmt is a borrowed weak reference */
-- (id) initWithStatement: (sqlite3_stmt *) sqlite_stmt values: (NSDictionary *) values {
+- (id) initWithValueDictionary: (NSDictionary *) values {
     if ((self = [super init]) == nil)
         return nil;
 
-    _sqlite_stmt = sqlite_stmt;
     _values = [values retain];
 
     return self;
@@ -123,11 +120,11 @@
     return [_values count];
 }
 
-- (id) valueForParameter: (int) parameterIndex {
+- (id) valueForParameter: (int) parameterIndex withStatement: (sqlite3_stmt *) stmt {
     const char *sqlite_name;
 
     /* Fetch the parameter name. */
-    sqlite_name = sqlite3_bind_parameter_name(_sqlite_stmt, parameterIndex);
+    sqlite_name = sqlite3_bind_parameter_name(stmt, parameterIndex);
     
     /* If there is no name, or if it's blank, we can't retrieve the value. */
     if (sqlite_name == NULL || *sqlite_name == '\0')
@@ -230,6 +227,10 @@
     
     /* Release the query statement */
     [_queryString release];
+
+#ifdef PL_SQLITE_LEGACY_STMT_PREPARE
+    [_boundParameterStrategy release];
+#endif /* PL_SQLITE_LEGACY_STMT_PREPARE */
     
     [super dealloc];
 }
@@ -278,6 +279,16 @@
 - (void) bindParametersWithStrategy: (id<PLSqliteParameterStrategy>) strategy {
     [self assertNotInUse];
     
+#ifdef PL_SQLITE_LEGACY_STMT_PREPARE
+    if (_boundParameterStrategy != strategy) {
+        /* Save the new strategy, in case the statement must be reparsed */
+        if (_boundParameterStrategy != nil)
+            [_boundParameterStrategy release];
+
+        _boundParameterStrategy = [strategy retain];
+    }
+#endif /* PL_SQLITE_LEGACY_STMT_PREPARE */
+
     /* Verify that a complete parameter list was provided */
     if ([strategy count] != _parameterCount)
         [NSException raise: PLSqliteException 
@@ -286,7 +297,7 @@
     /* Sqlite counts parameters starting at 1. */
     for (int valueIndex = 1; valueIndex <= _parameterCount; valueIndex++) {
         /* (Note that NSArray indexes from 0, so we subtract one to get the current value) */
-        id value = [strategy valueForParameter: valueIndex];
+        id value = [strategy valueForParameter: valueIndex withStatement: _sqlite_stmt];
         if (value == nil) {
             [NSException raise: PLSqliteException
                         format: @"Missing parameter %d binding for query %@", valueIndex, _queryString];
@@ -317,9 +328,52 @@
 - (void) bindParameterDictionary: (NSDictionary *) parameters {
     PLSqliteDictionaryParameterStrategy *strategy;
     
-    strategy = [[[PLSqliteDictionaryParameterStrategy alloc] initWithStatement: _sqlite_stmt values: parameters] autorelease];
+    strategy = [[[PLSqliteDictionaryParameterStrategy alloc] initWithValueDictionary: parameters] autorelease];
     [self bindParametersWithStrategy: strategy];
 }
+
+#ifdef PL_SQLITE_LEGACY_STMT_PREPARE
+
+/**
+ * @internal
+ *
+ * Re-create and return the backing prepared statement.
+ *
+ * Must only be called by PLSqliteResultSet. This method is only available
+ * to support SQLite 3.0.9 and earlier, where sqlite3_prepare_v2() is unavailable.
+ *
+ * The implementation should be dropped if sqlite3_prepare() support is dropped.
+ *
+ * MEMORY OWNERSHIP WARNING:
+ * The reference to the returned sqlite3_stmt object is borrowed.
+ */
+- (sqlite3_stmt *) reloadStatementAndReturnError: (NSError **) error {
+    sqlite3_stmt *newStmt;
+    
+    /* Try re-creating the statement */
+    newStmt = [_database createStatement: _queryString error: error];
+    if (newStmt == NULL)
+        return NULL;
+    
+    /* Free the current prepared statement */
+    sqlite3_finalize(_sqlite_stmt);
+    
+    /* Set the new prepared statement */
+    _sqlite_stmt = newStmt;
+    
+    /* Re-bind parameters */
+    if (_boundParameterStrategy != nil) {
+        BOOL useFlag = _inUse;
+        _inUse = NO; // evil! allows re-bind even if the prepared statement is currently checked out.
+        [self bindParametersWithStrategy: _boundParameterStrategy];
+        _inUse = useFlag;
+    }
+
+    /* Provide the new statement to the caller */
+    return _sqlite_stmt;
+}
+
+#endif /* PL_SQLITE_LEGACY_STMT_PREPARE */
 
 
 /* from PLPreparedStatement */

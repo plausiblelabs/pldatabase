@@ -40,7 +40,6 @@ NSString *PLSqliteException = @"PLSqliteException";
 @interface PLSqliteDatabase (PLSqliteDatabasePrivate)
 
 - (id<PLPreparedStatement>) prepareStatement: (NSString *) statement error: (NSError **) outError closeAtCheckin: (BOOL) closeAtCheckin;
-- (sqlite3_stmt *) createStatement: (NSString *) statement error: (NSError **) error;
 
 @end
 
@@ -438,6 +437,74 @@ NSString *PLSqliteException = @"PLSqliteException";
         *error = result;
 }
 
+/**
+ * @internal
+ *
+ * Create an SQLite statement, returning NULL on error.
+ *
+ * This method is intended to be used only by PLSqlitePreparedStatement, for the purpose of re-creating prepared statements.
+ * This method is only exposed for the purpose of supporting implementations missing sqlite3_prepare_v2(), and should be
+ * made class-private if support for SQLite 3.0.9 or earlier is dropped.
+ *
+ * @warning MEMORY OWNERSHIP WARNING: The returned statement is owned by the caller, and MUST be free'd using sqlite3_finalize().
+ *
+ * @param statement SQLite statement string
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the statement could
+ * not be created. If no error occurs, this parameter will be left unmodified.
+ * You may specify nil for this parameter, and no error information will be provided.
+ */
+- (sqlite3_stmt *) createStatement: (NSString *) statement error: (NSError **) error {
+    sqlite3_stmt *sqlite_stmt;
+    const char *unused;
+    int ret;
+    
+    /* Prepare. The V2 interface is only available in SQLite 3.3.9 and later, which was released in January of 2004.
+     * Mac OS X 10.4 ships with 3.1.3.
+     *
+     * The V2 interface differs in two ways (from the SQLite documentation):
+     *
+     * 1. If the database schema changes, instead of returning SQLITE_SCHEMA as it always
+     * used to do, sqlite3_step() will automatically recompile the SQL statement and try
+     * to run it again. If the schema has changed in a way that makes the statement no
+     * longer valid, sqlite3_step() will still return SQLITE_SCHEMA. But unlike the legacy
+     * behavior, SQLITE_SCHEMA is now a fatal error. Calling sqlite3_prepare_v2() again
+     * will not make the error go away. Note: use sqlite3_errmsg() to find the text of the
+     * parsing error that results in an SQLITE_SCHEMA return.
+     *
+     * 2. When an error occurs, sqlite3_step() will return one of the detailed error codes or
+     * extended error codes. The legacy behavior was that sqlite3_step() would only return a generic
+     * SQLITE_ERROR result code and you would have to make a second call to sqlite3_reset() in
+     * order to find the underlying cause of the problem. With the "v2" prepare interfaces, the
+     * underlying reason for the error is returned immediately.
+     */
+#ifdef PL_SQLITE_LEGACY_STMT_PREPARE
+    ret = sqlite3_prepare(_sqlite, [statement UTF8String], -1, &sqlite_stmt, &unused);
+#else
+    ret = sqlite3_prepare_v2(_sqlite, [statement UTF8String], -1, &sqlite_stmt, &unused);
+#endif
+    
+    /* Prepare failed */
+    if (ret != SQLITE_OK) {
+        [self populateError: error
+              withErrorCode: PLDatabaseErrorInvalidStatement
+                description: NSLocalizedString(@"An error occured parsing the provided SQL statement.", @"")
+                queryString: statement];
+        return NULL;
+    }
+    
+    /* Multiple statements were provided */
+    if (*unused != '\0') {
+        [self populateError: error
+              withErrorCode: PLDatabaseErrorInvalidStatement
+                description: NSLocalizedString(@"Multiple SQL statements were provided for a single query.", @"")
+                queryString: statement];
+        return NULL;
+    }
+    
+    return sqlite_stmt;
+}
+
 @end
 
 
@@ -474,64 +541,5 @@ NSString *PLSqliteException = @"PLSqliteException";
      * that statement using sqlite3_finalize(). */
     return [[[PLSqlitePreparedStatement alloc] initWithDatabase: self sqliteStmt: sqlite_stmt queryString: statement closeAtCheckin: closeAtCheckin] autorelease];
 }
-
-/**
- * @internal
- *
- * Create an SQLite statement, returning nil on error.
- * MEMORY OWNERSHIP WARNING:
- * The returned statement is owned by the caller, and MUST be free'd using sqlite3_finalize().
- */
-- (sqlite3_stmt *) createStatement: (NSString *) statement error: (NSError **) error {
-    sqlite3_stmt *sqlite_stmt;
-    const char *unused;
-    int ret;
-    
-    /* Prepare. The V2 interface is only available in SQLite 3.3.9 and later, which was released in January of 2004.
-     * Mac OS X 10.4 ships with 3.1.3.
-     *
-     * The V2 interface differs in two ways (from the SQLite documentation):
-     *
-     * 1. If the database schema changes, instead of returning SQLITE_SCHEMA as it always
-     * used to do, sqlite3_step() will automatically recompile the SQL statement and try
-     * to run it again. If the schema has changed in a way that makes the statement no
-     * longer valid, sqlite3_step() will still return SQLITE_SCHEMA. But unlike the legacy
-     * behavior, SQLITE_SCHEMA is now a fatal error. Calling sqlite3_prepare_v2() again
-     * will not make the error go away. Note: use sqlite3_errmsg() to find the text of the
-     * parsing error that results in an SQLITE_SCHEMA return.
-     *
-     * 2. When an error occurs, sqlite3_step() will return one of the detailed error codes or
-     * extended error codes. The legacy behavior was that sqlite3_step() would only return a generic
-     * SQLITE_ERROR result code and you would have to make a second call to sqlite3_reset() in
-     * order to find the underlying cause of the problem. With the "v2" prepare interfaces, the
-     * underlying reason for the error is returned immediately.
-     */
-#if SQLITE_VERSION_NUMBER >= 3003009
-    ret = sqlite3_prepare_v2(_sqlite, [statement UTF8String], -1, &sqlite_stmt, &unused);
-#else
-    ret = sqlite3_prepare(_sqlite, [statement UTF8String], -1, &sqlite_stmt, &unused);
-#endif
-    
-    /* Prepare failed */
-    if (ret != SQLITE_OK) {
-        [self populateError: error
-              withErrorCode: PLDatabaseErrorInvalidStatement
-                description: NSLocalizedString(@"An error occured parsing the provided SQL statement.", @"")
-                queryString: statement];
-        return nil;
-    }
-    
-    /* Multiple statements were provided */
-    if (*unused != '\0') {
-        [self populateError: error
-              withErrorCode: PLDatabaseErrorInvalidStatement
-                description: NSLocalizedString(@"Multiple SQL statements were provided for a single query.", @"")
-                queryString: statement];
-        return nil;
-    }
-    
-    return sqlite_stmt;
-}
-
 
 @end
