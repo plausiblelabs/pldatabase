@@ -130,12 +130,11 @@
 
 
 - (void) tearDown {
-	NSError *error = nil;
 	BOOL result;
     
 	/* Clean out the test directory */
     result = [[NSFileManager defaultManager] removeFileAtPath: _testDir handler: nil];
-	STAssertTrue(result, @"Deletion of test directory returned error: %@", error);
+	STAssertTrue(result, @"Deletion of test directory returned error");
     
 	[_testDir release];
     [_dbManager release];
