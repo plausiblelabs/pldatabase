@@ -87,7 +87,7 @@
  * @param statement SQL statement to prepare.
  * @param outError A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the statement could not be prepared.
- * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * If no error occurs, this parameter will be left unmodified. You may specify NULL for this
  * parameter, and no error information will be provided.
  * @return The prepared statement, or nil if it could not be prepared.
  */
@@ -112,7 +112,7 @@
  *
  * @param error A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the statement could not be executed.
- * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * If no error occurs, this parameter will be left unmodified. You may specify NULL for this
  * parameter, and no error information will be provided.
  * @param statement SQL statement to execute.
  *
@@ -138,7 +138,7 @@
  *
  * @param error A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the statement could not be executed.
- * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * If no error occurs, this parameter will be left unmodified. You may specify NULL for this
  * parameter, and no error information will be provided.
  * @param statement SQL statement to execute.
  * @return PLResultSet on success, or nil on failure.
@@ -172,7 +172,7 @@
  * pointer will contain an error object indicating why the transaction could not
  * be started.
  *
- * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * If no error occurs, this parameter will be left unmodified. You may specify NULL for this
  * parameter, and no error information will be provided.
  * @return YES on success, NO on failure.
  */

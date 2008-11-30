@@ -50,7 +50,7 @@
  * @param currentVersion The current version of the database. This always defaults to 0 in an uninitialized database.
  * @param newVersion Must be used to supply the new version of the database (or the current version, if nothing has changed).
  * @param outError A pointer to an NSError object variable. If an error occurs, this pointer will contain an error object indicating
- * why the migration could not be completed. If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * why the migration could not be completed. If no error occurs, this parameter will be left unmodified. You may specify NULL for this
  * parameter, and no error information will be provided.
  */
 - (BOOL) migrateDatabase: (id<PLDatabase>) database currentVersion: (int) currentVersion newVersion: (int *) newVersion error: (NSError **) outError;

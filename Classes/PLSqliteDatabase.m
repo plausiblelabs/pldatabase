@@ -103,7 +103,7 @@ NSString *PLSqliteException = @"PLSqliteException";
  * @return YES on success, NO on failure.
  */
 - (BOOL) open {
-    return [self openAndReturnError: nil];
+    return [self openAndReturnError: NULL];
 }
 
 
@@ -114,7 +114,7 @@ NSString *PLSqliteException = @"PLSqliteException";
  * @param error A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the database could
  * not be opened. If no error occurs, this parameter will be left unmodified.
- * You may specify nil for this parameter, and no error information will be provided.
+ * You may specify NULL for this parameter, and no error information will be provided.
  *
  * @return YES if the database was successfully opened, NO on failure.
  */
@@ -122,7 +122,7 @@ NSString *PLSqliteException = @"PLSqliteException";
     int err;
 
     /* Do not call open twice! */
-    if (_sqlite != nil)
+    if (_sqlite != NULL)
         [NSException raise: PLSqliteException format: @"Attempted to open already-open SQLite database instance at '%@'. Called -[PLSqliteDatabase open] twice?", _path];
     
     /* Open the database */
@@ -153,7 +153,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 /* from PLDatabase. */
 - (BOOL) goodConnection {
     /* If the connection wasn't opened, we have our answer */
-    if (_sqlite == nil)
+    if (_sqlite == NULL)
         return NO;
     
     return YES;
@@ -171,7 +171,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 - (void) close {
     int err;
     
-    if (_sqlite == nil)
+    if (_sqlite == NULL)
         return;
     
     /* Close the connection and release any sqlite resources (if open was ever called) */
@@ -186,13 +186,13 @@ NSString *PLSqliteException = @"PLSqliteException";
         NSLog(@"Unexpected error closing SQLite database at '%@': %s", sqlite3_errmsg(_sqlite));
     
     /* Reset the variable. If any of the above failed, it is programmer error. */
-    _sqlite = nil;
+    _sqlite = NULL;
 }
 
 
 /* from PLDatabase */
 - (id<PLPreparedStatement>) prepareStatement: (NSString *) statement {
-    return [self prepareStatement: statement error: nil];
+    return [self prepareStatement: statement error: NULL];
 }
 
 
@@ -263,7 +263,7 @@ NSString *PLSqliteException = @"PLSqliteException";
     va_list ap;
     
     va_start(ap, statement);
-    ret = [self executeUpdateAndReturnError: nil statement: statement args: ap];
+    ret = [self executeUpdateAndReturnError: NULL statement: statement args: ap];
     va_end(ap);
     
     return ret;
@@ -307,7 +307,7 @@ NSString *PLSqliteException = @"PLSqliteException";
     va_list ap;
     
     va_start(ap, statement);
-    result = [self executeQueryAndReturnError: nil statement: statement args: ap];
+    result = [self executeQueryAndReturnError: NULL statement: statement args: ap];
     va_end(ap);
     
     return result;
@@ -318,7 +318,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* from PLDatabase. */
 - (BOOL) beginTransaction {
-    return [self beginTransactionAndReturnError: nil];
+    return [self beginTransactionAndReturnError: NULL];
 }
 
 /* from PLDatabase */
@@ -329,7 +329,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* from PLDatabase. */
 - (BOOL) commitTransaction {
-    return [self commitTransactionAndReturnError: nil];
+    return [self commitTransactionAndReturnError: NULL];
 }
 
 /* from PLDatabase */
@@ -340,7 +340,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* from PLDatabase. */
 - (BOOL) rollbackTransaction {
-    return [self rollbackTransactionAndReturnError: nil];
+    return [self rollbackTransactionAndReturnError: NULL];
 }
 
 /* from PLDatabase */
@@ -428,12 +428,15 @@ NSString *PLSqliteException = @"PLSqliteException";
                                   queryString: queryString
                                   vendorError: vendorError
                             vendorErrorString: vendorString];    
+
+    if (queryString == nil)
+        queryString = @"<none>";
     
     /* Log it and optionally return it */
     NSLog(@"A SQLite database error occurred on database '%@': %@ (SQLite #%@: %@) (query: '%@')", 
-          _path, result, vendorError, vendorString, queryString != nil ? queryString : @"<none>");
+          _path, result, vendorError, vendorString, queryString);
     
-    if (error != nil)
+    if (error != NULL)
         *error = result;
 }
 
@@ -531,7 +534,7 @@ NSString *PLSqliteException = @"PLSqliteException";
     
     /* Prepare our statement */
     sqlite_stmt = [self createStatement: statement error: outError];
-    if (sqlite_stmt == nil)
+    if (sqlite_stmt == NULL)
         return nil;
     
     /* Create a new prepared statement.

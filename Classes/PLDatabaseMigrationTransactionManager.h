@@ -46,7 +46,7 @@
  * @param database An active database connection on which to execute any queries.
  * @param outError A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the transaction could not be started.
- * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * If no error occurs, this parameter will be left unmodified. You may specify NULL for this
  * parameter, and no error information will be provided.
  */
 - (BOOL) beginExclusiveTransactionForDatabase: (id<PLDatabase>) database error: (NSError **) outError;

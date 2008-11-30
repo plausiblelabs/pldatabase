@@ -238,14 +238,14 @@
 
 /* from PLPreparedStatement */
 - (void) close {
-    if (_sqlite_stmt == nil)
+    if (_sqlite_stmt == NULL)
         return;
     
     /* The finalization may return the last error returned by sqlite3_next(), but this has already
      * been handled by the -[PLSqliteResultSet next] implementation. Any remaining memory and
      * resources are released regardless of the error code, so we do not check it here. */
     sqlite3_finalize(_sqlite_stmt);
-    _sqlite_stmt = nil;
+    _sqlite_stmt = NULL;
 }
 
 /**
@@ -378,7 +378,7 @@
 
 /* from PLPreparedStatement */
 - (BOOL) executeUpdate {
-    return [self executeUpdateAndReturnError: nil];
+    return [self executeUpdateAndReturnError: NULL];
 }
 
 
@@ -413,7 +413,7 @@
 
 /* from PLPreparedStatement */
 - (id<PLResultSet>) executeQuery {
-    return [self executeQueryAndReturnError: nil];
+    return [self executeQueryAndReturnError: NULL];
 }
 
 /* from PLPreparedStatement */
@@ -459,7 +459,7 @@
  * Assert that the result set has not been closed
  */
 - (void) assertNotClosed {
-    if (_sqlite_stmt == nil)
+    if (_sqlite_stmt == NULL)
         [NSException raise: PLSqliteException format: @"Attempt to access already-closed prepared statement."];
 }
 

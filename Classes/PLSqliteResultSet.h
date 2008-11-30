@@ -41,7 +41,7 @@
     uint32_t _columnCount;
 
     /** Cache of column name to column index. This value is lazy initialized and may be NULL. */
-    CFDictionaryRef _columnNames;
+    NSDictionary *_columnNames;
 }
 
 - (id) initWithPreparedStatement: (PLSqlitePreparedStatement *) stmt sqliteStatemet: (sqlite3_stmt *)sqlite_stmt;

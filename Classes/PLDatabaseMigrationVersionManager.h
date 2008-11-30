@@ -49,7 +49,7 @@
  * @param database An active database connection on which to issue any queries.
  * @param outError A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the version could not be retrieved.
- * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * If no error occurs, this parameter will be left unmodified. You may specify NULL for this
  * parameter, and no error information will be provided.
  */
 - (BOOL) version: (int *) version forDatabase: (id<PLDatabase>) database error: (NSError **) outError;
@@ -65,7 +65,7 @@
  * @param database An active database connection on which to issue any queries.
  * @param outError A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the version could not be retrieved.
- * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * If no error occurs, this parameter will be left unmodified. You may specify NULL for this
  * parameter, and no error information will be provided.
  */
 - (BOOL) setVersion: (int) version forDatabase: (id<PLDatabase>) database error: (NSError **) outError;

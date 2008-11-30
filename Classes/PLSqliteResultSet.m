@@ -29,24 +29,6 @@
 
 #import "PlausibleDatabase.h"
 
-static const void *plsqlite_rs_value_retain (CFAllocatorRef allocator, const void *value);
-static void plsqlite_rs_value_release (CFAllocatorRef allocator, const void *value);
-static CFStringRef plsqlite_rs_value_copy_description (const void *value);
-static Boolean plsqlite_rs_value_equals (const void *value1, const void *value2);
-
-/**
- * @internal
- * Dictionary value callbacks used to store column name to column index mappings.
- * The index number is stored directly in the item pointer.
- */
-static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallbacks = {
-    .version = 0,
-    .retain = &plsqlite_rs_value_retain,
-    .release = &plsqlite_rs_value_release,
-    .copyDescription = &plsqlite_rs_value_copy_description,
-    .equal = &plsqlite_rs_value_equals
-};
-
 /**
  * @internal
  *
@@ -89,9 +71,8 @@ static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallba
 - (void) finalize {
     /* 'Check in' our prepared statement reference */
     [self close];
-
-    if (_columnNames != NULL)
-        CFRelease(_columnNames);
+    if (_columnNames != nil)
+        [_columnNames release];
 
     [super finalize];
 }
@@ -103,7 +84,7 @@ static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallba
 
     /* Release the column cache. */
     if (_columnNames != NULL)
-        CFRelease(_columnNames);
+        [_columnNames release];
     
     /* Release the statement. */
     [_stmt release];
@@ -113,12 +94,12 @@ static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallba
 
 // From PLResultSet
 - (void) close {
-    if (_sqlite_stmt == nil)
+    if (_sqlite_stmt == NULL)
         return;
 
     /* Check ourselves back in and give up our statement reference */
     [_stmt checkinResultSet: self];
-    _sqlite_stmt = nil;
+    _sqlite_stmt = NULL;
 }
 
 /**
@@ -126,7 +107,7 @@ static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallba
  * Assert that the result set has not been closed
  */
 - (void) assertNotClosed {
-    if (_sqlite_stmt == nil)
+    if (_sqlite_stmt == NULL)
         [NSException raise: PLSqliteException format: @"Attempt to access already-closed result set."];
 }
 
@@ -134,7 +115,7 @@ static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallba
 - (BOOL) next {
     [self assertNotClosed];
 
-    if ([self nextAndReturnError: nil] == PLResultSetStatusRow)
+    if ([self nextAndReturnError: NULL] == PLResultSetStatusRow)
         return YES;
 
     /* This depreciated API can not differentiate between an error or
@@ -185,36 +166,23 @@ static const CFDictionaryValueCallBacks kPLSqliteResultSetColumnCacheValueCallba
     /* Lazy initialization of the column name mapping. Profiling demonstrates that iPhone code doing a high
      * volume of queries avoids a significant performance penalty if the column name mapping is not used. */
     if (_columnNames == nil) {
-        /* Create a column name cache. Using CFDictionary allows us to store the integer index
-         * values without boxing them as objects. iPhone profiling demonstrates not insignificant overhead
-         * using NSDictionary here. */
-        CFMutableDictionaryRef columnNames = CFDictionaryCreateMutable(kCFAllocatorDefault,
-                                                                       _columnCount, 
-                                                                       &kCFTypeDictionaryKeyCallBacks, 
-                                                                       &kPLSqliteResultSetColumnCacheValueCallbacks);
+        /* Create a column name cache */
+        NSMutableDictionary *columnNames = [[NSMutableDictionary alloc] initWithCapacity: _columnCount];
         _columnNames = columnNames;
+
         for (int columnIndex = 0; columnIndex < _columnCount; columnIndex++) {
             /* Fetch the name */
-            CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, 
-                                                         sqlite3_column_name(_sqlite_stmt, columnIndex),
-                                                         kCFStringEncodingUTF8);
-            
-            /* Lowercase the name */
-            CFMutableStringRef lower = CFStringCreateMutableCopy(kCFAllocatorDefault, 0, name);
-            CFStringLowercase(lower, NULL);
+            NSString *name = [NSString stringWithUTF8String: sqlite3_column_name(_sqlite_stmt, columnIndex)];
             
             /* Set the dictionary value */
-            CFDictionarySetValue(columnNames, lower, (void *) columnIndex);
-            
-            /* Clean up */
-            CFRelease(name);
-            CFRelease(lower);
-        }        
+            [columnNames setObject: [NSNumber numberWithInt: columnIndex] forKey: [name lowercaseString]];
+        }
     }
 
     NSString *key = [name lowercaseString];
-    if (CFDictionaryContainsKey(_columnNames, key)) {
-        return (int) CFDictionaryGetValue(_columnNames, key);
+    NSNumber *idx = [_columnNames objectForKey: key];
+    if (idx != nil) {
+        return [idx intValue];
     }
     
     /* Not found */
@@ -354,24 +322,3 @@ VALUE_ACCESSORS(NSData *, data, SQLITE_BLOB, [NSData dataWithBytes: sqlite3_colu
 }
 
 @end
-
-// from CFDictionaryValueCallBacks
-static const void *plsqlite_rs_value_retain (CFAllocatorRef allocator, const void *value) {
-    // Nothing to do, values are integers
-    return value;
-}
-
-// from CFDictionaryValueCallBacks
-static void plsqlite_rs_value_release (CFAllocatorRef allocator, const void *value) {
-    // Nothing to do, values are integers
-}
-
-// from CFDictionaryValueCallBacks
-static CFStringRef plsqlite_rs_value_copy_description (const void *value) {
-    return CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("%p"), value);
-}
-
-// from CFDictionaryValueCallBacks
-static Boolean plsqlite_rs_value_equals (const void *value1, const void *value2) {
-    return (value1 == value2);
-}

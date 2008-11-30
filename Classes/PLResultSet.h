@@ -70,7 +70,7 @@ typedef enum {
  *
  * @param outError A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the statement could not be executed.
- * If no error occurs, this parameter's value will not be modified. You may specify nil for this
+ * If no error occurs, this parameter's value will not be modified. You may specify NULL for this
  * parameter, and no error information will be provided.
  *
  * @return Returns #PLResultSetStatusRow if the next row is available, or #PLResultSetStatusDone if no

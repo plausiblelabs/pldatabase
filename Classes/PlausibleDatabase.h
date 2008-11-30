@@ -30,7 +30,10 @@
 
 /* Dependencies */
 #import <Foundation/Foundation.h>
+
+#ifdef __APPLE__
 #import <AvailabilityMacros.h>
+#endif
 
 /**
  * @defgroup functions Plausible Database Functions Reference

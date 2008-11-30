@@ -105,7 +105,7 @@
  *
  * @param outError A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the migration could not be completed.
- * If no error occurs, this parameter will be left unmodified. You may specify nil for this
+ * If no error occurs, this parameter will be left unmodified. You may specify NULL for this
  * parameter, and no error information will be provided.
  * @return YES on successful migration, or NO if migration failed. If NO is returned, all modifications
  * will be rolled back.
@@ -150,7 +150,7 @@
     return YES;
 
 rollback:
-    [_txManager rollbackTransactionForDatabase: db error: nil];
+    [_txManager rollbackTransactionForDatabase: db error: NULL];
 cleanup:
     [_connectionProvider closeConnection: db];
     return NO;
