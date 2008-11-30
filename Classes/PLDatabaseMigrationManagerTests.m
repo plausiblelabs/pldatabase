@@ -154,14 +154,14 @@
 
     /* Get the current version (should be 0) */
     STAssertTrue([_versionManager version: &version forDatabase: database error: &error], @"Could not retrieve version: %@", error);
-    STAssertEquals(0, version, @"Expected database version 0, got %d", version);
+    STAssertTrue(0 == version, @"Expected database version 0, got %d", version);
 
     /* Run the migration */
     STAssertTrue([_dbManager migrateAndReturnError: &error], @"Migration failed: %@", error);
     
     /* Verify that our table was created and the version was bumped */
     STAssertTrue([_versionManager version: &version forDatabase: database error: &error], @"Could not retrieve version: %@", error);
-    STAssertEquals(TEST_DATABASE_VERSION, version, @"Expected database version %d, got %d", TEST_DATABASE_VERSION, version);
+    STAssertTrue(TEST_DATABASE_VERSION == version, @"Expected database version %d, got %d", TEST_DATABASE_VERSION, version);
     STAssertTrue([database tableExists: @"testtable"], @"Test table was not created");
 
     /* Clean up */
