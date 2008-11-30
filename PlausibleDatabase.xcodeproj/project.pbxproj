@@ -654,10 +654,10 @@
 			targets = (
 				054CBF250EE21BD10043675E /* PlausibleDatabase (Mac & iPhone) */,
 				058ABB630DE6361300C995C9 /* PlausibleDatabase-MacOSX */,
-				0551CA4A0DCBE9F600E31E46 /* Tests-MacOSX */,
 				054CBF0C0EE21B2B0043675E /* PlausibleDatabase-iPhoneOS */,
 				054CBF150EE21B570043675E /* PlausibleDatabase-iPhoneSimulator */,
 				054CBFDB0EE242BC0043675E /* PlausibleDatabase-Windows-i386 */,
+				0551CA4A0DCBE9F600E31E46 /* Tests-MacOSX */,
 				057829F20EE25E850039276A /* Tests-Windows-i386 */,
 			);
 		};
