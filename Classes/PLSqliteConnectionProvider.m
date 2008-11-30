@@ -79,7 +79,8 @@
 
 /* from PLEntityConnectionDelegate */
 - (void) closeConnection: (id<PLDatabase>) connection {
-    // Nothing to do, no connection pooling
+    // Nothing to do besides close the connection, no connection pooling
+    [connection close];
 }
 
 

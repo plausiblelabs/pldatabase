@@ -75,9 +75,7 @@
 
     /* Try to be polite */
     [provider closeConnection: db];
-
-    /* Force the connection closed, to ensure we don't keep a file handle open */
-    [db close];
+    STAssertFalse([db goodConnection], @"Connection should be closed");
 }
 
 @end
