@@ -29,7 +29,7 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-#import "PlausibleDatabase.h"
+#import <PlausibleDatabase/PlausibleDatabase.h>
 
 @interface PLSqliteDatabaseTests : SenTestCase {
 @private
@@ -92,7 +92,7 @@
     STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a VARCHAR(10), b VARCHAR(20), c BOOL)"], @"Create table failed");
     
     /* Prepare a statement */
-    stmt = [_db prepareStatement: @"INSERT INTO test (a) VALUES (?)" error: nil];
+    stmt = [_db prepareStatement: @"INSERT INTO test (a) VALUES (?)" error: NULL];
     STAssertNotNil(stmt, @"Could not prepare statement");
 }
 

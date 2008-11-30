@@ -29,7 +29,7 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-#import "PlausibleDatabase.h"
+#import <PlausibleDatabase/PlausibleDatabase.h>
 
 @interface PLSqliteMigrationVersionManagerTests : SenTestCase {
 @private
@@ -55,6 +55,9 @@
 }
 
 - (void) tearDown {
+    /* Close the open database file */
+    [_db close];
+
     /* Remove the temporary database file */
     STAssertTrue([[NSFileManager defaultManager] removeFileAtPath: _dbPath handler: nil], @"Could not clean up database %@", _dbPath);
     

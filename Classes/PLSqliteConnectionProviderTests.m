@@ -29,7 +29,7 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-#import "PlausibleDatabase.h"
+#import <PlausibleDatabase/PlausibleDatabase.h>
 
 @interface PLSqliteConnectionProviderTests : SenTestCase {
 @private
@@ -50,6 +50,9 @@
 }
 
 - (void) tearDown {
+    /* Close the open database file */
+    [_db close];
+
     /* Remove the temporary database file */
     STAssertTrue([[NSFileManager defaultManager] removeFileAtPath: _dbPath handler: nil], @"Could not clean up database %@", _dbPath);
 
@@ -64,7 +67,7 @@
 
     /* Create our delegate and request a connection */
     provider = [[[PLSqliteConnectionProvider alloc] initWithPath: _dbPath] autorelease];
-    db = [provider getConnectionAndReturnError: nil];
+    db = [provider getConnectionAndReturnError: NULL];
 
     /* Test the connection */
     STAssertNotNil(db, @"Delegate returned nil.");
@@ -72,6 +75,9 @@
 
     /* Try to be polite */
     [provider closeConnection: db];
+
+    /* Force the connection closed, to ensure we don't keep a file handle open */
+    [db close];
 }
 
 @end

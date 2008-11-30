@@ -28,7 +28,7 @@
  */
 
 #import <SenTestingKit/SenTestingKit.h>
-#import "PlausibleDatabase.h"
+#import <PlausibleDatabase/PlausibleDatabase.h>
 
 #define TEST_DATABASE_VERSION 42
 
@@ -73,7 +73,7 @@
         return NO;
 
     if (_shouldFail) {
-        if (outError != nil)
+        if (outError != NULL)
             *outError = [NSError errorWithDomain: PLDatabaseErrorDomain code: PLDatabaseErrorUnknown userInfo: nil];
         return NO;
     } else {
@@ -185,10 +185,10 @@
                                                                        delegate: delegate] autorelease];
 
     /* Run the migration (will fail, should roll back)  */
-    STAssertFalse([dbManager migrateAndReturnError: nil], @"Migration was expected to fail");
+    STAssertFalse([dbManager migrateAndReturnError: NULL], @"Migration was expected to fail");
 
     /* Verify that our table was not created and the version remains at 0 */
-    id<PLDatabase> db = [_connProvider getConnectionAndReturnError: nil];
+    id<PLDatabase> db = [_connProvider getConnectionAndReturnError: NULL];
     STAssertNotNil(db, @"Could not get db connection");
 
     int version;

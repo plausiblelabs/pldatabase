@@ -27,7 +27,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/* On windows, use the included sqlite3 library */
+#ifdef WINDOWS
+#import "sqlite3.h"
+#else
 #import <sqlite3.h>
+#endif
 
 /* On older versions of sqlite3, sqlite3_prepare_v2() is not available */
 #if SQLITE_VERSION_NUMBER <= 3003009

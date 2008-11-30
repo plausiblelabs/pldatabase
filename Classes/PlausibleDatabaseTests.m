@@ -30,7 +30,7 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-#import "PlausibleDatabase.h"
+#import <PlausibleDatabase/PlausibleDatabase.h>
 
 @interface PlausibleDatabaseTests : SenTestCase {
 @private
@@ -50,7 +50,7 @@
 
     STAssertTrue([PLDatabaseErrorDomain isEqual: [error domain]], @"Domain incorrect");
     STAssertEquals(PLDatabaseErrorFileNotFound, [error code], @"Code incorrect");
-    STAssertTrue([@"test" isEqual: [error localizedDescription]], @"Description incorrect");
+    STAssertTrue([@"test" isEqual: [error localizedDescription]], @"Description incorrect (Wanted: test, Got: \"%@""", [error localizedDescription]);
 
     STAssertTrue([@"query" isEqual: [[error userInfo] objectForKey: PLDatabaseErrorQueryStringKey]], @"Query string incorrect");
     

@@ -29,7 +29,7 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-#import "PlausibleDatabase.h"
+#import <PlausibleDatabase/PlausibleDatabase.h>
 
 @interface PLSqliteResultSetTests : SenTestCase {
 @private
@@ -102,9 +102,9 @@
 
     /* Trigger an error by over iterating the result set. (Is there a better way to trigger this error?) */
     id<PLResultSet> result = [_db executeQuery: @"PRAGMA user_version"];
-    [result nextAndReturnError: nil];
-    [result nextAndReturnError: nil];
-    [result nextAndReturnError: nil];
+    [result nextAndReturnError: NULL];
+    [result nextAndReturnError: NULL];
+    [result nextAndReturnError: NULL];
     STAssertEquals(PLResultSetStatusError, [result nextAndReturnError: &error], @"Result set did not return an error");
 }
 
