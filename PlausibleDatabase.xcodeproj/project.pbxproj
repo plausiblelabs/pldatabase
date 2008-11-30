@@ -608,7 +608,7 @@
 				057829EF0EE25E850039276A /* Sources */,
 				057829F00EE25E850039276A /* Frameworks */,
 				05782A030EE25F890039276A /* Retarget Bundle */,
-				057829F10EE25E850039276A /* ShellScript */,
+				057829F10EE25E850039276A /* Run Tests */,
 			);
 			buildRules = (
 				05782A3B0EE260C60039276A /* PBXBuildRule */,
@@ -709,13 +709,14 @@
 			shellScript = "# Run the unit tests in this test bundle.\n\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 			showEnvVarsInLog = 0;
 		};
-		057829F10EE25E850039276A /* ShellScript */ = {
+		057829F10EE25E850039276A /* Run Tests */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run Tests";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -735,8 +736,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/Developer/Cocotron/1.0/bin/retargetBundle -framework Foundation -framework SenTestingKit -F \"${CONFIGURATION_BUILD_DIR}\" -framework PlausibleDatabase -destination \"$TARGET_BUILD_DIR/$EXECUTABLE_FOLDER_PATH\"";
-			showEnvVarsInLog = 0;
+			shellScript = "/Developer/Cocotron/1.0/bin/retargetBundle -framework Foundation -framework SenTestingKit -F \"${CONFIGURATION_BUILD_DIR}\" -framework PlausibleDatabase -destination \"$TARGET_BUILD_DIR/$EXECUTABLE_FOLDER_PATH\"\ncp \"${PROJECT_DIR}\"/Dependencies/sqlite-*/sqlite3.dll \"$TARGET_BUILD_DIR/$EXECUTABLE_FOLDER_PATH\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
