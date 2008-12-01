@@ -162,6 +162,20 @@
 			remoteGlobalIDString = 054CBFDB0EE242BC0043675E;
 			remoteInfo = "PlausibleDatabase-Windows-i386";
 		};
+		05782EF00EE3B0C80039276A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 058ABB630DE6361300C995C9 /* PlausibleDatabase-MacOSX */;
+			remoteInfo = "PlausibleDatabase-MacOSX";
+		};
+		05782F4C0EE3B8150039276A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 058ABB630DE6361300C995C9 /* PlausibleDatabase-MacOSX */;
+			remoteInfo = "PlausibleDatabase-MacOSX";
+		};
 		058ABC430DE638DE00C995C9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -534,10 +548,12 @@
 				054CBF090EE21B2B0043675E /* Headers */,
 				054CBF0A0EE21B2B0043675E /* Sources */,
 				054CBF0B0EE21B2B0043675E /* Frameworks */,
+				05782F1C0EE3B1A00039276A /* Create Framework */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				05782EF10EE3B0C80039276A /* PBXTargetDependency */,
 			);
 			name = "PlausibleDatabase-iPhoneOS";
 			productName = "PlausibleDatabase-iPhoneOS";
@@ -551,10 +567,12 @@
 				054CBF120EE21B570043675E /* Headers */,
 				054CBF130EE21B570043675E /* Sources */,
 				054CBF140EE21B570043675E /* Frameworks */,
+				05782F300EE3B7600039276A /* Create Framework */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				05782F4D0EE3B8150039276A /* PBXTargetDependency */,
 			);
 			name = "PlausibleDatabase-iPhoneSimulator";
 			productName = "PlausibleDatabase-iPhoneSimulator";
@@ -738,6 +756,34 @@
 			shellPath = /bin/sh;
 			shellScript = "/Developer/Cocotron/1.0/bin/retargetBundle -framework Foundation -framework SenTestingKit -F \"${CONFIGURATION_BUILD_DIR}\" -framework PlausibleDatabase -destination \"$TARGET_BUILD_DIR/$EXECUTABLE_FOLDER_PATH\"\ncp \"${PROJECT_DIR}\"/Dependencies/sqlite-*/sqlite3.dll \"$TARGET_BUILD_DIR/$EXECUTABLE_FOLDER_PATH\"";
 		};
+		05782F1C0EE3B1A00039276A /* Create Framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Create Framework";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Copy in the canonical framework\ntar -C \"${BUILD_DIR}/${CONFIGURATION}-${PL_CANONICAL_PLATFORM}\" -cf - \"${PL_CANONICAL_PRODUCT}.framework\" | tar -C \"${BUILT_PRODUCTS_DIR}\" -xf -\n\n# Copy in the static library we'll be using to replace the canonical framework's dylib\ncp \"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PL_CANONICAL_PRODUCT}.framework/Versions/Current/${PL_CANONICAL_PRODUCT}\"";
+		};
+		05782F300EE3B7600039276A /* Create Framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Create Framework";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Copy in the canonical framework\ntar -C \"${BUILD_DIR}/${CONFIGURATION}-${PL_CANONICAL_PLATFORM}\" -cf - \"${PL_CANONICAL_PRODUCT}.framework\" | tar -C \"${BUILT_PRODUCTS_DIR}\" -xf -\n\n# Copy in the static library we'll be using to replace the canonical framework's dylib\ncp \"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PL_CANONICAL_PRODUCT}.framework/Versions/Current/${PL_CANONICAL_PRODUCT}\"";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -852,6 +898,16 @@
 			isa = PBXTargetDependency;
 			target = 054CBFDB0EE242BC0043675E /* PlausibleDatabase-Windows-i386 */;
 			targetProxy = 05782A1A0EE260560039276A /* PBXContainerItemProxy */;
+		};
+		05782EF10EE3B0C80039276A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 058ABB630DE6361300C995C9 /* PlausibleDatabase-MacOSX */;
+			targetProxy = 05782EF00EE3B0C80039276A /* PBXContainerItemProxy */;
+		};
+		05782F4D0EE3B8150039276A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 058ABB630DE6361300C995C9 /* PlausibleDatabase-MacOSX */;
+			targetProxy = 05782F4C0EE3B8150039276A /* PBXContainerItemProxy */;
 		};
 		058ABC440DE638DE00C995C9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1180,6 +1236,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
+				PL_CANONICAL_PLATFORM = MacOSX;
+				PL_CANONICAL_PRODUCT = PlausibleDatabase;
 				PREBINDING = NO;
 				WARNING_CFLAGS = (
 					"-Wall",
@@ -1197,6 +1255,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
+				PL_CANONICAL_PLATFORM = MacOSX;
+				PL_CANONICAL_PRODUCT = PlausibleDatabase;
 				PREBINDING = NO;
 				WARNING_CFLAGS = (
 					"-Wall",
