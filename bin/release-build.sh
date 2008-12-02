@@ -4,19 +4,22 @@
 CONFIGURATION="Release"
 
 # Platforms to build
-PLATFORMS="MacOSX iPhoneOS iPhoneSimulator Windows-i386"
-
-# The primary platform, from which headers will be copied
-PRIMARY_PLATFORM="MacOSX"
+PLATFORMS="MacOSX Windows-i386"
 
 # Platforms that should be combined into a single iPhone output directory
 # The iPhoneOS/iPhoneSimulator platforms are unique (and, arguably, broken) in this regard
 IPHONE_PLATFORMS="iPhoneOS iPhoneSimulator"
 
+# The primary platform, from which headers will be copied
+PRIMARY_PLATFORM="MacOSX"
+
 # Base product name
 PRODUCT="PlausibleDatabase"
 
 VERSION=""
+
+# List of all iPhone static libs. Populated by copy_build()
+IPHONE_PRODUCT_LIBS=""
 
 print_usage () {
     echo "`basename $0` <configuration> <version>"
@@ -64,28 +67,21 @@ copy_build () {
         fi
     done
 
-
     # Input files/directories
     local PLATFORM_BUILD_DIR="build/${CONFIGURATION}-${platform}"
     local PLATFORM_FRAMEWORK="${PLATFORM_BUILD_DIR}/${PRODUCT}.framework"
     local CANONICAL_FRAMEWORK="build/${CONFIGURATION}-${PRIMARY_PLATFORM}/${PRODUCT}.framework"
     local PLATFORM_STATIC_LIB="${PLATFORM_BUILD_DIR}/lib${PRODUCT}.a"
-    local PLATFORM_SPECIFIC_STATIC_LIB="${PLATFORM_BUILD_DIR}/lib${PRODUCT}-`echo ${PLATFORM} | tr '[A-Z]' '[a-z]'`.a"
+    local PLATFORM_SDK_NAME=`echo ${PLATFORM} | tr '[A-Z]' '[a-z]'`
+    local PLATFORM_SPECIFIC_STATIC_LIB="${PLATFORM_BUILD_DIR}/lib${PRODUCT}-${PLATFORM_SDK_NAME}.a"
 
     # Output files/directories
-    local PLATFORM_OUTPUT_DIR="${ROOT_OUTPUT_DIR}/${PLATFORM}"
+    local PLATFORM_OUTPUT_DIR="${ROOT_OUTPUT_DIR}/${PRODUCT}-${PLATFORM}"
 
-    # The iPhone-combined simulator/device is a special case. They're nearly identical APIs, and are intended to be used
-    # in conjunction, retargeting a single target at either the Simulator or the Device. However, the simulator/device
-    # implementations are not identical, and a project can not be built Universal. We handle that special case here,
-    # by outputting a combined iPhone SDK release that includes specially named static libraries in a single
-    # iPhone output directory
+    # For the iPhone-combined simulator/device platforms, a platform-specific static library name is used
     if [ "${IPHONE_PLATFORM}" = "YES" ]; then
-        # For the iPhone-combined simulator/device platforms, a platform-specific static library name is used
         local PLATFORM_STATIC_LIB="${PLATFORM_SPECIFIC_STATIC_LIB}"
-
-        # A single combined 'iPhone' output directory is used.
-        local PLATFORM_OUTPUT_DIR="${ROOT_OUTPUT_DIR}/iPhone"
+        IPHONE_STATIC_LIBS="${IPHONE_STATIC_LIBS} ${PLATFORM_STATIC_LIB}"
     fi
 
 
@@ -95,33 +91,24 @@ copy_build () {
         exit 1
     fi
 
+    if [ ! -d "${PLATFORM_FRAMEWORK}" ]; then
+        echo "Missing framework build for ${PLATFORM_BUILD_DIR}"
+        exit 1
+    fi
+
     # Create the output directory if it does not exist
     mkdir -p "${PLATFORM_OUTPUT_DIR}"
     check_failure "Could not create directory: ${PLATFORM_OUTPUT_DIR}"
 
-    # Copy in a framework build, if it exists
-    if [ -d "${PLATFORM_FRAMEWORK}" ]; then
-        echo "${PLATFORM}: Copying ${PLATFORM_FRAMEWORK}"
-        tar -C `dirname "${PLATFORM_FRAMEWORK}"` -cf - "${PRODUCT}.framework" | tar -C "${PLATFORM_OUTPUT_DIR}" -xf -
-        check_failure "Could not copy framework ${PLATFORM_FRAMEWORK}"
-    fi
+    # Copy in built framework
+    echo "${PLATFORM}: Copying ${PLATFORM_FRAMEWORK}"
+    tar -C `dirname "${PLATFORM_FRAMEWORK}"` -cf - "${PRODUCT}.framework" | tar -C "${PLATFORM_OUTPUT_DIR}" -xf -
+    check_failure "Could not copy framework ${PLATFORM_FRAMEWORK}"
 
-    # Copy in a static lib build, if it exists
+    # Copy in static lib, if it exists
     if [ -f "${PLATFORM_STATIC_LIB}" ]; then
-        mkdir -p "${PLATFORM_OUTPUT_DIR}/lib"
-        check_failure "Could not create output directory"
-
-        mkdir -p "${PLATFORM_OUTPUT_DIR}/include/${PRODUCT}"
-        check_failure "Could not create output directory"
-
-        echo "${PLATFORM}: Copying ${PLATFORM_STATIC_LIB}"
-        cp -p "${PLATFORM_STATIC_LIB}" "${PLATFORM_OUTPUT_DIR}/lib"
-        check_failure "Could not copy static lib ${PLATFORM_STATIC_LIB}"
-
-        echo "${PLATFORM}: Copying header files from canonical framework"
-        cp -Rp "${CANONICAL_FRAMEWORK}/Headers/"* "${PLATFORM_OUTPUT_DIR}/include/${PRODUCT}"
-        check_failure "Could not copy headers from ${CANONICAL_FRAMEWORK}"
-    fi
+        cp "${PLATFORM_STATIC_LIB}" "${PLATFORM_OUTPUT_DIR}"
+    fi 
 }
 
 # Copy the platform build results
@@ -132,10 +119,28 @@ if [ -d "${OUTPUT_DIR}" ]; then
 fi
 mkdir -p "${OUTPUT_DIR}"
 
+# Standard builds
 for platform in ${PLATFORMS}; do
     echo "Copying ${platform} build to ${OUTPUT_DIR}"
     copy_build ${platform} "${OUTPUT_DIR}"
 done
+
+# Output the iPhone builds
+for platform in ${IPHONE_PLATFORMS}; do
+    copy_build ${platform} "${OUTPUT_DIR}/${PRODUCT}-iPhone/"
+done
+
+# Build a single iPhoneOS/iPhoneSimulator static framework
+for platform in ${IPHONE_PLATFORMS}; do
+    tar -C "${OUTPUT_DIR}/${PRODUCT}-iPhone/${PRODUCT}-${platform}" -cf - "${PRODUCT}.framework" | tar -C "${OUTPUT_DIR}/${PRODUCT}-iPhone/" -xf -
+    check_failure "Could not copy framework ${platform} framework"
+
+    rm -r "${OUTPUT_DIR}/${PRODUCT}-iPhone/${PRODUCT}-${platform}"
+    check_failure "Could not delete framework ${platform} framework"
+done
+
+lipo $IPHONE_STATIC_LIBS -create -output "${OUTPUT_DIR}/${PRODUCT}-iPhone/${PRODUCT}.framework/Versions/Current/${PRODUCT}"
+check_failure "Could not lipo iPhone framework"
 
 # Build the documentation
 doxygen
