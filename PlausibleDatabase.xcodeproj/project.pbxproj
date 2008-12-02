@@ -166,14 +166,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 058ABB630DE6361300C995C9 /* PlausibleDatabase-MacOSX */;
+			remoteGlobalIDString = 058ABB630DE6361300C995C9;
 			remoteInfo = "PlausibleDatabase-MacOSX";
 		};
 		05782F4C0EE3B8150039276A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 058ABB630DE6361300C995C9 /* PlausibleDatabase-MacOSX */;
+			remoteGlobalIDString = 058ABB630DE6361300C995C9;
 			remoteInfo = "PlausibleDatabase-MacOSX";
 		};
 		058ABC430DE638DE00C995C9 /* PBXContainerItemProxy */ = {
