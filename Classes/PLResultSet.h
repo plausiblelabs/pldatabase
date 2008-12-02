@@ -76,7 +76,7 @@ typedef enum {
  * @return Returns #PLResultSetStatusRow if the next row is available, or #PLResultSetStatusDone if no
  * further rows are available. If an error occurs, #PLResultSetStatusError will be returned.
  */
-- (PLResultSetStatus) nextAndReturnError: (NSError **) error;
+- (PLResultSetStatus) nextAndReturnError: (NSError **) outError;
 
 /**
  * Close the result set, and return any held database resources. After calling,
