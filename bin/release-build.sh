@@ -1,14 +1,14 @@
 #!/bin/sh
 
-# Default configuration
-CONFIGURATION="Release"
-
-# Platforms to build
-PLATFORMS="MacOSX Windows-i386"
+# Build configuration
+CONFIGURATION=""
 
 # Platforms that should be combined into a single iPhone output directory
 # The iPhoneOS/iPhoneSimulator platforms are unique (and, arguably, broken) in this regard
 IPHONE_PLATFORMS="iPhoneOS iPhoneSimulator"
+
+# Platforms to build
+PLATFORMS="MacOSX Windows-i386 ${IPHONE_PLATFORMS}"
 
 # The primary platform, from which headers will be copied
 PRIMARY_PLATFORM="MacOSX"
@@ -16,22 +16,78 @@ PRIMARY_PLATFORM="MacOSX"
 # Base product name
 PRODUCT="PlausibleDatabase"
 
-VERSION=""
+VERSION="`date +%Y%m%d`-snap"
 
 # List of all iPhone static libs. Populated by copy_build()
 IPHONE_PRODUCT_LIBS=""
 
 print_usage () {
-    echo "`basename $0` <configuration> <version>"
+    echo "`basename $0` <options> [-c configuration] [-v version]"
+    echo "Options:"
+    echo "-c:    Specify the build configuration (Release or Debug)"
+    echo "-v:    Specify the release version. If none is supplied, ${VERSION} will be used"
+    echo "-p:    Specify a platform to build (Available: ${PLATFORMS})."
+    echo "       Multiple -p options may be supplied"
+    echo "\nExample:"
+    echo "    $0 -p MacOSX -c Release"
+    echo "    Build a Mac OS X-only release"
+    echo ""
+    echo "    $0 -c Release -v 1.3"
+    echo "    Build a standard release ($PLATFORMS)"
 }
 
-CONFIGURATION=$1
-VERSION=$2
+check_supported_platform () {
+    local REQ_PLATFORM=$1
+    for platform in ${PLATFORMS}; do
+        if [ "${platform}" = "${REQ_PLATFORM}" ]; then
+            REQ_PLATFORM_VALID=YES
+            return
+        fi
+    done
+    REQ_PLATFORM_VALID=NO
+}
 
-if [ -z "$VERSION" ] || [ -z "${CONFIGURATION}" ]; then
+# Read in the command line arguments
+while getopts hc:v:p: OPTION; do
+    case ${OPTION} in
+        p)
+            check_supported_platform $OPTARG
+            if [ "${REQ_PLATFORM_VALID}" != "YES" ]; then
+                echo "Platform ${OPTARG} is not supported"
+                exit 1
+            fi
+            CUSTOM_PLATFORM="${CUSTOM_PLATFORM} $OPTARG"
+            ;;
+        c)
+            CONFIGURATION=${OPTARG}
+            ;;
+        v)
+            VERSION=${OPTARG}
+            ;;
+        h)
+            print_usage
+            exit 1;;
+        *)
+            print_usage
+            exit 1;;
+    esac
+done
+shift $(($OPTIND - 1))
+
+if [ ! -z "${CUSTOM_PLATFORM}" ]; then
+    PLATFORMS="${CUSTOM_PLATFORM}"
+fi
+
+if [ -z "${CONFIGURATION}" ]; then
     print_usage
     exit 1
 fi
+
+# What are we building
+echo "Building ${PRODUCT}"
+echo "Platforms: ${PLATFORMS}"
+echo "Config: ${CONFIGURATION}"
+sleep 1
 
 # Check for program failure
 check_failure () {
@@ -125,22 +181,23 @@ for platform in ${PLATFORMS}; do
     copy_build ${platform} "${OUTPUT_DIR}"
 done
 
-# Output the iPhone builds
-for platform in ${IPHONE_PLATFORMS}; do
-    copy_build ${platform} "${OUTPUT_DIR}/${PRODUCT}-iPhone/"
-done
-
 # Build a single iPhoneOS/iPhoneSimulator static framework
 for platform in ${IPHONE_PLATFORMS}; do
-    tar -C "${OUTPUT_DIR}/${PRODUCT}-iPhone/${PRODUCT}-${platform}" -cf - "${PRODUCT}.framework" | tar -C "${OUTPUT_DIR}/${PRODUCT}-iPhone/" -xf -
-    check_failure "Could not copy framework ${platform} framework"
+    if [ -d "${OUTPUT_DIR}/${PRODUCT}-${platform}" ]; then
+        mkdir -p  "${OUTPUT_DIR}/${PRODUCT}-iPhone/"
 
-    rm -r "${OUTPUT_DIR}/${PRODUCT}-iPhone/${PRODUCT}-${platform}"
-    check_failure "Could not delete framework ${platform} framework"
+        tar -C "${OUTPUT_DIR}/${PRODUCT}-${platform}" -cf - "${PRODUCT}.framework" | tar -C "${OUTPUT_DIR}/${PRODUCT}-iPhone/" -xf -
+        check_failure "Could not copy framework ${platform} framework"
+
+        rm -r "${OUTPUT_DIR}/${PRODUCT}-${platform}"
+        check_failure "Could not delete framework ${platform} framework"
+    fi
 done
 
-lipo $IPHONE_STATIC_LIBS -create -output "${OUTPUT_DIR}/${PRODUCT}-iPhone/${PRODUCT}.framework/Versions/Current/${PRODUCT}"
-check_failure "Could not lipo iPhone framework"
+if [ ! -z "${IPHONE_STATIC_LIBS}" ]; then
+    lipo $IPHONE_STATIC_LIBS -create -output "${OUTPUT_DIR}/${PRODUCT}-iPhone/${PRODUCT}.framework/Versions/Current/${PRODUCT}"
+    check_failure "Could not lipo iPhone framework"
+fi
 
 # Build the documentation
 doxygen

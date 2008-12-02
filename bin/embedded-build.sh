@@ -21,7 +21,7 @@ print_usage () {
 # this script will be retired.
 echo "NOTE:"
 echo "This release build mechanism has been deprecated in favor of ./bin/release-build.sh, and may be removed in future versions."
-echo "For more information, see ..." # TODO: Point to documentation
+echo "Run ./bin/release-build.sh -h for more information. The release build script provides drop-in frameworks for all supported platforms."
 echo "Do you wish to continue? (yes/no): \c"
 read REPLY
 
