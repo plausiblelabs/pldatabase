@@ -161,6 +161,9 @@ copy_build () {
     tar -C `dirname "${PLATFORM_FRAMEWORK}"` -cf - "${PRODUCT}.framework" | tar -C "${PLATFORM_OUTPUT_DIR}" -xf -
     check_failure "Could not copy framework ${PLATFORM_FRAMEWORK}"
 
+    # Update the framework version
+    /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${VERSION}" "${PLATFORM_OUTPUT_DIR}/${PRODUCT}.framework/Versions/Current/Resources/Info.plist"
+
     # Copy in static lib, if it exists
     if [ -f "${PLATFORM_STATIC_LIB}" ]; then
         cp "${PLATFORM_STATIC_LIB}" "${PLATFORM_OUTPUT_DIR}"
