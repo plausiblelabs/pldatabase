@@ -21,6 +21,9 @@ VERSION="`date +%Y%m%d`-snap"
 # List of all iPhone static libs. Populated by copy_build()
 IPHONE_PRODUCT_LIBS=""
 
+# Arguments given to all xcodebuild invocations
+XCODEOPTS="OBJROOT=build/ SYMROOT=build/"
+
 print_usage () {
     echo "`basename $0` <options> [-c configuration] [-v version]"
     echo "Options:"
@@ -99,13 +102,13 @@ check_failure () {
 
 # Build all platforms targets, and execute their unit tests.
 for platform in ${PLATFORMS}; do
-    xcodebuild -configuration $CONFIGURATION -target ${PRODUCT}-${platform}
+    xcodebuild -configuration $CONFIGURATION -target ${PRODUCT}-${platform} $XCODEOPTS
     check_failure "Build for ${PRODUCT}-${platform} failed"
 
     # Check for unit tests, run them if available
     xcodebuild -list | grep -q Tests-${platform}
     if [ $? = 0 ]; then
-        xcodebuild -configuration ${CONFIGURATION} -target Tests-${platform}
+        xcodebuild -configuration ${CONFIGURATION} -target Tests-${platform} $XCODEOPTS
         check_failure "Unit tests for ${PRODUCT}-${platform} failed"
     fi
 done

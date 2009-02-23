@@ -61,10 +61,10 @@ fi
 for sdk in $SDKS; do
     case $sdk in
         macosx*)
-            xcodebuild -target $TARGET -sdk $sdk -configuration $CONFIGURATION ARCHS="i386 ppc"
+            xcodebuild -target $TARGET -sdk $sdk -configuration $CONFIGURATION ARCHS="i386 ppc" OBJROOT=build/ SYMROOT=build/
             ;;
         *)
-            xcodebuild -target $TARGET -sdk $sdk -configuration $CONFIGURATION
+            xcodebuild -target $TARGET -sdk $sdk -configuration $CONFIGURATION OBJROOT=build/ SYMROOT=build/
             ;;
     esac
 done
