@@ -28,8 +28,8 @@
  */
 
 /**
- * A protocol for creating, or providing existing PLDatabase connections, and checking those connections back
- * in for re-use upon completion.
+ * A protocol for opening new or existing PLDatabase connections, and returning those connections for
+ * re-use upon completion.
  *
  * @par Thread Safety
  * PLDatabaseConnectionProvider instances implement no locking and must not be shared between threads
@@ -49,8 +49,8 @@
 - (id<PLDatabase>) getConnectionAndReturnError: (NSError **) error;
 
 /**
- * Called to inform the delegate that the given connection may be re-used.
+ * Called to return the given connection for re-use.
  */
-- (void) closeConnection: (id<PLDatabase>) connection;
+- (void) returnConnection: (id<PLDatabase>) connection;
 
 @end

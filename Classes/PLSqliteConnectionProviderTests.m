@@ -74,7 +74,7 @@
     STAssertTrue([db goodConnection], @"Database connection claims to be bad.");
 
     /* Try to be polite */
-    [provider closeConnection: db];
+    [provider returnConnection: db];
     STAssertFalse([db goodConnection], @"Connection should be closed");
 }
 
