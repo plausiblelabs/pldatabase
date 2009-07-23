@@ -237,4 +237,24 @@
     STAssertTrue([data isEqualToData: [rs dataForColumn: @"dataval"]], @"Data value incorrect");
 }
 
+/**
+ * Test handling of binding too many parameters. This can occur with a dictionary containing unused keys.
+ */
+- (void) testBindTooManyParameters {
+    id<PLPreparedStatement> stmt;
+    NSMutableDictionary *parameters;
+
+    /* Prepare the statement */
+    stmt = [_db prepareStatement: @"INSERT INTO test (name, color) VALUES (:name, :color)"];
+    
+    /* Create the parameter dictionary */
+    parameters = [NSMutableDictionary dictionaryWithCapacity: 2];
+    [parameters setObject: @"Appleseed" forKey: @"name"];
+    [parameters setObject: @"blue" forKey: @"color"];
+    [parameters setObject: @"value" forKey: @"extra"];
+
+    /* Bind and insert our values. If no exception is thrown, the test succeeds. */
+    [stmt bindParameterDictionary: parameters];
+}
+
 @end

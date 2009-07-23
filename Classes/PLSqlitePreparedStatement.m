@@ -290,7 +290,7 @@
 #endif /* PL_SQLITE_LEGACY_STMT_PREPARE */
 
     /* Verify that a complete parameter list was provided */
-    if ([strategy count] != _parameterCount)
+    if ([strategy count] < _parameterCount)
         [NSException raise: PLSqliteException 
                     format: @"%@ prepared statement provided invalid parameter count (expected %d, but %d were provided)", [self class], _parameterCount, [strategy count]];
 
