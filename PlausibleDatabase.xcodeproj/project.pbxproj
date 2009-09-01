@@ -1171,7 +1171,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				EFFECTIVE_PLATFORM_NAME = "-MacOSX";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1197,7 +1197,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = Tests;
-				SDKROOT = macosx10.4;
+				SDKROOT = macosx10.5;
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
@@ -1206,7 +1206,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EFFECTIVE_PLATFORM_NAME = "-MacOSX";
@@ -1231,7 +1231,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = Tests;
-				SDKROOT = macosx10.4;
+				SDKROOT = macosx10.5;
 				WRAPPER_EXTENSION = octest;
 				ZERO_LINK = NO;
 			};
@@ -1355,7 +1355,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1366,6 +1366,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = "Resources/PlausibleDatabase-Info.plist";
 				INSTALL_PATH = "@loader_path/../Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -1374,7 +1375,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = PlausibleDatabase;
-				SDKROOT = macosx10.4;
+				SDKROOT = macosx10.5;
 			};
 			name = Debug;
 		};
@@ -1382,7 +1383,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1403,7 +1404,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = PlausibleDatabase;
-				SDKROOT = macosx10.4;
+				SDKROOT = macosx10.5;
 				ZERO_LINK = NO;
 			};
 			name = Release;
