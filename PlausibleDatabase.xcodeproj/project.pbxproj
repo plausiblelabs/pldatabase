@@ -7,19 +7,30 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		054CBF250EE21BD10043675E /* PlausibleDatabase (Mac & iPhone) */ = {
+		054CBF250EE21BD10043675E /* PlausibleDatabase */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 054CBF360EE21C380043675E /* Build configuration list for PBXAggregateTarget "PlausibleDatabase (Mac & iPhone)" */;
+			buildConfigurationList = 054CBF360EE21C380043675E /* Build configuration list for PBXAggregateTarget "PlausibleDatabase" */;
 			buildPhases = (
 			);
 			dependencies = (
 				054CBF2F0EE21BE50043675E /* PBXTargetDependency */,
 				054CBF2D0EE21BE50043675E /* PBXTargetDependency */,
-				054CBF2B0EE21BE50043675E /* PBXTargetDependency */,
-				054CBF290EE21BE50043675E /* PBXTargetDependency */,
+				05534D42104CC04E00647A44 /* PBXTargetDependency */,
 			);
-			name = "PlausibleDatabase (Mac & iPhone)";
+			name = PlausibleDatabase;
 			productName = PlausibleDatabase;
+		};
+		05534D4B104CC09000647A44 /* Disk Image */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 05534D4E104CC0C700647A44 /* Build configuration list for PBXAggregateTarget "Disk Image" */;
+			buildPhases = (
+				05534D4A104CC09000647A44 /* Build Disk Image */,
+			);
+			dependencies = (
+				05534D6F104CC18100647A44 /* PBXTargetDependency */,
+			);
+			name = "Disk Image";
+			productName = "Disk Image";
 		};
 /* End PBXAggregateTarget section */
 
@@ -52,6 +63,20 @@
 		054CBFF80EE244740043675E /* PLSqliteMigrationVersionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D196670EAFC9C800F7079D /* PLSqliteMigrationVersionManager.m */; };
 		054CC0020EE245130043675E /* sqlite3.dll in Frameworks */ = {isa = PBXBuildFile; fileRef = 054CBFFD0EE244F60043675E /* sqlite3.dll */; };
 		0551CA780DCBED7A00E31E46 /* PLSqliteDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */; };
+		05534D2D104CBFFE00647A44 /* PlausibleDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */; };
+		05534D2E104CBFFE00647A44 /* PLDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA660DCBEC1500E31E46 /* PLDatabase.h */; };
+		05534D2F104CBFFE00647A44 /* PLPreparedStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = 0502A7F10DDE9B4A006F4613 /* PLPreparedStatement.h */; };
+		05534D30104CBFFE00647A44 /* PLResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */; };
+		05534D31104CBFFE00647A44 /* PLSqliteDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA680DCBEC5B00E31E46 /* PLSqliteDatabase.h */; };
+		05534D32104CBFFE00647A44 /* PLSqlitePreparedStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = 0502A8420DDE9EDD006F4613 /* PLSqlitePreparedStatement.h */; };
+		05534D33104CBFFE00647A44 /* PLSqliteResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 058196AF0DD16BDC001E992F /* PLSqliteResultSet.h */; };
+		05534D34104CBFFE00647A44 /* PLSqliteConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9980EAEEECB003F848A /* PLSqliteConnectionProvider.h */; };
+		05534D35104CBFFE00647A44 /* PLDatabaseMigrationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9CF0EAEF1EF003F848A /* PLDatabaseMigrationManager.h */; };
+		05534D36104CBFFE00647A44 /* PLDatabaseMigrationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9D20EAEF1EF003F848A /* PLDatabaseMigrationDelegate.h */; };
+		05534D37104CBFFE00647A44 /* PLDatabaseMigrationVersionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578DA3C0EAF02A5003F848A /* PLDatabaseMigrationVersionManager.h */; };
+		05534D38104CBFFE00647A44 /* PLSqliteMigrationVersionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05D196660EAFC9C800F7079D /* PLSqliteMigrationVersionManager.h */; };
+		05534D39104CBFFE00647A44 /* PLDatabaseConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9940EAEED94003F848A /* PLDatabaseConnectionProvider.h */; };
+		05534D3A104CBFFE00647A44 /* PLDatabaseMigrationTransactionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05BE86970EC2D7BE00CCAA2A /* PLDatabaseMigrationTransactionManager.h */; };
 		05782A0B0EE25FF60039276A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0578285F0EE2520F0039276A /* libsqlite3.dylib */; };
 		05782A120EE260490039276A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0578285F0EE2520F0039276A /* libsqlite3.dylib */; };
 		05782A3E0EE260F50039276A /* PlausibleDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -127,20 +152,6 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
-		054CBF280EE21BE50043675E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 054CBF150EE21B570043675E;
-			remoteInfo = "PlausibleDatabase-iPhoneSimulator";
-		};
-		054CBF2A0EE21BE50043675E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 054CBF0C0EE21B2B0043675E;
-			remoteInfo = "PlausibleDatabase-iPhoneOS";
-		};
 		054CBF2C0EE21BE50043675E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -154,6 +165,34 @@
 			proxyType = 1;
 			remoteGlobalIDString = 0551CA4A0DCBE9F600E31E46;
 			remoteInfo = "PlausibleDatabase-Tests-MacOSX";
+		};
+		05534D29104CBFF500647A44 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 054CBF0C0EE21B2B0043675E /* PlausibleDatabase-iPhoneOS */;
+			remoteInfo = "PlausibleDatabase-iPhoneOS";
+		};
+		05534D2B104CBFF800647A44 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 054CBF150EE21B570043675E /* PlausibleDatabase-iPhoneSimulator */;
+			remoteInfo = "PlausibleDatabase-iPhoneSimulator";
+		};
+		05534D41104CC04E00647A44 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 05534D20104CBFB700647A44 /* PlausibleDatabase-iPhone */;
+			remoteInfo = "PlausibleDatabase-iPhone";
+		};
+		05534D6E104CC18100647A44 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 054CBF250EE21BD10043675E /* PlausibleDatabase */;
+			remoteInfo = PlausibleDatabase;
 		};
 		05782A1A0EE260560039276A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -219,6 +258,7 @@
 		0551CA680DCBEC5B00E31E46 /* PLSqliteDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteDatabase.h; sourceTree = "<group>"; };
 		0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteDatabase.m; sourceTree = "<group>"; };
 		0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteDatabaseTests.m; sourceTree = "<group>"; };
+		05534D21104CBFB700647A44 /* PlausibleDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlausibleDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0578285F0EE2520F0039276A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = /usr/lib/libsqlite3.dylib; sourceTree = "<absolute>"; };
 		057828660EE2524B0039276A /* PlausibleDatabase-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PlausibleDatabase-Info.plist"; sourceTree = "<group>"; };
 		057828670EE2524B0039276A /* Tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
@@ -278,6 +318,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		05534D1F104CBFB700647A44 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		057829F00EE25E850039276A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -308,6 +355,7 @@
 				054CBF160EE21B570043675E /* libPlausibleDatabase-iphonesimulator.a */,
 				054CBFDC0EE242BC0043675E /* PlausibleDatabase.framework */,
 				057829F30EE25E850039276A /* Tests.octest */,
+				05534D21104CBFB700647A44 /* PlausibleDatabase.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -517,6 +565,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		05534D1C104CBFB700647A44 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05534D2D104CBFFE00647A44 /* PlausibleDatabase.h in Headers */,
+				05534D2E104CBFFE00647A44 /* PLDatabase.h in Headers */,
+				05534D2F104CBFFE00647A44 /* PLPreparedStatement.h in Headers */,
+				05534D30104CBFFE00647A44 /* PLResultSet.h in Headers */,
+				05534D31104CBFFE00647A44 /* PLSqliteDatabase.h in Headers */,
+				05534D32104CBFFE00647A44 /* PLSqlitePreparedStatement.h in Headers */,
+				05534D33104CBFFE00647A44 /* PLSqliteResultSet.h in Headers */,
+				05534D34104CBFFE00647A44 /* PLSqliteConnectionProvider.h in Headers */,
+				05534D35104CBFFE00647A44 /* PLDatabaseMigrationManager.h in Headers */,
+				05534D36104CBFFE00647A44 /* PLDatabaseMigrationDelegate.h in Headers */,
+				05534D37104CBFFE00647A44 /* PLDatabaseMigrationVersionManager.h in Headers */,
+				05534D38104CBFFE00647A44 /* PLSqliteMigrationVersionManager.h in Headers */,
+				05534D39104CBFFE00647A44 /* PLDatabaseConnectionProvider.h in Headers */,
+				05534D3A104CBFFE00647A44 /* PLDatabaseMigrationTransactionManager.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		058ABB5F0DE6361300C995C9 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -548,7 +617,6 @@
 				054CBF090EE21B2B0043675E /* Headers */,
 				054CBF0A0EE21B2B0043675E /* Sources */,
 				054CBF0B0EE21B2B0043675E /* Frameworks */,
-				05782F1C0EE3B1A00039276A /* Create Framework */,
 			);
 			buildRules = (
 			);
@@ -567,7 +635,6 @@
 				054CBF120EE21B570043675E /* Headers */,
 				054CBF130EE21B570043675E /* Sources */,
 				054CBF140EE21B570043675E /* Frameworks */,
-				05782F300EE3B7600039276A /* Create Framework */,
 			);
 			buildRules = (
 			);
@@ -617,6 +684,27 @@
 			productName = Tests;
 			productReference = 0551CA4B0DCBE9F600E31E46 /* Tests.octest */;
 			productType = "com.apple.product-type.bundle";
+		};
+		05534D20104CBFB700647A44 /* PlausibleDatabase-iPhone */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05534D25104CBFB800647A44 /* Build configuration list for PBXNativeTarget "PlausibleDatabase-iPhone" */;
+			buildPhases = (
+				05534D1C104CBFB700647A44 /* Headers */,
+				05534D1D104CBFB700647A44 /* Resources */,
+				05534D1E104CBFB700647A44 /* Sources */,
+				05534D1F104CBFB700647A44 /* Frameworks */,
+				05534D44104CC05B00647A44 /* Lipo Binary */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				05534D2A104CBFF500647A44 /* PBXTargetDependency */,
+				05534D2C104CBFF800647A44 /* PBXTargetDependency */,
+			);
+			name = "PlausibleDatabase-iPhone";
+			productName = "PlausibleDatabase-iPhone";
+			productReference = 05534D21104CBFB700647A44 /* PlausibleDatabase.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		057829F20EE25E850039276A /* Tests-Windows-i386 */ = {
 			isa = PBXNativeTarget;
@@ -670,8 +758,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				054CBF250EE21BD10043675E /* PlausibleDatabase (Mac & iPhone) */,
+				054CBF250EE21BD10043675E /* PlausibleDatabase */,
+				05534D4B104CC09000647A44 /* Disk Image */,
 				058ABB630DE6361300C995C9 /* PlausibleDatabase-MacOSX */,
+				05534D20104CBFB700647A44 /* PlausibleDatabase-iPhone */,
 				054CBF0C0EE21B2B0043675E /* PlausibleDatabase-iPhoneOS */,
 				054CBF150EE21B570043675E /* PlausibleDatabase-iPhoneSimulator */,
 				054CBFDB0EE242BC0043675E /* PlausibleDatabase-Windows-i386 */,
@@ -690,6 +780,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		0551CA460DCBE9F600E31E46 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05534D1D104CBFB700647A44 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -727,6 +824,34 @@
 			shellScript = "# Run the unit tests in this test bundle.\n\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 			showEnvVarsInLog = 0;
 		};
+		05534D44104CC05B00647A44 /* Lipo Binary */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Lipo Binary";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "FRAMEWORK=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework\"\n\nlipo \\\n\t\"${BUILD_DIR}/${CONFIGURATION}-iphoneos/libPlausibleDatabase-iPhoneOS.a\" \\\n\t\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/libPlausibleDatabase-iPhoneSimulator.a\" \\\n\t-create -output \"${FRAMEWORK}/Versions/Current/${PRODUCT_NAME}\"\n\ncd \"${FRAMEWORK}\" && ln -sf \"Versions/Current/${PRODUCT_NAME}\" ./";
+		};
+		05534D4A104CC09000647A44 /* Build Disk Image */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build Disk Image";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Set the destroot\nDESTROOT=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}-${CURRENT_PROJECT_VERSION}\"\nmkdir -p \"${DESTROOT}\"\n\n# Per-platform framework destinations\nIPHONE_DEST=\"${DESTROOT}/iPhone Framework\"\nMAC_DEST=\"${DESTROOT}/Mac OS X Framework\"\nDOC_DEST=\"${DESTROOT}/Documentation\"\n\n# Populate the destroot\nmkdir -p \"${IPHONE_DEST}\"\ntar -C \"${BUILD_DIR}/${CONFIGURATION}-iphone\" -cf - \"PlausibleDatabase.framework\" | tar -C \"${IPHONE_DEST}\" -xf - \n\nmkdir -p \"${MAC_DEST}\"\ntar -C \"${BUILD_DIR}/${CONFIGURATION}-MacOSX\" -cf - \"PlausibleDatabase.framework\" | tar -C \"${MAC_DEST}\" -xf - \n\nif [ ! -z `which doxygen` ]; then\n\tpushd \"${SRCROOT}\" >/dev/null\n    doxygen\n    if [ $? != 0 ]; then\n        echo \"ERROR: Documentation generation failed\" >/dev/stderr\n        exit 1\n    fi\n\tpopd >/dev/null\n\n\trm -rf \"${DOC_DEST}\"\n\tmv docs \"${DOC_DEST}\"\nelse\n    echo \"WARNING: Doxygen not available, skipping documentation generation\" >/dev/stderr\nfi\n\n# Create the disk image\nrm -f \"${DESTROOT}.dmg\"\nhdiutil create -srcfolder \"${DESTROOT}\" \"${DESTROOT}.dmg\"";
+		};
 		057829F10EE25E850039276A /* Run Tests */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -755,34 +880,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/Developer/Cocotron/1.0/bin/retargetBundle -framework Foundation -framework SenTestingKit -F \"${CONFIGURATION_BUILD_DIR}\" -framework PlausibleDatabase -destination \"$TARGET_BUILD_DIR/$EXECUTABLE_FOLDER_PATH\"\ncp \"${PROJECT_DIR}\"/Dependencies/sqlite-*/sqlite3.dll \"$TARGET_BUILD_DIR/$EXECUTABLE_FOLDER_PATH\"";
-		};
-		05782F1C0EE3B1A00039276A /* Create Framework */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Create Framework";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Copy in the canonical framework\ntar -C \"${BUILD_DIR}/${CONFIGURATION}-${PL_CANONICAL_PLATFORM}\" -cf - \"${PL_CANONICAL_PRODUCT}.framework\" | tar -C \"${BUILT_PRODUCTS_DIR}\" -xf -\n\n# Copy in the static library we'll be using to replace the canonical framework's dylib\ncp \"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PL_CANONICAL_PRODUCT}.framework/Versions/Current/${PL_CANONICAL_PRODUCT}\"";
-		};
-		05782F300EE3B7600039276A /* Create Framework */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Create Framework";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Copy in the canonical framework\ntar -C \"${BUILD_DIR}/${CONFIGURATION}-${PL_CANONICAL_PLATFORM}\" -cf - \"${PL_CANONICAL_PRODUCT}.framework\" | tar -C \"${BUILT_PRODUCTS_DIR}\" -xf -\n\n# Copy in the static library we'll be using to replace the canonical framework's dylib\ncp \"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PL_CANONICAL_PRODUCT}.framework/Versions/Current/${PL_CANONICAL_PRODUCT}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -843,6 +940,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		05534D1E104CBFB700647A44 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		057829EF0EE25E850039276A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -874,16 +978,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		054CBF290EE21BE50043675E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 054CBF150EE21B570043675E /* PlausibleDatabase-iPhoneSimulator */;
-			targetProxy = 054CBF280EE21BE50043675E /* PBXContainerItemProxy */;
-		};
-		054CBF2B0EE21BE50043675E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 054CBF0C0EE21B2B0043675E /* PlausibleDatabase-iPhoneOS */;
-			targetProxy = 054CBF2A0EE21BE50043675E /* PBXContainerItemProxy */;
-		};
 		054CBF2D0EE21BE50043675E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 058ABB630DE6361300C995C9 /* PlausibleDatabase-MacOSX */;
@@ -893,6 +987,26 @@
 			isa = PBXTargetDependency;
 			target = 0551CA4A0DCBE9F600E31E46 /* Tests-MacOSX */;
 			targetProxy = 054CBF2E0EE21BE50043675E /* PBXContainerItemProxy */;
+		};
+		05534D2A104CBFF500647A44 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 054CBF0C0EE21B2B0043675E /* PlausibleDatabase-iPhoneOS */;
+			targetProxy = 05534D29104CBFF500647A44 /* PBXContainerItemProxy */;
+		};
+		05534D2C104CBFF800647A44 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 054CBF150EE21B570043675E /* PlausibleDatabase-iPhoneSimulator */;
+			targetProxy = 05534D2B104CBFF800647A44 /* PBXContainerItemProxy */;
+		};
+		05534D42104CC04E00647A44 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 05534D20104CBFB700647A44 /* PlausibleDatabase-iPhone */;
+			targetProxy = 05534D41104CC04E00647A44 /* PBXContainerItemProxy */;
+		};
+		05534D6F104CC18100647A44 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 054CBF250EE21BD10043675E /* PlausibleDatabase */;
+			targetProxy = 05534D6E104CC18100647A44 /* PBXContainerItemProxy */;
 		};
 		05782A1B0EE260560039276A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1123,6 +1237,72 @@
 			};
 			name = Release;
 		};
+		05534D23104CBFB800647A44 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EFFECTIVE_PLATFORM_NAME = "-iphone";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "Resources/PlausibleDatabase-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = PlausibleDatabase;
+			};
+			name = Debug;
+		};
+		05534D24104CBFB800647A44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EFFECTIVE_PLATFORM_NAME = "-iphone";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "Resources/PlausibleDatabase-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = PlausibleDatabase;
+			};
+			name = Release;
+		};
+		05534D4C104CC09000647A44 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "Plausible Database";
+			};
+			name = Debug;
+		};
+		05534D4D104CC09000647A44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Plausible Database";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		057829F70EE25E860039276A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1232,6 +1412,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CURRENT_PROJECT_VERSION = 1.2;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -1239,8 +1420,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
-				PL_CANONICAL_PLATFORM = MacOSX;
-				PL_CANONICAL_PRODUCT = PlausibleDatabase;
 				PREBINDING = NO;
 				WARNING_CFLAGS = (
 					"-Wall",
@@ -1253,14 +1432,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CURRENT_PROJECT_VERSION = 1.2;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = 4.0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
-				PL_CANONICAL_PLATFORM = MacOSX;
-				PL_CANONICAL_PRODUCT = PlausibleDatabase;
 				PREBINDING = NO;
 				WARNING_CFLAGS = (
 					"-Wall",
@@ -1290,7 +1468,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		054CBF360EE21C380043675E /* Build configuration list for PBXAggregateTarget "PlausibleDatabase (Mac & iPhone)" */ = {
+		054CBF360EE21C380043675E /* Build configuration list for PBXAggregateTarget "PlausibleDatabase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				054CBF260EE21BD10043675E /* Debug */,
@@ -1313,6 +1491,24 @@
 			buildConfigurations = (
 				0551CA4E0DCBE9F600E31E46 /* Debug */,
 				0551CA4F0DCBE9F600E31E46 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		05534D25104CBFB800647A44 /* Build configuration list for PBXNativeTarget "PlausibleDatabase-iPhone" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05534D23104CBFB800647A44 /* Debug */,
+				05534D24104CBFB800647A44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		05534D4E104CC0C700647A44 /* Build configuration list for PBXAggregateTarget "Disk Image" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05534D4C104CC09000647A44 /* Debug */,
+				05534D4D104CC09000647A44 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
