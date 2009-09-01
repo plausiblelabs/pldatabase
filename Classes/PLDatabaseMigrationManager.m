@@ -144,7 +144,7 @@
         goto rollback;
 
     /* Return our connection to the provider */
-    [_connectionProvider returnConnection: db];
+    [_connectionProvider closeConnection: db];
 
     /* Create and return the new manager */
     return YES;
@@ -152,7 +152,7 @@
 rollback:
     [_txManager rollbackTransactionForDatabase: db error: NULL];
 cleanup:
-    [_connectionProvider returnConnection: db];
+    [_connectionProvider closeConnection: db];
     return NO;
 }
 

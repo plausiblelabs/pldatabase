@@ -30,10 +30,6 @@
 /**
  * A protocol for opening new or existing PLDatabase connections, and returning those connections for
  * re-use upon completion.
- *
- * @par Thread Safety
- * PLDatabaseConnectionProvider instances implement no locking and must not be shared between threads
- * without external synchronization.
  */
 @protocol PLDatabaseConnectionProvider <NSObject>
 
@@ -51,6 +47,6 @@
 /**
  * Called to return the given connection for re-use.
  */
-- (void) returnConnection: (id<PLDatabase>) connection;
+- (void) closeConnection: (id<PLDatabase>) connection;
 
 @end

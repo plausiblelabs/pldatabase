@@ -33,6 +33,9 @@
  * Provides new PLSqliteDatabase connections as per the PLDatabaseConnectionProvider
  * protocol. This class does no connection pooling, and should be combined
  * with a generic connection pool implementation if pooling is required.
+ *
+ * @par Thread Safety
+ * Immutable and thread-safe. May be used from any thread.
  */
 @implementation PLSqliteConnectionProvider
 
@@ -78,7 +81,7 @@
 
 
 /* from PLEntityConnectionDelegate */
-- (void) returnConnection: (id<PLDatabase>) connection {
+- (void) closeConnection: (id<PLDatabase>) connection {
     // Nothing to do besides close the connection, no connection pooling
     [connection close];
 }

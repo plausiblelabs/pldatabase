@@ -162,7 +162,7 @@
     STAssertTrue([database tableExists: @"testtable"], @"Test table was not created");
 
     /* Clean up */
-    [_connProvider returnConnection: database];
+    [_connProvider closeConnection: database];
 }
 
 
@@ -193,7 +193,7 @@
     STAssertEquals(0, version, @"The transaction was not rolled back, version is not 0");
     STAssertFalse([db tableExists: @"testtable"], @"The transaction was not rolled back, table exists");
 
-    [_connProvider returnConnection: db];
+    [_connProvider closeConnection: db];
 }
 
 /**
@@ -231,7 +231,7 @@
     STAssertEquals(TEST_DATABASE_VERSION, version, @"The database version was reset");
 
     /* Return our connection to the connection provider */
-    [_connProvider returnConnection: db];
+    [_connProvider closeConnection: db];
 }
 
 @end
