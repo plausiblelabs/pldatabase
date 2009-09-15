@@ -170,6 +170,7 @@
     STAssertTrue([_db executeUpdate: @"CREATE TABLE data ("
            "intval int,"
            "int64val int,"
+           "int64val_negative int,"
            "stringval varchar(30),"
            "nilval int,"
            "floatval float,"
@@ -179,8 +180,8 @@
            ")"], @"Could not create table");
 
     /* Prepare the insert statement */
-    stmt = [_db prepareStatement: @"INSERT INTO data (intval, int64val, stringval, nilval, floatval, doubleval, dateval, dataval)"
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"];
+    stmt = [_db prepareStatement: @"INSERT INTO data (intval, int64val, int64val_negative, stringval, nilval, floatval, doubleval, dateval, dataval)"
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"];
     STAssertNotNil(stmt, @"Could not create statement");
     
     /* Some example data */
@@ -192,6 +193,7 @@
     NSArray *values = [NSArray arrayWithObjects:
         [NSNumber numberWithInt: 42],
         [NSNumber numberWithLongLong: INT64_MAX],
+        [NSNumber numberWithLongLong: INT64_MIN],
         @"test",
         [NSNull null],
         [NSNumber numberWithFloat: 3.14],
@@ -226,7 +228,10 @@
     
     /* 64-bit integer value */
     STAssertEquals(INT64_MAX, [rs bigIntForColumn: @"int64val"], @"64-bit integer value incorrect");
-    
+
+    /* Negative 64-bit integer value */
+    STAssertEquals(INT64_MIN, [rs bigIntForColumn: @"int64val_negative"], @"64-bit negative integer value incorrect");
+
     /* Float */
     STAssertEquals(3.14f, [rs floatForColumn: @"floatval"], @"Float value incorrect");
     

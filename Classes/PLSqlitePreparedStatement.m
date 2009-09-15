@@ -535,7 +535,7 @@
         }
         
         /* If the value can fit into a 32-bit value, use that bind type. */
-        else if (number <= INT32_MAX) {
+        else if (number <= INT32_MAX && number >= INT32_MIN) {
             return sqlite3_bind_int(_sqlite_stmt, parameterIndex, number);
             
             /* Otherwise use the 64-bit bind. */
