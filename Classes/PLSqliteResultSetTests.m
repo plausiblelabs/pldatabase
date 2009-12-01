@@ -213,11 +213,12 @@
     
     result = [_db executeQuery: @"SELECT a FROM test"];
     STAssertTrue([result next], @"No rows returned");
+    STAssertEquals(0, [result intForColumn: @"a"], @"NULL column should return 0");
     STAssertTrue([result isNullForColumn: @"a"], @"Column value should be NULL");
 }
 
-/* Test that dereferencing a null value throws an exception. */
-- (void) testNullValueException {
+/* Test that dereferencing a null value returns a proper default 0 value */
+- (void) testNullValueHandling {
     id<PLResultSet> result;
     
     STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a integer)"], @"Create table failed");
@@ -226,7 +227,16 @@
     result = [_db executeQuery: @"SELECT a FROM test"];
     STAssertTrue([result next], @"No rows returned");
     
-    STAssertThrows([result intForColumn: @"a"], @"Did not throw an exception for NULL column");
+    STAssertEquals(0, [result intForColumn: @"a"], @"Expected 0 value");
+    STAssertEquals((int64_t)0, [result bigIntForColumn: @"a"], @"Expected 0 value");
+    STAssertEquals(0.0f, [result floatForColumn: @"a"], @"Expected 0 value");
+    STAssertEquals(0.0, [result doubleForColumn: @"a"], @"Expected 0 value");
+    STAssertEquals(NO, [result boolForColumn: @"a"], @"Expected 0 value");
+    STAssertTrue([result stringForColumn: @"a"] == nil, @"Expected nil value");
+    STAssertTrue([result dateForColumn: @"a"] == nil, @"Expected nil value");
+    STAssertTrue([result dataForColumn: @"a"] == nil, @"Expected nil value");
+    STAssertTrue([result objectForColumn: @"a"] == nil, @"Expected nil value");
+
 }
 
 - (void) testObjectForColumn {
@@ -255,7 +265,7 @@
     STAssertTrue([testString isEqual: [result objectForColumn: @"b"]], @"Did not return correct string value");
     STAssertTrue([testDouble isEqual: [result objectForColumn: @"c"]], @"Did not return correct double value");
     STAssertTrue([testBlob isEqual: [result objectForColumn: @"d"]], @"Did not return correct data value");
-    STAssertTrue([NSNull null] == [result objectForColumn: @"e"], @"Did not return correct NSNull value");
+    STAssertTrue(nil == [result objectForColumn: @"e"], @"Did not return correct NSNull value");
 }
 
 @end

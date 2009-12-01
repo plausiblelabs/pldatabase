@@ -197,7 +197,7 @@
  * @internal
  * Validate the column index and return the column type
  */
-- (int) validateColumnIndex: (int) columnIndex isNullable: (BOOL) nullable {
+- (int) validateColumnIndex: (int) columnIndex {
     [self assertNotClosed];
 
     int columnType;
@@ -208,11 +208,6 @@
 
     /* Fetch the type */
     columnType = sqlite3_column_type(_sqlite_stmt, columnIndex);
-    
-    /* Verify nullability */
-    if (!nullable && columnType == SQLITE_NULL) {
-        [NSException raise: PLSqliteException format: @"Attempted to access null column value for column index %d. Use -[PLResultSet isNullColumn].", columnIndex];
-    }
 
     return columnType;
 }
@@ -221,9 +216,9 @@
 #define VALUE_ACCESSORS(ReturnType, MethodName, SqliteType, Expression) \
     - (ReturnType) MethodName ## ForColumnIndex: (int) columnIndex { \
         [self assertNotClosed]; \
-        int columnType = [self validateColumnIndex: columnIndex isNullable: NO]; \
+        int columnType = [self validateColumnIndex: columnIndex]; \
         \
-        if (columnType == SqliteType) \
+        if (columnType == SqliteType || columnType == SQLITE_NULL) \
             return (Expression); \
         \
         /* unknown value */ \
@@ -247,11 +242,11 @@ VALUE_ACCESSORS(int32_t, int, SQLITE_INTEGER, sqlite3_column_int(_sqlite_stmt, c
 VALUE_ACCESSORS(int64_t, bigInt, SQLITE_INTEGER, sqlite3_column_int64(_sqlite_stmt, columnIndex))
 
 /* date */
-VALUE_ACCESSORS(NSDate *, date, SQLITE_FLOAT,
+VALUE_ACCESSORS(NSDate *, date, SQLITE_FLOAT, columnType == SQLITE_NULL ? nil : 
                     [NSDate dateWithTimeIntervalSince1970: sqlite3_column_double(_sqlite_stmt, columnIndex)])
 
 /* string */
-VALUE_ACCESSORS(NSString *, string, SQLITE_TEXT,
+VALUE_ACCESSORS(NSString *, string, SQLITE_TEXT, columnType == SQLITE_NULL ? nil : 
                     [NSString stringWithCharacters: sqlite3_column_text16(_sqlite_stmt, columnIndex)
                                             length: sqlite3_column_bytes16(_sqlite_stmt, columnIndex) / 2])
 
@@ -262,15 +257,16 @@ VALUE_ACCESSORS(float, float, SQLITE_FLOAT, sqlite3_column_double(_sqlite_stmt, 
 VALUE_ACCESSORS(double, double, SQLITE_FLOAT, sqlite3_column_double(_sqlite_stmt, columnIndex))
 
 /* data */
-VALUE_ACCESSORS(NSData *, data, SQLITE_BLOB, [NSData dataWithBytes: sqlite3_column_blob(_sqlite_stmt, columnIndex)
-                                                            length: sqlite3_column_bytes(_sqlite_stmt, columnIndex)])
+VALUE_ACCESSORS(NSData *, data, SQLITE_BLOB, columnType == SQLITE_NULL ? nil : 
+                    [NSData dataWithBytes: sqlite3_column_blob(_sqlite_stmt, columnIndex)
+                                   length: sqlite3_column_bytes(_sqlite_stmt, columnIndex)])
 
 
 /* From PLResultSet */
 - (id) objectForColumnIndex: (int) columnIndex {
     [self assertNotClosed];
 
-    int columnType = [self validateColumnIndex: columnIndex isNullable: YES];
+    int columnType = [self validateColumnIndex: columnIndex];
     switch (columnType) {
         case SQLITE_TEXT:
             return [self stringForColumnIndex: columnIndex];
@@ -285,7 +281,7 @@ VALUE_ACCESSORS(NSData *, data, SQLITE_BLOB, [NSData dataWithBytes: sqlite3_colu
             return [self dataForColumnIndex: columnIndex];
 
         case SQLITE_NULL:
-            return [NSNull null];
+            return nil;
 
         default:
             [NSException raise: PLDatabaseException format: @"Unhandled SQLite column type %d", columnType];
@@ -306,7 +302,7 @@ VALUE_ACCESSORS(NSData *, data, SQLITE_BLOB, [NSData dataWithBytes: sqlite3_colu
 - (BOOL) isNullForColumnIndex: (int) columnIndex {
     [self assertNotClosed];
 
-    int columnType = [self validateColumnIndex: columnIndex isNullable: YES];
+    int columnType = [self validateColumnIndex: columnIndex];
     
     /* If the column has a null value, return YES. */
     if (columnType == SQLITE_NULL)
