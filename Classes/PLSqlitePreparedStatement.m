@@ -432,7 +432,7 @@
  * and releasing any exclusive ownership on the prepared statement.
  */
 - (void) checkinResultSet: (PLSqliteResultSet *) resultSet {
-    assert(_inUse = YES); // That would be strange.
+    assert(_inUse == YES); // That would be strange.
 
     _inUse = NO;
     sqlite3_reset(_sqlite_stmt);
