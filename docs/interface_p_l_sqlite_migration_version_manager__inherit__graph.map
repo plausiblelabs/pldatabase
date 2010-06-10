@@ -1,2 +1,4 @@
-<area shape="rect" id="node2" href="$protocol_p_l_database_migration_version_manager-p.html" title="Manages the database migration version." alt="" coords="5,5,307,35">
-<area shape="rect" id="node4" href="$protocol_p_l_database_migration_transaction_manager-p.html" title="Manages the database migration transactions and locking to ensure atomic testing..." alt="" coords="331,5,661,35">
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$protocol_p_l_database_migration_version_manager-p.html" title="Manages the database migration version." alt="" coords="5,5,299,35"/>
+<area shape="rect" id="node4" href="$protocol_p_l_database_migration_transaction_manager-p.html" title="Manages the database migration transactions and locking to ensure atomic testing..." alt="" coords="323,5,645,35"/>
+</map>

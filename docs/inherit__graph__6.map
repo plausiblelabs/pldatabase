@@ -1,1 +1,5 @@
-<area shape="rect" id="node1" href="$interface_p_l_database_migration_manager.html" title="The PLDatabaseMigrationManager implements transactional, versioned migration/initialization..." alt="" coords="5,5,229,35">
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$protocol_p_l_sqlite_parameter_strategy-p.html" title="\&lt;PLSqliteParameterStrategy\&gt;" alt="" coords="5,32,237,61"/>
+<area shape="rect" id="node3" href="$interface_p_l_sqlite_array_parameter_strategy.html" title="PLSqliteArrayParameterStrategy" alt="" coords="303,5,548,35"/>
+<area shape="rect" id="node5" href="$interface_p_l_sqlite_dictionary_parameter_strategy.html" title="PLSqliteDictionaryParameterStrategy" alt="" coords="287,59,564,88"/>
+</map>

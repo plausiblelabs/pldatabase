@@ -11,13 +11,13 @@
         <Subnodes>
          <Node>
           <Name>Basic SQL Programming Guide</Name>
-          <Path>exec_sql.html</Path>
+          <Path>exec__sql.html</Path>
           <Subnodes>
           </Subnodes>
          </Node>
          <Node>
           <Name>Error Handling Programming Guide</Name>
-          <Path>error_handling.html</Path>
+          <Path>error__handling.html</Path>
           <Subnodes>
           </Subnodes>
          </Node>
@@ -70,15 +70,19 @@
         <Path>annotated.html</Path>
         <Subnodes>
          <Node>
-          <Name>&lt; PLDatabase &gt;</Name>
+          <Name>PlausibleDatabase</Name>
+          <Path>class_plausible_database.html</Path>
+         </Node>
+         <Node>
+          <Name>&lt;PLDatabase&gt;</Name>
           <Path>protocol_p_l_database-p.html</Path>
          </Node>
          <Node>
-          <Name>&lt; PLDatabaseConnectionProvider &gt;</Name>
+          <Name>&lt;PLDatabaseConnectionProvider&gt;</Name>
           <Path>protocol_p_l_database_connection_provider-p.html</Path>
          </Node>
          <Node>
-          <Name>&lt; PLDatabaseMigrationDelegate &gt;</Name>
+          <Name>&lt;PLDatabaseMigrationDelegate&gt;</Name>
           <Path>protocol_p_l_database_migration_delegate-p.html</Path>
          </Node>
          <Node>
@@ -86,20 +90,24 @@
           <Path>interface_p_l_database_migration_manager.html</Path>
          </Node>
          <Node>
-          <Name>&lt; PLDatabaseMigrationTransactionManager &gt;</Name>
+          <Name>&lt;PLDatabaseMigrationTransactionManager&gt;</Name>
           <Path>protocol_p_l_database_migration_transaction_manager-p.html</Path>
          </Node>
          <Node>
-          <Name>&lt; PLDatabaseMigrationVersionManager &gt;</Name>
+          <Name>&lt;PLDatabaseMigrationVersionManager&gt;</Name>
           <Path>protocol_p_l_database_migration_version_manager-p.html</Path>
          </Node>
          <Node>
-          <Name>&lt; PLPreparedStatement &gt;</Name>
+          <Name>&lt;PLPreparedStatement&gt;</Name>
           <Path>protocol_p_l_prepared_statement-p.html</Path>
          </Node>
          <Node>
-          <Name>&lt; PLResultSet &gt;</Name>
+          <Name>&lt;PLResultSet&gt;</Name>
           <Path>protocol_p_l_result_set-p.html</Path>
+         </Node>
+         <Node>
+          <Name>PLSqliteArrayParameterStrategy</Name>
+          <Path>interface_p_l_sqlite_array_parameter_strategy.html</Path>
          </Node>
          <Node>
           <Name>PLSqliteConnectionProvider</Name>
@@ -110,8 +118,24 @@
           <Path>interface_p_l_sqlite_database.html</Path>
          </Node>
          <Node>
+          <Name>PLSqliteDictionaryParameterStrategy</Name>
+          <Path>interface_p_l_sqlite_dictionary_parameter_strategy.html</Path>
+         </Node>
+         <Node>
           <Name>PLSqliteMigrationVersionManager</Name>
           <Path>interface_p_l_sqlite_migration_version_manager.html</Path>
+         </Node>
+         <Node>
+          <Name>&lt;PLSqliteParameterStrategy&gt;</Name>
+          <Path>protocol_p_l_sqlite_parameter_strategy-p.html</Path>
+         </Node>
+         <Node>
+          <Name>PLSqlitePreparedStatement</Name>
+          <Path>class_p_l_sqlite_prepared_statement.html</Path>
+         </Node>
+         <Node>
+          <Name>PLSqliteResultSet</Name>
+          <Path>class_p_l_sqlite_result_set.html</Path>
          </Node>
         </Subnodes>
        </Node>
@@ -120,7 +144,11 @@
         <Path>hierarchy.html</Path>
         <Subnodes>
          <Node>
-          <Name>&lt; PLDatabase &gt;</Name>
+          <Name>PlausibleDatabase</Name>
+          <Path>class_plausible_database.html</Path>
+         </Node>
+         <Node>
+          <Name>&lt;PLDatabase&gt;</Name>
           <Path>protocol_p_l_database-p.html</Path>
           <Subnodes>
            <Node>
@@ -130,7 +158,7 @@
           </Subnodes>
          </Node>
          <Node>
-          <Name>&lt; PLDatabaseConnectionProvider &gt;</Name>
+          <Name>&lt;PLDatabaseConnectionProvider&gt;</Name>
           <Path>protocol_p_l_database_connection_provider-p.html</Path>
           <Subnodes>
            <Node>
@@ -140,7 +168,7 @@
           </Subnodes>
          </Node>
          <Node>
-          <Name>&lt; PLDatabaseMigrationDelegate &gt;</Name>
+          <Name>&lt;PLDatabaseMigrationDelegate&gt;</Name>
           <Path>protocol_p_l_database_migration_delegate-p.html</Path>
          </Node>
          <Node>
@@ -148,7 +176,7 @@
           <Path>interface_p_l_database_migration_manager.html</Path>
          </Node>
          <Node>
-          <Name>&lt; PLDatabaseMigrationTransactionManager &gt;</Name>
+          <Name>&lt;PLDatabaseMigrationTransactionManager&gt;</Name>
           <Path>protocol_p_l_database_migration_transaction_manager-p.html</Path>
           <Subnodes>
            <Node>
@@ -158,7 +186,7 @@
           </Subnodes>
          </Node>
          <Node>
-          <Name>&lt; PLDatabaseMigrationVersionManager &gt;</Name>
+          <Name>&lt;PLDatabaseMigrationVersionManager&gt;</Name>
           <Path>protocol_p_l_database_migration_version_manager-p.html</Path>
           <Subnodes>
            <Node>
@@ -168,12 +196,34 @@
           </Subnodes>
          </Node>
          <Node>
-          <Name>&lt; PLPreparedStatement &gt;</Name>
+          <Name>&lt;PLPreparedStatement&gt;</Name>
           <Path>protocol_p_l_prepared_statement-p.html</Path>
          </Node>
          <Node>
-          <Name>&lt; PLResultSet &gt;</Name>
+          <Name>&lt;PLResultSet&gt;</Name>
           <Path>protocol_p_l_result_set-p.html</Path>
+         </Node>
+         <Node>
+          <Name>&lt;PLSqliteParameterStrategy&gt;</Name>
+          <Path>protocol_p_l_sqlite_parameter_strategy-p.html</Path>
+          <Subnodes>
+           <Node>
+            <Name>PLSqliteArrayParameterStrategy</Name>
+            <Path>interface_p_l_sqlite_array_parameter_strategy.html</Path>
+           </Node>
+           <Node>
+            <Name>PLSqliteDictionaryParameterStrategy</Name>
+            <Path>interface_p_l_sqlite_dictionary_parameter_strategy.html</Path>
+           </Node>
+          </Subnodes>
+         </Node>
+         <Node>
+          <Name>PLSqlitePreparedStatement</Name>
+          <Path>class_p_l_sqlite_prepared_statement.html</Path>
+         </Node>
+         <Node>
+          <Name>PLSqliteResultSet</Name>
+          <Path>class_p_l_sqlite_result_set.html</Path>
          </Node>
         </Subnodes>
        </Node>

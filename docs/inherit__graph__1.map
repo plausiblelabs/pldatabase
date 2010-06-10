@@ -1,2 +1,4 @@
-<area shape="rect" id="node1" href="$protocol_p_l_database_connection_provider-p.html" title="A protocol for opening new or existing PLDatabase connections, and returning those..." alt="" coords="5,5,272,35">
-<area shape="rect" id="node3" href="$interface_p_l_sqlite_connection_provider.html" title="Provides new PLSqliteDatabase connections as per the PLDatabaseConnectionProvider..." alt="" coords="320,5,528,35">
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$protocol_p_l_database_connection_provider-p.html" title="A protocol for opening new or existing PLDatabase connections, and returning those..." alt="" coords="5,5,264,35"/>
+<area shape="rect" id="node3" href="$interface_p_l_sqlite_connection_provider.html" title="Provides new PLSqliteDatabase connections as per the PLDatabaseConnectionProvider..." alt="" coords="313,5,521,35"/>
+</map>
