@@ -33,29 +33,29 @@
  * Generic Database Exception
  * @ingroup exceptions
  */
-NSString *PLDatabaseException = @"com.plausiblelabs.pldatabase.exception.generic";
+NSString *PLDatabaseException = @"PLDatabaseException";
 
 /** Plausible Database NSError Domain
  * @ingroup globals */
-NSString *PLDatabaseErrorDomain = @"com.plausiblelabs.pldatabase";
+NSString *PLDatabaseErrorDomain = @"PLDatabaseErrorDomain";
 
 /**
  * Key to retrieve the optionally provided SQL query which caused the error from an NSError in the PLDatabaseErrorDomain, as an NSString
  * @ingroup globals
  */
-NSString *PLDatabaseErrorQueryStringKey = @"com.plausiblelabs.pldatabase.error.query.string";
+NSString *PLDatabaseErrorQueryStringKey = @"PLDatabaseErrorQueryStringKey";
 
 /**
   * Key to retrieve the native database error code from an NSError in the PLDatabaseErrorDomain, as an NSNumber
   * @ingroup globals
   */
-NSString *PLDatabaseErrorVendorErrorKey = @"com.plausiblelabs.pldatabase.error.vendor.code";
+NSString *PLDatabaseErrorVendorErrorKey = @"PLDatabaseErrorVendorErrorKey";
 
 /** 
  * Key to retrieve the native database error string from an NSError in the PLDatabaseErrorDomain, as an NSString
  * @ingroup globals
  */
-NSString *PLDatabaseErrorVendorStringKey = @"com.plausiblelabs.pldatabase.error.vendor.string";
+NSString *PLDatabaseErrorVendorStringKey = @"PLDatabaseErrorVendorStringKey";
 
 /**
  * @internal

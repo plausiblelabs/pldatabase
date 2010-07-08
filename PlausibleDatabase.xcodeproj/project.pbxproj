@@ -245,8 +245,8 @@
 		0502A84C0DDE9F81006F4613 /* PLSqlitePreparedStatementTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqlitePreparedStatementTests.m; sourceTree = "<group>"; };
 		051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabase.m; sourceTree = "<group>"; };
 		051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabaseTests.m; sourceTree = "<group>"; };
-		054CBF0D0EE21B2B0043675E /* libPlausibleDatabase-iphoneos.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPlausibleDatabase-iphoneos.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		054CBF160EE21B570043675E /* libPlausibleDatabase-iphonesimulator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPlausibleDatabase-iphonesimulator.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		054CBF0D0EE21B2B0043675E /* libPlausibleDatabase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPlausibleDatabase.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		054CBF160EE21B570043675E /* libPlausibleDatabase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPlausibleDatabase.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		054CBFDC0EE242BC0043675E /* PlausibleDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlausibleDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		054CBFFC0EE244F60043675E /* sqlite3.def */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sqlite3.def; sourceTree = "<group>"; };
 		054CBFFD0EE244F60043675E /* sqlite3.dll */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = sqlite3.dll; sourceTree = "<group>"; };
@@ -351,8 +351,8 @@
 			children = (
 				0551CA4B0DCBE9F600E31E46 /* Tests.octest */,
 				058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */,
-				054CBF0D0EE21B2B0043675E /* libPlausibleDatabase-iphoneos.a */,
-				054CBF160EE21B570043675E /* libPlausibleDatabase-iphonesimulator.a */,
+				054CBF0D0EE21B2B0043675E /* libPlausibleDatabase.a */,
+				054CBF160EE21B570043675E /* libPlausibleDatabase.a */,
 				054CBFDC0EE242BC0043675E /* PlausibleDatabase.framework */,
 				057829F30EE25E850039276A /* Tests.octest */,
 				05534D21104CBFB700647A44 /* PlausibleDatabase.framework */,
@@ -625,7 +625,7 @@
 			);
 			name = "PlausibleDatabase-iPhoneOS";
 			productName = "PlausibleDatabase-iPhoneOS";
-			productReference = 054CBF0D0EE21B2B0043675E /* libPlausibleDatabase-iphoneos.a */;
+			productReference = 054CBF0D0EE21B2B0043675E /* libPlausibleDatabase.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		054CBF150EE21B570043675E /* PlausibleDatabase-iPhoneSimulator */ = {
@@ -643,7 +643,7 @@
 			);
 			name = "PlausibleDatabase-iPhoneSimulator";
 			productName = "PlausibleDatabase-iPhoneSimulator";
-			productReference = 054CBF160EE21B570043675E /* libPlausibleDatabase-iphonesimulator.a */;
+			productReference = 054CBF160EE21B570043675E /* libPlausibleDatabase.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		054CBFDB0EE242BC0043675E /* PlausibleDatabase-Windows-i386 */ = {
