@@ -107,8 +107,8 @@
     NSError *error;
     result = [_db executeQuery: @"SELECT a FROM test"];
     __block NSInteger iterations = 0;
-    BOOL success = [result enumerateAndReturnError: &error block: ^(BOOL *stop) {
-        STAssertEquals(1, [result intForColumn: @"a"], @"Did not return correct date value");
+    BOOL success = [result enumerateAndReturnError: &error block: ^(id<PLResultSet> rs, BOOL *stop) {
+        STAssertEquals(1, [rs intForColumn: @"a"], @"Did not return correct date value");
         iterations++;
         *stop = YES;
     }];

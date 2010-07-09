@@ -159,13 +159,13 @@
 }
 
 /* From PLResultSet */
-- (BOOL) enumerateAndReturnError: (NSError **) outError block: (void (^)(BOOL *stop)) block {
+- (BOOL) enumerateAndReturnError: (NSError **) outError block: (void (^)(id<PLResultSet> rs, BOOL *stop)) block {
     BOOL stop = NO;
     
     /* Iterate over the results */
     PLResultSetStatus row;
     while ((row = [self nextAndReturnError: outError]) == PLResultSetStatusRow) {
-        block(&stop);
+        block(self, &stop);
         if (stop)
             break;
     }

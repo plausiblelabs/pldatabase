@@ -66,7 +66,7 @@ typedef enum {
  *
  * @return Returns YES if the result set was successfully iterated, or NO if a database error occurs.
  */
-- (BOOL) enumerateAndReturnError: (NSError **) outError block: (void (^)(BOOL *stop)) block;
+- (BOOL) enumerateAndReturnError: (NSError **) outError block: (void (^)(id<PLResultSet> rs, BOOL *stop)) block;
 
 #endif
 
