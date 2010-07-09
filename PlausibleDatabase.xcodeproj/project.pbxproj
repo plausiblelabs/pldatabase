@@ -54,14 +54,6 @@
 		054CBF450EE21CA10043675E /* PLSqliteMigrationVersionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05D196660EAFC9C800F7079D /* PLSqliteMigrationVersionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054CBF460EE21CBE0043675E /* PLDatabaseConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9940EAEED94003F848A /* PLDatabaseConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054CBF470EE21CC20043675E /* PLDatabaseMigrationTransactionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05BE86970EC2D7BE00CCAA2A /* PLDatabaseMigrationTransactionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		054CBFF20EE244740043675E /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
-		054CBFF30EE244740043675E /* PLSqliteDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */; };
-		054CBFF40EE244740043675E /* PLSqlitePreparedStatement.m in Sources */ = {isa = PBXBuildFile; fileRef = 0502A8430DDE9EDD006F4613 /* PLSqlitePreparedStatement.m */; };
-		054CBFF50EE244740043675E /* PLSqliteResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B00DD16BDC001E992F /* PLSqliteResultSet.m */; };
-		054CBFF60EE244740043675E /* PLSqliteConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0578D9990EAEEECB003F848A /* PLSqliteConnectionProvider.m */; };
-		054CBFF70EE244740043675E /* PLDatabaseMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0578D9D00EAEF1EF003F848A /* PLDatabaseMigrationManager.m */; };
-		054CBFF80EE244740043675E /* PLSqliteMigrationVersionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D196670EAFC9C800F7079D /* PLSqliteMigrationVersionManager.m */; };
-		054CC0020EE245130043675E /* sqlite3.dll in Frameworks */ = {isa = PBXBuildFile; fileRef = 054CBFFD0EE244F60043675E /* sqlite3.dll */; };
 		0551CA780DCBED7A00E31E46 /* PLSqliteDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */; };
 		05534D2D104CBFFE00647A44 /* PlausibleDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05534D2E104CBFFE00647A44 /* PLDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA660DCBEC1500E31E46 /* PLDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -79,33 +71,6 @@
 		05534D3A104CBFFE00647A44 /* PLDatabaseMigrationTransactionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05BE86970EC2D7BE00CCAA2A /* PLDatabaseMigrationTransactionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05782A0B0EE25FF60039276A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0578285F0EE2520F0039276A /* libsqlite3.dylib */; };
 		05782A120EE260490039276A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0578285F0EE2520F0039276A /* libsqlite3.dylib */; };
-		05782A3E0EE260F50039276A /* PlausibleDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A3F0EE260F50039276A /* PLDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA660DCBEC1500E31E46 /* PLDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A400EE260F50039276A /* PLPreparedStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = 0502A7F10DDE9B4A006F4613 /* PLPreparedStatement.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A410EE260F50039276A /* PLResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A420EE260F50039276A /* PLSqliteDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA680DCBEC5B00E31E46 /* PLSqliteDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A430EE260F50039276A /* PLSqlitePreparedStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = 0502A8420DDE9EDD006F4613 /* PLSqlitePreparedStatement.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A440EE260F50039276A /* PLSqliteResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 058196AF0DD16BDC001E992F /* PLSqliteResultSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A450EE260F50039276A /* PLSqliteConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9980EAEEECB003F848A /* PLSqliteConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A460EE260F50039276A /* PLDatabaseMigrationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9CF0EAEF1EF003F848A /* PLDatabaseMigrationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A470EE260F50039276A /* PLDatabaseMigrationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9D20EAEF1EF003F848A /* PLDatabaseMigrationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A480EE260F50039276A /* PLDatabaseMigrationVersionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578DA3C0EAF02A5003F848A /* PLDatabaseMigrationVersionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A490EE260F50039276A /* PLSqliteMigrationVersionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05D196660EAFC9C800F7079D /* PLSqliteMigrationVersionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A4A0EE260F50039276A /* PLDatabaseConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9940EAEED94003F848A /* PLDatabaseConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A4B0EE260F50039276A /* PLDatabaseMigrationTransactionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05BE86970EC2D7BE00CCAA2A /* PLDatabaseMigrationTransactionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A4C0EE261230039276A /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 054CBFFE0EE244F60043675E /* sqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A4D0EE261230039276A /* sqlite3ext.h in Headers */ = {isa = PBXBuildFile; fileRef = 054CBFFF0EE244F60043675E /* sqlite3ext.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05782A500EE261BE0039276A /* PLSqliteDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */; };
-		05782A510EE261BE0039276A /* PLSqliteResultSetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */; };
-		05782A520EE261BE0039276A /* PlausibleDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */; };
-		05782A530EE261BE0039276A /* PLSqlitePreparedStatementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0502A84C0DDE9F81006F4613 /* PLSqlitePreparedStatementTests.m */; };
-		05782A540EE261BE0039276A /* PLSqliteConnectionProviderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0578D99A0EAEEECB003F848A /* PLSqliteConnectionProviderTests.m */; };
-		05782A550EE261BE0039276A /* PLDatabaseMigrationManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0578D9D10EAEF1EF003F848A /* PLDatabaseMigrationManagerTests.m */; };
-		05782A560EE261BE0039276A /* PLSqliteMigrationVersionManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D196800EAFD2E700F7079D /* PLSqliteMigrationVersionManagerTests.m */; };
-		05782A5E0EE261ED0039276A /* PlausibleDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 054CBFDC0EE242BC0043675E /* PlausibleDatabase.framework */; };
-		05782B1E0EE266540039276A /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05782B060EE266450039276A /* SenTestingKit.framework */; };
-		05782BD60EE2692A0039276A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0867D69BFE84028FC02AAC07 /* Foundation.framework */; };
-		05782BEF0EE2693F0039276A /* PlausibleDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 054CBFDC0EE242BC0043675E /* PlausibleDatabase.framework */; };
 		0578D99B0EAEEECB003F848A /* PLSqliteConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9980EAEEECB003F848A /* PLSqliteConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0578D99C0EAEEECB003F848A /* PLSqliteConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0578D9990EAEEECB003F848A /* PLSqliteConnectionProvider.m */; };
 		0578D9A50EAEEF4F003F848A /* PLSqliteConnectionProviderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0578D99A0EAEEECB003F848A /* PLSqliteConnectionProviderTests.m */; };
@@ -114,6 +79,7 @@
 		0578D9D70EAEF1EF003F848A /* PLDatabaseMigrationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9D20EAEF1EF003F848A /* PLDatabaseMigrationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0578D9DE0EAEF1F5003F848A /* PLDatabaseMigrationManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0578D9D10EAEF1EF003F848A /* PLDatabaseMigrationManagerTests.m */; };
 		0578DA3E0EAF02A5003F848A /* PLDatabaseMigrationVersionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578DA3C0EAF02A5003F848A /* PLDatabaseMigrationVersionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05797E7611E782B20049A783 /* PlausibleDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */; };
 		058196B60DD16BDC001E992F /* PLSqliteResultSetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */; };
 		058ABBA20DE637FD00C995C9 /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
 		058ABBA70DE6380E00C995C9 /* PlausibleDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -129,27 +95,7 @@
 		058ABCE30DE63A4B00C995C9 /* PlausibleDatabase.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */; };
 		05D196810EAFD2E700F7079D /* PLSqliteMigrationVersionManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D196800EAFD2E700F7079D /* PLSqliteMigrationVersionManagerTests.m */; };
 		05D198930EB1248B00F7079D /* PLSqliteMigrationVersionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D196670EAFC9C800F7079D /* PLSqliteMigrationVersionManager.m */; };
-		05DC377B0EE2476200706FCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0867D69BFE84028FC02AAC07 /* Foundation.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXBuildRule section */
-		054CC0000EE244F60043675E /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = org.cocotron.1.0.windows.i386.gcc.default;
-			fileType = sourcecode.c;
-			isEditable = 1;
-			outputFiles = (
-			);
-		};
-		05782A3B0EE260C60039276A /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = org.cocotron.1.0.windows.i386.gcc.default;
-			fileType = sourcecode.c;
-			isEditable = 1;
-			outputFiles = (
-			);
-		};
-/* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
 		054CBF2C0EE21BE50043675E /* PBXContainerItemProxy */ = {
@@ -194,13 +140,6 @@
 			remoteGlobalIDString = 054CBF250EE21BD10043675E;
 			remoteInfo = PlausibleDatabase;
 		};
-		05782A1A0EE260560039276A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 054CBFDB0EE242BC0043675E;
-			remoteInfo = "PlausibleDatabase-Windows-i386";
-		};
 		058ABC430DE638DE00C995C9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -231,13 +170,8 @@
 		0502A84C0DDE9F81006F4613 /* PLSqlitePreparedStatementTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqlitePreparedStatementTests.m; sourceTree = "<group>"; };
 		051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabase.m; sourceTree = "<group>"; };
 		051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabaseTests.m; sourceTree = "<group>"; };
-		054CBF0D0EE21B2B0043675E /* libPlausibleDatabase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPlausibleDatabase.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		054CBF160EE21B570043675E /* libPlausibleDatabase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPlausibleDatabase.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		054CBFDC0EE242BC0043675E /* PlausibleDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlausibleDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		054CBFFC0EE244F60043675E /* sqlite3.def */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sqlite3.def; sourceTree = "<group>"; };
-		054CBFFD0EE244F60043675E /* sqlite3.dll */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = sqlite3.dll; sourceTree = "<group>"; };
-		054CBFFE0EE244F60043675E /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
-		054CBFFF0EE244F60043675E /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
+		054CBF0D0EE21B2B0043675E /* libPlausibleDatabase-iphoneos.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPlausibleDatabase-iphoneos.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		054CBF160EE21B570043675E /* libPlausibleDatabase-iphonesimulator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPlausibleDatabase-iphonesimulator.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551CA4B0DCBE9F600E31E46 /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlausibleDatabase.h; sourceTree = "<group>"; };
 		0551CA660DCBEC1500E31E46 /* PLDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabase.h; sourceTree = "<group>"; };
@@ -248,8 +182,6 @@
 		0578285F0EE2520F0039276A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = /usr/lib/libsqlite3.dylib; sourceTree = "<absolute>"; };
 		057828660EE2524B0039276A /* PlausibleDatabase-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PlausibleDatabase-Info.plist"; sourceTree = "<group>"; };
 		057828670EE2524B0039276A /* Tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
-		057829F30EE25E850039276A /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		05782B060EE266450039276A /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Cocotron/1.0/Windows/i386/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		0578D9940EAEED94003F848A /* PLDatabaseConnectionProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabaseConnectionProvider.h; sourceTree = "<group>"; };
 		0578D9980EAEEECB003F848A /* PLSqliteConnectionProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteConnectionProvider.h; sourceTree = "<group>"; };
 		0578D9990EAEEECB003F848A /* PLSqliteConnectionProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteConnectionProvider.m; sourceTree = "<group>"; };
@@ -259,6 +191,9 @@
 		0578D9D10EAEF1EF003F848A /* PLDatabaseMigrationManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLDatabaseMigrationManagerTests.m; sourceTree = "<group>"; };
 		0578D9D20EAEF1EF003F848A /* PLDatabaseMigrationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabaseMigrationDelegate.h; sourceTree = "<group>"; };
 		0578DA3C0EAF02A5003F848A /* PLDatabaseMigrationVersionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabaseMigrationVersionManager.h; sourceTree = "<group>"; };
+		05797E3F11E780820049A783 /* PLBlocks.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PLBlocks.framework; sourceTree = "<group>"; };
+		05797E4111E780820049A783 /* PLBlocks.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PLBlocks.framework; sourceTree = "<group>"; };
+		05797E4211E780820049A783 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		058196AF0DD16BDC001E992F /* PLSqliteResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteResultSet.h; sourceTree = "<group>"; };
 		058196B00DD16BDC001E992F /* PLSqliteResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSet.m; sourceTree = "<group>"; };
 		058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSetTests.m; sourceTree = "<group>"; };
@@ -286,20 +221,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		054CBFDA0EE242BC0043675E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				05DC377B0EE2476200706FCF /* Foundation.framework in Frameworks */,
-				054CC0020EE245130043675E /* sqlite3.dll in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0551CA480DCBE9F600E31E46 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05782A5E0EE261ED0039276A /* PlausibleDatabase.framework in Frameworks */,
+				05797E7611E782B20049A783 /* PlausibleDatabase.framework in Frameworks */,
 				05782A120EE260490039276A /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,16 +234,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		057829F00EE25E850039276A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				05782BEF0EE2693F0039276A /* PlausibleDatabase.framework in Frameworks */,
-				05782BD60EE2692A0039276A /* Foundation.framework in Frameworks */,
-				05782B1E0EE266540039276A /* SenTestingKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,10 +253,8 @@
 			children = (
 				0551CA4B0DCBE9F600E31E46 /* Tests.octest */,
 				058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */,
-				054CBF0D0EE21B2B0043675E /* libPlausibleDatabase.a */,
-				054CBF160EE21B570043675E /* libPlausibleDatabase.a */,
-				054CBFDC0EE242BC0043675E /* PlausibleDatabase.framework */,
-				057829F30EE25E850039276A /* Tests.octest */,
+				054CBF0D0EE21B2B0043675E /* libPlausibleDatabase-iphoneos.a */,
+				054CBF160EE21B570043675E /* libPlausibleDatabase-iphonesimulator.a */,
 				05534D21104CBFB700647A44 /* PlausibleDatabase.framework */,
 			);
 			name = Products;
@@ -349,20 +263,10 @@
 		053D389E0DDAE62B009D4EAF /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				054CBFFB0EE244F60043675E /* sqlite-3.6.5 */,
+				05797E4211E780820049A783 /* README.txt */,
+				05797E3D11E780820049A783 /* PLBlocks */,
 			);
 			path = Dependencies;
-			sourceTree = "<group>";
-		};
-		054CBFFB0EE244F60043675E /* sqlite-3.6.5 */ = {
-			isa = PBXGroup;
-			children = (
-				054CBFFC0EE244F60043675E /* sqlite3.def */,
-				054CBFFD0EE244F60043675E /* sqlite3.dll */,
-				054CBFFE0EE244F60043675E /* sqlite3.h */,
-				054CBFFF0EE244F60043675E /* sqlite3ext.h */,
-			);
-			path = "sqlite-3.6.5";
 			sourceTree = "<group>";
 		};
 		057828650EE2524B0039276A /* Resources */ = {
@@ -372,14 +276,6 @@
 				057828670EE2524B0039276A /* Tests-Info.plist */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		05782B020EE2662D0039276A /* Cocotron Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				05782B060EE266450039276A /* SenTestingKit.framework */,
-			);
-			name = "Cocotron Frameworks";
 			sourceTree = "<group>";
 		};
 		0578D9960EAEEE99003F848A /* Connection Providers */ = {
@@ -425,6 +321,31 @@
 			name = SQLite;
 			sourceTree = "<group>";
 		};
+		05797E3D11E780820049A783 /* PLBlocks */ = {
+			isa = PBXGroup;
+			children = (
+				05797E3E11E780820049A783 /* iOS */,
+				05797E4011E780820049A783 /* MacOSX */,
+			);
+			path = PLBlocks;
+			sourceTree = "<group>";
+		};
+		05797E3E11E780820049A783 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				05797E3F11E780820049A783 /* PLBlocks.framework */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		05797E4011E780820049A783 /* MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				05797E4111E780820049A783 /* PLBlocks.framework */,
+			);
+			path = MacOSX;
+			sourceTree = "<group>";
+		};
 		05939BF00DCBFFE4004FEA21 /* SQLite */ = {
 			isa = PBXGroup;
 			children = (
@@ -465,7 +386,6 @@
 		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				05782B020EE2662D0039276A /* Cocotron Frameworks */,
 				1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */,
 				1058C7B2FEA5585E11CA2CBB /* Other Frameworks */,
 			);
@@ -528,29 +448,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		054CBFD70EE242BC0043675E /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				05782A4C0EE261230039276A /* sqlite3.h in Headers */,
-				05782A4D0EE261230039276A /* sqlite3ext.h in Headers */,
-				05782A3E0EE260F50039276A /* PlausibleDatabase.h in Headers */,
-				05782A3F0EE260F50039276A /* PLDatabase.h in Headers */,
-				05782A400EE260F50039276A /* PLPreparedStatement.h in Headers */,
-				05782A410EE260F50039276A /* PLResultSet.h in Headers */,
-				05782A420EE260F50039276A /* PLSqliteDatabase.h in Headers */,
-				05782A430EE260F50039276A /* PLSqlitePreparedStatement.h in Headers */,
-				05782A440EE260F50039276A /* PLSqliteResultSet.h in Headers */,
-				05782A450EE260F50039276A /* PLSqliteConnectionProvider.h in Headers */,
-				05782A460EE260F50039276A /* PLDatabaseMigrationManager.h in Headers */,
-				05782A470EE260F50039276A /* PLDatabaseMigrationDelegate.h in Headers */,
-				05782A480EE260F50039276A /* PLDatabaseMigrationVersionManager.h in Headers */,
-				05782A490EE260F50039276A /* PLSqliteMigrationVersionManager.h in Headers */,
-				05782A4A0EE260F50039276A /* PLDatabaseConnectionProvider.h in Headers */,
-				05782A4B0EE260F50039276A /* PLDatabaseMigrationTransactionManager.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		05534D1C104CBFB700647A44 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -610,7 +507,7 @@
 			);
 			name = "PlausibleDatabase-iPhoneOS";
 			productName = "PlausibleDatabase-iPhoneOS";
-			productReference = 054CBF0D0EE21B2B0043675E /* libPlausibleDatabase.a */;
+			productReference = 054CBF0D0EE21B2B0043675E /* libPlausibleDatabase-iphoneos.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		054CBF150EE21B570043675E /* PlausibleDatabase-iPhoneSimulator */ = {
@@ -627,27 +524,8 @@
 			);
 			name = "PlausibleDatabase-iPhoneSimulator";
 			productName = "PlausibleDatabase-iPhoneSimulator";
-			productReference = 054CBF160EE21B570043675E /* libPlausibleDatabase.a */;
+			productReference = 054CBF160EE21B570043675E /* libPlausibleDatabase-iphonesimulator.a */;
 			productType = "com.apple.product-type.library.static";
-		};
-		054CBFDB0EE242BC0043675E /* PlausibleDatabase-Windows-i386 */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 054CBFE00EE242BD0043675E /* Build configuration list for PBXNativeTarget "PlausibleDatabase-Windows-i386" */;
-			buildPhases = (
-				054CBFD70EE242BC0043675E /* Headers */,
-				054CBFD80EE242BC0043675E /* Resources */,
-				054CBFD90EE242BC0043675E /* Sources */,
-				054CBFDA0EE242BC0043675E /* Frameworks */,
-			);
-			buildRules = (
-				054CC0000EE244F60043675E /* PBXBuildRule */,
-			);
-			dependencies = (
-			);
-			name = "PlausibleDatabase-Windows-i386";
-			productName = "PlausibleDatabase-Windows-i386";
-			productReference = 054CBFDC0EE242BC0043675E /* PlausibleDatabase.framework */;
-			productType = "com.apple.product-type.framework";
 		};
 		0551CA4A0DCBE9F600E31E46 /* Tests-MacOSX */ = {
 			isa = PBXNativeTarget;
@@ -690,27 +568,6 @@
 			productReference = 05534D21104CBFB700647A44 /* PlausibleDatabase.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		057829F20EE25E850039276A /* Tests-Windows-i386 */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 057829F90EE25E860039276A /* Build configuration list for PBXNativeTarget "Tests-Windows-i386" */;
-			buildPhases = (
-				057829EE0EE25E850039276A /* Resources */,
-				057829EF0EE25E850039276A /* Sources */,
-				057829F00EE25E850039276A /* Frameworks */,
-				05782A030EE25F890039276A /* Retarget Bundle */,
-				057829F10EE25E850039276A /* Run Tests */,
-			);
-			buildRules = (
-				05782A3B0EE260C60039276A /* PBXBuildRule */,
-			);
-			dependencies = (
-				05782A1B0EE260560039276A /* PBXTargetDependency */,
-			);
-			name = "Tests-Windows-i386";
-			productName = "Tests-Windows-i386";
-			productReference = 057829F30EE25E850039276A /* Tests.octest */;
-			productType = "com.apple.product-type.bundle";
-		};
 		058ABB630DE6361300C995C9 /* PlausibleDatabase-MacOSX */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 058ABB680DE6361300C995C9 /* Build configuration list for PBXNativeTarget "PlausibleDatabase-MacOSX" */;
@@ -748,21 +605,12 @@
 				05534D20104CBFB700647A44 /* PlausibleDatabase-iPhone */,
 				054CBF0C0EE21B2B0043675E /* PlausibleDatabase-iPhoneOS */,
 				054CBF150EE21B570043675E /* PlausibleDatabase-iPhoneSimulator */,
-				054CBFDB0EE242BC0043675E /* PlausibleDatabase-Windows-i386 */,
 				0551CA4A0DCBE9F600E31E46 /* Tests-MacOSX */,
-				057829F20EE25E850039276A /* Tests-Windows-i386 */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		054CBFD80EE242BC0043675E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0551CA460DCBE9F600E31E46 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -771,13 +619,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		05534D1D104CBFB700647A44 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		057829EE0EE25E850039276A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -836,35 +677,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# Set the destroot\nDESTROOT=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}-${CURRENT_PROJECT_VERSION}\"\nmkdir -p \"${DESTROOT}\"\n\n# Per-platform framework destinations\nIPHONE_DEST=\"${DESTROOT}/iPhone Framework\"\nMAC_DEST=\"${DESTROOT}/Mac OS X Framework\"\nDOC_DEST=\"${DESTROOT}/Documentation\"\n\n# Populate the destroot\nmkdir -p \"${IPHONE_DEST}\"\ntar -C \"${BUILD_DIR}/${CONFIGURATION}-iphone\" -cf - \"PlausibleDatabase.framework\" | tar -C \"${IPHONE_DEST}\" -xf - \n\nmkdir -p \"${MAC_DEST}\"\ntar -C \"${BUILD_DIR}/${CONFIGURATION}-MacOSX\" -cf - \"PlausibleDatabase.framework\" | tar -C \"${MAC_DEST}\" -xf - \n\nif [ ! -z `which doxygen` ]; then\n\tpushd \"${SRCROOT}\" >/dev/null\n    doxygen\n    if [ $? != 0 ]; then\n        echo \"ERROR: Documentation generation failed\" >/dev/stderr\n        exit 1\n    fi\n\tpopd >/dev/null\n\n\trm -rf \"${DOC_DEST}\"\n\tmv docs \"${DOC_DEST}\"\nelse\n    echo \"WARNING: Doxygen not available, skipping documentation generation\" >/dev/stderr\nfi\n\n# Create the disk image\nrm -f \"${DESTROOT}.dmg\"\nhdiutil create -srcfolder \"${DESTROOT}\" \"${DESTROOT}.dmg\"";
 		};
-		057829F10EE25E850039276A /* Run Tests */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Tests";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\nDEST=\"${CONFIGURATION_BUILD_DIR}/${EXECUTABLE_FOLDER_PATH}\"\n\n# Only try to run the tests locally if wine is available\nwhich wine\nif [ $? = 0 ]; then\n\tcp \"/Developer/Cocotron/1.0/Windows/i386/otest.exe\" \"${DEST}\"\n\twine \"${DEST}/otest.exe\" -SenTest All \"${CONFIGURATION_BUILD_DIR}/$WRAPPER_NAME\"\nfi";
-			showEnvVarsInLog = 0;
-		};
-		05782A030EE25F890039276A /* Retarget Bundle */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Retarget Bundle";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/Developer/Cocotron/1.0/bin/retargetBundle -framework Foundation -framework SenTestingKit -F \"${CONFIGURATION_BUILD_DIR}\" -framework PlausibleDatabase -destination \"$TARGET_BUILD_DIR/$EXECUTABLE_FOLDER_PATH\"\ncp \"${PROJECT_DIR}\"/Dependencies/sqlite-*/sqlite3.dll \"$TARGET_BUILD_DIR/$EXECUTABLE_FOLDER_PATH\"";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -896,20 +708,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		054CBFD90EE242BC0043675E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				054CBFF20EE244740043675E /* PlausibleDatabase.m in Sources */,
-				054CBFF30EE244740043675E /* PLSqliteDatabase.m in Sources */,
-				054CBFF40EE244740043675E /* PLSqlitePreparedStatement.m in Sources */,
-				054CBFF50EE244740043675E /* PLSqliteResultSet.m in Sources */,
-				054CBFF60EE244740043675E /* PLSqliteConnectionProvider.m in Sources */,
-				054CBFF70EE244740043675E /* PLDatabaseMigrationManager.m in Sources */,
-				054CBFF80EE244740043675E /* PLSqliteMigrationVersionManager.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0551CA470DCBE9F600E31E46 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -928,20 +726,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		057829EF0EE25E850039276A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				05782A500EE261BE0039276A /* PLSqliteDatabaseTests.m in Sources */,
-				05782A510EE261BE0039276A /* PLSqliteResultSetTests.m in Sources */,
-				05782A520EE261BE0039276A /* PlausibleDatabaseTests.m in Sources */,
-				05782A530EE261BE0039276A /* PLSqlitePreparedStatementTests.m in Sources */,
-				05782A540EE261BE0039276A /* PLSqliteConnectionProviderTests.m in Sources */,
-				05782A550EE261BE0039276A /* PLDatabaseMigrationManagerTests.m in Sources */,
-				05782A560EE261BE0039276A /* PLSqliteMigrationVersionManagerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -992,11 +776,6 @@
 			target = 054CBF250EE21BD10043675E /* PlausibleDatabase */;
 			targetProxy = 05534D6E104CC18100647A44 /* PBXContainerItemProxy */;
 		};
-		05782A1B0EE260560039276A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 054CBFDB0EE242BC0043675E /* PlausibleDatabase-Windows-i386 */;
-			targetProxy = 05782A1A0EE260560039276A /* PBXContainerItemProxy */;
-		};
 		058ABC440DE638DE00C995C9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 058ABB630DE6361300C995C9 /* PlausibleDatabase-MacOSX */;
@@ -1016,7 +795,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 2.0;
 				PREBINDING = NO;
 				PRODUCT_NAME = "PlausibleDatabase$(EFFECTIVE_PLATFORM_NAME)";
-				SDKROOT = iphoneos3.0;
+				SDKROOT = iphoneos4.0;
 			};
 			name = Debug;
 		};
@@ -1031,7 +810,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 2.0;
 				PREBINDING = NO;
 				PRODUCT_NAME = "PlausibleDatabase$(EFFECTIVE_PLATFORM_NAME)";
-				SDKROOT = iphoneos3.0;
+				SDKROOT = iphoneos4.0;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1045,7 +824,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PREBINDING = NO;
 				PRODUCT_NAME = "PlausibleDatabase$(EFFECTIVE_PLATFORM_NAME)";
-				SDKROOT = iphonesimulator3.0;
+				SDKROOT = iphonesimulator4.0;
 			};
 			name = Debug;
 		};
@@ -1058,7 +837,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PREBINDING = NO;
 				PRODUCT_NAME = "PlausibleDatabase$(EFFECTIVE_PLATFORM_NAME)";
-				SDKROOT = iphonesimulator3.0;
+				SDKROOT = iphonesimulator4.0;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1073,70 +852,6 @@
 		054CBF270EE21BD10043675E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = PlausibleDatabase;
-			};
-			name = Release;
-		};
-		054CBFDE0EE242BD0043675E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = i386;
-				COPY_PHASE_STRIP = NO;
-				EFFECTIVE_PLATFORM_NAME = "-Windows-i386";
-				EXECUTABLE_SUFFIX = .1.0.dll;
-				FRAMEWORK_SEARCH_PATHS = /Developer/Cocotron/1.0/Windows/i386/Frameworks;
-				FRAMEWORK_VERSION = A;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/Dependencies/sqlite-3.6.5";
-				INFOPLIST_FILE = "Resources/PlausibleDatabase-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/Dependencies/sqlite-3.6.5\"",
-				);
-				OTHER_CFLAGS = (
-					"$(inherited)",
-					"-Wno-unknown-pragmas",
-				);
-				OTHER_LDFLAGS = (
-					"-shared",
-					"-Wl,--enable-auto-import",
-					"-Wl,--export-all-symbols",
-					"-Wl,--out-implib,$TARGET_BUILD_DIR/$(PRODUCT_NAME).framework/lib$(PRODUCT_NAME).a",
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = PlausibleDatabase;
-			};
-			name = Debug;
-		};
-		054CBFDF0EE242BD0043675E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = i386;
-				COPY_PHASE_STRIP = YES;
-				EFFECTIVE_PLATFORM_NAME = "-Windows-i386";
-				EXECUTABLE_SUFFIX = .1.0.dll;
-				FRAMEWORK_SEARCH_PATHS = /Developer/Cocotron/1.0/Windows/i386/Frameworks;
-				FRAMEWORK_VERSION = A;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/Dependencies/sqlite-3.6.5";
-				INFOPLIST_FILE = "Resources/PlausibleDatabase-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/Dependencies/sqlite-3.6.5\"",
-				);
-				OTHER_CFLAGS = (
-					"$(inherited)",
-					"-Wno-unknown-pragmas",
-				);
-				OTHER_LDFLAGS = (
-					"-shared",
-					"-Wl,--enable-auto-import",
-					"-Wl,--export-all-symbols",
-					"-Wl,--out-implib,$TARGET_BUILD_DIR/$(PRODUCT_NAME).framework/lib$(PRODUCT_NAME).a",
-				);
-				PREBINDING = NO;
 				PRODUCT_NAME = PlausibleDatabase;
 			};
 			name = Release;
@@ -1277,54 +992,6 @@
 			};
 			name = Release;
 		};
-		057829F70EE25E860039276A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = i386;
-				COPY_PHASE_STRIP = NO;
-				EFFECTIVE_PLATFORM_NAME = "-Windows-i386";
-				EXECUTABLE_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/Windows";
-				EXECUTABLE_SUFFIX = .dll;
-				FRAMEWORK_SEARCH_PATHS = /Developer/Cocotron/1.0/Windows/i386/Frameworks;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				INFOPLIST_FILE = "Resources/Tests-Info.plist";
-				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
-				MACH_O_TYPE = mh_dylib;
-				OTHER_LDFLAGS = (
-					"-shared",
-					"-Wl,--export-all-symbols",
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = Tests;
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
-		057829F80EE25E860039276A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = i386;
-				COPY_PHASE_STRIP = YES;
-				EFFECTIVE_PLATFORM_NAME = "-Windows-i386";
-				EXECUTABLE_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/Windows";
-				EXECUTABLE_SUFFIX = .dll;
-				FRAMEWORK_SEARCH_PATHS = /Developer/Cocotron/1.0/Windows/i386/Frameworks;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				INFOPLIST_FILE = "Resources/Tests-Info.plist";
-				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
-				MACH_O_TYPE = mh_dylib;
-				OTHER_LDFLAGS = (
-					"-shared",
-					"-Wl,--export-all-symbols",
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = Tests;
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Release;
-		};
 		058ABB660DE6361300C995C9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1334,6 +1001,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EFFECTIVE_PLATFORM_NAME = "-MacOSX";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/Dependencies/PLBlocks/MacOSX",
+					"$(inherited)",
+				);
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
@@ -1346,6 +1017,8 @@
 					Foundation,
 					"-framework",
 					AppKit,
+					"-weak_framework",
+					PLBlocks,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = PlausibleDatabase;
@@ -1363,6 +1036,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EFFECTIVE_PLATFORM_NAME = "-MacOSX";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/Dependencies/PLBlocks/MacOSX",
+					"$(inherited)",
+				);
 				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
@@ -1375,6 +1052,8 @@
 					Foundation,
 					"-framework",
 					AppKit,
+					"-weak_framework",
+					PLBlocks,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = PlausibleDatabase;
@@ -1391,7 +1070,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_VERSION = 4.0;
+				GCC_VERSION = coop.plausible.blocks.compilers.gcc.4_2;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
@@ -1410,7 +1089,7 @@
 				CURRENT_PROJECT_VERSION = 1.2.1;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_VERSION = 4.0;
+				GCC_VERSION = coop.plausible.blocks.compilers.gcc.4_2;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_CFLAGS = "-DPL_DB_PRIVATE=1";
@@ -1452,15 +1131,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		054CBFE00EE242BD0043675E /* Build configuration list for PBXNativeTarget "PlausibleDatabase-Windows-i386" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				054CBFDE0EE242BD0043675E /* Debug */,
-				054CBFDF0EE242BD0043675E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		0551CA500DCBE9F700E31E46 /* Build configuration list for PBXNativeTarget "Tests-MacOSX" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1484,15 +1154,6 @@
 			buildConfigurations = (
 				05534D4C104CC09000647A44 /* Debug */,
 				05534D4D104CC09000647A44 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		057829F90EE25E860039276A /* Build configuration list for PBXNativeTarget "Tests-Windows-i386" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				057829F70EE25E860039276A /* Debug */,
-				057829F80EE25E860039276A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
