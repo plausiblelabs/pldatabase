@@ -159,6 +159,11 @@
 }
 
 /* From PLResultSet */
+- (BOOL) enumerateWithBlock: (void (^)(id<PLResultSet> rs, BOOL *stop)) block {
+    return [self enumerateAndReturnError: NULL block: block];
+}
+
+/* From PLResultSet */
 - (BOOL) enumerateAndReturnError: (NSError **) outError block: (void (^)(id<PLResultSet> rs, BOOL *stop)) block {
     BOOL stop = NO;
     

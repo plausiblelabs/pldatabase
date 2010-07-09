@@ -57,6 +57,16 @@ typedef enum {
 /**
  * Iterate over all rows in the result set, calling the provided block for each row.
  *
+ * @param block Block to execute for each row in the result set. Set the provided stop argument's value
+ * to YES to stop iteration of the result set.
+ *
+ * @return Returns YES if the result set was successfully iterated, or NO if a database error occurs.
+ */
+- (BOOL) enumerateWithBlock: (void (^)(id<PLResultSet> rs, BOOL *stop)) block;
+
+/**
+ * Iterate over all rows in the result set, calling the provided block for each row.
+ *
  * @param outError A pointer to an NSError object variable. If an error occurs, iteration will stop and
  * this pointer will contain an error object indicating why the statement could not be executed.
  * If no error occurs, this parameter's value will not be modified. You may specify NULL for this
