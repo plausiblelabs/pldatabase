@@ -97,6 +97,26 @@
     }
 }
 
+- (void) testBlockIteration {
+    id<PLResultSet> result;
+    
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Create table failed");
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a) VALUES (?)", [NSNumber numberWithInt: 1]]), @"Could not insert row");
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a) VALUES (?)", [NSNumber numberWithInt: 2]]), @"Could not insert row");
+
+    NSError *error;
+    result = [_db executeQuery: @"SELECT a FROM test"];
+    __block NSInteger iterations = 0;
+    BOOL success = [result enumerateAndReturnError: &error block: ^(BOOL *stop) {
+        STAssertEquals(1, [result intForColumn: @"a"], @"Did not return correct date value");
+        iterations++;
+        *stop = YES;
+    }];
+
+    STAssertTrue(success, @"Did not iterate successfully: %@", error);
+    STAssertEquals((NSInteger)1, iterations, @"Did not stop when requested");
+}
+
 - (void) testNextErrorHandling {
     NSError *error;
 

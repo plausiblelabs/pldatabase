@@ -158,6 +158,24 @@
     return PLResultSetStatusError;
 }
 
+/* From PLResultSet */
+- (BOOL) enumerateAndReturnError: (NSError **) outError block: (void (^)(BOOL *stop)) block {
+    BOOL stop = NO;
+    
+    /* Iterate over the results */
+    PLResultSetStatus row;
+    while ((row = [self nextAndReturnError: outError]) == PLResultSetStatusRow) {
+        block(&stop);
+        if (stop)
+            break;
+    }
+    
+    if (row == PLResultSetStatusError)
+        return NO;
+    
+    return YES;
+}
+
 
 /* From PLResultSet */
 - (int) columnIndexForName: (NSString *) name {
