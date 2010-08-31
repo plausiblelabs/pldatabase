@@ -365,6 +365,11 @@ NSString *PLSqliteException = @"PLSqliteException";
     return exists;
 }
 
+/* from PLDatabase */
+- (NSInteger) lastModifiedRowCount {
+    return sqlite3_changes(_sqlite);
+}
+
 /**
  * Returns the row ID of the most recent successful INSERT. If the table
  * has a column of type INTEGER PRIMARY KEY, then the value assigned will

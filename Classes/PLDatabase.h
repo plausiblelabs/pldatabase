@@ -214,6 +214,13 @@
  */
 - (BOOL) rollbackTransactionAndReturnError: (NSError **) error;
 
+
+/**
+ * Return the number of rows modified by the last UPDATE, INSERT, or DELETE statement issued
+ * on this connection.
+ */
+- (NSInteger) lastModifiedRowCount;
+
 /**
  * Return YES if the given table name exists.
  *

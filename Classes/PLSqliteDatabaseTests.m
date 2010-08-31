@@ -252,6 +252,17 @@
     STAssertFalse([_db tableExists: @"not exists"], @"Returned true on non-existent table");
 }
 
+- (void) testLastModifiedRowCount {
+    /* Create test table */
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a INTEGER PRIMARY KEY AUTOINCREMENT, b INTEGER)"], @"Create table failed");
+    STAssertTrue([_db tableExists: @"test"], @"Table 'test' not created");
+    
+    /* Insert test data */
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a, b) VALUES (?, ?)", nil, [NSNumber numberWithInt: 42]]), @"Inserting test data failed");
+    STAssertEquals((NSInteger)1, [_db lastModifiedRowCount], @"Expected a modified row count of 1");
+}
+
+
 - (void) testLastInsertRowId {
     id<PLResultSet> rs;
     int64_t rowId;
