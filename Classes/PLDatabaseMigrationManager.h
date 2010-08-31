@@ -45,7 +45,7 @@
 }
 
 - (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) connectionProvider
-                      transactionManager: (id<PLDatabaseMigrationTransactionManager>) lockManager
+               transactionManager: (id<PLDatabaseMigrationTransactionManager>) lockManager
                    versionManager: (id<PLDatabaseMigrationVersionManager>) versionManager
                          delegate: (id<PLDatabaseMigrationDelegate>) delegate;
 
