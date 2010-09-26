@@ -599,7 +599,14 @@
 			isa = PBXProject;
 			buildConfigurationList = 1DEB918108733D990010E9CD /* Build configuration list for PBXProject "PlausibleDatabase" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 0867D691FE84028FC02AAC07 /* PlausibleDatabase */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
 			projectDirPath = "";
@@ -801,7 +808,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 2.0;
 				PREBINDING = NO;
 				PRODUCT_NAME = "PlausibleDatabase$(EFFECTIVE_PLATFORM_NAME)";
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos4.1;
 			};
 			name = Debug;
 		};
@@ -809,14 +816,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 2.0;
 				PREBINDING = NO;
 				PRODUCT_NAME = "PlausibleDatabase$(EFFECTIVE_PLATFORM_NAME)";
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos4.1;
 				ZERO_LINK = NO;
 			};
 			name = Release;
