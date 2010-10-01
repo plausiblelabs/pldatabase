@@ -92,9 +92,9 @@ typedef enum {
 #import "PLDatabase.h"
 
 #import "PLSqliteDatabase.h"
+#import "PLSqliteStatementCache.h"
 #import "PLSqlitePreparedStatement.h"
 #import "PLSqliteResultSet.h"
-#import "PLSqliteStatementCache.h"
 
 #import "PLDatabaseConnectionProvider.h"
 #import "PLSqliteConnectionProvider.h"

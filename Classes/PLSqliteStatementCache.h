@@ -29,7 +29,9 @@
 
 #import <Foundation/Foundation.h>
 
-#if PL_DB_PRIVATE
+#ifndef PL_DB_PRIVATE
+@class PLSqliteStatementCache;
+#else
 
 @interface PLSqliteStatementCache : NSObject {
 @private
@@ -47,7 +49,7 @@
 
 - (void) removeAllStatements;
 - (void) checkinStatement: (sqlite3_stmt *) stmt forQuery: (NSString *) query;
-- (sqlite3_stmt *) checkoutStatementForQuery: (NSString *) query;
+- (sqlite3_stmt *) checkoutStatementForQueryString: (NSString *) query;
 
 @end
 

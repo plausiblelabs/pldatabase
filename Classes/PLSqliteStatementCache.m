@@ -101,6 +101,7 @@ static const CFArrayCallBacks StatementCacheArrayCallbacks = {
         CFMakeCollectable(stmtArray);
 
         [_statements setObject: (id) stmtArray forKey: query];
+        CFRelease(stmtArray);
     }
 
     /* Claim ownership of the statement */
@@ -116,7 +117,7 @@ static const CFArrayCallBacks StatementCacheArrayCallbacks = {
  * @warning MEMORY OWNERSHIP WARNING: The caller is given ownership of the statement object, and MUST either deallocate
  * that object or provide it to PLSqliteStatementCache::checkinStatement:forQuery: for reclaimation.
  */
-- (sqlite3_stmt *) checkoutStatementForQuery: (NSString *) query {
+- (sqlite3_stmt *) checkoutStatementForQueryString: (NSString *) query {
     /* Fetch the statement set for this query */
     CFMutableArrayRef stmtArray = (CFMutableArrayRef) [_statements objectForKey: query];
     if (stmtArray == nil)

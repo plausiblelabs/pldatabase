@@ -39,6 +39,8 @@
 #define PL_SQLITE_LEGACY_STMT_PREPARE 1
 #endif
 
+#import "PLSqliteStatementCache.h"
+
 extern NSString *PLSqliteException;
 
 @interface PLSqliteDatabase : NSObject <PLDatabase> {
@@ -48,6 +50,9 @@ extern NSString *PLSqliteException;
     
     /** Underlying sqlite database reference. */
     sqlite3 *_sqlite;
+
+    /** Prepared statement cache */
+    PLSqliteStatementCache *_statementCache;
 }
 
 + (id) databaseWithPath: (NSString *) dbPath;

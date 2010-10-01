@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2008-2010 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,6 +36,10 @@
 @private
     /** Our backing database. */
     PLSqliteDatabase *_database;
+    
+    /** Cache in which the statement should be checked in on close, or nil if no cache is available and the
+     * statement should simply be finalized. */
+    PLSqliteStatementCache *_statementCache;
 
     /** The prepared SQLite statement. */
     sqlite3_stmt *_sqlite_stmt;
@@ -58,7 +62,11 @@
     BOOL _closeAtCheckin;
 }
 
-- (id) initWithDatabase: (PLSqliteDatabase *) db sqliteStmt: (sqlite3_stmt *) sqlite_stmt queryString: (NSString *) queryString closeAtCheckin: (BOOL) closeAtCheckin;
+- (id) initWithDatabase: (PLSqliteDatabase *) db 
+         statementCache: (PLSqliteStatementCache *) statementCache 
+             sqliteStmt: (sqlite3_stmt *) sqlite_stmt 
+            queryString: (NSString *) queryString
+         closeAtCheckin: (BOOL) closeAtCheckin;
 
 - (void) populateError: (NSError **) error withErrorCode: (PLDatabaseError) errorCode description: (NSString *) localizedDescription;
 

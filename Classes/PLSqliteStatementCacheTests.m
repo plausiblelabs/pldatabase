@@ -66,7 +66,7 @@
     [cache checkinStatement: stmt forQuery: queryString];
 
     /* Make sure we can get it back out again */
-    sqlite3_stmt *cached_stmt = [cache checkoutStatementForQuery: queryString];
+    sqlite3_stmt *cached_stmt = [cache checkoutStatementForQueryString: queryString];
     STAssertEquals(stmt, cached_stmt, @"Statement was not cached");
 
     /* Re-add it to the cache so that we can test the cache's finalization of statements. */

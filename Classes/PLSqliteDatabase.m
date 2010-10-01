@@ -75,6 +75,7 @@ NSString *PLSqliteException = @"PLSqliteException";
         return nil;
 
     _path = [dbPath retain];
+    _statementCache = [[PLSqliteStatementCache alloc] initWithCapacity: 100 /* TODO: configurable? */];
     
     return self;
 }
@@ -89,6 +90,9 @@ NSString *PLSqliteException = @"PLSqliteException";
 /* Manual */
 - (void) dealloc {
     [self close];
+    
+    /* Drop the statement cache */
+    [_statementCache release];
 
     /* Release our backing path */
     [_path release];
@@ -173,7 +177,10 @@ NSString *PLSqliteException = @"PLSqliteException";
     
     if (_sqlite == NULL)
         return;
-    
+
+    /* Finalize any cached statements */
+    [_statementCache removeAllStatements];
+
     /* Close the connection and release any sqlite resources (if open was ever called) */
     err = sqlite3_close(_sqlite);
     
@@ -467,6 +474,11 @@ NSString *PLSqliteException = @"PLSqliteException";
     const char *unused;
     int ret;
     
+    /* Try fetching from the cache. */
+    sqlite_stmt = [_statementCache checkoutStatementForQueryString: statement];
+    if (sqlite_stmt != NULL)
+        return sqlite_stmt;
+
     /* Prepare. The V2 interface is only available in SQLite 3.3.9 and later, which was released in January of 2004.
      * Mac OS X 10.4 ships with 3.1.3.
      *
@@ -547,7 +559,11 @@ NSString *PLSqliteException = @"PLSqliteException";
      * MEMORY OWNERSHIP WARNING:
      * We pass our sqlite3_stmt reference to the PLSqlitePreparedStatement, which now must assume authority for releasing
      * that statement using sqlite3_finalize(). */
-    return [[[PLSqlitePreparedStatement alloc] initWithDatabase: self sqliteStmt: sqlite_stmt queryString: statement closeAtCheckin: closeAtCheckin] autorelease];
+    return [[[PLSqlitePreparedStatement alloc] initWithDatabase: self
+                                                 statementCache: _statementCache
+                                                     sqliteStmt: sqlite_stmt
+                                                    queryString: statement 
+                                                 closeAtCheckin: closeAtCheckin] autorelease];
 }
 
 @end

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2008-2010 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -169,6 +169,7 @@
  * Initialize the prepared statement with an open database and an sqlite3 prepared statement.
  *
  * @param db A reference to the managing PLSqliteDatabase instance.
+ * @param statementCache The statement cache into which the backing sqlite3_stmt should be checked back in.
  * @param sqliteStmt The prepared sqlite statement. This class will assume ownership of the reference.
  * @param queryString The original SQL query string, used for error reporting.
  * @param closeAtCheckin A flag specifying whether the statement should be closed at first checkin. Used to support returning
@@ -182,9 +183,10 @@
  * This method is the designated initializer for the PLSqlitePreparedStatement class.
  */
 - (id) initWithDatabase: (PLSqliteDatabase *) db 
-             sqliteStmt: (sqlite3_stmt *) sqlite_stmt
-            queryString: (NSString *) queryString 
-         closeAtCheckin: (BOOL) closeAtCheckin 
+         statementCache: (PLSqliteStatementCache *) statementCache 
+             sqliteStmt: (sqlite3_stmt *) sqlite_stmt 
+            queryString: (NSString *) queryString
+         closeAtCheckin: (BOOL) closeAtCheckin
 {
     if ((self = [super init]) == nil)
         return nil;
@@ -194,6 +196,7 @@
 
     /* Save our database and statement reference. */
     _database = [db retain];
+    _statementCache = [statementCache retain];
     _sqlite_stmt = sqlite_stmt;
     _queryString = [queryString retain];
     _inUse = NO;
@@ -225,6 +228,9 @@
     /* Now release the database. */
     [_database release];
     
+    /* Drop the statement cache reference */
+    [_statementCache release];
+    
     /* Release the query statement */
     [_queryString release];
 
@@ -240,11 +246,17 @@
 - (void) close {
     if (_sqlite_stmt == NULL)
         return;
-    
-    /* The finalization may return the last error returned by sqlite3_next(), but this has already
-     * been handled by the -[PLSqliteResultSet next] implementation. Any remaining memory and
-     * resources are released regardless of the error code, so we do not check it here. */
-    sqlite3_finalize(_sqlite_stmt);
+
+    /* Either check in the statement or finalize it directly */
+    if (_statementCache != nil) {
+        [_statementCache checkinStatement: _sqlite_stmt forQuery: _queryString];
+    } else {
+        /* The finalization may return the last error returned by sqlite3_next(), but this has already
+         * been handled by the -[PLSqliteResultSet next] implementation. Any remaining memory and
+         * resources are released regardless of the error code, so we do not check it here. */
+        sqlite3_finalize(_sqlite_stmt);
+    }
+
     _sqlite_stmt = NULL;
 }
 
