@@ -130,6 +130,9 @@ static const CFArrayCallBacks StatementCacheArrayCallbacks = {
     sqlite3_stmt *stmt = (sqlite3_stmt *) CFArrayGetValueAtIndex(stmtArray, 0);
     CFArrayRemoveValueAtIndex(stmtArray, 0);
 
+    /* Decrement the count */
+    _size--;
+
     return stmt;
 }
 
