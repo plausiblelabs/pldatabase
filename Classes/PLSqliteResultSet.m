@@ -236,19 +236,14 @@
 }
 
 /* This beauty generates the PLResultSet value accessors for a given data type */
-#define VALUE_ACCESSORS(ReturnType, MethodName, SqliteType, Expression) \
+#define VALUE_ACCESSORS(ReturnType, MethodName, Expression) \
     - (ReturnType) MethodName ## ForColumnIndex: (int) columnIndex { \
         [self assertNotClosed]; \
         int columnType = [self validateColumnIndex: columnIndex]; \
         \
-        if (columnType == SqliteType || columnType == SQLITE_NULL) \
+        /* Quiesce unused variable warning */ \
+        if (YES || columnType == SQLITE_NULL) \
             return (Expression); \
-        \
-        /* unknown value */ \
-        [NSException raise: PLSqliteException format: @"Attempted to access non-%s column as %s.", #ReturnType, #ReturnType]; \
-        \
-        /* Unreachable */ \
-        abort(); \
     } \
     \
     - (ReturnType) MethodName ## ForColumn: (NSString *) column { \
@@ -256,31 +251,31 @@
     }
 
 /* bool */
-VALUE_ACCESSORS(BOOL, bool, SQLITE_INTEGER, sqlite3_column_int(_sqlite_stmt, columnIndex))
+VALUE_ACCESSORS(BOOL, bool, sqlite3_column_int(_sqlite_stmt, columnIndex))
 
 /* int32_t */
-VALUE_ACCESSORS(int32_t, int, SQLITE_INTEGER, sqlite3_column_int(_sqlite_stmt, columnIndex))
+VALUE_ACCESSORS(int32_t, int, sqlite3_column_int(_sqlite_stmt, columnIndex))
 
 /* int64_t */
-VALUE_ACCESSORS(int64_t, bigInt, SQLITE_INTEGER, sqlite3_column_int64(_sqlite_stmt, columnIndex))
+VALUE_ACCESSORS(int64_t, bigInt, sqlite3_column_int64(_sqlite_stmt, columnIndex))
 
 /* date */
-VALUE_ACCESSORS(NSDate *, date, SQLITE_FLOAT, columnType == SQLITE_NULL ? nil : 
+VALUE_ACCESSORS(NSDate *, date, columnType == SQLITE_NULL ? nil : 
                     [NSDate dateWithTimeIntervalSince1970: sqlite3_column_double(_sqlite_stmt, columnIndex)])
 
 /* string */
-VALUE_ACCESSORS(NSString *, string, SQLITE_TEXT, columnType == SQLITE_NULL ? nil : 
+VALUE_ACCESSORS(NSString *, string, columnType == SQLITE_NULL ? nil : 
                     [NSString stringWithCharacters: sqlite3_column_text16(_sqlite_stmt, columnIndex)
                                             length: sqlite3_column_bytes16(_sqlite_stmt, columnIndex) / 2])
 
 /* float */
-VALUE_ACCESSORS(float, float, SQLITE_FLOAT, sqlite3_column_double(_sqlite_stmt, columnIndex))
+VALUE_ACCESSORS(float, float, sqlite3_column_double(_sqlite_stmt, columnIndex))
 
 /* double */
-VALUE_ACCESSORS(double, double, SQLITE_FLOAT, sqlite3_column_double(_sqlite_stmt, columnIndex))
+VALUE_ACCESSORS(double, double, sqlite3_column_double(_sqlite_stmt, columnIndex))
 
 /* data */
-VALUE_ACCESSORS(NSData *, data, SQLITE_BLOB, columnType == SQLITE_NULL ? nil : 
+VALUE_ACCESSORS(NSData *, data, columnType == SQLITE_NULL ? nil : 
                     [NSData dataWithBytes: sqlite3_column_blob(_sqlite_stmt, columnIndex)
                                    length: sqlite3_column_bytes(_sqlite_stmt, columnIndex)])
 
