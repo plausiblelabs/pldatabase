@@ -101,7 +101,7 @@ static const CFArrayCallBacks StatementCacheArrayCallbacks = {
         CFMakeCollectable(stmtArray);
 
         [_statements setObject: (id) stmtArray forKey: query];
-        CFRelease(stmtArray);
+        [(id)stmtArray release];
     }
 
     /* Claim ownership of the statement */
