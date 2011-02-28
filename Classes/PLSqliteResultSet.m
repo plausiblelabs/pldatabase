@@ -71,8 +71,6 @@
 - (void) finalize {
     /* 'Check in' our prepared statement reference */
     [self close];
-    if (_columnNames != nil)
-        [_columnNames release];
 
     [super finalize];
 }
