@@ -243,16 +243,8 @@
     if (_sqlite_stmt == NULL)
         return;
 
-    /* Either check in the statement or finalize it directly */
-    if (_statementCache != nil) {
-        [_statementCache checkinStatement: _sqlite_stmt forQuery: _queryString];
-    } else {
-        /* The finalization may return the last error returned by sqlite3_next(), but this has already
-         * been handled by the -[PLSqliteResultSet next] implementation. Any remaining memory and
-         * resources are released regardless of the error code, so we do not check it here. */
-        sqlite3_finalize(_sqlite_stmt);
-    }
-
+    /* Check in the statement. */
+    [_statementCache checkinStatement: _sqlite_stmt forQuery: _queryString];
     _sqlite_stmt = NULL;
 }
 
