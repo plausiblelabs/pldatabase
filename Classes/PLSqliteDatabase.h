@@ -34,9 +34,10 @@
 #import <sqlite3.h>
 #endif
 
-/* On older versions of sqlite3, sqlite3_prepare_v2() is not available */
-#if SQLITE_VERSION_NUMBER <= 3003009
-#define PL_SQLITE_LEGACY_STMT_PREPARE 1
+/* On older versions of sqlite3, sqlite3_prepare_v2() is not available. It was introduced in 3.3.9, and significant
+ * bugs remained until 3.3.11. */
+#if SQLITE_VERSION_NUMBER < 3003011
+#error SQLite versions 3.3.8 and earlier are unsupported.
 #endif
 
 #import "PLSqliteStatementCache.h"

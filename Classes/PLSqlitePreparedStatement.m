@@ -233,10 +233,6 @@
     
     /* Release the query statement */
     [_queryString release];
-
-#ifdef PL_SQLITE_LEGACY_STMT_PREPARE
-    [_boundParameterStrategy release];
-#endif /* PL_SQLITE_LEGACY_STMT_PREPARE */
     
     [super dealloc];
 }
@@ -290,16 +286,6 @@
  */
 - (void) bindParametersWithStrategy: (id<PLSqliteParameterStrategy>) strategy {
     [self assertNotInUse];
-    
-#ifdef PL_SQLITE_LEGACY_STMT_PREPARE
-    if (_boundParameterStrategy != strategy) {
-        /* Save the new strategy, in case the statement must be reparsed */
-        if (_boundParameterStrategy != nil)
-            [_boundParameterStrategy release];
-
-        _boundParameterStrategy = [strategy retain];
-    }
-#endif /* PL_SQLITE_LEGACY_STMT_PREPARE */
 
     /* Verify that a complete parameter list was provided */
     if ([strategy count] < _parameterCount)
@@ -343,50 +329,6 @@
     strategy = [[[PLSqliteDictionaryParameterStrategy alloc] initWithValueDictionary: parameters] autorelease];
     [self bindParametersWithStrategy: strategy];
 }
-
-#ifdef PL_SQLITE_LEGACY_STMT_PREPARE
-
-/**
- * @internal
- *
- * Re-create and return the backing prepared statement.
- *
- * Must only be called by PLSqliteResultSet. This method is only available
- * to support SQLite 3.0.9 and earlier, where sqlite3_prepare_v2() is unavailable.
- *
- * The implementation should be dropped if sqlite3_prepare() support is dropped.
- *
- * MEMORY OWNERSHIP WARNING:
- * The reference to the returned sqlite3_stmt object is borrowed.
- */
-- (sqlite3_stmt *) reloadStatementAndReturnError: (NSError **) error {
-    sqlite3_stmt *newStmt;
-    
-    /* Try re-creating the statement */
-    newStmt = [_database createStatement: _queryString error: error];
-    if (newStmt == NULL)
-        return NULL;
-    
-    /* Free the current prepared statement */
-    sqlite3_finalize(_sqlite_stmt);
-    
-    /* Set the new prepared statement */
-    _sqlite_stmt = newStmt;
-    
-    /* Re-bind parameters */
-    if (_boundParameterStrategy != nil) {
-        BOOL useFlag = _inUse;
-        _inUse = NO; // evil! allows re-bind even if the prepared statement is currently checked out.
-        [self bindParametersWithStrategy: _boundParameterStrategy];
-        _inUse = useFlag;
-    }
-
-    /* Provide the new statement to the caller */
-    return _sqlite_stmt;
-}
-
-#endif /* PL_SQLITE_LEGACY_STMT_PREPARE */
-
 
 /* from PLPreparedStatement */
 - (BOOL) executeUpdate {

@@ -479,30 +479,8 @@ NSString *PLSqliteException = @"PLSqliteException";
     if (sqlite_stmt != NULL)
         return sqlite_stmt;
 
-    /* Prepare. The V2 interface is only available in SQLite 3.3.9 and later, which was released in January of 2004.
-     * Mac OS X 10.4 ships with 3.1.3.
-     *
-     * The V2 interface differs in two ways (from the SQLite documentation):
-     *
-     * 1. If the database schema changes, instead of returning SQLITE_SCHEMA as it always
-     * used to do, sqlite3_step() will automatically recompile the SQL statement and try
-     * to run it again. If the schema has changed in a way that makes the statement no
-     * longer valid, sqlite3_step() will still return SQLITE_SCHEMA. But unlike the legacy
-     * behavior, SQLITE_SCHEMA is now a fatal error. Calling sqlite3_prepare_v2() again
-     * will not make the error go away. Note: use sqlite3_errmsg() to find the text of the
-     * parsing error that results in an SQLITE_SCHEMA return.
-     *
-     * 2. When an error occurs, sqlite3_step() will return one of the detailed error codes or
-     * extended error codes. The legacy behavior was that sqlite3_step() would only return a generic
-     * SQLITE_ERROR result code and you would have to make a second call to sqlite3_reset() in
-     * order to find the underlying cause of the problem. With the "v2" prepare interfaces, the
-     * underlying reason for the error is returned immediately.
-     */
-#ifdef PL_SQLITE_LEGACY_STMT_PREPARE
-    ret = sqlite3_prepare(_sqlite, [statement UTF8String], -1, &sqlite_stmt, &unused);
-#else
+    /* Prepare. */
     ret = sqlite3_prepare_v2(_sqlite, [statement UTF8String], -1, &sqlite_stmt, &unused);
-#endif
     
     /* Prepare failed */
     if (ret != SQLITE_OK) {

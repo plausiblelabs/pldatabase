@@ -53,12 +53,7 @@
     const char *unused;
     int ret;
 
-#ifdef PL_SQLITE_LEGACY_STMT_PREPARE
-    ret = sqlite3_prepare(sqlite, [queryString UTF8String], -1, &stmt, &unused);
-#else
     ret = sqlite3_prepare_v2(sqlite, [queryString UTF8String], -1, &stmt, &unused);
-#endif
-
     STAssertEquals(ret, SQLITE_OK, @"Failed to prepare the statement");
 
     /* Try caching it */
