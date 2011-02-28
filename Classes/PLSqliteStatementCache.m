@@ -31,6 +31,8 @@
 #import <CoreFoundation/CoreFoundation.h>
 
 /**
+ * @internal
+ *
  * Manages a cache of sqlite3_stmt instances, providing a mapping from query string to a sqlite3_stmt.
  *
  * The implementation naively evicts all statements should the cache become full. Future enhancement
