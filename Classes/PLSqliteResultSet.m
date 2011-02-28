@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2008-2011 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,10 +53,11 @@
 - (id) initWithPreparedStatement: (PLSqlitePreparedStatement *) stmt 
                   sqliteStatemet: (sqlite3_stmt *) sqlite_stmt
 {
-    if ((self = [super init]) == nil) {
+    if ((self = [super init]) == nil)
         return nil;
-    }
     
+    _closeLock = OS_SPINLOCK_INIT;
+
     /* Save our database and statement references. */
     _stmt = [stmt retain];
     _sqlite_stmt = sqlite_stmt;
@@ -69,7 +70,8 @@
 
 /* GC */
 - (void) finalize {
-    /* 'Check in' our prepared statement reference */
+    /* Check in our sqlite3_stmt reference. We guarantee (internally) that -close may be called from
+     * an arbitrary thread. */
     [self close];
 
     [super finalize];
@@ -92,12 +94,18 @@
 
 // From PLResultSet
 - (void) close {
-    if (_sqlite_stmt == NULL)
-        return;
+    /* Note that this method must support calling from -finalize or -dealloc, which may be executed
+     * from any thread. We lock here to ensure atomicity in the incredibly unlikely case that an API
+     * client calls -close and the object is finalized near-simultaneously. */
+    OSSpinLockLock(&_closeLock); {
 
-    /* Check ourselves back in and give up our statement reference */
-    [_stmt checkinResultSet: self];
-    _sqlite_stmt = NULL;
+        /* Check ourselves back in and give up our statement reference */
+        if (_sqlite_stmt != NULL) {
+            [_stmt checkinResultSet: self];
+            _sqlite_stmt = NULL;
+        }
+
+    } OSSpinLockUnlock(&_closeLock);
 }
 
 /**

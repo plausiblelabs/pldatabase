@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2010 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2008-2011 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,6 +29,8 @@
 
 #if PL_DB_PRIVATE
 
+#import <libkern/OSAtomic.h>
+
 @class PLSqliteResultSet;
 @protocol PLSqliteParameterStrategy;
 
@@ -43,6 +45,9 @@
 
     /** The prepared SQLite statement. */
     sqlite3_stmt *_sqlite_stmt;
+    
+    /** The lock used to synchronize -close. */
+    OSSpinLock _closeLock;
     
     /** The unprepared query string. */
     NSString *_queryString;

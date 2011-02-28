@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2008-2011 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -51,6 +51,9 @@ extern NSString *PLSqliteException;
     
     /** Underlying sqlite database reference. */
     sqlite3 *_sqlite;
+
+    /** The lock used to synchronize -close. */
+    OSSpinLock _closeLock;    
 
     /** Prepared statement cache */
     PLSqliteStatementCache *_statementCache;
