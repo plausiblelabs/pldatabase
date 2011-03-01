@@ -63,7 +63,7 @@
     STAssertEquals(ret, SQLITE_OK, @"Failed to prepare the statement");
     
     /* Create our reference to it */
-    _ref = [[PLSqliteStatementReference alloc] initWithStatement: stmt];
+    _ref = [[PLSqliteStatementReference alloc] initWithStatement: stmt queryString: queryString];
 }
 
 - (void) tearDown {
@@ -105,6 +105,74 @@
     /* Verify that the databases closes cleanly. If it doesn't, that means that the statements were leaked, and an
      * exception will be raised. */
     [_db close];
+}
+
+/**
+ * Test invalidation of a parent reference while using a cloned reference.
+ */
+- (void) testCloneParentInvalidated {
+    PLSqliteStatementReference *clone = [_ref cloneReference];
+    NSError *error;
+    
+    /* Make sure the transaction block is not executed once the parent reference is invalidated. */
+    __block BOOL didRun = NO;
+    [_ref invalidate];
+    
+    BOOL result = [clone performWithStatement: ^(sqlite3_stmt *stmt) {
+        STAssertTrue(stmt != NULL, @"Statement is nil");
+        didRun = YES;
+    } error: &error];
+    
+    STAssertFalse(didRun, @"Block ran with invalidated statement.");
+    STAssertFalse(result, @"Perform returned true with an invalidated statement.");
+    STAssertEquals([error code], PLDatabaseErrorStatementInvalidated, @"Unexpected error returned.");
+
+    /* Verify that the databases closes cleanly. If it doesn't, that means that the statements were leaked, and an
+     * exception will be raised. */
+    [_db close];
+}
+
+/**
+ * Test performWithStatement on a cloned reference.
+ */
+- (void) testClonePerformWithStatement {
+    PLSqliteStatementReference *clone = [_ref cloneReference];
+    NSError *error;
+
+    /* Try with a valid child reference */
+    __block BOOL didRun = NO;
+    BOOL result = [clone performWithStatement: ^(sqlite3_stmt *stmt) {
+        STAssertTrue(stmt != NULL, @"Statement is nil");
+        didRun = YES;
+    } error: &error];
+    
+    STAssertTrue(didRun, @"Block did not run");
+    STAssertTrue(result, @"Perform returned false");
+
+
+    /* Make sure the transaction block is not executed once the reference is invalidated. */
+    [clone invalidate];
+    didRun = NO;
+    
+    result = [clone performWithStatement: ^(sqlite3_stmt *stmt) {
+        STAssertTrue(stmt != NULL, @"Statement is nil");
+        didRun = YES;
+    } error: &error];
+    
+    STAssertFalse(didRun, @"Block ran with invalidated statement.");
+    STAssertFalse(result, @"Perform returned true with an invalidated statement.");
+    STAssertEquals([error code], PLDatabaseErrorStatementInvalidated, @"Unexpected error returned.");
+
+
+    /* Verify that the child reference does not invalidate the parent. */
+    didRun = NO;
+    result = [_ref performWithStatement: ^(sqlite3_stmt *stmt) {
+        STAssertTrue(stmt != NULL, @"Statement is nil");
+        didRun = YES;
+    } error: &error];
+    
+    STAssertTrue(didRun, @"Block did not run");
+    STAssertTrue(result, @"Perform returned false");
 }
 
 @end
