@@ -32,7 +32,9 @@
 
 @interface PLSqliteStatementReference (PrivateMethods)
 
-- (id) initWithStatement: (sqlite3_stmt *) statement parent: (PLSqliteStatementReference *) parent;
+- (id) initWithStatement: (sqlite3_stmt *) statement
+                  parent: (PLSqliteStatementReference *) parent
+             queryString: (NSString *) queryString;
 
 @end
 
@@ -47,19 +49,21 @@
  * Unlike most classes in this library, PLSqliteStatementRef is thread-safe; this is intended to allow the safe
  * finalization/deallocation of SQLite data structures from multiple threads.
  *
- * Note, however, that the implementation is optimized for minimal contention, and it is not intended that 
- * the statement reference be subject to high contention.
+ * Note, however, that the implementation is optimized for minimal contention.
  */
 @implementation PLSqliteStatementReference
+
+@synthesize queryString = _queryString;
 
 /**
  * Initialize a new statement reference with the provided statement. The receiver will assume ownership of the
  * provided statement.
  *
  * @param statement A valid sqlite3_stmt reference.
+ * @param queryString The original SQL query string.
  */
-- (id) initWithStatement: (sqlite3_stmt *) statement {
-    return [self initWithStatement: statement parent: nil];
+- (id) initWithStatement: (sqlite3_stmt *) statement queryString: (NSString *) queryString {
+    return [self initWithStatement: statement parent: nil queryString: queryString];
 }
 
 - (void) finalize {
@@ -109,7 +113,7 @@
             parent = [[_parent retain] autorelease];
     } OSSpinLockUnlock(&_lock);
 
-    return [[[PLSqliteStatementReference alloc] initWithStatement: NULL parent: parent] autorelease];    
+    return [[[PLSqliteStatementReference alloc] initWithStatement: NULL parent: parent queryString: _queryString] autorelease];    
 }
 
 /**
@@ -158,14 +162,16 @@
  *
  * @param statement A valid sqlite3_stmt reference, or NULL if this is a child statement.
  * @param parent A valid parent reference, or nil if statement is non-NULL.
+ * @param queryString The original SQL query string.
  */
-- (id) initWithStatement: (sqlite3_stmt *) statement parent: (PLSqliteStatementReference *) parent {
+- (id) initWithStatement: (sqlite3_stmt *) statement parent: (PLSqliteStatementReference *) parent queryString: (NSString *) queryString {
     if ((self = [super init]) == nil)
         return nil;
     
     _lock = OS_SPINLOCK_INIT;
     _parent = [parent retain];
     _stmt = statement;
+    _queryString = [queryString copy];
     
     return self;
 }

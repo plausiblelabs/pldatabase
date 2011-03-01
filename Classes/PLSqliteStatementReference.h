@@ -42,6 +42,9 @@
     /** Lock */
     OSSpinLock _lock;
     
+    /** The statement's query string. */
+    NSString *_queryString;
+
     /** Parent reference. May be nil if there is no parent reference. */
     PLSqliteStatementReference *_parent;
 
@@ -49,13 +52,16 @@
     sqlite3_stmt *_stmt;
 }
 
-- (id) initWithStatement: (sqlite3_stmt *) statement;
+- (id) initWithStatement: (sqlite3_stmt *) statement queryString: (NSString *) queryString;
 
 
 - (BOOL) performWithStatement: (void (^)(sqlite3_stmt *stmt)) block error: (NSError **) outError;
 - (PLSqliteStatementReference *) cloneReference;
 
 - (void) invalidate;
+
+/** The statement's query string. */
+@property(nonatomic, readonly) NSString *queryString;
 
 @end
 
