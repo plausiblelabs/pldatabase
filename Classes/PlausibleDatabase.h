@@ -84,6 +84,9 @@ typedef enum {
     
     /** The provided SQL statement was invalid. */
     PLDatabaseErrorInvalidStatement = 3,
+
+    /** The database statement has been invalidated; this will occur due to the re-use of a PLPreparedStatement. */
+    PLDatabaseErrorStatementInvalidated = 4
 } PLDatabaseError;
 
 /* Library Includes */
@@ -111,6 +114,7 @@ typedef enum {
 @interface PlausibleDatabase : NSObject {
 }
 
++ (NSError *) errorWithCode: (PLDatabaseError) errorCode localizedDescription: (NSString *) localizedDescription;
 + (NSError *) errorWithCode: (PLDatabaseError) errorCode localizedDescription: (NSString *) localizedDescription 
                 queryString: (NSString *) queryString
                  vendorError: (NSNumber *) vendorError vendorErrorString: (NSString *) vendorErrorString;

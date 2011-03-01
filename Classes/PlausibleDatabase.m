@@ -70,6 +70,25 @@ NSString *PLDatabaseErrorVendorStringKey = @"PLDatabaseErrorVendorStringKey";
  *
  * @param errorCode The error code.
  * @param localizedDescription A localized error description.
+ * @return A NSError that may be returned to the API caller.
+ */
++ (NSError *) errorWithCode: (PLDatabaseError) errorCode localizedDescription: (NSString *) localizedDescription {
+    NSMutableDictionary *userInfo;
+    
+    /* Create the userInfo dictionary */
+    userInfo = [NSMutableDictionary dictionaryWithObject: localizedDescription forKey: NSLocalizedDescriptionKey];
+        
+    /* Return the NSError */
+    return [NSError errorWithDomain: PLDatabaseErrorDomain code: errorCode userInfo: userInfo];
+}
+
+/**
+ * @internal
+ *
+ * Create a new NSError in the PLDatabaseErrorDomain.
+ *
+ * @param errorCode The error code.
+ * @param localizedDescription A localized error description.
  * @param queryString The optional query which caused the error.
  * @param nativeCode The native SQL driver's error code.
  * @param nativeString The native SQL driver's non-localized error string.
