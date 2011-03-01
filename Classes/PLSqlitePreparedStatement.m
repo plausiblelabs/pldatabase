@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2008-2010 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -200,7 +200,6 @@
     _sqlite_stmt = sqlite_stmt;
     _queryString = [queryString retain];
     _inUse = NO;
-    _closeLock = OS_SPINLOCK_INIT;
 
     /* Cache parameter count */
     _parameterCount = sqlite3_bind_parameter_count(_sqlite_stmt);
@@ -212,10 +211,11 @@
 
 /* GC */
 - (void) finalize {
-    /* Check in our sqlite3_stmt reference. We guarantee (internally) that -close may be called from
-     * an arbitrary thread. */
+    // XXX: May cause a memory leak when garbage collecting due
+    // to Apple's finalization rules. No ordering is maintained,
+    // and such, there's no way to ensure that the sqlite3_stmt
+    // is released before sqlite3_close() is called.
     [self close];
-
     [super finalize];
 }
 
@@ -240,18 +240,12 @@
 
 /* from PLPreparedStatement */
 - (void) close {
-    /* Note that this method must support calling from -finalize or -dealloc, which may be executed
-     * from any thread. We lock here to ensure atomicity in the incredibly unlikely case that an API
-     * client calls -close and the object is finalized near-simultaneously. */
-    OSSpinLockLock(&_closeLock); {
-        
-        /* Check in the statement. */
-        if (_sqlite_stmt != NULL) {
-            [_statementCache checkinStatement: _sqlite_stmt forQuery: _queryString];
-            _sqlite_stmt = NULL;
-        }
-        
-    } OSSpinLockUnlock(&_closeLock);
+    if (_sqlite_stmt == NULL)
+        return;
+
+    /* Check in the statement. */
+    [_statementCache checkinStatement: _sqlite_stmt forQuery: _queryString];
+    _sqlite_stmt = NULL;
 }
 
 /**
@@ -441,7 +435,7 @@
 
    /*
     * MEMORY OWNERSHIP WARNING:
-    * We pass our sqlite3_stmt reference to the PLSqliteResultSet, and guarantee (by contract)
+    * We pass our sqlite3_stmt reference to the PLSqliteResultSet, and gaurantee (by contract)
     * that the statement reference will remain valid until checkinResultSet is called for
     * the new PLSqliteResultSet instance.
     */

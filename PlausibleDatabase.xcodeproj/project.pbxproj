@@ -83,13 +83,6 @@
 		05797EC811E78B310049A783 /* PLBlocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05797E4111E780820049A783 /* PLBlocks.framework */; };
 		05797ECB11E78B3F0049A783 /* PLBlocks.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 05797E4111E780820049A783 /* PLBlocks.framework */; };
 		058196B60DD16BDC001E992F /* PLSqliteResultSetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */; };
-		058933E4131D4F9D0057CB82 /* PLSqliteStatementReference.h in Headers */ = {isa = PBXBuildFile; fileRef = 058933E2131D4F9D0057CB82 /* PLSqliteStatementReference.h */; };
-		058933E5131D4F9D0057CB82 /* PLSqliteStatementReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 058933E3131D4F9D0057CB82 /* PLSqliteStatementReference.m */; };
-		058933E6131D4F9D0057CB82 /* PLSqliteStatementReference.h in Headers */ = {isa = PBXBuildFile; fileRef = 058933E2131D4F9D0057CB82 /* PLSqliteStatementReference.h */; };
-		058933E7131D4F9D0057CB82 /* PLSqliteStatementReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 058933E3131D4F9D0057CB82 /* PLSqliteStatementReference.m */; };
-		058933E8131D4F9D0057CB82 /* PLSqliteStatementReference.h in Headers */ = {isa = PBXBuildFile; fileRef = 058933E2131D4F9D0057CB82 /* PLSqliteStatementReference.h */; };
-		058933E9131D4F9D0057CB82 /* PLSqliteStatementReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 058933E3131D4F9D0057CB82 /* PLSqliteStatementReference.m */; };
-		058933EB131D530D0057CB82 /* PLSqliteStatementReferenceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 058933EA131D530D0057CB82 /* PLSqliteStatementReferenceTests.m */; };
 		058ABBA20DE637FD00C995C9 /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
 		058ABBA70DE6380E00C995C9 /* PlausibleDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		058ABBA80DE6381000C995C9 /* PLDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA660DCBEC1500E31E46 /* PLDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -216,9 +209,6 @@
 		058196AF0DD16BDC001E992F /* PLSqliteResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteResultSet.h; sourceTree = "<group>"; };
 		058196B00DD16BDC001E992F /* PLSqliteResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSet.m; sourceTree = "<group>"; };
 		058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSetTests.m; sourceTree = "<group>"; };
-		058933E2131D4F9D0057CB82 /* PLSqliteStatementReference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteStatementReference.h; sourceTree = "<group>"; };
-		058933E3131D4F9D0057CB82 /* PLSqliteStatementReference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteStatementReference.m; sourceTree = "<group>"; };
-		058933EA131D530D0057CB82 /* PLSqliteStatementReferenceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteStatementReferenceTests.m; sourceTree = "<group>"; };
 		058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlausibleDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLResultSet.h; sourceTree = "<group>"; };
 		05B76B031256403500BFB6DC /* PLSqliteStatementCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteStatementCache.h; sourceTree = "<group>"; };
@@ -387,9 +377,6 @@
 				05B76B031256403500BFB6DC /* PLSqliteStatementCache.h */,
 				05B76B041256403500BFB6DC /* PLSqliteStatementCache.m */,
 				05B76B3212564A0D00BFB6DC /* PLSqliteStatementCacheTests.m */,
-				058933E2131D4F9D0057CB82 /* PLSqliteStatementReference.h */,
-				058933E3131D4F9D0057CB82 /* PLSqliteStatementReference.m */,
-				058933EA131D530D0057CB82 /* PLSqliteStatementReferenceTests.m */,
 			);
 			name = SQLite;
 			sourceTree = "<group>";
@@ -472,7 +459,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				05B76B071256403500BFB6DC /* PLSqliteStatementCache.h in Headers */,
-				058933E6131D4F9D0057CB82 /* PLSqliteStatementReference.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,7 +467,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				05B76B091256403500BFB6DC /* PLSqliteStatementCache.h in Headers */,
-				058933E4131D4F9D0057CB82 /* PLSqliteStatementReference.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,7 +511,6 @@
 				054CBF460EE21CBE0043675E /* PLDatabaseConnectionProvider.h in Headers */,
 				054CBF470EE21CC20043675E /* PLDatabaseMigrationTransactionManager.h in Headers */,
 				05B76B051256403500BFB6DC /* PLSqliteStatementCache.h in Headers */,
-				058933E8131D4F9D0057CB82 /* PLSqliteStatementReference.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -739,7 +723,6 @@
 				054CBF3C0EE21C670043675E /* PLDatabaseMigrationManager.m in Sources */,
 				054CBF3D0EE21C670043675E /* PLSqliteMigrationVersionManager.m in Sources */,
 				05B76B081256403500BFB6DC /* PLSqliteStatementCache.m in Sources */,
-				058933E7131D4F9D0057CB82 /* PLSqliteStatementReference.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -755,7 +738,6 @@
 				054CBF430EE21C6D0043675E /* PLDatabaseMigrationManager.m in Sources */,
 				054CBF440EE21C6D0043675E /* PLSqliteMigrationVersionManager.m in Sources */,
 				05B76B0A1256403500BFB6DC /* PLSqliteStatementCache.m in Sources */,
-				058933E5131D4F9D0057CB82 /* PLSqliteStatementReference.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -771,7 +753,6 @@
 				0578D9DE0EAEF1F5003F848A /* PLDatabaseMigrationManagerTests.m in Sources */,
 				05D196810EAFD2E700F7079D /* PLSqliteMigrationVersionManagerTests.m in Sources */,
 				05B76B3312564A0D00BFB6DC /* PLSqliteStatementCacheTests.m in Sources */,
-				058933EB131D530D0057CB82 /* PLSqliteStatementReferenceTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -794,7 +775,6 @@
 				0578D9D50EAEF1EF003F848A /* PLDatabaseMigrationManager.m in Sources */,
 				05D198930EB1248B00F7079D /* PLSqliteMigrationVersionManager.m in Sources */,
 				05B76B061256403500BFB6DC /* PLSqliteStatementCache.m in Sources */,
-				058933E9131D4F9D0057CB82 /* PLSqliteStatementReference.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

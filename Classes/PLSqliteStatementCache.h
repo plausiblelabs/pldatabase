@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2008-2010 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <libkern/OSAtomic.h>
 
 #ifndef PL_DB_PRIVATE
 @class PLSqliteStatementCache;
@@ -44,9 +43,6 @@
 
     /** Maps the query string to a CFMutableArrayRef containing sqlite3_stmt instances. We claim ownership for these statements. */
     NSMutableDictionary *_statements;
-
-    /** Internal lock. Must be held when mutating state. */
-    OSSpinLock _lock;
 }
 
 - (id) initWithCapacity: (NSUInteger) capacity;

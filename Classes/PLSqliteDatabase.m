@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -76,15 +76,12 @@ NSString *PLSqliteException = @"PLSqliteException";
 
     _path = [dbPath retain];
     _statementCache = [[PLSqliteStatementCache alloc] initWithCapacity: 100 /* TODO: configurable? */];
-    _closeLock = OS_SPINLOCK_INIT;
-
+    
     return self;
 }
 
 /* GC */
 - (void) finalize {
-    /* Check in our sqlite3 references. We guarantee (internally) that -close (and -dealloc) may be called from
-     * an arbitrary thread. */
     [self close];
 
     [super finalize];
@@ -92,8 +89,6 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* Manual */
 - (void) dealloc {
-    /* Check in our sqlite3 references. We guarantee (internally) that -close (and -dealloc) may be called from
-     * an arbitrary thread. */
     [self close];
     
     /* Drop the statement cache */
@@ -178,36 +173,27 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* From PLDatabase */
 - (void) close {
-    /* Note that this method must support calling from -finalize or -dealloc, which may be executed
-     * from any thread. We lock here to ensure atomicity in the incredibly unlikely case that an API
-     * client calls -close and the object is finalized near-simultaneously. */
-    OSSpinLockLock(&_closeLock); {
-        int err;
+    int err;
+    
+    if (_sqlite == NULL)
+        return;
 
-        if (_sqlite == NULL) {
-            OSSpinLockUnlock(&_closeLock);
-            return;
-        }
+    /* Finalize any cached statements */
+    [_statementCache removeAllStatements];
 
-        /* Finalize any cached statements before closing the database. */
-        [_statementCache removeAllStatements];
-        
-        /* Close the connection and release any sqlite resources (if open was ever called) */
-        err = sqlite3_close(_sqlite);
-        
-        /* Leaking prepared statements is programmer error, and is the only cause for SQLITE_BUSY */
-        if (err == SQLITE_BUSY) {
-            OSSpinLockUnlock(&_closeLock);
-            [NSException raise: PLSqliteException format: @"The SQLite database at '%@' can not be closed, as the implementation has leaked prepared statements", _path];
-        }
-
-        /* Unexpected! This should not happen */
-        if (err != SQLITE_OK)
-            NSLog(@"Unexpected error closing SQLite database at '%@': %s", _path, sqlite3_errmsg(_sqlite));
-        
-        /* Reset the variable. If any of the above failed, it is programmer error. */
-        _sqlite = NULL;
-    } OSSpinLockUnlock(&_closeLock);
+    /* Close the connection and release any sqlite resources (if open was ever called) */
+    err = sqlite3_close(_sqlite);
+    
+    /* Leaking prepared statements is programmer error, and is the only cause for SQLITE_BUSY */
+    if (err == SQLITE_BUSY)
+        [NSException raise: PLSqliteException format: @"The SQLite database at '%@' can not be closed, as the implementation has leaked prepared statements", _path];
+    
+    /* Unexpected! This should not happen */
+    if (err != SQLITE_OK)
+        NSLog(@"Unexpected error closing SQLite database at '%@': %s", _path, sqlite3_errmsg(_sqlite));
+    
+    /* Reset the variable. If any of the above failed, it is programmer error. */
+    _sqlite = NULL;
 }
 
 

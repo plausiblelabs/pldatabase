@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2008-2010 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,10 +30,6 @@
 #import "PlausibleDatabase.h"
 #import <CoreFoundation/CoreFoundation.h>
 
-@interface PLSqliteStatementCache (PrivateMethods)
-- (void) removeAllStatementsHasLock: (BOOL) locked;
-@end
-
 /**
  * @internal
  *
@@ -42,14 +38,6 @@
  * The implementation naively evicts all statements should the cache become full. Future enhancement
  * may include implementing an LRU strategy, but it's not expected that many users will be executing
  * more unique queries than will fit in a reasonably sized cache.
- *
- * @par Thread Safety
- *
- * Unlike most classes in this library, PLSqliteStatementCache is thread-safe; this is intended to allow the safe
- * finalization/deallocation of SQLite ojects from multiple threads.
- *
- * Note, however, that the implementation is optimized for minimal contention, and it is not intended that 
- * the statement cache be subject to high contention.
  */
 @implementation PLSqliteStatementCache
 
@@ -65,7 +53,6 @@
     
     _capacity = capacity;
     _statements = [[NSMutableDictionary alloc] init];
-    _lock = OS_SPINLOCK_INIT;
 
     return self;
 }
@@ -104,26 +91,24 @@ static const CFArrayCallBacks StatementCacheArrayCallbacks = {
  * @warning MEMORY OWNERSHIP WARNING: The receiver will claim ownership of the statement object.
  */
 - (void) checkinStatement: (sqlite3_stmt *) stmt forQuery: (NSString *) query {
-    OSSpinLockLock(&_lock); {
-        /* Bump the count */
-        _size++;
-        if (_size > _capacity)
-            [self removeAllStatementsHasLock: YES];
+    /* Bump the count */
+    _size++;
+    if (_size > _capacity)
+        [self removeAllStatements];
 
-        /* Fetch the statement set for this query */
-        CFMutableArrayRef stmtArray = (CFMutableArrayRef) [_statements objectForKey: query];
-        if (stmtArray == nil) {
-            stmtArray = CFArrayCreateMutable(NULL, 0, &StatementCacheArrayCallbacks);
-            CFMakeCollectable(stmtArray);
+    /* Fetch the statement set for this query */
+    CFMutableArrayRef stmtArray = (CFMutableArrayRef) [_statements objectForKey: query];
+    if (stmtArray == nil) {
+        stmtArray = CFArrayCreateMutable(NULL, 0, &StatementCacheArrayCallbacks);
+        CFMakeCollectable(stmtArray);
 
-            [_statements setObject: (id) stmtArray forKey: query];
-            [(id)stmtArray release];
-        }
+        [_statements setObject: (id) stmtArray forKey: query];
+        [(id)stmtArray release];
+    }
 
-        /* Claim ownership of the statement */
-        sqlite3_reset(stmt);
-        CFArrayAppendValue(stmtArray, stmt);
-    }; OSSpinLockUnlock(&_lock);
+    /* Claim ownership of the statement */
+    sqlite3_reset(stmt);
+    CFArrayAppendValue(stmtArray, stmt);
 }
 
 /**
@@ -135,23 +120,20 @@ static const CFArrayCallBacks StatementCacheArrayCallbacks = {
  * that object or provide it to PLSqliteStatementCache::checkinStatement:forQuery: for reclaimation.
  */
 - (sqlite3_stmt *) checkoutStatementForQueryString: (NSString *) query {
-    sqlite3_stmt *stmt;
+    /* Fetch the statement set for this query */
+    CFMutableArrayRef stmtArray = (CFMutableArrayRef) [_statements objectForKey: query];
+    if (stmtArray == nil)
+        return NULL;
 
-    OSSpinLockLock(&_lock); {
-        /* Fetch the statement set for this query */
-        CFMutableArrayRef stmtArray = (CFMutableArrayRef) [_statements objectForKey: query];
-        if (stmtArray == nil || CFArrayGetCount(stmtArray) == 0) {
-            OSSpinLockUnlock(&_lock);
-            return NULL;
-        }
+    if (CFArrayGetCount(stmtArray) == 0)
+        return NULL;
 
-        /* Pop the statement from the array */
-        stmt = (sqlite3_stmt *) CFArrayGetValueAtIndex(stmtArray, 0);
-        CFArrayRemoveValueAtIndex(stmtArray, 0);
+    /* Pop the statement from the array */
+    sqlite3_stmt *stmt = (sqlite3_stmt *) CFArrayGetValueAtIndex(stmtArray, 0);
+    CFArrayRemoveValueAtIndex(stmtArray, 0);
 
-        /* Decrement the count */
-        _size--;
-    }; OSSpinLockUnlock(&_lock);
+    /* Decrement the count */
+    _size--;
 
     return stmt;
 }
@@ -160,28 +142,11 @@ static const CFArrayCallBacks StatementCacheArrayCallbacks = {
  * Remove all statements from the cache.
  */
 - (void) removeAllStatements {
-    [self removeAllStatementsHasLock: NO];
-}
-
-@end
-
-@implementation PLSqliteStatementCache (PrivateMethods)
-
-/**
- * Remove all statements from the cache. 
- *
- * @param locked If NO, the implementation will acquire a lock on _lock; otherwise,
- * it is assumed that _lock is already held.
- */
-- (void) removeAllStatementsHasLock: (BOOL) locked {
-    if (!locked)
-        OSSpinLockLock(&_lock);
-    
     /* Iterate over and finalize all statements */
     for (NSString *query in _statements) {
         CFMutableArrayRef stmtArray = (CFMutableArrayRef) [_statements objectForKey: query];
         CFIndex stmtCount = CFArrayGetCount(stmtArray);
-        
+
         /* Finalize all statements */
         for (CFIndex i = 0; i < stmtCount; i++) {
             sqlite3_stmt *stmt = (sqlite3_stmt *) CFArrayGetValueAtIndex(stmtArray, i);
@@ -191,9 +156,6 @@ static const CFArrayCallBacks StatementCacheArrayCallbacks = {
         /* Now remove them all */
         CFArrayRemoveAllValues(stmtArray);
     }
-    
-    if (!locked)
-        OSSpinLockUnlock(&_lock);
 }
 
 @end

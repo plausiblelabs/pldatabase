@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2008 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,8 +29,6 @@
 
 #ifdef PL_DB_PRIVATE
 
-#import <libkern/OSAtomic.h>
-
 @interface PLSqliteResultSet : NSObject <PLResultSet> {
 @private
     /** The prepared statement */
@@ -38,9 +36,6 @@
     
     /** The weak referenced sqlite3 prepared statement. */
     sqlite3_stmt *_sqlite_stmt;
-
-    /** The lock used to synchronize -close. */
-    OSSpinLock _closeLock;
 
     /** The number of columns in the result. */
     uint32_t _columnCount;
