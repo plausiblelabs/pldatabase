@@ -81,8 +81,13 @@
 		0578DA3E0EAF02A5003F848A /* PLDatabaseMigrationVersionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578DA3C0EAF02A5003F848A /* PLDatabaseMigrationVersionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05797E7611E782B20049A783 /* PlausibleDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */; };
 		058196B60DD16BDC001E992F /* PLSqliteResultSetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */; };
-		0588B4E3131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B4E2131EAB8500F6B60B /* PLDatabaseConstants.h */; };
-		0588B4E4131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B4E2131EAB8500F6B60B /* PLDatabaseConstants.h */; };
+		0588B4E3131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B4E2131EAB8500F6B60B /* PLDatabaseConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0588B4E4131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B4E2131EAB8500F6B60B /* PLDatabaseConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0588B5A0131EB11D00F6B60B /* PLDatabaseConnectionPool.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B59E131EB11D00F6B60B /* PLDatabaseConnectionPool.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0588B5A1131EB11D00F6B60B /* PLDatabaseConnectionPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B59F131EB11D00F6B60B /* PLDatabaseConnectionPool.m */; };
+		0588B5A2131EB11D00F6B60B /* PLDatabaseConnectionPool.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B59E131EB11D00F6B60B /* PLDatabaseConnectionPool.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0588B5A3131EB11D00F6B60B /* PLDatabaseConnectionPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B59F131EB11D00F6B60B /* PLDatabaseConnectionPool.m */; };
+		0588B5BC131EB4C900F6B60B /* PLDatabaseConnectionPoolTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B5BB131EB4C900F6B60B /* PLDatabaseConnectionPoolTests.m */; };
 		058ABBA20DE637FD00C995C9 /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
 		058ABBA70DE6380E00C995C9 /* PlausibleDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		058ABBA80DE6381000C995C9 /* PLDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA660DCBEC1500E31E46 /* PLDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -206,6 +211,9 @@
 		058196B00DD16BDC001E992F /* PLSqliteResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSet.m; sourceTree = "<group>"; };
 		058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSetTests.m; sourceTree = "<group>"; };
 		0588B4E2131EAB8500F6B60B /* PLDatabaseConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabaseConstants.h; sourceTree = "<group>"; };
+		0588B59E131EB11D00F6B60B /* PLDatabaseConnectionPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabaseConnectionPool.h; sourceTree = "<group>"; };
+		0588B59F131EB11D00F6B60B /* PLDatabaseConnectionPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLDatabaseConnectionPool.m; sourceTree = "<group>"; };
+		0588B5BB131EB4C900F6B60B /* PLDatabaseConnectionPoolTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLDatabaseConnectionPoolTests.m; sourceTree = "<group>"; };
 		058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlausibleDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLResultSet.h; sourceTree = "<group>"; };
 		05B76B031256403500BFB6DC /* PLSqliteStatementCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteStatementCache.h; sourceTree = "<group>"; };
@@ -292,6 +300,7 @@
 			isa = PBXGroup;
 			children = (
 				0578D9940EAEED94003F848A /* PLDatabaseConnectionProvider.h */,
+				0588B59D131EB10E00F6B60B /* Pool */,
 				0578D9970EAEEEA4003F848A /* SQLite */,
 			);
 			name = "Connection Providers";
@@ -329,6 +338,16 @@
 				05D196800EAFD2E700F7079D /* PLSqliteMigrationManagerTests.m */,
 			);
 			name = SQLite;
+			sourceTree = "<group>";
+		};
+		0588B59D131EB10E00F6B60B /* Pool */ = {
+			isa = PBXGroup;
+			children = (
+				0588B59E131EB11D00F6B60B /* PLDatabaseConnectionPool.h */,
+				0588B59F131EB11D00F6B60B /* PLDatabaseConnectionPool.m */,
+				0588B5BB131EB4C900F6B60B /* PLDatabaseConnectionPoolTests.m */,
+			);
+			name = Pool;
 			sourceTree = "<group>";
 		};
 		05939BF00DCBFFE4004FEA21 /* SQLite */ = {
@@ -460,6 +479,7 @@
 				05534D3A104CBFFE00647A44 /* PLDatabaseMigrationTransactionManager.h in Headers */,
 				05B76B711256503300BFB6DC /* PLSqliteStatementCache.h in Headers */,
 				0588B4E4131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */,
+				0588B5A0131EB11D00F6B60B /* PLDatabaseConnectionPool.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,6 +503,7 @@
 				054CBF470EE21CC20043675E /* PLDatabaseMigrationTransactionManager.h in Headers */,
 				05B76B051256403500BFB6DC /* PLSqliteStatementCache.h in Headers */,
 				0588B4E3131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */,
+				0588B5A2131EB11D00F6B60B /* PLDatabaseConnectionPool.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -725,6 +746,7 @@
 				0578D9DE0EAEF1F5003F848A /* PLDatabaseMigrationManagerTests.m in Sources */,
 				05D196810EAFD2E700F7079D /* PLSqliteMigrationManagerTests.m in Sources */,
 				05B76B3312564A0D00BFB6DC /* PLSqliteStatementCacheTests.m in Sources */,
+				0588B5BC131EB4C900F6B60B /* PLDatabaseConnectionPoolTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -732,6 +754,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0588B5A1131EB11D00F6B60B /* PLDatabaseConnectionPool.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -747,6 +770,7 @@
 				0578D9D50EAEF1EF003F848A /* PLDatabaseMigrationManager.m in Sources */,
 				05D198930EB1248B00F7079D /* PLSqliteMigrationManager.m in Sources */,
 				05B76B061256403500BFB6DC /* PLSqliteStatementCache.m in Sources */,
+				0588B5A3131EB11D00F6B60B /* PLDatabaseConnectionPool.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -872,11 +896,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				EFFECTIVE_PLATFORM_NAME = "-MacOSX";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-					"\"$(SRCROOT)/Dependencies\"",
-					"\"$(SRCROOT)/Dependencies/PLBlocks/MacOSX\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -910,11 +930,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EFFECTIVE_PLATFORM_NAME = "-MacOSX";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-					"\"$(SRCROOT)/Dependencies\"",
-					"\"$(SRCROOT)/Dependencies/PLBlocks/MacOSX\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_ENABLE_OBJC_GC = supported;
@@ -1014,10 +1030,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EFFECTIVE_PLATFORM_NAME = "-MacOSX";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/Dependencies/PLBlocks/MacOSX",
-					"$(inherited)",
-				);
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_GC = supported;
@@ -1048,10 +1060,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EFFECTIVE_PLATFORM_NAME = "-MacOSX";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/Dependencies/PLBlocks/MacOSX",
-					"$(inherited)",
-				);
 				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_GC = supported;

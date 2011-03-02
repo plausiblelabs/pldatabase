@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2011 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,39 +27,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #import <Foundation/Foundation.h>
+#import <pthread.h>
 
-#import "PLDatabase.h"
+#import "PLDatabaseConnectionProvider.h"
 
-/**
- * A protocol for opening new or existing PLDatabase connections, and returning those connections for
- * re-use upon completion.
- *
- * @par Thread Safety
- * Thread-safe. May be used from any thread.
- *
- * @par Implementation Notes
- *
- * Implementations must be immutable and/or thread-safe, and must be usable from any thread without external
- * locking.
- */
-@protocol PLDatabaseConnectionProvider <NSObject>
+@interface PLDatabaseConnectionPool : NSObject <PLDatabaseConnectionProvider> {
+@private
+    /** Lock that must be held when mutating internal state. */
+    pthread_mutex_t _lock;
 
-/**
- * Returns a database connection.
- *
- * @param error A pointer to an NSError object variable. If an error occurs, this
- * pointer will contain an error object indicating why the transaction could not
- * be started.
- *
- * @return A database connection, or nil on error.
- */
-- (id<PLDatabase>) getConnectionAndReturnError: (NSError **) error;
+    /** The backing connection provider. */
+    id<PLDatabaseConnectionProvider> _provider;
 
-/**
- * Called to return the given connection for re-use. The connection may be immediately closed.
- */
-- (void) closeConnection: (id<PLDatabase>) connection;
+    /** The set of available database connections. */
+    NSMutableSet *_connections;
+
+    /** The maximum number of connections that may be cached by this pool. */
+    NSUInteger _capacity;
+}
+
+- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) provider capacity: (NSUInteger) capacity;
 
 @end
