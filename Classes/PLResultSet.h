@@ -87,8 +87,8 @@ typedef enum {
  * @return YES if the cursor was moved to the next row, NO if no further rows were available or an error
  * has occured.
  *
- * @deprecated This method fails to differentiate between end of rows and an error condition. New code should be
- * written to use -[PLResultSet nextAndReturnError:].
+ * @deprecated This method fails to differentiate between end of rows and an error condition. Replaced by 
+ * PLResultSet::nextAndReturnError:.
  */
 - (BOOL) next;
 
