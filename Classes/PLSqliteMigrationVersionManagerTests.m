@@ -59,7 +59,7 @@
     [_db close];
 
     /* Remove the temporary database file */
-    STAssertTrue([[NSFileManager defaultManager] removeFileAtPath: _dbPath handler: nil], @"Could not clean up database %@", _dbPath);
+    STAssertTrue([[NSFileManager defaultManager] removeItemAtPath: _dbPath error: NULL], @"Could not clean up database %@", _dbPath);
     
     /* Release our objects */
     [_dbPath release];

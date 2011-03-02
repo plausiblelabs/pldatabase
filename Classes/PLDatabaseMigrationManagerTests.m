@@ -112,7 +112,8 @@
 - (void) setUp {
     /* Create a temporary directory. Secure, as the user owns enclosing directory. */
     _testDir = [[NSTemporaryDirectory() stringByAppendingPathComponent: [[NSProcessInfo processInfo] globallyUniqueString]] retain];
-    STAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath: _testDir attributes: nil], @"Could not create test directory");
+    STAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath: _testDir withIntermediateDirectories: YES attributes: nil error: NULL],
+                 @"Could not create test directory");
     
     /* A new database manager */
     PLDatabaseMigrationManagerTestsDelegateMock *delegate = [[[PLDatabaseMigrationManagerTestsDelegateMock alloc] initWithNewVersion: TEST_DATABASE_VERSION shouldFail: NO] autorelease];
@@ -131,7 +132,7 @@
 	BOOL result;
     
 	/* Clean out the test directory */
-    result = [[NSFileManager defaultManager] removeFileAtPath: _testDir handler: nil];
+    result = [[NSFileManager defaultManager] removeItemAtPath: _testDir error: NULL];
 	STAssertTrue(result, @"Deletion of test directory returned error");
     
 	[_testDir release];
