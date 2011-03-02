@@ -88,6 +88,8 @@
 		0588B5A2131EB11D00F6B60B /* PLDatabaseConnectionPool.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B59E131EB11D00F6B60B /* PLDatabaseConnectionPool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0588B5A3131EB11D00F6B60B /* PLDatabaseConnectionPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B59F131EB11D00F6B60B /* PLDatabaseConnectionPool.m */; };
 		0588B5BC131EB4C900F6B60B /* PLDatabaseConnectionPoolTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B5BB131EB4C900F6B60B /* PLDatabaseConnectionPoolTests.m */; };
+		0588B747131EC63200F6B60B /* PLDatabaseConnectionPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B59F131EB11D00F6B60B /* PLDatabaseConnectionPool.m */; };
+		0588B748131EC63700F6B60B /* PLDatabaseConnectionPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B59F131EB11D00F6B60B /* PLDatabaseConnectionPool.m */; };
 		058ABBA20DE637FD00C995C9 /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
 		058ABBA70DE6380E00C995C9 /* PlausibleDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		058ABBA80DE6381000C995C9 /* PLDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA660DCBEC1500E31E46 /* PLDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -716,6 +718,7 @@
 				054CBF3C0EE21C670043675E /* PLDatabaseMigrationManager.m in Sources */,
 				054CBF3D0EE21C670043675E /* PLSqliteMigrationManager.m in Sources */,
 				05B76B081256403500BFB6DC /* PLSqliteStatementCache.m in Sources */,
+				0588B747131EC63200F6B60B /* PLDatabaseConnectionPool.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -731,6 +734,7 @@
 				054CBF430EE21C6D0043675E /* PLDatabaseMigrationManager.m in Sources */,
 				054CBF440EE21C6D0043675E /* PLSqliteMigrationManager.m in Sources */,
 				05B76B0A1256403500BFB6DC /* PLSqliteStatementCache.m in Sources */,
+				0588B748131EC63700F6B60B /* PLDatabaseConnectionPool.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -982,7 +986,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EFFECTIVE_PLATFORM_NAME = "-iphone";
