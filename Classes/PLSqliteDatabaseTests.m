@@ -29,7 +29,7 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-#import <PlausibleDatabase/PlausibleDatabase.h>
+#import "PLSqliteDatabase.h"
 
 @interface PLSqliteDatabaseTests : SenTestCase {
 @private

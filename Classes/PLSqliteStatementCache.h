@@ -34,6 +34,8 @@
 @class PLSqliteStatementCache;
 #else
 
+#import <sqlite3.h>
+
 @interface PLSqliteStatementCache : NSObject {
 @private
     /** Maximum size. */

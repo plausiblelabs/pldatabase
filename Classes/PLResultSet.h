@@ -27,6 +27,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
+#import <Foundation/Foundation.h>
+#import "PLDatabaseConstants.h"
+
 /**
  * Result values returned when iterating PLResetSet rows.
  *
@@ -52,8 +56,6 @@ typedef enum {
  */
 @protocol PLResultSet <NSObject>
 
-#ifdef __BLOCKS__
-
 /**
  * Iterate over all rows in the result set, calling the provided block for each row.
  *
@@ -77,8 +79,6 @@ typedef enum {
  * @return Returns YES if the result set was successfully iterated, or NO if a database error occurs.
  */
 - (BOOL) enumerateAndReturnError: (NSError **) outError block: (void (^)(id<PLResultSet> rs, BOOL *stop)) block;
-
-#endif
 
 /**
  * Move the result cursor to the next available row. If no further rows

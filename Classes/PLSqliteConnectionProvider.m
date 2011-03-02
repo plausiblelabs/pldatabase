@@ -27,7 +27,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PlausibleDatabase.h"
+#import "PLSqliteConnectionProvider.h"
+#import "PLSqliteDatabase.h"
 
 /**
  * Provides new PLSqliteDatabase connections as per the PLDatabaseConnectionProvider

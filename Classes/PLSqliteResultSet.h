@@ -29,6 +29,13 @@
 
 #ifdef PL_DB_PRIVATE
 
+#import <Foundation/Foundation.h>
+#import <sqlite3.h>
+
+#import "PLResultSet.h"
+
+@class PLSqlitePreparedStatement;
+
 @interface PLSqliteResultSet : NSObject <PLResultSet> {
 @private
     /** The prepared statement */
@@ -46,5 +53,7 @@
 
 - (id) initWithPreparedStatement: (PLSqlitePreparedStatement *) stmt sqliteStatemet: (sqlite3_stmt *)sqlite_stmt;
 @end
+
+#import "PLSqlitePreparedStatement.h"
 
 #endif

@@ -27,6 +27,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
+#import <Foundation/Foundation.h>
+
+#import "PLDatabase.h"
+
 /**
  * A protocol for opening new or existing PLDatabase connections, and returning those connections for
  * re-use upon completion.

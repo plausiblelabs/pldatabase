@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2010 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2008-2011 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,49 +27,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if PL_DB_PRIVATE
-
 #import <Foundation/Foundation.h>
 
-#import "PLSqliteDatabase.h"
-#import "PLSqliteResultSet.h"
+/* Exceptions */
+extern NSString *PLDatabaseException;
 
-@interface PLSqlitePreparedStatement : NSObject <PLPreparedStatement> {
-@private
-    /** Our backing database. */
-    PLSqliteDatabase *_database;
-    
-    /** Cache in which the statement should be checked in on close, or nil if no cache is available and the
-     * statement should simply be finalized. */
-    PLSqliteStatementCache *_statementCache;
+/* Error Domain and Codes */
+extern NSString *PLDatabaseErrorDomain;
+extern NSString *PLDatabaseErrorQueryStringKey;
+extern NSString *PLDatabaseErrorVendorErrorKey;
+extern NSString *PLDatabaseErrorVendorStringKey;
 
-    /** The prepared SQLite statement. */
-    sqlite3_stmt *_sqlite_stmt;
+/**
+ * NSError codes in the Plausible Database error domain.
+ * @ingroup enums
+ */
+typedef enum {
+    /** An unknown error has occured. If this
+     * code is received, it is a bug, and should be reported. */
+    PLDatabaseErrorUnknown = 0,
     
-    /** The unprepared query string. */
-    NSString *_queryString;
+    /** File not found. */
+    PLDatabaseErrorFileNotFound = 1,
+    
+    /** An SQL query failed. */
+    PLDatabaseErrorQueryFailed = 2,
+    
+    /** The provided SQL statement was invalid. */
+    PLDatabaseErrorInvalidStatement = 3,
+} PLDatabaseError;
 
-    /** Number of parameters. */
-    int _parameterCount;
-    
-    /** Is the prepared statement in use by a PLResultSet */
-    BOOL _inUse;
-    
-    /** If YES, the prepared statement is closed when the first result set is checked in. */
-    BOOL _closeAtCheckin;
+#ifdef PL_DB_PRIVATE
+
+@interface PlausibleDatabase : NSObject {
 }
 
-- (id) initWithDatabase: (PLSqliteDatabase *) db 
-         statementCache: (PLSqliteStatementCache *) statementCache 
-             sqliteStmt: (sqlite3_stmt *) sqlite_stmt 
-            queryString: (NSString *) queryString
-         closeAtCheckin: (BOOL) closeAtCheckin;
-
-- (void) populateError: (NSError **) error withErrorCode: (PLDatabaseError) errorCode description: (NSString *) localizedDescription;
-
-// DO NOT CALL. Must only be called from PLSqliteResultSet
-- (void) checkinResultSet: (PLSqliteResultSet *) resultSet;
++ (NSError *) errorWithCode: (PLDatabaseError) errorCode localizedDescription: (NSString *) localizedDescription 
+                queryString: (NSString *) queryString
+                vendorError: (NSNumber *) vendorError vendorErrorString: (NSString *) vendorErrorString;
 
 @end
 
-#endif
+#endif /* PL_DB_PRIVATE */

@@ -29,7 +29,8 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-#import <PlausibleDatabase/PlausibleDatabase.h>
+#import "PLSqliteDatabase.h"
+#import "PLSqliteStatementCache.h"
 
 @interface PLSqliteStatementCacheTests : SenTestCase {
 @private

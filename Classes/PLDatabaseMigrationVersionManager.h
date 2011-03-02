@@ -27,7 +27,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PlausibleDatabase.h"
+#import <Foundation/Foundation.h>
+#import "PLDatabase.h"
 
 /**
  * Manages the database migration version. The version may be stored using

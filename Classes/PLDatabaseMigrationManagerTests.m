@@ -28,7 +28,7 @@
  */
 
 #import <SenTestingKit/SenTestingKit.h>
-#import <PlausibleDatabase/PlausibleDatabase.h>
+#import "PLDatabaseMigrationManager.h"
 
 #define TEST_DATABASE_VERSION 42
 

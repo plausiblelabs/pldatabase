@@ -27,12 +27,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* On windows, use the included sqlite3 library */
-#ifdef WINDOWS
-#import "sqlite3.h"
-#else
+#import <Foundation/Foundation.h>
 #import <sqlite3.h>
-#endif
 
 /* On older versions of sqlite3, sqlite3_prepare_v2() is not available. It was introduced in 3.3.9, and significant
  * bugs remained until 3.3.11. */
@@ -40,6 +36,7 @@
 #error SQLite versions 3.3.8 and earlier are unsupported.
 #endif
 
+#import "PLDatabase.h"
 #import "PLSqliteStatementCache.h"
 
 extern NSString *PLSqliteException;

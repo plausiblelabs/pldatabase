@@ -27,6 +27,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
+#import <Foundation/Foundation.h>
+
+#import "PLDatabaseConnectionProvider.h"
+
 @interface PLSqliteConnectionProvider : NSObject <PLDatabaseConnectionProvider> {
 @private
     /** Path to backing database */

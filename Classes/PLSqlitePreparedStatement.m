@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PlausibleDatabase.h"
+#import "PLSqlitePreparedStatement.h"
 
 #pragma mark Parameter Strategy
 

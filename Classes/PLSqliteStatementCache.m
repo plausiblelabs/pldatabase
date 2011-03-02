@@ -27,9 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PlausibleDatabase.h"
-#import <CoreFoundation/CoreFoundation.h>
-
+#import "PLSqliteStatementCache.h"
 
 static const CFArrayCallBacks StatementCacheArrayCallbacks = {
     .version = 0,

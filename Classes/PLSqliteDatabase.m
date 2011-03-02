@@ -27,7 +27,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PlausibleDatabase.h"
+#import "PLSqliteDatabase.h"
+
+#import "PLSqlitePreparedStatement.h"
+#import "PLSqliteResultSet.h"
 
 /* Keep trying for up to 10 minutes. We do not modify the busy timeout handler. */
 #define PL_SQLITE_BUSY_TIMEOUT 10 * 60 * 1000

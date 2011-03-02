@@ -83,6 +83,8 @@
 		05797EC811E78B310049A783 /* PLBlocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05797E4111E780820049A783 /* PLBlocks.framework */; };
 		05797ECB11E78B3F0049A783 /* PLBlocks.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 05797E4111E780820049A783 /* PLBlocks.framework */; };
 		058196B60DD16BDC001E992F /* PLSqliteResultSetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */; };
+		0588B4E3131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B4E2131EAB8500F6B60B /* PLDatabaseConstants.h */; };
+		0588B4E4131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B4E2131EAB8500F6B60B /* PLDatabaseConstants.h */; };
 		058ABBA20DE637FD00C995C9 /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
 		058ABBA70DE6380E00C995C9 /* PlausibleDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		058ABBA80DE6381000C995C9 /* PLDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA660DCBEC1500E31E46 /* PLDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -209,6 +211,7 @@
 		058196AF0DD16BDC001E992F /* PLSqliteResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteResultSet.h; sourceTree = "<group>"; };
 		058196B00DD16BDC001E992F /* PLSqliteResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSet.m; sourceTree = "<group>"; };
 		058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSetTests.m; sourceTree = "<group>"; };
+		0588B4E2131EAB8500F6B60B /* PLDatabaseConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabaseConstants.h; sourceTree = "<group>"; };
 		058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlausibleDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLResultSet.h; sourceTree = "<group>"; };
 		05B76B031256403500BFB6DC /* PLSqliteStatementCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteStatementCache.h; sourceTree = "<group>"; };
@@ -414,9 +417,10 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */,
-				051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */,
 				0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */,
+				051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */,
+				0588B4E2131EAB8500F6B60B /* PLDatabaseConstants.h */,
+				051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */,
 				0551CA660DCBEC1500E31E46 /* PLDatabase.h */,
 				05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */,
 				0502A7F10DDE9B4A006F4613 /* PLPreparedStatement.h */,
@@ -489,6 +493,7 @@
 				05534D39104CBFFE00647A44 /* PLDatabaseConnectionProvider.h in Headers */,
 				05534D3A104CBFFE00647A44 /* PLDatabaseMigrationTransactionManager.h in Headers */,
 				05B76B711256503300BFB6DC /* PLSqliteStatementCache.h in Headers */,
+				0588B4E4131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,6 +516,7 @@
 				054CBF460EE21CBE0043675E /* PLDatabaseConnectionProvider.h in Headers */,
 				054CBF470EE21CC20043675E /* PLDatabaseMigrationTransactionManager.h in Headers */,
 				05B76B051256403500BFB6DC /* PLSqliteStatementCache.h in Headers */,
+				0588B4E3131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

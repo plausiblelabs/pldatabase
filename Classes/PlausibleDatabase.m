@@ -28,6 +28,7 @@
  */
 
 #import "PlausibleDatabase.h"
+#import "PLDatabaseConstants.h"
 
 /** 
  * Generic Database Exception

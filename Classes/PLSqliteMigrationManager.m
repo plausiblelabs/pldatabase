@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PlausibleDatabase.h"
+#import "PLSqliteMigrationManager.h"
 
 /**
  * @deprecated Replaced by PLSqliteMigrationManager.

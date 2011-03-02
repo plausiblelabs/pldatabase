@@ -27,6 +27,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <Foundation/Foundation.h>
+
+#import "PLDatabaseConstants.h"
+#import "PLPreparedStatement.h"
+#import "PLResultSet.h"
 
 /**
  * Protocol for interacting with an SQL database.

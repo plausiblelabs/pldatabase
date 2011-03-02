@@ -27,7 +27,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PlausibleDatabase.h"
+#import <Foundation/Foundation.h>
+
+#import "PLDatabaseMigrationManager.h"
 
 @interface PLSqliteMigrationManager : NSObject <PLDatabaseMigrationVersionManager, PLDatabaseMigrationTransactionManager>
 

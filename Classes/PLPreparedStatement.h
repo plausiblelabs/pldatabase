@@ -27,6 +27,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
+#import <Foundation/Foundation.h>
+#import "PLDatabaseConstants.h"
+#import "PLResultSet.h"
+
 /**
  * An object that represents a pre-compiled statement, and any parameters
  * bound to that statement.

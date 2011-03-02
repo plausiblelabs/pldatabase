@@ -27,7 +27,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PlausibleDatabase.h"
+#import <Foundation/Foundation.h>
+#import "PLDatabase.h"
 
 /**
  * The PLDatabaseMigrationDelegate is responsible for applying any migration necessary to update

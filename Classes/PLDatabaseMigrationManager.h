@@ -27,6 +27,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
+#import <Foundation/Foundation.h>
+
+#import "PLDatabaseConnectionProvider.h"
+
+#import "PLDatabaseMigrationTransactionManager.h"
+#import "PLDatabaseMigrationVersionManager.h"
+#import "PLDatabaseMigrationDelegate.h"
+
 @protocol PLDatabaseMigrationDelegate;
 
 @interface PLDatabaseMigrationManager : NSObject {

@@ -27,9 +27,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <Foundation/Foundation.h>
 #import <SenTestingKit/SenTestingKit.h>
 
-#import <PlausibleDatabase/PlausibleDatabase.h>
+#import "PLSqliteMigrationManager.h"
 
 @interface PLSqliteMigrationManagerTests : SenTestCase {
 @private

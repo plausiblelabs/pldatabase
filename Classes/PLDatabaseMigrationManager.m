@@ -27,8 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PlausibleDatabase.h"
-
+#import "PLDatabaseMigrationManager.h"
 
 /**
  *
