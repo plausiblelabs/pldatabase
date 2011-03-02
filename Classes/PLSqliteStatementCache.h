@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2010 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2008-2011 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <libkern/OSAtomic.h>
 
 #ifndef PL_DB_PRIVATE
 @class PLSqliteStatementCache;
@@ -42,13 +43,23 @@
     NSUInteger _size;
 
     /** Maps the query string to a CFMutableArrayRef containing sqlite3_stmt instances. We claim ownership for these statements. */
-    NSMutableDictionary *_statements;
+    NSMutableDictionary *_availableStatements;
+    
+    /** All live statements (whether or not they're checked out). */
+    __strong CFMutableSetRef _allStatements;
+
+    /** Internal lock. Must be held when mutating state. */
+    OSSpinLock _lock;
 }
 
 - (id) initWithCapacity: (NSUInteger) capacity;
 
-- (void) removeAllStatements;
+- (void) close;
+
+- (void) registerStatement: (sqlite3_stmt *) stmt;
+
 - (void) checkinStatement: (sqlite3_stmt *) stmt forQuery: (NSString *) query;
+
 - (sqlite3_stmt *) checkoutStatementForQueryString: (NSString *) query;
 
 @end

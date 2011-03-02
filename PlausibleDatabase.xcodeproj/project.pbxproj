@@ -1064,7 +1064,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = PlausibleDatabase;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
@@ -1100,7 +1100,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = PlausibleDatabase;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				ZERO_LINK = NO;
 			};
 			name = Release;

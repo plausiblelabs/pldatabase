@@ -58,6 +58,7 @@
 
     /* Try caching it */
     PLSqliteStatementCache *cache = [[[PLSqliteStatementCache alloc] initWithCapacity: 500] autorelease];
+    [cache registerStatement: stmt];
     [cache checkinStatement: stmt forQuery: queryString];
 
     /* Make sure we can get it back out again */
@@ -68,7 +69,7 @@
     [cache checkinStatement: stmt forQuery: queryString];
 
     /* Finalize all statements */
-    [cache removeAllStatements];
+    [cache close];
 
     /* Now verify that the databases closes cleanly. If it doesn't, that means that the statements were leaked, and an 
      * exception will be raised. */

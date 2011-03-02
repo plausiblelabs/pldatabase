@@ -173,13 +173,14 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* From PLDatabase */
 - (void) close {
+    /* NOTE: This method must work correctly even if called from an unexpected thread from -dealloc or -finalize */
     int err;
     
     if (_sqlite == NULL)
         return;
 
-    /* Finalize any cached statements */
-    [_statementCache removeAllStatements];
+    /* Finalize all open statements. The statement cache is thread-safe. */
+    [_statementCache close];
 
     /* Close the connection and release any sqlite resources (if open was ever called) */
     err = sqlite3_close(_sqlite);
@@ -493,6 +494,7 @@ NSString *PLSqliteException = @"PLSqliteException";
     
     /* Multiple statements were provided */
     if (*unused != '\0') {
+        sqlite3_finalize(sqlite_stmt);
         [self populateError: error
               withErrorCode: PLDatabaseErrorInvalidStatement
                 description: NSLocalizedString(@"Multiple SQL statements were provided for a single query.", @"")
@@ -500,6 +502,9 @@ NSString *PLSqliteException = @"PLSqliteException";
         return NULL;
     }
     
+    /* Register the statement */
+    [_statementCache registerStatement: sqlite_stmt];
+
     return sqlite_stmt;
 }
 
