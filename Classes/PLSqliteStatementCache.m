@@ -232,9 +232,11 @@ static void cache_statement_finalize (const void *value, void *context);
     OSSpinLockLock(&_lock); {
 
         /* Finalize all registered statements */
-        CFSetApplyFunction(_allStatements, cache_statement_finalize, NULL);
-        CFSetRemoveAllValues(_allStatements);
-        
+        if (_allStatements != NULL) {
+            CFSetApplyFunction(_allStatements, cache_statement_finalize, NULL);
+            CFSetRemoveAllValues(_allStatements);
+        }
+
         /* Empty the statement cache of the now invalid references. */
         [_availableStatements removeAllObjects];
     } OSSpinLockUnlock(&_lock);
