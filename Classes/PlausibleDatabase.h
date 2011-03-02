@@ -62,6 +62,8 @@
 #import "PLSqliteResultSet.h"
 
 #import "PLDatabaseConnectionProvider.h"
+
+#import "PLDatabaseConnectionPool.h"
 #import "PLSqliteConnectionProvider.h"
 
 #import "PLDatabaseMigrationVersionManager.h"
