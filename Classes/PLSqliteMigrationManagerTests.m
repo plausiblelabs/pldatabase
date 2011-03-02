@@ -30,6 +30,7 @@
 #import <Foundation/Foundation.h>
 #import <SenTestingKit/SenTestingKit.h>
 
+#import "PLSqliteDatabase.h"
 #import "PLSqliteMigrationManager.h"
 
 @interface PLSqliteMigrationManagerTests : SenTestCase {

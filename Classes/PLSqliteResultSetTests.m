@@ -29,7 +29,7 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-#import <PLSqliteResultSet.h"
+#import "PLSqliteResultSet.h"
 
 @interface PLSqliteResultSetTests : SenTestCase {
 @private

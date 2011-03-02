@@ -28,6 +28,9 @@
  */
 
 #import <SenTestingKit/SenTestingKit.h>
+
+#import "PLSqliteConnectionProvider.h"
+#import "PLSqliteMigrationManager.h"
 #import "PLDatabaseMigrationManager.h"
 
 #define TEST_DATABASE_VERSION 42

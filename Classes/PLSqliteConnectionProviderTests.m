@@ -29,6 +29,7 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
+#import "PLSqliteDatabase.h"
 #import "PLSqliteConnectionProvider.h"
 
 @interface PLSqliteConnectionProviderTests : SenTestCase {
