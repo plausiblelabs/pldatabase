@@ -30,6 +30,11 @@
 #import "PlausibleDatabase.h"
 
 /**
+ * @deprecated Replaced by PLSqliteMigrationManager.
+ */
+@implementation PLSqliteMigrationVersionManager @end
+
+/**
  * Implements database schema versioning using SQLite's per-database user_version field
  * (see http://www.sqlite.org/pragma.html#version).
  *
@@ -42,7 +47,7 @@
  * @par Thread Safety
  * PLSqliteMigrationVersionManager instances implement no locking and must not be shared between threads.
  */
-@implementation PLSqliteMigrationVersionManager
+@implementation PLSqliteMigrationManager
 
 // from PLDatabaseMigrationVersionManager protocol
 - (BOOL) beginExclusiveTransactionForDatabase: (id<PLDatabase>) database error: (NSError **) outError {

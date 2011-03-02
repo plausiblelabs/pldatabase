@@ -31,16 +31,16 @@
 
 #import <PlausibleDatabase/PlausibleDatabase.h>
 
-@interface PLSqliteMigrationVersionManagerTests : SenTestCase {
+@interface PLSqliteMigrationManagerTests : SenTestCase {
 @private
     NSString *_dbPath;
     PLSqliteDatabase *_db;
-    PLSqliteMigrationVersionManager *_versionManager;
+    PLSqliteMigrationManager *_versionManager;
 }
 @end
 
 
-@implementation PLSqliteMigrationVersionManagerTests
+@implementation PLSqliteMigrationManagerTests
 
 - (void) setUp {
     /* Create a temporary file for the database. Secure -- user owns enclosing directory. */
@@ -51,7 +51,7 @@
     STAssertTrue([_db open], @"Could not open temporary database");
 
     /* Create the version manager */
-    _versionManager = [[PLSqliteMigrationVersionManager alloc] init];
+    _versionManager = [[PLSqliteMigrationManager alloc] init];
 }
 
 - (void) tearDown {

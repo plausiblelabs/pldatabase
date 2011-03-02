@@ -104,7 +104,7 @@ typedef enum {
 #import "PLDatabaseMigrationManager.h"
 #import "PLDatabaseMigrationDelegate.h"
 
-#import "PLSqliteMigrationVersionManager.h"
+#import "PLSqliteMigrationManager.h"
 
 #ifdef PL_DB_PRIVATE
 

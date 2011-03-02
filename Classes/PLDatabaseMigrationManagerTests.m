@@ -36,7 +36,7 @@
 @private
     NSString *_testDir;
     PLDatabaseMigrationManager *_dbManager;
-    PLSqliteMigrationVersionManager *_versionManager;
+    PLSqliteMigrationManager *_versionManager;
     id<PLDatabaseConnectionProvider> _connProvider;
 }
 
@@ -119,7 +119,7 @@
     PLDatabaseMigrationManagerTestsDelegateMock *delegate = [[[PLDatabaseMigrationManagerTestsDelegateMock alloc] initWithNewVersion: TEST_DATABASE_VERSION shouldFail: NO] autorelease];
 
     _connProvider = [[PLSqliteConnectionProvider alloc] initWithPath: [_testDir stringByAppendingPathComponent: @"shared-test-db"]];
-    _versionManager = [[PLSqliteMigrationVersionManager alloc] init];
+    _versionManager = [[PLSqliteMigrationManager alloc] init];
     _dbManager = [[PLDatabaseMigrationManager alloc] initWithConnectionProvider: _connProvider
                                                                     transactionManager: _versionManager
                                                                  versionManager: _versionManager 

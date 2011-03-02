@@ -29,6 +29,10 @@
 
 #import "PlausibleDatabase.h"
 
-@interface PLSqliteMigrationVersionManager : NSObject <PLDatabaseMigrationVersionManager, PLDatabaseMigrationTransactionManager>
+@interface PLSqliteMigrationManager : NSObject <PLDatabaseMigrationVersionManager, PLDatabaseMigrationTransactionManager>
 
+@end
+
+/* Provide a compatibility alias for the legacy class name. */
+DEPRECATED_ATTRIBUTE @interface PLSqliteMigrationVersionManager : PLSqliteMigrationManager
 @end
