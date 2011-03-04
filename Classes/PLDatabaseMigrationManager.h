@@ -53,11 +53,17 @@
     id<PLDatabaseMigrationDelegate> _delegate;
 }
 
-- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) connectionProvider
-               transactionManager: (id<PLDatabaseMigrationTransactionManager>) lockManager
+- (id) initWithTransactionManager: (id<PLDatabaseMigrationTransactionManager>) lockManager
                    versionManager: (id<PLDatabaseMigrationVersionManager>) versionManager
                          delegate: (id<PLDatabaseMigrationDelegate>) delegate;
 
-- (BOOL) migrateAndReturnError: (NSError **) outError;
+- (BOOL) migrateDatabase: (id<PLDatabase>) database error: (NSError **) outError;
+
+- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) connectionProvider
+               transactionManager: (id<PLDatabaseMigrationTransactionManager>) lockManager
+                   versionManager: (id<PLDatabaseMigrationVersionManager>) versionManager
+                         delegate: (id<PLDatabaseMigrationDelegate>) delegate DEPRECATED_ATTRIBUTE;
+
+- (BOOL) migrateAndReturnError: (NSError **) outError DEPRECATED_ATTRIBUTE;
 
 @end

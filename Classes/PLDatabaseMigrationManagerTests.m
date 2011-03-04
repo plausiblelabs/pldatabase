@@ -29,7 +29,7 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-#import "PLSqliteConnectionProvider.h"
+#import "PLSqliteDatabase.h"
 #import "PLSqliteMigrationManager.h"
 #import "PLDatabaseMigrationManager.h"
 
@@ -40,7 +40,6 @@
     NSString *_testDir;
     PLDatabaseMigrationManager *_dbManager;
     PLSqliteMigrationManager *_versionManager;
-    id<PLDatabaseConnectionProvider> _connProvider;
 }
 
 @end
@@ -61,6 +60,8 @@
     _newVersion = newVersion;
     _shouldFail = shouldFail;
     
+    NSLog(@"%p SHOULD FAIL IS %@", self, _shouldFail ? @"YES" : @"NO");
+    
     return self;
 }
 
@@ -76,10 +77,12 @@
         return NO;
 
     if (_shouldFail) {
+        NSLog(@"%p FAIL", self);
         if (outError != NULL)
             *outError = [NSError errorWithDomain: PLDatabaseErrorDomain code: PLDatabaseErrorUnknown userInfo: nil];
         return NO;
     } else {
+        NSLog(@"%p DON'T FAIL", self);
         return YES;
     }
 }
@@ -121,10 +124,8 @@
     /* A new database manager */
     PLDatabaseMigrationManagerTestsDelegateMock *delegate = [[[PLDatabaseMigrationManagerTestsDelegateMock alloc] initWithNewVersion: TEST_DATABASE_VERSION shouldFail: NO] autorelease];
 
-    _connProvider = [[PLSqliteConnectionProvider alloc] initWithPath: [_testDir stringByAppendingPathComponent: @"shared-test-db"]];
     _versionManager = [[PLSqliteMigrationManager alloc] init];
-    _dbManager = [[PLDatabaseMigrationManager alloc] initWithConnectionProvider: _connProvider
-                                                                    transactionManager: _versionManager
+    _dbManager = [[PLDatabaseMigrationManager alloc] initWithTransactionManager: _versionManager
                                                                  versionManager: _versionManager 
                                                                        delegate: delegate];
     STAssertNotNil(_dbManager, @"Could not create a new db manager");
@@ -141,24 +142,21 @@
 	[_testDir release];
     [_dbManager release];
     [_versionManager release];
-    [_connProvider release];
 }
 
 
 - (void) testMigrate {
     NSError *error;
     int version;
-    id<PLDatabase> database;
-
-    database = [_connProvider getConnectionAndReturnError: &error];
-    STAssertNotNil(database, @"Could not open database: %@", database);
+    PLSqliteDatabase *database = [PLSqliteDatabase databaseWithPath: @":memory:"];
+    STAssertTrue([database openAndReturnError: &error], @"Could not get db connection: %@", error);
 
     /* Get the current version (should be 0) */
     STAssertTrue([_versionManager version: &version forDatabase: database error: &error], @"Could not retrieve version: %@", error);
     STAssertTrue(0 == version, @"Expected database version 0, got %d", version);
 
     /* Run the migration */
-    STAssertTrue([_dbManager migrateAndReturnError: &error], @"Migration failed: %@", error);
+    STAssertTrue([_dbManager migrateDatabase: database error: &error], @"Migration failed: %@", error);
     
     /* Verify that our table was created and the version was bumped */
     STAssertTrue([_versionManager version: &version forDatabase: database error: &error], @"Could not retrieve version: %@", error);
@@ -166,7 +164,7 @@
     STAssertTrue([database tableExists: @"testtable"], @"Test table was not created");
 
     /* Clean up */
-    [_connProvider closeConnection: database];
+    [database close];
 }
 
 
@@ -174,30 +172,27 @@
     PLDatabaseMigrationManagerTestsDelegateMock *delegate;
     PLDatabaseMigrationManager *dbManager;
     NSError *error;
-    NSString *dbPath;
-
-    dbPath = [_testDir stringByAppendingPathComponent: @"testdb"];
     
     /* Set up our delegate */
     delegate = [[[PLDatabaseMigrationManagerTestsDelegateMock alloc] initWithNewVersion: TEST_DATABASE_VERSION shouldFail: YES] autorelease];    
-    dbManager = [[[PLDatabaseMigrationManager alloc] initWithConnectionProvider: _connProvider 
-                                                                    transactionManager: _versionManager
+    dbManager = [[[PLDatabaseMigrationManager alloc] initWithTransactionManager: _versionManager
                                                                  versionManager: _versionManager 
                                                                        delegate: delegate] autorelease];
+    
+    /* Create a test database */
+    PLSqliteDatabase *database = [PLSqliteDatabase databaseWithPath: @":memory:"];
+    STAssertTrue([database openAndReturnError: &error], @"Could not get db connection: %@", error);
 
     /* Run the migration (will fail, should roll back)  */
-    STAssertFalse([dbManager migrateAndReturnError: NULL], @"Migration was expected to fail");
-
-    /* Verify that our table was not created and the version remains at 0 */
-    id<PLDatabase> db = [_connProvider getConnectionAndReturnError: NULL];
-    STAssertNotNil(db, @"Could not get db connection");
+    STAssertFalse([dbManager migrateDatabase: database error: NULL], @"Migration was expected to fail");
 
     int version;
-    STAssertTrue([_versionManager version: &version forDatabase: db error: &error], @"Could not retrieve database version: %@", error);
+    STAssertTrue([_versionManager version: &version forDatabase: database error: &error], @"Could not retrieve database version: %@", error);
     STAssertEquals(0, version, @"The transaction was not rolled back, version is not 0");
-    STAssertFalse([db tableExists: @"testtable"], @"The transaction was not rolled back, table exists");
+    STAssertFalse([database tableExists: @"testtable"], @"The transaction was not rolled back, table exists");
 
-    [_connProvider closeConnection: db];
+    /* Clean up */
+    [database close];
 }
 
 /**
@@ -207,35 +202,31 @@
     PLDatabaseMigrationManagerTestsDelegateDoNothingMock *delegate;
     PLDatabaseMigrationManager *dbManager;
     NSError *error;
-    NSString *dbPath;
-    
-    dbPath = [_testDir stringByAppendingPathComponent: @"testdb"];
     
     /* Fetch a db connection */
-    id<PLDatabase> db = [_connProvider getConnectionAndReturnError: &error];
-    STAssertNotNil(db, @"Could not get db connection: %@", error);
+    PLSqliteDatabase *database = [PLSqliteDatabase databaseWithPath: @":memory:"];
+    STAssertTrue([database openAndReturnError: &error], @"Could not get db connection: %@", error);
 
     /* Start with a non-zero version */
     assert(TEST_DATABASE_VERSION != 0);
-    STAssertTrue([_versionManager setVersion: TEST_DATABASE_VERSION forDatabase: db error: &error], @"Could not set version: %@", error);
+    STAssertTrue([_versionManager setVersion: TEST_DATABASE_VERSION forDatabase: database error: &error], @"Could not set version: %@", error);
 
     /* Set up our delegate (will fail, should roll back) */
     delegate = [[[PLDatabaseMigrationManagerTestsDelegateDoNothingMock alloc] init] autorelease];
-    dbManager = [[[PLDatabaseMigrationManager alloc] initWithConnectionProvider: _connProvider
-                                                                    transactionManager: _versionManager
+    dbManager = [[[PLDatabaseMigrationManager alloc] initWithTransactionManager: _versionManager
                                                                  versionManager: _versionManager 
                                                                        delegate: delegate] autorelease];
     
     /* Run the migration */
-    STAssertTrue([dbManager migrateAndReturnError: &error], @"Migration failed: %@", error);
+    STAssertTrue([_dbManager migrateDatabase: database error: &error], @"Migration failed: %@", error);
     
     /* Verify that the version remains at TEST_DATABASE_VERSION */
     int version;
-    STAssertTrue([_versionManager version: &version forDatabase: db error: &error], @"Could not retrieve database version: %@", error);
+    STAssertTrue([_versionManager version: &version forDatabase: database error: &error], @"Could not retrieve database version: %@", error);
     STAssertEquals(TEST_DATABASE_VERSION, version, @"The database version was reset");
 
-    /* Return our connection to the connection provider */
-    [_connProvider closeConnection: db];
+    /* Clean up */
+    [database close];
 }
 
 @end

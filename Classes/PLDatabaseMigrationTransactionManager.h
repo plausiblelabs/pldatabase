@@ -35,8 +35,11 @@
  * of the database version and application of any migrations.
  *
  * @par Thread Safety
- * PLDatabaseMigrationTransactionManager instances are not required to implement any locking and must not be
- * shared between threads.
+ * Thread-safe. May be used from any thread.
+ *
+ * @par Implementation Notes
+ * Implementations must be immutable and/or thread-safe, and must be usable from any thread without external
+ * locking.
  */
 @protocol PLDatabaseMigrationTransactionManager <NSObject>
 

@@ -39,38 +39,55 @@
  * assumptions about the migrations applied or the methods used to retrieve or update
  * database schema versions.
  *
+ *
  * @par Thread Safety
- * PLDatabaseMigrationManager instances are not required to implement any locking and must not be
- * shared between threads.
+ * Thread-safe. May be used from any thread.
+ *
+ * @par Implementation Notes
+ * Implementations must be immutable and/or thread-safe, and must be usable from any thread without external
+ * locking.
  */
 @implementation PLDatabaseMigrationManager
 
 /**
- * Manages database migration and initialization.
+ * Initialize a new migration manager.
  *
- * @param connectionProvider Database conection provider.
  * @param lockManager An object implementing the PLDatabaseMigrationTransactionManager protocol.
  * @param versionManager An object implementing the PLDatabaseMigrationVersionManager protocol.
  * @param delegate An object implementing the formal PLDatabaseMigrationDelegate protocol.
  */
-- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) connectionProvider
-               transactionManager: (id<PLDatabaseMigrationTransactionManager>) lockManager
+- (id) initWithTransactionManager: (id<PLDatabaseMigrationTransactionManager>) lockManager
                    versionManager: (id<PLDatabaseMigrationVersionManager>) versionManager
                          delegate: (id<PLDatabaseMigrationDelegate>) delegate;
 {
     assert(delegate != nil);
     assert(lockManager != nil);
     assert(versionManager != nil);
-    assert(connectionProvider != nil);
-
+    
     if ((self = [super init]) == nil)
         return nil;
-
+    
     /* Save the delegates/providers */
     _delegate = delegate; // cyclic reference, can not retain
-    _connectionProvider = [connectionProvider retain];
     _txManager = [lockManager retain];
     _versionManager = [versionManager retain];
+    
+    return self;
+}
+
+/**
+ * @deprecated Replaced by PLDatabaseMigrationManager::initWithTransactionManager:versionManager:delegate:
+ */
+- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) connectionProvider
+               transactionManager: (id<PLDatabaseMigrationTransactionManager>) lockManager
+                   versionManager: (id<PLDatabaseMigrationVersionManager>) versionManager
+                         delegate: (id<PLDatabaseMigrationDelegate>) delegate;
+{
+    if ((self = [self initWithTransactionManager: lockManager versionManager: versionManager delegate: delegate]) == nil)
+        return nil;
+
+    /* Save the connection provider */
+    _connectionProvider = [connectionProvider retain];
 
     return self;
 }
@@ -84,23 +101,8 @@
     [super dealloc];
 }
 
-
 /**
- * Open a new database connection and allow the PLDatabaseMigrationDelegate to perform
- * any pending migrations.
- *
- * If the migration delegate returns success (YES), the PLDatabaseMigrationVersionManager will
- * be used to set the provided version number.
- *
- * If the delegate returns failure (NO), the database will not be modified in
- * any way (including the addition of a database version number).
- *
- * A transaction will be opened prior to the delegate being called. The transaction will
- * be committed upon the return of a success value (YES). If this method returns NO,
- * the entire transaction will be aborted.
- *
- * Failure to open the database, or returning NO from the delegate, will cause
- * database initialization to fail, and this method will return NO.
+ * Perform any pending migrations on @a database using the receiver's PLDatabaseMigrationDelegate.
  *
  * @param outError A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the migration could not be completed.
@@ -109,9 +111,44 @@
  * @return YES on successful migration, or NO if migration failed. If NO is returned, all modifications
  * will be rolled back.
  */
-- (BOOL) migrateAndReturnError: (NSError **) outError {
+- (BOOL) migrateDatabase: (id<PLDatabase>) db error: (NSError **) outError {
     int currentVersion;
     int newVersion;
+
+    /* Start a transaction, we'll do *all modifications* within this one transaction */
+    if (![_txManager beginExclusiveTransactionForDatabase: db error: outError])
+        return NO;
+    
+    /* Fetch the current version. We default the new version to the current version -- failure to do so
+     * will result in the database version being reset should the delegate forget to set the version
+     * on a migration returning YES but implementing no changes. */
+    if (![_versionManager version: &currentVersion forDatabase: db error: outError])
+        goto rollback;
+    
+    newVersion = currentVersion;
+    
+    /* Run the migration */
+    if (![_delegate migrateDatabase: db currentVersion: currentVersion newVersion: &newVersion error: outError])
+        goto rollback;
+    
+    if (![_versionManager setVersion: newVersion forDatabase: db error: outError])
+        goto rollback;
+    
+    if (![_txManager commitTransactionForDatabase: db error: outError])
+        goto rollback;
+
+    /* Succeeded */
+    return YES;
+    
+rollback:
+    [_txManager rollbackTransactionForDatabase: db error: NULL];
+    return NO;
+}
+
+/**
+ * @deprecated Replaced by PLDatabaseMigrationManager::migrateDatabase:error:
+ */
+- (BOOL) migrateAndReturnError: (NSError **) outError {
     id<PLDatabase> db;
     
     /* Open the database connection */
@@ -120,39 +157,13 @@
         return NO;
     }
 
-    /* Start a transaction, we'll do *all modifications* within this one transaction */
-    if (![_txManager beginExclusiveTransactionForDatabase: db error: outError])
-        goto cleanup;
-
-    /* Fetch the current version. We default the new version to the current version -- failure to do so
-     * will result in the database version being reset should the delegate forget to set the version
-     * on a migration returning YES but implementing no changes. */
-    if (![_versionManager version: &currentVersion forDatabase: db error: outError])
-        goto rollback;
-    
-    newVersion = currentVersion;
-
-    /* Run the migration */
-    if (![_delegate migrateDatabase: db currentVersion: currentVersion newVersion: &newVersion error: outError])
-        goto rollback;
-
-    if (![_versionManager setVersion: newVersion forDatabase: db error: outError])
-        goto rollback;
-
-    if (![_txManager commitTransactionForDatabase: db error: outError])
-        goto rollback;
+    /* Attempt the migration */
+    BOOL result = [self migrateDatabase: db error: outError];
 
     /* Return our connection to the provider */
     [_connectionProvider closeConnection: db];
 
-    /* Create and return the new manager */
-    return YES;
-
-rollback:
-    [_txManager rollbackTransactionForDatabase: db error: NULL];
-cleanup:
-    [_connectionProvider closeConnection: db];
-    return NO;
+    return result;
 }
 
 @end

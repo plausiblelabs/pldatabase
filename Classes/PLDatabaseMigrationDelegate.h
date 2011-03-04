@@ -35,8 +35,11 @@
  * a database to the latest schema/data required by an application.
  *
  * @par Thread Safety
- * PLDatabaseMigrationDelegate instances are not required to implement any locking and must not be
- * shared between threads.
+ * Thread-safe. May be used from any thread.
+ *
+ * @par Implementation Notes
+ * Implementations must be immutable and/or thread-safe, and must be usable from any thread without external
+ * locking.
  */
 @protocol PLDatabaseMigrationDelegate <NSObject>
 
