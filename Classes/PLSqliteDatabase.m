@@ -126,14 +126,23 @@ NSString *PLSqliteException = @"PLSqliteException";
  * @return YES if the database was successfully opened, NO on failure.
  */
 - (BOOL) openAndReturnError: (NSError **) error {
+    const char *path;
     int err;
 
     /* Do not call open twice! */
     if (_sqlite != NULL)
         [NSException raise: PLSqliteException format: @"Attempted to open already-open SQLite database instance at '%@'. Called -[PLSqliteDatabase open] twice?", _path];
     
-    /* Open the database */
-    err = sqlite3_open([_path fileSystemRepresentation], &_sqlite);
+    /* Open the database. Note that an empty path is valid -- SQLite will treat it as a request for a temporary
+     * database. At the time of writing, however, -[NSString fileSystemRepresentation] will throw an exception on an
+     * empty string. */
+    if ([_path length] == 0 || [_path rangeOfCharacterFromSet: [[NSCharacterSet whitespaceAndNewlineCharacterSet] invertedSet]].location == NSNotFound) {
+        path = [_path UTF8String];
+    } else {
+        path = [_path fileSystemRepresentation];
+    }
+
+    err = sqlite3_open(path, &_sqlite);
     if (err != SQLITE_OK) {
         [self populateError: error 
               withErrorCode: PLDatabaseErrorFileNotFound 

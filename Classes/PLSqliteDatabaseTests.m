@@ -55,6 +55,16 @@
     STAssertNotNil(db, @"Returned database is nil");
 }
 
+- (void) testOpenWithEmptyPath {
+    /* SQLite treats an empty path as a request for a disk-backed temporary database that will automatically
+     * be closed */
+    PLSqliteDatabase *db = [[[PLSqliteDatabase alloc] initWithPath: @""] autorelease];
+    STAssertNotNil(db, @"Returned database is nil");
+
+    NSError *error;
+    STAssertTrue([db openAndReturnError: &error], @"Failed to open database: %@", error);
+    [db close];
+}
 
 - (void) testOpen {
     PLSqliteDatabase *db = [[[PLSqliteDatabase alloc] initWithPath:  @":memory:"] autorelease];
