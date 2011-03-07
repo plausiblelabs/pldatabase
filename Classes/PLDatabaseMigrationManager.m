@@ -42,10 +42,6 @@
  *
  * @par Thread Safety
  * Thread-safe. May be used from any thread.
- *
- * @par Implementation Notes
- * Implementations must be immutable and/or thread-safe, and must be usable from any thread without external
- * locking.
  */
 @implementation PLDatabaseMigrationManager
 
