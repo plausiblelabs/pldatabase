@@ -63,7 +63,8 @@
 
 #import "PLDatabaseConnectionProvider.h"
 
-#import "PLDatabaseConnectionPool.h"
+#import "PLPoolConnectionProvider.h"
+#import "PLMigrationConnectionProvider.h"
 #import "PLSqliteConnectionProvider.h"
 
 #import "PLDatabaseMigrationVersionManager.h"
