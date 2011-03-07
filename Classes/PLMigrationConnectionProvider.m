@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PLDatabaseMigrationConnectionProvider.h"
+#import "PLMigrationConnectionProvider.h"
 
 
 /**
@@ -42,7 +42,7 @@
  * @par Thread Safety
  * Thread-safe. May be used from any thread.
  */
-@implementation PLDatabaseMigrationConnectionProvider
+@implementation PLMigrationConnectionProvider
 
 /**
  * Initialize a new migration connection provider.

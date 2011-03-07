@@ -33,7 +33,7 @@
 #import "PLDatabaseConnectionProvider.h"
 
 
-@interface PLDatabaseMigrationConnectionProvider : NSObject <PLDatabaseConnectionProvider> {
+@interface PLMigrationConnectionProvider : NSObject <PLDatabaseConnectionProvider> {
 @private
     /** Backing connection provider. */
     id<PLDatabaseConnectionProvider> _conProv;

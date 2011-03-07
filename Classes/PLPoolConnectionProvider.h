@@ -32,7 +32,7 @@
 
 #import "PLDatabaseConnectionProvider.h"
 
-@interface PLDatabaseConnectionPool : NSObject <PLDatabaseConnectionProvider> {
+@interface PLPoolConnectionProvider : NSObject <PLDatabaseConnectionProvider> {
 @private
     /** Lock that must be held when mutating internal state. */
     pthread_mutex_t _lock;
