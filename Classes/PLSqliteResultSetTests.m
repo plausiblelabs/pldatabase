@@ -63,40 +63,6 @@
     STAssertTrue([_db rollbackTransaction], @"Could not roll back, was result actually closed?");
 }
 
-/* Test handling of schema changes when iterating over an already prepared statement.
- * This is handled automatically in SQLite 3.3.9 and later by using sqlite3_prepare_v2().
- *
- * Earlier versions of SQLite (eg, Mac OS X 10.4) require manually re-preparing the statement
- * after the first call to sqlite3_step() fails with SQLITE_SCHEMA. They also require
- * calling sqlite3_reset() to return the actual sqlite3_step() error.
- *
- * Our test uses a bound parameter to ensure that any bound parameters are correctly copied
- * across to a newly created statement.
- */
-- (void) testSchemaChangeHandling {
-    id<PLPreparedStatement> stmt;
-    NSError *error = nil;
-    
-    /* Create a test table, prepare a statement, then modify the test table from underneath it */
-    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Create table failed");
-    stmt = [_db prepareStatement: @"INSERT INTO test (a) VALUES (?)"];
-    STAssertNotNil(stmt, @"Could not parse statement");
-    STAssertTrue([_db executeUpdateAndReturnError: &error statement: @"ALTER TABLE test ADD COLUMN b int DEFAULT 0"], @"Alter table failed: %@", error);
-
-    /* Bind parameters */
-    [stmt bindParameters: [NSArray arrayWithObject: [NSNumber numberWithInt: 1]]];
-
-    /* Execute update */
-    error = nil;
-    STAssertTrue([stmt executeUpdateAndReturnError: &error], @"Statement execute failed: %@ (%@)", error, [[error userInfo] objectForKey: PLDatabaseErrorVendorStringKey]);
-
-    /* The above should not fail, but if it does, we should verify that the returned error is non-generic */
-    if (error != nil) {
-        int errCode = [[[error userInfo] objectForKey: PLDatabaseErrorVendorErrorKey] intValue];
-        STAssertEquals(SQLITE_SCHEMA, errCode, @"Expected SQLITE_SCHEMA error code");
-    }
-}
-
 - (void) testBlockIteration {
     id<PLResultSet> result;
     
