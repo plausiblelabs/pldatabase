@@ -105,7 +105,9 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 
 /**
- * Open the database connection. May be called once and only once.
+ * Opens the database connection for reading/writing. May be called once and only once.
+ *
+ * If the database does not already exist, it will be created.
  *
  * @return YES on success, NO on failure.
  */
@@ -115,8 +117,9 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 
 /**
- * Opens the database connection, and returns any errors. May
- * be called once and only once.
+ * Opens the database connection for reading/writing, and returns any errors. May be called once and only once.
+ *
+ * If the database does not already exist, it will be created.
  *
  * @param error A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the database could
@@ -126,23 +129,53 @@ NSString *PLSqliteException = @"PLSqliteException";
  * @return YES if the database was successfully opened, NO on failure.
  */
 - (BOOL) openAndReturnError: (NSError **) error {
-    const char *path;
+    /* Use the default flags */
+    return [self openWithFlags: SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE error: error];
+}
+
+/**
+ * Opens the database connection, and returns any errors. May be called once and only once.
+ *
+ * @param flags The SQLite-defined flags that will be passed directly to sqlite3_open_v2() or an equivalent API.
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the database could
+ * not be opened. If no error occurs, this parameter will be left unmodified.
+ * You may specify NULL for this parameter, and no error information will be provided.
+ *
+ * @return YES if the database was successfully opened, NO on failure.
+ *
+ * @par Supported Flags
+ * The flags supported by SQLite are defined in the SQLite C API Documentation:
+ * http://www.sqlite.org/c3ref/open.html
+ */
+- (BOOL) openWithFlags: (int) flags {
+    return [self openWithFlags: flags error: NULL];
+}
+
+/**
+ * Opens the database connection, and returns any errors. May be called once and only once.
+ *
+ * @param flags The SQLite-defined flags that will be passed directly to sqlite3_open_v2() or an equivalent API.
+ * @param error A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the database could
+ * not be opened. If no error occurs, this parameter will be left unmodified.
+ * You may specify NULL for this parameter, and no error information will be provided.
+ *
+ * @return YES if the database was successfully opened, NO on failure.
+ *
+ * @par Supported Flags
+ * The flags supported by SQLite are defined in the SQLite C API Documentation:
+ * http://www.sqlite.org/c3ref/open.html
+ */
+- (BOOL) openWithFlags: (int) flags error: (NSError **) error {
     int err;
 
     /* Do not call open twice! */
     if (_sqlite != NULL)
         [NSException raise: PLSqliteException format: @"Attempted to open already-open SQLite database instance at '%@'. Called -[PLSqliteDatabase open] twice?", _path];
     
-    /* Open the database. Note that an empty path is valid -- SQLite will treat it as a request for a temporary
-     * database. At the time of writing, however, -[NSString fileSystemRepresentation] will throw an exception on an
-     * empty string. */
-    if ([_path length] == 0 || [_path rangeOfCharacterFromSet: [[NSCharacterSet whitespaceAndNewlineCharacterSet] invertedSet]].location == NSNotFound) {
-        path = [_path UTF8String];
-    } else {
-        path = [_path fileSystemRepresentation];
-    }
-
-    err = sqlite3_open(path, &_sqlite);
+    /* Open the database. */    
+    err = sqlite3_open_v2([_path UTF8String], &_sqlite, flags, NULL);
     if (err != SQLITE_OK) {
         [self populateError: error 
               withErrorCode: PLDatabaseErrorFileNotFound 

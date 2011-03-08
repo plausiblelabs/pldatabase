@@ -67,6 +67,9 @@ extern NSString *PLSqliteException;
 - (BOOL) open;
 - (BOOL) openAndReturnError: (NSError **) error;
 
+- (BOOL) openWithFlags: (int) flags;
+- (BOOL) openWithFlags: (int) flags error: (NSError **) error;
+
 - (sqlite3 *) sqliteHandle;
 - (int64_t) lastInsertRowId;
 
