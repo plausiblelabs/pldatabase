@@ -70,6 +70,9 @@
 // DO NOT CALL. Must only be called from PLSqliteResultSet
 - (void) checkinResultSet: (PLSqliteResultSet *) resultSet;
 
+/** The prepared statement's backing database. */
+@property(nonatomic, readonly) PLSqliteDatabase *database;
+
 @end
 
 #endif

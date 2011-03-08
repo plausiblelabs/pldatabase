@@ -163,6 +163,8 @@
  */
 @implementation PLSqlitePreparedStatement
 
+@synthesize database = _database;
+
 /**
  * @internal
  *

@@ -49,6 +49,13 @@ extern NSString *PLSqliteException;
     /** Underlying sqlite database reference. */
     sqlite3 *_sqlite;
 
+    /** If YES, a transaction monitored for SQLITE_BUSY is currently active. In the future, we may replace this with a
+     * stack to automatically support nested transactions via save points. */
+    BOOL _monitorTx;
+
+    /** If YES, SQLITE_BUSY was returned from a monitored transaction. */
+    BOOL _txBusy;
+
     /** Prepared statement cache */
     PLSqliteStatementCache *_statementCache;
 }
@@ -71,6 +78,8 @@ extern NSString *PLSqliteException;
 
 - (int) lastErrorCode;
 - (NSString *) lastErrorMessage;
+
+- (void) setTxBusy;
 
 #ifdef PL_SQLITE_LEGACY_STMT_PREPARE
 // This method is only exposed for the purpose of supporting implementations missing sqlite3_prepare_v2()

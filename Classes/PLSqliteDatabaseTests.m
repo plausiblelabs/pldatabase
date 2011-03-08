@@ -237,6 +237,97 @@
     STAssertTrue([data isEqualToData: [rs dataForColumn: @"dataval"]], @"Data value incorrect");
 }
 
+- (void) testBeginAndRollbackBlockTransaction {
+    NSError *error;
+
+    __block int runCount = 0;
+    BOOL ret = [_db performTransactionWithRetryBlock: ^{
+        runCount++;
+        STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
+        return NO;
+    } error: &error];
+
+    STAssertTrue(ret, @"Transaction failed: %@", error);
+    STAssertEquals(1, runCount, @"Transaction block was not run once");
+    STAssertFalse([_db tableExists: @"test"], @"Transaction was not rolled back");
+}
+
+- (void) testBeginAndCommitBlockTransaction {
+    NSError *error;
+    
+    __block int runCount = 0;
+    BOOL ret = [_db performTransactionWithRetryBlock: ^{
+        runCount++;
+        STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
+        return YES;
+    } error: &error];
+    
+    STAssertTrue(ret, @"Transaction failed: %@", error);
+    STAssertEquals(1, runCount, @"Transaction block was not run once");
+    STAssertTrue([_db tableExists: @"test"], @"Transaction was not comitted");
+}
+
+/* Test retry of a transaction that sets SQLITE_BUSY */
+- (void) testBeginAndRetryBlockTransaction {
+    NSError *error;
+    
+    __block int runCount = 0;
+    BOOL ret = [_db performTransactionWithRetryBlock: ^{
+        runCount++;
+        STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
+        
+        /* Trigger a fake SQLITE_BUSY retry. */
+        if (runCount < 2)
+            [_db setTxBusy];
+
+        return YES;
+    } error: &error];
+
+    STAssertTrue(ret, @"Transaction failed: %@", error);
+    STAssertEquals(2, runCount, @"Transaction block was not run twice");
+    STAssertTrue([_db tableExists: @"test"], @"Transaction was not comitted");
+}
+
+/* Verify that no retry is attempted if the block returns NO (rollback) */
+- (void) testBeginAndRetryBlockTransactionDisableRetry {
+    NSError *error;
+    
+    __block int runCount = 0;
+    BOOL ret = [_db performTransactionWithRetryBlock: ^{
+        runCount++;
+        STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
+
+        /* Trigger a fake SQLITE_BUSY retry. */
+        if (runCount < 2)
+            [_db setTxBusy];
+        
+        return NO;
+    } error: &error];
+    
+    STAssertTrue(ret, @"Transaction failed: %@", error);
+    STAssertEquals(1, runCount, @"Transaction block was not run once; was it retried after NO was returned?");
+    STAssertFalse([_db tableExists: @"test"], @"Transaction was not rolled back");
+}
+
+/* Test handling of transactions that are rolled back by SQLite. */
+- (void) testBeginAndRetryRolledBackBlockTransaction {
+    NSError *error;
+    
+    __block int runCount = 0;
+    BOOL ret = [_db performTransactionWithRetryBlock: ^{
+        runCount++;
+
+        /* Fake up a rollback. Normally this would happen due to a failed query. */
+        if (runCount == 1)
+            STAssertTrue([_db rollbackTransaction], @"Failed to rollback transaction");
+    
+        return NO;
+    } error: &error];
+
+    STAssertTrue(ret, @"Transaction failed: %@", error);
+    STAssertEquals(1, runCount, @"Transaction block was not run once");
+}
+
 - (void) testBeginAndRollbackTransaction {
     STAssertTrue([_db beginTransaction], @"Could not start a transaction");
     STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
