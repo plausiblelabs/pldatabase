@@ -34,6 +34,33 @@
 #import "PLResultSet.h"
 
 /**
+ * Standard SQL transaction isolation levels. These levels define the minimum isolation required; a database
+ * is free to apply stricter isolation than has been requested.
+ *
+ * @ingroup enums
+ */
+typedef enum {
+    /** Statements can read rows that have been modified by other transactions and have not yet been committed. */
+    PLDatabaseIsolationLevelReadUncomitted = 0,
+
+    /** Statements cannot read changes that have not been committed by other transactions. Changes that
+     * have been comitted will be readable. */
+    PLDatabaseIsolationLevelReadComitted = 1,
+
+    /** Statements cannot read changes that have not been committed by other transactions, and no other transactions
+     * may modify data that has been read by the current transaction until the current transaction is completed. */
+    PLDatabaseIsolationLevelRepeatableRead = 2,
+
+    /**
+     * Statements cannot read changes that have not been committed by other transactions, no other transactions may
+     * modify data that has been read by the current transaction until the current transaction is completed, and
+     * other transactions cannot insert new rows with values that would fall into the range of rows read by any
+     * statement in the current transaction until the current transaction complets.
+     */
+    PLDatabaseIsolationLevelSerializable = 3
+} PLDatabaseIsolationLevel;
+
+/**
  * Protocol for interacting with an SQL database.
  *
  * @par Object Types
@@ -153,36 +180,6 @@
 /**
  * Begin a transaction and execute @a block. If the caller returns YES from @a block, and <em>any</em> database operation
  * within the transaction block fails due to the server reporting a dead-lock condition, the transaction will be rolled back,
- * immediately retried, and @a block will executed again.
- *
- * @param block A block to be executed within the transaction. If the block returns YES, the transaction will be committed,
- * otherwise, the transaction will be rolled back.
- * @return YES if the transaction is successfully committed or rolled back, or NO on failure. Note that a return value of
- * YES <em>does not</em> signify that the transaction was committed, but rather, that no database error occured either committing
- * or rolling back the transaction.
- *
- * @par Automatic Retry
- *
- * If any operations within the transaction fail due to a dead-lock condition and @a block returns YES, the transaction
- * will be automatically retried. This means that @a block may be executed multiple times, and the block implementation
- * must be idempotent and free of unintended side-effects if run repeatedly.
- *
- * @par Isolation Level
- *
- * The transaction must provide at least 'Read committed' isolation. As per the SQL standard, the isolation level may be
- * stricter than what has been requested -- this method only gaurantees the MINIMUM of isolation.
- *
- * For more information on SQL standard transaction isolation levels, refer to
- * PostgreSQL's documentation:
- *    http://www.postgresql.org/docs/8.3/interactive/transaction-iso.html
- *
- * @warning The provided @a block may be executed multiple times and <em>must</em> be idempotent.
- */
-- (BOOL) performTransactionWithRetryBlock: (BOOL (^)()) block;
-
-/**
- * Begin a transaction and execute @a block. If the caller returns YES from @a block, and <em>any</em> database operation
- * within the transaction block fails due to the server reporting a dead-lock condition, the transaction will be rolled back,
  * immediately retried, and @a block will executed again. 
  *
  * @param block A block to be executed within the transaction. If the block returns YES, the transaction will be committed,
@@ -212,6 +209,34 @@
  * @warning The provided @a block may be executed multiple times and <em>must</em> be idempotent.
  */
 - (BOOL) performTransactionWithRetryBlock: (BOOL (^)()) block error: (NSError **) outError;
+
+/**
+ * Begin a transaction and execute @a block. If the caller returns YES from @a block, and <em>any</em> database operation
+ * within the transaction block fails due to the server reporting a dead-lock condition, the transaction will be rolled back,
+ * immediately retried, and @a block will executed again. 
+ *
+ * @param isolationLevel The minimum isolation level to be used for this transaction.
+ * @param block A block to be executed within the transaction. If the block returns YES, the transaction will be committed,
+ * otherwise, the transaction will be rolled back.
+ * @param outError If an error occurs executing the transaction, upon return contains an error object in the PLDatabaseErrorDomain
+ * that describes the problem. Pass NULL if you do not want error information.
+ 
+ * @return YES if the transaction is successfully committed or rolled back, or NO on failure. Note that a return value of
+ * YES <em>does not</em> signify that the transaction was committed, but rather, that no database error occured either committing
+ * or rolling back the transaction.
+ *
+ * @par Automatic Retry
+ *
+ * If any operations within the transaction fail due to a dead-lock condition and @a block returns YES, the transaction
+ * will be automatically retried. This means that @a block may be executed multiple times, and the block implementation
+ * must be idempotent and free of unintended side-effects if run repeatedly.
+ *
+ * @warning The provided @a block may be executed multiple times and <em>must</em> be idempotent.
+ */
+- (BOOL) performTransactionWithIsolationLevel: (PLDatabaseIsolationLevel) isolationLevel
+                                   retryBlock: (BOOL (^)()) block
+                                        error: (NSError **) outError;
+
 
 /**
  * Begin a transaction. This must provide at least 'Read committed' isolation. As
@@ -244,6 +269,15 @@
  * @return YES on success, NO on failure.
  */
 - (BOOL) beginTransactionAndReturnError: (NSError **) error;
+
+/**
+ * Begin a transaction.
+ *
+ * @param isolationLevel The minimum isolation level to be used for this transaction.
+ *
+ * @return YES on success, NO on failure.
+ */
+- (BOOL) beginTransactionWithIsolationLevel: (PLDatabaseIsolationLevel) isolationLevel error: (NSError **) outError;
 
 /**
  * Commit an open transaction.

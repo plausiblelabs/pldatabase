@@ -376,15 +376,25 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* from PLDatabase. */
 - (BOOL) performTransactionWithRetryBlock: (BOOL (^)()) block error: (NSError **) outError {    
+    return [self performTransactionWithIsolationLevel: PLDatabaseIsolationLevelReadComitted 
+                                           retryBlock: block 
+                                                error: outError];
+}
+
+/* from PLDatabase. */
+- (BOOL) performTransactionWithIsolationLevel: (PLDatabaseIsolationLevel) isolationLevel
+                                   retryBlock: (BOOL (^)()) block
+                                        error: (NSError **) outError
+{
     /* */
     NSAssert(_monitorTx == NO, @"Nested transactions are not currently supported");
     _monitorTx = YES;
-
+    
     /* Execute the transaction loop, rolling back and retrying if a deadlock occurs (_txBusy == YES). */
     BOOL ret = YES;
     while (1) {        
         /* Start the transaction */
-        if (![self beginTransactionAndReturnError: outError]) {
+        if (![self beginTransactionWithIsolationLevel: isolationLevel error: outError]) {
             ret = NO;
             break;
         }
@@ -408,19 +418,19 @@ NSString *PLSqliteException = @"PLSqliteException";
                 /* If the user doesn't want a COMMIT, nothing to do. We need to ROLLBACK and not retry. */
                 retry = NO;
                 shouldCommit = NO;
-    
+                
             } else if (!_txBusy && wantCommit) {
                 /* Otherwise, SQLITE_BUSY was not triggered, and the user wants a commit. We need to COMMIT and not retry. */
                 retry = NO;
                 shouldCommit = YES;
             }
         }
-
+        
         /* After running the block we may no longer be in a transaction (sqlite will roll back a transaction
          * automatically on some errors). If we've been rolled back and we should retry, there's nothing left to do but
          * retry the entire transaction immediately. However, if we should not retry or commit and rollback has already
          * occured, there's nothing for us to do. */
-    
+        
         /* We may no longer be in a transaction -- SQLite may automatically roll back a transaction. */
         if (sqlite3_get_autocommit(_sqlite) != 0) {
             /* If we need to retry and the transaction has already been rolled back, there's nothing left to do but
@@ -436,10 +446,10 @@ NSString *PLSqliteException = @"PLSqliteException";
              * However, if the block has NOT request COMMIT, but instead requested ROLLBACK, there's nothing for us to
              * but return -- rollback has already occured. */
             if (!shouldCommit)
-            ret = YES;
+                ret = YES;
             break;
         }
-
+        
         /*
          * The transaction is still active, which means we now need to either commit or rollback, based on the block's
          * return value and whether the block deadlocked (SQLITE_BUSY).
@@ -448,10 +458,10 @@ NSString *PLSqliteException = @"PLSqliteException";
          * still in the transaction, we are free to automatically retry -- otherwise, if the transaction is rolled back
          * by sqlite, we should restart the entire transaction immediately.
          */
-
+        
         /* Reset the _txBusy flag; we need to re-use it to check whether commit/rollback fails with SQLITE_BUSY. */
         _txBusy = NO;
-    
+        
         /* Issue COMMIT or ROLLBACK, retrying immediately if the transaction remains active and SQLITE_BUSY has been
          * returned */
         do {
@@ -461,15 +471,15 @@ NSString *PLSqliteException = @"PLSqliteException";
                 ret = [self rollbackTransactionAndReturnError: outError];
             }                
         } while (_txBusy && sqlite3_get_autocommit(_sqlite) == 0);
-
+        
         /* No retry was requested. Terminate immediately. */
         if (!retry)
             break;
     };
-
+    
     /* Disabling monitoring of SQLITE_BUSY and return */
     _monitorTx = NO;
-
+    
     return ret;
 }
 
@@ -480,8 +490,28 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* from PLDatabase */
 - (BOOL) beginTransactionAndReturnError: (NSError **) error {
-    return [self executeUpdateAndReturnError: error statement: @"BEGIN DEFERRED"];
+    return [self beginTransactionWithIsolationLevel: PLDatabaseIsolationLevelReadComitted error: error];
 }
+
+/* from PLDatabase */
+- (BOOL) beginTransactionWithIsolationLevel: (PLDatabaseIsolationLevel) isolationLevel error: (NSError **) outError {
+    NSString *txStmt = @"BEGIN";
+
+    switch (isolationLevel) {
+        case PLDatabaseIsolationLevelReadUncomitted:
+        case PLDatabaseIsolationLevelReadComitted:
+            txStmt = @"BEGIN DEFERRED";
+            break;
+            
+        case PLDatabaseIsolationLevelRepeatableRead:
+        case PLDatabaseIsolationLevelSerializable:
+            txStmt = @"BEGIN EXCLUSIVE";
+            break;
+    }
+
+    return [self executeUpdateAndReturnError: outError statement: @"BEGIN DEFERRED"];
+}
+
 
 
 /* from PLDatabase. */
