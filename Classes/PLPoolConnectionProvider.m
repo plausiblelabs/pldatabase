@@ -94,10 +94,7 @@
      * error directly. We do this outside of the synchronized block to avoid any possibility of deadlock when calling
      * out to our backing provider. */
     if (db == nil) {
-        NSLog(@"No connections in %@", _connections);
         db = [_provider getConnectionAndReturnError: outError];
-    } else {
-        NSLog(@"Got a cached connection");
     }
 
     return db;

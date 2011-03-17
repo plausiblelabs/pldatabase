@@ -60,8 +60,6 @@
     _newVersion = newVersion;
     _shouldFail = shouldFail;
     
-    NSLog(@"%p SHOULD FAIL IS %@", self, _shouldFail ? @"YES" : @"NO");
-    
     return self;
 }
 
@@ -77,12 +75,10 @@
         return NO;
 
     if (_shouldFail) {
-        NSLog(@"%p FAIL", self);
         if (outError != NULL)
             *outError = [NSError errorWithDomain: PLDatabaseErrorDomain code: PLDatabaseErrorUnknown userInfo: nil];
         return NO;
     } else {
-        NSLog(@"%p DON'T FAIL", self);
         return YES;
     }
 }
