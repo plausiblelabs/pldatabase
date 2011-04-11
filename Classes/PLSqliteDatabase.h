@@ -82,6 +82,7 @@ extern NSString *PLSqliteException;
 - (int) lastErrorCode;
 - (NSString *) lastErrorMessage;
 
+- (void) resetTxBusy;
 - (void) setTxBusy;
 
 #ifdef PL_SQLITE_LEGACY_STMT_PREPARE

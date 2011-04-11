@@ -60,6 +60,19 @@ typedef enum {
     PLDatabaseIsolationLevelSerializable = 3
 } PLDatabaseIsolationLevel;
 
+typedef enum {
+    /** Request that the transaction be committed. */
+    PLDatabaseTransactionCommit = 0,
+
+    /** Request that the transaction be rolled back. The transaction will be automatically retried if the immediate
+     * previous database failure was caused by a deadlock condition. Return PLDatabaseTransactionRollbackDisableRetry to
+     * prevent retry behavior. */
+    PLDatabaseTransactionRollback = 1,
+
+    /** Request that the transaction be rolled back. It will not be retried. */
+    PLDatabaseTransactionRollbackDisableRetry = 2
+} PLDatabaseTransactionResult;
+
 /**
  * Protocol for interacting with an SQL database.
  *
@@ -178,12 +191,12 @@ typedef enum {
 - (id<PLResultSet>) executeQueryAndReturnError: (NSError **) error statement: (NSString *) statement, ...;
 
 /**
- * Begin a transaction and execute @a block. If the caller returns YES from @a block, and <em>any</em> database operation
- * within the transaction block fails due to the server reporting a dead-lock condition, the transaction will be rolled back,
- * immediately retried, and @a block will executed again. 
+ * Begin a transaction and execute @a block. If @a block returns PLDatabaseTransactionRollback, and
+ * the immediate proceeding database operation within the transaction block failed due to the server reporting a dead-lock
+ * condition, the transaction will be rolled back, immediately retried, and @a block will executed again. 
  *
- * @param block A block to be executed within the transaction. If the block returns YES, the transaction will be committed,
- * otherwise, the transaction will be rolled back.
+ * @param block A block to be executed within the transaction. If the block returns PLDatabaseTransactionCommit, the
+ * transaction will be committed, otherwise, the transaction will be rolled back and optionally retried.
  * @param outError If an error occurs executing the transaction, upon return contains an error object in the PLDatabaseErrorDomain
  * that describes the problem. Pass NULL if you do not want error information.
  
@@ -193,9 +206,10 @@ typedef enum {
  *
  * @par Automatic Retry
  *
- * If any operations within the transaction fail due to a dead-lock condition and @a block returns YES, the transaction
- * will be automatically retried. This means that @a block may be executed multiple times, and the block implementation
- * must be idempotent and free of unintended side-effects if run repeatedly.
+ * If the immediate proceeding operation within the transaction failed due to a dead-lock condition, the transaction
+ * will be automatically retried if PLDatabaseTransactionRollback is returned. This means that @a block may
+ * be executed multiple times, and the block implementation must be idempotent and free of unintended side-effects if
+ * run repeatedly.
  *
  * @par Isolation Level
  *
@@ -208,12 +222,12 @@ typedef enum {
  *
  * @warning The provided @a block may be executed multiple times and <em>must</em> be idempotent.
  */
-- (BOOL) performTransactionWithRetryBlock: (BOOL (^)()) block error: (NSError **) outError;
+- (BOOL) performTransactionWithRetryBlock: (PLDatabaseTransactionResult (^)()) block error: (NSError **) outError;
 
 /**
- * Begin a transaction and execute @a block. If the caller returns YES from @a block, and <em>any</em> database operation
- * within the transaction block fails due to the server reporting a dead-lock condition, the transaction will be rolled back,
- * immediately retried, and @a block will executed again. 
+ * Begin a transaction and execute @a block. If @a block returns PLDatabaseTransactionRollback, and
+ * the immediate proceeding database operation within the transaction block failed due to the server reporting a dead-lock
+ * condition, the transaction will be rolled back, immediately retried, and @a block will executed again. 
  *
  * @param isolationLevel The minimum isolation level to be used for this transaction.
  * @param block A block to be executed within the transaction. If the block returns YES, the transaction will be committed,
@@ -227,14 +241,15 @@ typedef enum {
  *
  * @par Automatic Retry
  *
- * If any operations within the transaction fail due to a dead-lock condition and @a block returns YES, the transaction
- * will be automatically retried. This means that @a block may be executed multiple times, and the block implementation
- * must be idempotent and free of unintended side-effects if run repeatedly.
+ * If the immediate proceeding operation within the transaction failed due to a dead-lock condition, the transaction
+ * will be automatically retried if PLDatabaseTransactionRollback is returned. This means that @a block may
+ * be executed multiple times, and the block implementation must be idempotent and free of unintended side-effects if
+ * run repeatedly.
  *
  * @warning The provided @a block may be executed multiple times and <em>must</em> be idempotent.
  */
 - (BOOL) performTransactionWithIsolationLevel: (PLDatabaseIsolationLevel) isolationLevel
-                                   retryBlock: (BOOL (^)()) block
+                                   retryBlock: (PLDatabaseTransactionResult (^)()) block
                                         error: (NSError **) outError;
 
 

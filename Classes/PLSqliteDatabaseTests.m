@@ -241,10 +241,10 @@
     NSError *error;
 
     __block int runCount = 0;
-    BOOL ret = [_db performTransactionWithRetryBlock: ^{
+    BOOL ret = [_db performTransactionWithRetryBlock: ^PLDatabaseTransactionResult {
         runCount++;
         STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
-        return NO;
+        return PLDatabaseTransactionRollbackDisableRetry;
     } error: &error];
 
     STAssertTrue(ret, @"Transaction failed: %@", error);
@@ -256,10 +256,10 @@
     NSError *error;
     
     __block int runCount = 0;
-    BOOL ret = [_db performTransactionWithRetryBlock: ^{
+    BOOL ret = [_db performTransactionWithRetryBlock: ^PLDatabaseTransactionResult {
         runCount++;
         STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
-        return YES;
+        return PLDatabaseTransactionCommit;
     } error: &error];
     
     STAssertTrue(ret, @"Transaction failed: %@", error);
@@ -272,15 +272,17 @@
     NSError *error;
     
     __block int runCount = 0;
-    BOOL ret = [_db performTransactionWithRetryBlock: ^{
+    BOOL ret = [_db performTransactionWithRetryBlock: ^PLDatabaseTransactionResult {
         runCount++;
         STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
         
         /* Trigger a fake SQLITE_BUSY retry. */
-        if (runCount < 2)
+        if (runCount < 2) {
             [_db setTxBusy];
+            return PLDatabaseTransactionRollback;
+        }
 
-        return YES;
+        return PLDatabaseTransactionCommit;
     } error: &error];
 
     STAssertTrue(ret, @"Transaction failed: %@", error);
@@ -293,7 +295,7 @@
     NSError *error;
     
     __block int runCount = 0;
-    BOOL ret = [_db performTransactionWithRetryBlock: ^{
+    BOOL ret = [_db performTransactionWithRetryBlock: ^PLDatabaseTransactionResult {
         runCount++;
         STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
 
@@ -301,7 +303,7 @@
         if (runCount < 2)
             [_db setTxBusy];
         
-        return NO;
+        return PLDatabaseTransactionRollbackDisableRetry;
     } error: &error];
     
     STAssertTrue(ret, @"Transaction failed: %@", error);
@@ -314,14 +316,14 @@
     NSError *error;
     
     __block int runCount = 0;
-    BOOL ret = [_db performTransactionWithRetryBlock: ^{
+    BOOL ret = [_db performTransactionWithRetryBlock: ^PLDatabaseTransactionResult {
         runCount++;
 
         /* Fake up a rollback. Normally this would happen due to a failed query. */
         if (runCount == 1)
             STAssertTrue([_db rollbackTransaction], @"Failed to rollback transaction");
     
-        return NO;
+        return PLDatabaseTransactionRollbackDisableRetry;
     } error: &error];
 
     STAssertTrue(ret, @"Transaction failed: %@", error);

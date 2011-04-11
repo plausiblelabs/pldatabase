@@ -370,12 +370,12 @@ NSString *PLSqliteException = @"PLSqliteException";
 #pragma mark Transactions
 
 /* from PLDatabase. */
-- (BOOL) performTransactionWithRetryBlock: (BOOL (^)()) block {
+- (BOOL) performTransactionWithRetryBlock: (PLDatabaseTransactionResult (^)()) block {
     return [self performTransactionWithRetryBlock: block error: NULL];
 }
 
 /* from PLDatabase. */
-- (BOOL) performTransactionWithRetryBlock: (BOOL (^)()) block error: (NSError **) outError {    
+- (BOOL) performTransactionWithRetryBlock: (PLDatabaseTransactionResult (^)()) block error: (NSError **) outError {    
     return [self performTransactionWithIsolationLevel: PLDatabaseIsolationLevelReadComitted 
                                            retryBlock: block 
                                                 error: outError];
@@ -383,7 +383,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* from PLDatabase. */
 - (BOOL) performTransactionWithIsolationLevel: (PLDatabaseIsolationLevel) isolationLevel
-                                   retryBlock: (BOOL (^)()) block
+                                   retryBlock: (PLDatabaseTransactionResult (^)()) block
                                         error: (NSError **) outError
 {
     /* */
@@ -400,27 +400,30 @@ NSString *PLSqliteException = @"PLSqliteException";
         }
 
         /*  Enable monitoring of SQLITE_BUSY and execute the block */
-        BOOL shouldCommit = NO;
+        PLDatabaseTransactionResult shouldCommit = NO;
         BOOL retry = NO;
         {
             _monitorTx = YES;
             _txBusy = NO;
 
             /* Run the user's transaction block. */
-            BOOL wantCommit = block();
+            PLDatabaseTransactionResult txResult = block();
 
-            if (_txBusy && wantCommit) {
+            if (_txBusy && txResult == PLDatabaseTransactionRollback) {
+                NSLog(@"Retry");
                 /* If we received SQLITE_BUSY but the user still wants a COMMIT, we need to ROLLBACK and retry. */
                 retry = YES;
                 shouldCommit = NO;
 
-            } else if (!wantCommit) {
+            } else if (txResult != PLDatabaseTransactionCommit) {
+                NSLog(@"Rollback (busy=%@)", _txBusy ? @"YES" : @"NO");
                 /* If the user doesn't want a COMMIT, nothing to do. We need to ROLLBACK and not retry. */
                 retry = NO;
                 shouldCommit = NO;
-                
-            } else if (!_txBusy && wantCommit) {
-                /* Otherwise, SQLITE_BUSY was not triggered, and the user wants a commit. We need to COMMIT and not retry. */
+
+            } else if (txResult == PLDatabaseTransactionCommit) {
+                NSLog(@"Commit");
+                /* Otherwise, the user wants a commit. We need to COMMIT and not retry. */
                 retry = NO;
                 shouldCommit = YES;
             }
@@ -505,7 +508,7 @@ NSString *PLSqliteException = @"PLSqliteException";
             
         case PLDatabaseIsolationLevelRepeatableRead:
         case PLDatabaseIsolationLevelSerializable:
-            txStmt = @"BEGIN EXCLUSIVE";
+            txStmt = @"BEGIN IMMEDIATE EXCLUSIVE";
             break;
     }
 
@@ -578,6 +581,16 @@ NSString *PLSqliteException = @"PLSqliteException";
  * Library Private PLSqliteDatabase methods
  */
 @implementation PLSqliteDatabase (PLSqliteDatabaseLibraryPrivate)
+
+/**
+ * @internal
+ *
+ * Inform the database that an sqlite3 API has returned !SQLITE_BUSY, and the internal busy flag should be
+ * reset.
+ */
+- (void) resetTxBusy {
+    _txBusy = NO;
+}
 
 /**
  * @internal
@@ -674,9 +687,12 @@ NSString *PLSqliteException = @"PLSqliteException";
     
     /* Prepare failed */
     if (ret != SQLITE_OK) {
-        /* Report a deadlock */
-        if (ret == SQLITE_BUSY)
+        /* Report deadlock status */
+        if (ret == SQLITE_BUSY) {
             [self setTxBusy];
+        } else {
+            [self resetTxBusy];
+        }
 
         [self populateError: error
               withErrorCode: PLDatabaseErrorInvalidStatement

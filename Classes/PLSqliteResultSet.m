@@ -125,6 +125,13 @@
     [self assertNotClosed];
     
     int ret = sqlite3_step(_sqlite_stmt);
+    
+    /* Inform the database of deadlock status */
+    if (ret == SQLITE_BUSY) {
+        [_stmt.database setTxBusy];
+    } else {
+        [_stmt.database resetTxBusy];
+    }
 
     /* No more rows available. */
     if (ret == SQLITE_DONE)
@@ -134,9 +141,7 @@
     if (ret == SQLITE_ROW)
         return PLResultSetStatusRow;
 
-    /* Inform the database of a deadlock */
-    if (ret == SQLITE_BUSY)
-        [_stmt.database setTxBusy];
+
 
     /* An error has occured */
     [_stmt populateError: error withErrorCode: PLDatabaseErrorQueryFailed description: NSLocalizedString(@"Could not retrieve the next result row", @"Generic result row error")];
