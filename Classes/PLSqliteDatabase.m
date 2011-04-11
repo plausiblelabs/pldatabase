@@ -31,6 +31,7 @@
 
 #import "PLSqlitePreparedStatement.h"
 #import "PLSqliteResultSet.h"
+#import "PLSqliteUnlockNotify.h"
 
 /* Keep trying for up to 10 minutes. We do not modify the busy timeout handler. */
 #define PL_SQLITE_BUSY_TIMEOUT 10 * 60 * 1000
@@ -50,11 +51,30 @@ NSString *PLSqliteException = @"PLSqliteException";
 /**
  * An SQLite PLDatabase driver.
  *
+ * @par Shared Cache and SQLite Unlock Notification Support
+ *
+ * If the SQLite library supports unlock notifications, PLSqliteDatabase will automatically handle SQLITE_LOCKED
+ * return values using mutexes and conditions to implement effecient locking and wake-up of blocked threads. When
+ * used in combination with SQLite's shared cache mode, this results in an enormous improvement in concurrent access
+ * performance when threads contend for write access to the database.
+ *
+ * For more information, please refer to the SQLite documentation:
+ * - http://www.sqlite.org/sharedcache.html
+ * - http://www.sqlite.org/unlock_notify.html
+ *
  * @par Thread Safety
- * PLSqliteDatabase instances implement no locking and must not be shared between threads
- * without external synchronization.
+ * PLSqliteDatabase instances implement no locking and must not be shared between threads without external
+ * synchronization.
  */
 @implementation PLSqliteDatabase
+
++ (void) initialize {
+    if (![[self class] isEqual: [PLSqliteDatabase class]])
+        return;
+
+    /* Initialize the notification system. */
+    pl_sqlite3_notify_init();
+}
 
 /**
  * Creates and returns an SQLite database with the provided
@@ -680,12 +700,12 @@ NSString *PLSqliteException = @"PLSqliteException";
         return sqlite_stmt;
 
     /* Prepare. */
-    ret = sqlite3_prepare_v2(_sqlite, [statement UTF8String], -1, &sqlite_stmt, &unused);
+    ret = pl_sqlite3_blocking_prepare_v2(_sqlite, [statement UTF8String], -1, &sqlite_stmt, &unused);
     
     /* Prepare failed */
     if (ret != SQLITE_OK) {
         /* Report deadlock status */
-        if (ret == SQLITE_BUSY) {
+        if (ret == SQLITE_BUSY || ret == SQLITE_LOCKED) {
             [self setTxBusy];
         } else {
             [self resetTxBusy];

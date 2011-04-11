@@ -275,7 +275,7 @@ typedef enum {
  * PostgreSQL's documentation:
  *    http://www.postgresql.org/docs/8.3/interactive/transaction-iso.html
  *
- * @param error A pointer to an NSError object variable. If an error occurs, this
+ * @param outError A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the transaction could not
  * be started.
  *

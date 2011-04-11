@@ -36,6 +36,12 @@
 
 /* Begin PBXBuildFile section */
 		0502A84D0DDE9F81006F4613 /* PLSqlitePreparedStatementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0502A84C0DDE9F81006F4613 /* PLSqlitePreparedStatementTests.m */; };
+		050C95421353AA9A0080FE20 /* PLSqliteUnlockNotify.m in Sources */ = {isa = PBXBuildFile; fileRef = 050C95401353AA9A0080FE20 /* PLSqliteUnlockNotify.m */; };
+		050C95431353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C95411353AA9A0080FE20 /* PLSqliteUnlockNotify.h */; };
+		050C95441353AA9A0080FE20 /* PLSqliteUnlockNotify.m in Sources */ = {isa = PBXBuildFile; fileRef = 050C95401353AA9A0080FE20 /* PLSqliteUnlockNotify.m */; };
+		050C95451353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C95411353AA9A0080FE20 /* PLSqliteUnlockNotify.h */; };
+		050C95461353AA9A0080FE20 /* PLSqliteUnlockNotify.m in Sources */ = {isa = PBXBuildFile; fileRef = 050C95401353AA9A0080FE20 /* PLSqliteUnlockNotify.m */; };
+		050C95471353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C95411353AA9A0080FE20 /* PLSqliteUnlockNotify.h */; };
 		051D157C0DD377F00083CC76 /* PlausibleDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */; };
 		054CBF370EE21C670043675E /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
 		054CBF380EE21C670043675E /* PLSqliteDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */; };
@@ -193,6 +199,8 @@
 		0502A8420DDE9EDD006F4613 /* PLSqlitePreparedStatement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqlitePreparedStatement.h; sourceTree = "<group>"; };
 		0502A8430DDE9EDD006F4613 /* PLSqlitePreparedStatement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqlitePreparedStatement.m; sourceTree = "<group>"; };
 		0502A84C0DDE9F81006F4613 /* PLSqlitePreparedStatementTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqlitePreparedStatementTests.m; sourceTree = "<group>"; };
+		050C95401353AA9A0080FE20 /* PLSqliteUnlockNotify.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteUnlockNotify.m; sourceTree = "<group>"; };
+		050C95411353AA9A0080FE20 /* PLSqliteUnlockNotify.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteUnlockNotify.h; sourceTree = "<group>"; };
 		051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabase.m; sourceTree = "<group>"; };
 		051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabaseTests.m; sourceTree = "<group>"; };
 		054CBF0D0EE21B2B0043675E /* libPlausibleDatabase-iphoneos.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPlausibleDatabase-iphoneos.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -389,6 +397,8 @@
 				05B76B031256403500BFB6DC /* PLSqliteStatementCache.h */,
 				05B76B041256403500BFB6DC /* PLSqliteStatementCache.m */,
 				05B76B3212564A0D00BFB6DC /* PLSqliteStatementCacheTests.m */,
+				050C95411353AA9A0080FE20 /* PLSqliteUnlockNotify.h */,
+				050C95401353AA9A0080FE20 /* PLSqliteUnlockNotify.m */,
 			);
 			name = SQLite;
 			sourceTree = "<group>";
@@ -473,6 +483,7 @@
 			files = (
 				05B76B071256403500BFB6DC /* PLSqliteStatementCache.h in Headers */,
 				054DCC7A132130ED005DFFE0 /* PLMigrationConnectionProvider.h in Headers */,
+				050C95451353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,6 +493,7 @@
 			files = (
 				05B76B091256403500BFB6DC /* PLSqliteStatementCache.h in Headers */,
 				054DCC7C132130ED005DFFE0 /* PLMigrationConnectionProvider.h in Headers */,
+				050C95471353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,6 +544,7 @@
 				0588B4E3131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */,
 				0588B5A2131EB11D00F6B60B /* PLPoolConnectionProvider.h in Headers */,
 				054DCC78132130ED005DFFE0 /* PLMigrationConnectionProvider.h in Headers */,
+				050C95431353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -727,7 +740,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Set the destroot\nDESTROOT=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}-${CURRENT_PROJECT_VERSION}\"\nmkdir -p \"${DESTROOT}\"\n\n# Per-platform framework destinations\nIPHONE_DEST=\"${DESTROOT}/iPhone Framework\"\nMAC_DEST=\"${DESTROOT}/Mac OS X Framework\"\nDOC_DEST=\"${DESTROOT}/Documentation\"\n\n# Populate the destroot\nmkdir -p \"${IPHONE_DEST}\"\ntar -C \"${BUILD_DIR}/${CONFIGURATION}-iphone\" -cf - \"PlausibleDatabase.framework\" | tar -C \"${IPHONE_DEST}\" -xf - \n\nmkdir -p \"${MAC_DEST}\"\ntar -C \"${BUILD_DIR}/${CONFIGURATION}-MacOSX\" -cf - \"PlausibleDatabase.framework\" | tar -C \"${MAC_DEST}\" -xf - \n\nif [ ! -z `which doxygen` ]; then\n\tpushd \"${SRCROOT}\" >/dev/null\n    doxygen\n    if [ $? != 0 ]; then\n        echo \"ERROR: Documentation generation failed\" >/dev/stderr\n        exit 1\n    fi\n\tpopd >/dev/null\n\n\trm -rf \"${DOC_DEST}\"\n\tmv docs \"${DOC_DEST}\"\nelse\n    echo \"WARNING: Doxygen not available, skipping documentation generation\" >/dev/stderr\nfi\n\n# Create the disk image\nrm -f \"${DESTROOT}.dmg\"\nhdiutil create -srcfolder \"${DESTROOT}\" \"${DESTROOT}.dmg\"";
+			shellScript = "# Set a PATH more likely to include doxygen\nexport PATH=\"${PATH}:/opt/local/bin\"\n\n# Set the destroot\nDESTROOT=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}-${CURRENT_PROJECT_VERSION}\"\nmkdir -p \"${DESTROOT}\"\n\n# Per-platform framework destinations\nIPHONE_DEST=\"${DESTROOT}/iPhone Framework\"\nMAC_DEST=\"${DESTROOT}/Mac OS X Framework\"\nDOC_DEST=\"${DESTROOT}/Documentation\"\n\n# Populate the destroot\nmkdir -p \"${IPHONE_DEST}\"\ntar -C \"${BUILD_DIR}/${CONFIGURATION}-iphone\" -cf - \"PlausibleDatabase.framework\" | tar -C \"${IPHONE_DEST}\" -xf - \n\nmkdir -p \"${MAC_DEST}\"\ntar -C \"${BUILD_DIR}/${CONFIGURATION}-MacOSX\" -cf - \"PlausibleDatabase.framework\" | tar -C \"${MAC_DEST}\" -xf - \n\nif [ ! -z `which doxygen` ]; then\n\tpushd \"${SRCROOT}\" >/dev/null\n    doxygen\n    if [ $? != 0 ]; then\n        echo \"ERROR: Documentation generation failed\" >/dev/stderr\n        exit 1\n    fi\n\tpopd >/dev/null\n\n\trm -rf \"${DOC_DEST}\"\n\tmv docs \"${DOC_DEST}\"\nelse\n    echo \"WARNING: Doxygen not available, skipping documentation generation\" >/dev/stderr\nfi\n\n# Create the disk image\nrm -f \"${DESTROOT}.dmg\"\nhdiutil create -srcfolder \"${DESTROOT}\" \"${DESTROOT}.dmg\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -746,6 +759,7 @@
 				05B76B081256403500BFB6DC /* PLSqliteStatementCache.m in Sources */,
 				0588B747131EC63200F6B60B /* PLPoolConnectionProvider.m in Sources */,
 				054DCC7B132130ED005DFFE0 /* PLMigrationConnectionProvider.m in Sources */,
+				050C95441353AA9A0080FE20 /* PLSqliteUnlockNotify.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -763,6 +777,7 @@
 				05B76B0A1256403500BFB6DC /* PLSqliteStatementCache.m in Sources */,
 				0588B748131EC63700F6B60B /* PLPoolConnectionProvider.m in Sources */,
 				054DCC7D132130ED005DFFE0 /* PLMigrationConnectionProvider.m in Sources */,
+				050C95461353AA9A0080FE20 /* PLSqliteUnlockNotify.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -805,6 +820,7 @@
 				05B76B061256403500BFB6DC /* PLSqliteStatementCache.m in Sources */,
 				0588B5A3131EB11D00F6B60B /* PLPoolConnectionProvider.m in Sources */,
 				054DCC79132130ED005DFFE0 /* PLMigrationConnectionProvider.m in Sources */,
+				050C95421353AA9A0080FE20 /* PLSqliteUnlockNotify.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

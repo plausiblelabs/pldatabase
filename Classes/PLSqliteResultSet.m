@@ -28,6 +28,7 @@
  */
 
 #import "PLSqliteResultSet.h"
+#import "PLSqliteUnlockNotify.h"
 
 /**
  * @internal
@@ -124,10 +125,10 @@
 - (PLResultSetStatus) nextAndReturnError: (NSError **) error {
     [self assertNotClosed];
     
-    int ret = sqlite3_step(_sqlite_stmt);
+    int ret = pl_sqlite3_blocking_step(_sqlite_stmt);
     
     /* Inform the database of deadlock status */
-    if (ret == SQLITE_BUSY) {
+    if (ret == SQLITE_BUSY || ret == SQLITE_LOCKED) {
         [_stmt.database setTxBusy];
     } else {
         [_stmt.database resetTxBusy];
