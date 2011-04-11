@@ -35,7 +35,6 @@
 @interface PLSqliteConnectionProviderTests : SenTestCase {
 @private
     NSString *_dbPath;
-    PLSqliteDatabase *_db;
 }
 @end
 
@@ -44,22 +43,36 @@
 - (void) setUp {
     /* Create a temporary file for the database. Secure -- user owns enclosing directory. */
     _dbPath = [[NSTemporaryDirectory() stringByAppendingPathComponent: [[NSProcessInfo processInfo] globallyUniqueString]] retain];
-    
-    /* Create the temporary database */
-    _db = [[PLSqliteDatabase alloc] initWithPath: _dbPath];
-    STAssertTrue([_db open], @"Could not open temporary database");
 }
 
 - (void) tearDown {
-    /* Close the open database file */
-    [_db close];
-
     /* Remove the temporary database file */
     STAssertTrue([[NSFileManager defaultManager] removeItemAtPath: _dbPath error: NULL], @"Could not clean up database %@", _dbPath);
 
     /* Release our objects */
     [_dbPath release];
-    [_db release];
+}
+
+- (void) testInitWithFlags {
+    PLSqliteConnectionProvider *provider;
+    id<PLDatabase> db;
+    NSError *error;
+
+    /* Create our delegate and request a connection. We use SQLITE_OPEN_EXCLUSIVE to test flag handling -- if set, the second open will fail on creation. */
+    provider = [[[PLSqliteConnectionProvider alloc] initWithPath: _dbPath flags: SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE|SQLITE_OPEN_EXCLUSIVE] autorelease];
+    db = [provider getConnectionAndReturnError: &error];
+    
+    /* Test the connection */
+    STAssertNotNil(db, @"Delegate returned nil: %@", error);
+    STAssertTrue([db goodConnection], @"Database connection claims to be bad.");
+    
+    /* Try to be polite */
+    [provider closeConnection: db];
+    STAssertFalse([db goodConnection], @"Connection should be closed");
+    
+    /* Create our second connection -- SQLITE_OPEN_EXCLUSIVE should ensure this fails, as the database already exists. */
+    db = [provider getConnectionAndReturnError: NULL];
+    STAssertNil(db, @"Database open flag was not specified -- provider created a database even though SQLITE_OPEN_CREATE|SQLITE_OPEN_EXCLUSIVE was set");
 }
 
 - (void) testInitWithPath {

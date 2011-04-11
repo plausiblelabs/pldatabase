@@ -36,8 +36,15 @@
 @private
     /** Path to backing database */
     NSString *_dbPath;
+
+    /** SQLite open flags. */
+    int _flags;
+
+    /** If NO, ignore _flags and allow the database driver to set the default flags. */
+    BOOL _useFlags;
 }
 
 - (id) initWithPath: (NSString *) dbPath;
+- (id) initWithPath: (NSString *) dbPath flags: (int) flags;
 
 @end

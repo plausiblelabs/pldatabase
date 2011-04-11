@@ -40,24 +40,53 @@
  */
 @implementation PLSqliteConnectionProvider
 
+/*
+ * Private initializer.
+ *
+ * @param dbPath Path to the sqlite database file.
+ * @param flags The SQLite-defined flags that will be passed directly to sqlite3_open_v2() or an equivalent API.
+ * @return YES if the database was successfully opened, NO on failure.
+ * @param useFlags If NO, the @a flags argument will be ignored.
+ */
+- (id) initWithPath: (NSString *) dbPath flags: (int) flags useFlags: (BOOL) useFlags {
+    if ((self = [super init]) == nil)
+        return nil;
+    
+    /* Path to our backing database */
+    _dbPath = [dbPath retain];
+    _flags = flags;
+    _useFlags = useFlags;
+    
+    return self;
+}
+
 /**
  * Initialize the database connection delegate with the provided
  * file path.
  *
  * @param dbPath Path to the sqlite database file.
- *
- * @par Designated Initializer
- * This method is the designated initializer for the PLSqliteConnectionProvider class.
  */
 - (id) initWithPath: (NSString *) dbPath {
-    if ((self = [super init]) == nil)
-        return nil;
-
-    /* Path to our backing database */
-    _dbPath = [dbPath retain];
-
-    return self;
+    return [self initWithPath: dbPath flags: 0 useFlags: NO];
 }
+
+/**
+ * Initialize the database connection delegate with the provided
+ * file path.
+ *
+ * @param dbPath Path to the sqlite database file.
+ * @param flags The SQLite-defined flags that will be passed directly to sqlite3_open_v2() or an equivalent API.
+ * @return YES if the database was successfully opened, NO on failure.
+ *
+ * @par Supported Flags
+ * The flags supported by SQLite are defined in the SQLite C API Documentation:
+ * http://www.sqlite.org/c3ref/open.html
+ */
+- (id) initWithPath: (NSString *) dbPath flags: (int) flags {
+    return [self initWithPath: dbPath flags: flags useFlags: YES];
+}
+
+
 
 - (void) dealloc {
     [_dbPath release];
@@ -71,7 +100,16 @@
 
     /* Create and attempt to open */
     database = [[[PLSqliteDatabase alloc] initWithPath: _dbPath] autorelease];
-    if (![database openAndReturnError: error]) {
+
+    /* Open with the correct flags (or the default flags) */
+    BOOL ret;
+    if (_useFlags) {
+        ret = [database openWithFlags: _flags error: error];
+    } else {
+        ret = [database openAndReturnError: error];
+    }
+
+    if (!ret) {
         /* Error was filled in, simply return nil */
         return nil;
     }
