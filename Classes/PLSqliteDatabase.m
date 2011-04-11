@@ -410,19 +410,16 @@ NSString *PLSqliteException = @"PLSqliteException";
             PLDatabaseTransactionResult txResult = block();
 
             if (_txBusy && txResult == PLDatabaseTransactionRollback) {
-                NSLog(@"Retry");
                 /* If we received SQLITE_BUSY but the user still wants a COMMIT, we need to ROLLBACK and retry. */
                 retry = YES;
                 shouldCommit = NO;
 
             } else if (txResult != PLDatabaseTransactionCommit) {
-                NSLog(@"Rollback (busy=%@)", _txBusy ? @"YES" : @"NO");
                 /* If the user doesn't want a COMMIT, nothing to do. We need to ROLLBACK and not retry. */
                 retry = NO;
                 shouldCommit = NO;
 
             } else if (txResult == PLDatabaseTransactionCommit) {
-                NSLog(@"Commit");
                 /* Otherwise, the user wants a commit. We need to COMMIT and not retry. */
                 retry = NO;
                 shouldCommit = YES;
