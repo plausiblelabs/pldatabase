@@ -157,10 +157,6 @@ NSString *PLSqliteException = @"PLSqliteException";
  * Opens the database connection, and returns any errors. May be called once and only once.
  *
  * @param flags The SQLite-defined flags that will be passed directly to sqlite3_open_v2() or an equivalent API.
- * @param error A pointer to an NSError object variable. If an error occurs, this
- * pointer will contain an error object indicating why the database could
- * not be opened. If no error occurs, this parameter will be left unmodified.
- * You may specify NULL for this parameter, and no error information will be provided.
  *
  * @return YES if the database was successfully opened, NO on failure.
  *

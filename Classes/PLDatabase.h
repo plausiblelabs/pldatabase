@@ -199,7 +199,7 @@ typedef enum {
  * transaction will be committed, otherwise, the transaction will be rolled back and optionally retried.
  * @param outError If an error occurs executing the transaction, upon return contains an error object in the PLDatabaseErrorDomain
  * that describes the problem. Pass NULL if you do not want error information.
- 
+ *
  * @return YES if the transaction is successfully committed or rolled back, or NO on failure. Note that a return value of
  * YES <em>does not</em> signify that the transaction was committed, but rather, that no database error occured either committing
  * or rolling back the transaction.
@@ -283,12 +283,15 @@ typedef enum {
  * parameter, and no error information will be provided.
  * @return YES on success, NO on failure.
  */
-- (BOOL) beginTransactionAndReturnError: (NSError **) error;
+- (BOOL) beginTransactionAndReturnError: (NSError **) outError;
 
 /**
  * Begin a transaction.
  *
  * @param isolationLevel The minimum isolation level to be used for this transaction.
+ * @param outError A pointer to an NSError object variable. If an error occurs, this
+ * pointer will contain an error object indicating why the transaction could not
+ * be started.
  *
  * @return YES on success, NO on failure.
  */

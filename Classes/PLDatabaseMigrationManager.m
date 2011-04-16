@@ -100,6 +100,7 @@
 /**
  * Perform any pending migrations on @a database using the receiver's PLDatabaseMigrationDelegate.
  *
+ * @param db The database connection upon which migrations will be performed.
  * @param outError A pointer to an NSError object variable. If an error occurs, this
  * pointer will contain an error object indicating why the migration could not be completed.
  * If no error occurs, this parameter will be left unmodified. You may specify NULL for this
