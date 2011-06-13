@@ -118,11 +118,13 @@
 		058ABCE30DE63A4B00C995C9 /* PlausibleDatabase.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */; };
 		05B66B4713A666B8004F433B /* PLFilterConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B66B4513A666B8004F433B /* PLFilterConnectionProvider.h */; };
 		05B66B4813A666B8004F433B /* PLFilterConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B66B4613A666B8004F433B /* PLFilterConnectionProvider.m */; };
-		05B66B4913A666B8004F433B /* PLFilterConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B66B4513A666B8004F433B /* PLFilterConnectionProvider.h */; };
+		05B66B4913A666B8004F433B /* PLFilterConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B66B4513A666B8004F433B /* PLFilterConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B66B4A13A666B8004F433B /* PLFilterConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B66B4613A666B8004F433B /* PLFilterConnectionProvider.m */; };
 		05B66B4B13A666B8004F433B /* PLFilterConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B66B4513A666B8004F433B /* PLFilterConnectionProvider.h */; };
 		05B66B4C13A666B8004F433B /* PLFilterConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B66B4613A666B8004F433B /* PLFilterConnectionProvider.m */; };
 		05B66B6413A66A60004F433B /* PLFilterConnectionProviderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B66B6313A66A60004F433B /* PLFilterConnectionProviderTests.m */; };
+		05B66B8313A66C68004F433B /* PLFilterConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B66B4513A666B8004F433B /* PLFilterConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05B66B8413A66C87004F433B /* PLSqliteUnlockNotify.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C95411353AA9A0080FE20 /* PLSqliteUnlockNotify.h */; };
 		05B76B051256403500BFB6DC /* PLSqliteStatementCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B76B031256403500BFB6DC /* PLSqliteStatementCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B76B061256403500BFB6DC /* PLSqliteStatementCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B76B041256403500BFB6DC /* PLSqliteStatementCache.m */; };
 		05B76B071256403500BFB6DC /* PLSqliteStatementCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B76B031256403500BFB6DC /* PLSqliteStatementCache.h */; };
@@ -540,8 +542,10 @@
 				05534D3A104CBFFE00647A44 /* PLDatabaseMigrationTransactionManager.h in Headers */,
 				05B76B711256503300BFB6DC /* PLSqliteStatementCache.h in Headers */,
 				0588B4E4131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */,
+				05B66B8313A66C68004F433B /* PLFilterConnectionProvider.h in Headers */,
 				0588B5A0131EB11D00F6B60B /* PLPoolConnectionProvider.h in Headers */,
 				0572762D1325352900156E85 /* PLMigrationConnectionProvider.h in Headers */,
+				05B66B8413A66C87004F433B /* PLSqliteUnlockNotify.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
