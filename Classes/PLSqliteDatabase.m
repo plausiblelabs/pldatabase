@@ -525,7 +525,7 @@ NSString *PLSqliteException = @"PLSqliteException";
             break;
     }
 
-    return [self executeUpdateAndReturnError: outError statement: @"BEGIN DEFERRED"];
+    return [self executeUpdateAndReturnError: outError statement: txStmt];
 }
 
 
