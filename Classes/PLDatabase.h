@@ -41,11 +41,11 @@
  */
 typedef enum {
     /** Statements can read rows that have been modified by other transactions and have not yet been committed. */
-    PLDatabaseIsolationLevelReadUncomitted = 0,
+    PLDatabaseIsolationLevelReadUncommitted = 0,
 
     /** Statements cannot read changes that have not been committed by other transactions. Changes that
      * have been comitted will be readable. */
-    PLDatabaseIsolationLevelReadComitted = 1,
+    PLDatabaseIsolationLevelReadCommitted = 1,
 
     /** Statements cannot read changes that have not been committed by other transactions, and no other transactions
      * may modify data that has been read by the current transaction until the current transaction is completed. */

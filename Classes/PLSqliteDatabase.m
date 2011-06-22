@@ -392,7 +392,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* from PLDatabase. */
 - (BOOL) performTransactionWithRetryBlock: (PLDatabaseTransactionResult (^)()) block error: (NSError **) outError {    
-    return [self performTransactionWithIsolationLevel: PLDatabaseIsolationLevelReadComitted 
+    return [self performTransactionWithIsolationLevel: PLDatabaseIsolationLevelReadCommitted 
                                            retryBlock: block 
                                                 error: outError];
 }
@@ -506,7 +506,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* from PLDatabase */
 - (BOOL) beginTransactionAndReturnError: (NSError **) error {
-    return [self beginTransactionWithIsolationLevel: PLDatabaseIsolationLevelReadComitted error: error];
+    return [self beginTransactionWithIsolationLevel: PLDatabaseIsolationLevelReadCommitted error: error];
 }
 
 /* from PLDatabase */
@@ -514,8 +514,8 @@ NSString *PLSqliteException = @"PLSqliteException";
     NSString *txStmt = @"BEGIN";
 
     switch (isolationLevel) {
-        case PLDatabaseIsolationLevelReadUncomitted:
-        case PLDatabaseIsolationLevelReadComitted:
+        case PLDatabaseIsolationLevelReadUncommitted:
+        case PLDatabaseIsolationLevelReadCommitted:
             txStmt = @"BEGIN DEFERRED";
             break;
             
