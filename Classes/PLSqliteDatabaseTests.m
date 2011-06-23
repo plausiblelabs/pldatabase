@@ -330,6 +330,21 @@
     STAssertEquals(1, runCount, @"Transaction block was not run once");
 }
 
+- (void) testBeginTransactionWithIsolationLevel {
+    NSError *error;
+    STAssertTrue([_db beginTransactionWithIsolationLevel: PLDatabaseIsolationLevelReadCommitted error: &error], @"Could not start a transaction: %@", error);
+    STAssertTrue([_db rollbackTransactionAndReturnError: &error], @"Could not roll back transaction: %@", error);
+
+    STAssertTrue([_db beginTransactionWithIsolationLevel: PLDatabaseIsolationLevelReadUncommitted error: &error], @"Could not start a transaction: %@", error);
+    STAssertTrue([_db rollbackTransactionAndReturnError: &error], @"Could not roll back transaction: %@", error);
+    
+    STAssertTrue([_db beginTransactionWithIsolationLevel: PLDatabaseIsolationLevelSerializable error: &error], @"Could not start a transaction: %@", error);
+    STAssertTrue([_db rollbackTransactionAndReturnError: &error], @"Could not roll back transaction: %@", error);
+    
+    STAssertTrue([_db beginTransactionWithIsolationLevel: PLDatabaseIsolationLevelRepeatableRead error: &error], @"Could not start a transaction: %@", error);
+    STAssertTrue([_db rollbackTransactionAndReturnError: &error], @"Could not roll back transaction: %@", error);
+}
+
 - (void) testBeginAndRollbackTransaction {
     STAssertTrue([_db beginTransaction], @"Could not start a transaction");
     STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Could not create test table");
