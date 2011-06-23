@@ -521,7 +521,7 @@ NSString *PLSqliteException = @"PLSqliteException";
             
         case PLDatabaseIsolationLevelRepeatableRead:
         case PLDatabaseIsolationLevelSerializable:
-            txStmt = @"BEGIN IMMEDIATE EXCLUSIVE";
+            txStmt = @"BEGIN EXCLUSIVE";
             break;
     }
 
