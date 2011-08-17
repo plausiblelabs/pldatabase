@@ -29,13 +29,13 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-#import "PLMigrationConnectionProvider.h"
+#import "PLDatabaseMigrationConnectionProvider.h"
 #import "PLSqliteConnectionProvider.h"
 #import "PLSqliteMigrationManager.h"
 
 #define TEST_VERSION 42
 
-@interface PLMigrationConnectionProviderTests : SenTestCase <PLDatabaseMigrationDelegate> {
+@interface PLDatabaseMigrationConnectionProviderTests : SenTestCase <PLDatabaseMigrationDelegate> {
 @private
 }
 
@@ -45,13 +45,13 @@
 /**
  * PLDatabaseMigrationConnectionProvider Tests
  */
-@implementation PLMigrationConnectionProviderTests
+@implementation PLDatabaseMigrationConnectionProviderTests
 
 /**
  * Test simple migration
  */
 - (void) testMigrate {
-    PLMigrationConnectionProvider *mprov;
+    PLDatabaseMigrationConnectionProvider *mprov;
     PLSqliteMigrationManager *sqliteMgr;
     PLSqliteConnectionProvider *prov;
     PLDatabaseMigrationManager *mgr;
@@ -64,7 +64,7 @@
 
     /* Set up the connection providers */
     prov = [[[PLSqliteConnectionProvider alloc] initWithPath: @""] autorelease];
-    mprov = [[[PLMigrationConnectionProvider alloc] initWithConnectionProvider: prov
+    mprov = [[[PLDatabaseMigrationConnectionProvider alloc] initWithConnectionProvider: prov
                                                                       migrationManager: mgr] autorelease];
 
     /* Try fetching a connection, and verify that it has been migrated. */

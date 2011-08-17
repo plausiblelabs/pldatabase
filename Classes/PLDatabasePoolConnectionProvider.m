@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PLPoolConnectionProvider.h"
+#import "PLDatabasePoolConnectionProvider.h"
 
 /**
  * Provides a size-constrained thread-safe database connection pool.
@@ -35,7 +35,7 @@
  * @par Thread Safety
  * Thread-safe. May be used from any thread.
  */
-@implementation PLPoolConnectionProvider
+@implementation PLDatabasePoolConnectionProvider
 
 /**
  * Initialize a new instance with the provided connection provider and capacity.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2008-2011 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,59 +27,67 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "PLFilterConnectionProvider.h"
+#import "PLDatabaseMigrationConnectionProvider.h"
+
 
 /**
- * Provides a filtering database connection provider that supports modification of PLDatabase connections as they are
- * returned from a backing PLDatabaseConnectionProvider.
+ *
+ * The PLDatabaseMigrationConnectionProvider implements the PLDatabaseConnectionProvider protocol, providing
+ * transactional migration of all returned connections via the PLDatabaseMigrationManager API.
+ *
+ * Connections are acquired (and returned) to a backing PLDatabaseConnectionProvider, and providers may be arbitrarily
+ * stacked; for instance, a PLDatabaseMigrationConnectionProvider may be wrapped by a PLDatabaseConnectionPool, thus pooling
+ * migrated connections.
  *
  * @par Thread Safety
  * Thread-safe. May be used from any thread.
  */
-@implementation PLFilterConnectionProvider
-
+@implementation PLDatabaseMigrationConnectionProvider
 
 /**
- * Initialize a new instance with the provided connection provider and filter block.
+ * Initialize a new migration connection provider.
  *
- * @param provider A connection provider that will be used to acquire new database connections.
- * @param filterBlock The filter block to be called for each returned database connection.
+ * @param conProv The connection provider to be used to acquire and perform migrations upon new connections.
+ * @param migrationManager The migration manager to be used to perform migrations on connections acquired from @a conProv.
  */
-- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) provider filterBlock: (void (^)(id<PLDatabase> db)) block {
+- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) conProv
+                 migrationManager: (PLDatabaseMigrationManager *) migrationManager
+{
     if ((self = [super init]) == nil)
         return nil;
-
-    _provider = [provider retain];
-    _filterBlock = [block copy];
+    
+    _conProv = [conProv retain];
+    _migrationMgr = [migrationManager retain];
 
     return self;
 }
 
 - (void) dealloc {
-    [_provider release];
-    [_filterBlock release];
+    [_conProv release];
+    [_migrationMgr release];
 
     [super dealloc];
 }
 
 // from PLDatabaseConnectionProvider protocol
 - (id<PLDatabase>) getConnectionAndReturnError: (NSError **) outError {
-    /* Attempt to fetch the connection */
-    id<PLDatabase> db = [_provider getConnectionAndReturnError: outError];
+    /* Get the database connection */
+    id<PLDatabase> db = [_conProv getConnectionAndReturnError: outError];
     if (db == nil)
         return nil;
-    
-    /* Apply a filter block */
-    _filterBlock(db);
 
-    /* Return the filtered connection */
+    /* Run migrations */
+    if (![_migrationMgr migrateDatabase: db error: outError])
+        return nil;
+
+    /* Success! */
     return db;
 }
 
-
 // from PLDatabaseConnectionProvider protocol
 - (void) closeConnection: (id<PLDatabase>) connection {
-    [_provider closeConnection: connection];
+    /* Simply hand the connection back to the backing provider. */
+    [_conProv closeConnection: connection];
 }
 
 @end

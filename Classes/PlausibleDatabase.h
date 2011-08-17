@@ -63,9 +63,10 @@
 
 #import "PLDatabaseConnectionProvider.h"
 
-#import "PLFilterConnectionProvider.h"
-#import "PLPoolConnectionProvider.h"
-#import "PLMigrationConnectionProvider.h"
+#import "PLDatabaseFilterConnectionProvider.h"
+#import "PLDatabasePoolConnectionProvider.h"
+#import "PLDatabaseMigrationConnectionProvider.h"
+
 #import "PLSqliteConnectionProvider.h"
 
 #import "PLDatabaseMigrationVersionManager.h"

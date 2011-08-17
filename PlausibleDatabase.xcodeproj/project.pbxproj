@@ -60,12 +60,12 @@
 		054CBF450EE21CA10043675E /* PLSqliteMigrationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05D196660EAFC9C800F7079D /* PLSqliteMigrationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054CBF460EE21CBE0043675E /* PLDatabaseConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9940EAEED94003F848A /* PLDatabaseConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054CBF470EE21CC20043675E /* PLDatabaseMigrationTransactionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05BE86970EC2D7BE00CCAA2A /* PLDatabaseMigrationTransactionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		054DCC78132130ED005DFFE0 /* PLMigrationConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DCC76132130ED005DFFE0 /* PLMigrationConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		054DCC79132130ED005DFFE0 /* PLMigrationConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 054DCC77132130ED005DFFE0 /* PLMigrationConnectionProvider.m */; };
-		054DCC7A132130ED005DFFE0 /* PLMigrationConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DCC76132130ED005DFFE0 /* PLMigrationConnectionProvider.h */; };
-		054DCC7B132130ED005DFFE0 /* PLMigrationConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 054DCC77132130ED005DFFE0 /* PLMigrationConnectionProvider.m */; };
-		054DCC7C132130ED005DFFE0 /* PLMigrationConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DCC76132130ED005DFFE0 /* PLMigrationConnectionProvider.h */; };
-		054DCC7D132130ED005DFFE0 /* PLMigrationConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 054DCC77132130ED005DFFE0 /* PLMigrationConnectionProvider.m */; };
+		054DCC78132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DCC76132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		054DCC79132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 054DCC77132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m */; };
+		054DCC7A132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DCC76132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h */; };
+		054DCC7B132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 054DCC77132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m */; };
+		054DCC7C132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DCC76132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h */; };
+		054DCC7D132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 054DCC77132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m */; };
 		0551CA780DCBED7A00E31E46 /* PLSqliteDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */; };
 		05534D2D104CBFFE00647A44 /* PlausibleDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05534D2E104CBFFE00647A44 /* PLDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA660DCBEC1500E31E46 /* PLDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -81,8 +81,8 @@
 		05534D38104CBFFE00647A44 /* PLSqliteMigrationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05D196660EAFC9C800F7079D /* PLSqliteMigrationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05534D39104CBFFE00647A44 /* PLDatabaseConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9940EAEED94003F848A /* PLDatabaseConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05534D3A104CBFFE00647A44 /* PLDatabaseMigrationTransactionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 05BE86970EC2D7BE00CCAA2A /* PLDatabaseMigrationTransactionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		057275AB132164F500156E85 /* PLMigrationConnectionProviderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 057275AA132164F500156E85 /* PLMigrationConnectionProviderTests.m */; };
-		0572762D1325352900156E85 /* PLMigrationConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DCC76132130ED005DFFE0 /* PLMigrationConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		057275AB132164F500156E85 /* PLDatabaseMigrationConnectionProviderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 057275AA132164F500156E85 /* PLDatabaseMigrationConnectionProviderTests.m */; };
+		0572762D1325352900156E85 /* PLDatabaseMigrationConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DCC76132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05782A0B0EE25FF60039276A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0578285F0EE2520F0039276A /* libsqlite3.dylib */; };
 		05782A120EE260490039276A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0578285F0EE2520F0039276A /* libsqlite3.dylib */; };
 		0578D99B0EAEEECB003F848A /* PLSqliteConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0578D9980EAEEECB003F848A /* PLSqliteConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -97,13 +97,13 @@
 		058196B60DD16BDC001E992F /* PLSqliteResultSetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */; };
 		0588B4E3131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B4E2131EAB8500F6B60B /* PLDatabaseConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0588B4E4131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B4E2131EAB8500F6B60B /* PLDatabaseConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0588B5A0131EB11D00F6B60B /* PLPoolConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B59E131EB11D00F6B60B /* PLPoolConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0588B5A1131EB11D00F6B60B /* PLPoolConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B59F131EB11D00F6B60B /* PLPoolConnectionProvider.m */; };
-		0588B5A2131EB11D00F6B60B /* PLPoolConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B59E131EB11D00F6B60B /* PLPoolConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0588B5A3131EB11D00F6B60B /* PLPoolConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B59F131EB11D00F6B60B /* PLPoolConnectionProvider.m */; };
-		0588B5BC131EB4C900F6B60B /* PLPoolConnectionProviderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B5BB131EB4C900F6B60B /* PLPoolConnectionProviderTests.m */; };
-		0588B747131EC63200F6B60B /* PLPoolConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B59F131EB11D00F6B60B /* PLPoolConnectionProvider.m */; };
-		0588B748131EC63700F6B60B /* PLPoolConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B59F131EB11D00F6B60B /* PLPoolConnectionProvider.m */; };
+		0588B5A0131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B59E131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0588B5A1131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B59F131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.m */; };
+		0588B5A2131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0588B59E131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0588B5A3131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B59F131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.m */; };
+		0588B5BC131EB4C900F6B60B /* PLDatabasePoolConnectionProviderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B5BB131EB4C900F6B60B /* PLDatabasePoolConnectionProviderTests.m */; };
+		0588B747131EC63200F6B60B /* PLDatabasePoolConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B59F131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.m */; };
+		0588B748131EC63700F6B60B /* PLDatabasePoolConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0588B59F131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.m */; };
 		058ABBA20DE637FD00C995C9 /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
 		058ABBA70DE6380E00C995C9 /* PlausibleDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		058ABBA80DE6381000C995C9 /* PLDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0551CA660DCBEC1500E31E46 /* PLDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -116,14 +116,14 @@
 		058ABBC70DE6385F00C995C9 /* PLSqliteResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 058196AF0DD16BDC001E992F /* PLSqliteResultSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		058ABBC80DE6386000C995C9 /* PLSqliteResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 058196B00DD16BDC001E992F /* PLSqliteResultSet.m */; };
 		058ABCE30DE63A4B00C995C9 /* PlausibleDatabase.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */; };
-		05B66B4713A666B8004F433B /* PLFilterConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B66B4513A666B8004F433B /* PLFilterConnectionProvider.h */; };
-		05B66B4813A666B8004F433B /* PLFilterConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B66B4613A666B8004F433B /* PLFilterConnectionProvider.m */; };
-		05B66B4913A666B8004F433B /* PLFilterConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B66B4513A666B8004F433B /* PLFilterConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05B66B4A13A666B8004F433B /* PLFilterConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B66B4613A666B8004F433B /* PLFilterConnectionProvider.m */; };
-		05B66B4B13A666B8004F433B /* PLFilterConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B66B4513A666B8004F433B /* PLFilterConnectionProvider.h */; };
-		05B66B4C13A666B8004F433B /* PLFilterConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B66B4613A666B8004F433B /* PLFilterConnectionProvider.m */; };
-		05B66B6413A66A60004F433B /* PLFilterConnectionProviderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B66B6313A66A60004F433B /* PLFilterConnectionProviderTests.m */; };
-		05B66B8313A66C68004F433B /* PLFilterConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B66B4513A666B8004F433B /* PLFilterConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05B66B4713A666B8004F433B /* PLDatabaseFilterConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B66B4513A666B8004F433B /* PLDatabaseFilterConnectionProvider.h */; };
+		05B66B4813A666B8004F433B /* PLDatabaseFilterConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B66B4613A666B8004F433B /* PLDatabaseFilterConnectionProvider.m */; };
+		05B66B4913A666B8004F433B /* PLDatabaseFilterConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B66B4513A666B8004F433B /* PLDatabaseFilterConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05B66B4A13A666B8004F433B /* PLDatabaseFilterConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B66B4613A666B8004F433B /* PLDatabaseFilterConnectionProvider.m */; };
+		05B66B4B13A666B8004F433B /* PLDatabaseFilterConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B66B4513A666B8004F433B /* PLDatabaseFilterConnectionProvider.h */; };
+		05B66B4C13A666B8004F433B /* PLDatabaseFilterConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B66B4613A666B8004F433B /* PLDatabaseFilterConnectionProvider.m */; };
+		05B66B6413A66A60004F433B /* PLDatabaseFilterConnectionProviderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B66B6313A66A60004F433B /* PLDatabaseFilterConnectionProviderTests.m */; };
+		05B66B8313A66C68004F433B /* PLDatabaseFilterConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B66B4513A666B8004F433B /* PLDatabaseFilterConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B66B8413A66C87004F433B /* PLSqliteUnlockNotify.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C95411353AA9A0080FE20 /* PLSqliteUnlockNotify.h */; };
 		05B76B051256403500BFB6DC /* PLSqliteStatementCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B76B031256403500BFB6DC /* PLSqliteStatementCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B76B061256403500BFB6DC /* PLSqliteStatementCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B76B041256403500BFB6DC /* PLSqliteStatementCache.m */; };
@@ -214,8 +214,8 @@
 		051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabaseTests.m; sourceTree = "<group>"; };
 		054CBF0D0EE21B2B0043675E /* libPlausibleDatabase-iphoneos.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPlausibleDatabase-iphoneos.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		054CBF160EE21B570043675E /* libPlausibleDatabase-iphonesimulator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPlausibleDatabase-iphonesimulator.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		054DCC76132130ED005DFFE0 /* PLMigrationConnectionProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLMigrationConnectionProvider.h; sourceTree = "<group>"; };
-		054DCC77132130ED005DFFE0 /* PLMigrationConnectionProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLMigrationConnectionProvider.m; sourceTree = "<group>"; };
+		054DCC76132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabaseMigrationConnectionProvider.h; sourceTree = "<group>"; };
+		054DCC77132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLDatabaseMigrationConnectionProvider.m; sourceTree = "<group>"; };
 		0551CA4B0DCBE9F600E31E46 /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551CA600DCBEBA000E31E46 /* PlausibleDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlausibleDatabase.h; sourceTree = "<group>"; };
 		0551CA660DCBEC1500E31E46 /* PLDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabase.h; sourceTree = "<group>"; };
@@ -223,7 +223,7 @@
 		0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteDatabase.m; sourceTree = "<group>"; };
 		0551CA6D0DCBECB600E31E46 /* PLSqliteDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteDatabaseTests.m; sourceTree = "<group>"; };
 		05534D21104CBFB700647A44 /* PlausibleDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlausibleDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		057275AA132164F500156E85 /* PLMigrationConnectionProviderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLMigrationConnectionProviderTests.m; sourceTree = "<group>"; };
+		057275AA132164F500156E85 /* PLDatabaseMigrationConnectionProviderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLDatabaseMigrationConnectionProviderTests.m; sourceTree = "<group>"; };
 		0578285F0EE2520F0039276A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = /usr/lib/libsqlite3.dylib; sourceTree = "<absolute>"; };
 		057828660EE2524B0039276A /* PlausibleDatabase-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PlausibleDatabase-Info.plist"; sourceTree = "<group>"; };
 		057828670EE2524B0039276A /* Tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
@@ -241,14 +241,14 @@
 		058196B00DD16BDC001E992F /* PLSqliteResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSet.m; sourceTree = "<group>"; };
 		058196B10DD16BDC001E992F /* PLSqliteResultSetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteResultSetTests.m; sourceTree = "<group>"; };
 		0588B4E2131EAB8500F6B60B /* PLDatabaseConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabaseConstants.h; sourceTree = "<group>"; };
-		0588B59E131EB11D00F6B60B /* PLPoolConnectionProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLPoolConnectionProvider.h; sourceTree = "<group>"; };
-		0588B59F131EB11D00F6B60B /* PLPoolConnectionProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLPoolConnectionProvider.m; sourceTree = "<group>"; };
-		0588B5BB131EB4C900F6B60B /* PLPoolConnectionProviderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLPoolConnectionProviderTests.m; sourceTree = "<group>"; };
+		0588B59E131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabasePoolConnectionProvider.h; sourceTree = "<group>"; };
+		0588B59F131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLDatabasePoolConnectionProvider.m; sourceTree = "<group>"; };
+		0588B5BB131EB4C900F6B60B /* PLDatabasePoolConnectionProviderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLDatabasePoolConnectionProviderTests.m; sourceTree = "<group>"; };
 		058ABB640DE6361300C995C9 /* PlausibleDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlausibleDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05939BCD0DCBFDA0004FEA21 /* PLResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLResultSet.h; sourceTree = "<group>"; };
-		05B66B4513A666B8004F433B /* PLFilterConnectionProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLFilterConnectionProvider.h; sourceTree = "<group>"; };
-		05B66B4613A666B8004F433B /* PLFilterConnectionProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLFilterConnectionProvider.m; sourceTree = "<group>"; };
-		05B66B6313A66A60004F433B /* PLFilterConnectionProviderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLFilterConnectionProviderTests.m; sourceTree = "<group>"; };
+		05B66B4513A666B8004F433B /* PLDatabaseFilterConnectionProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabaseFilterConnectionProvider.h; sourceTree = "<group>"; };
+		05B66B4613A666B8004F433B /* PLDatabaseFilterConnectionProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLDatabaseFilterConnectionProvider.m; sourceTree = "<group>"; };
+		05B66B6313A66A60004F433B /* PLDatabaseFilterConnectionProviderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLDatabaseFilterConnectionProviderTests.m; sourceTree = "<group>"; };
 		05B76B031256403500BFB6DC /* PLSqliteStatementCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteStatementCache.h; sourceTree = "<group>"; };
 		05B76B041256403500BFB6DC /* PLSqliteStatementCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteStatementCache.m; sourceTree = "<group>"; };
 		05B76B3212564A0D00BFB6DC /* PLSqliteStatementCacheTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteStatementCacheTests.m; sourceTree = "<group>"; };
@@ -323,9 +323,9 @@
 		057275A91321621400156E85 /* Migration */ = {
 			isa = PBXGroup;
 			children = (
-				054DCC76132130ED005DFFE0 /* PLMigrationConnectionProvider.h */,
-				054DCC77132130ED005DFFE0 /* PLMigrationConnectionProvider.m */,
-				057275AA132164F500156E85 /* PLMigrationConnectionProviderTests.m */,
+				054DCC76132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h */,
+				054DCC77132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m */,
+				057275AA132164F500156E85 /* PLDatabaseMigrationConnectionProviderTests.m */,
 			);
 			name = Migration;
 			sourceTree = "<group>";
@@ -388,9 +388,9 @@
 		0588B59D131EB10E00F6B60B /* Pool */ = {
 			isa = PBXGroup;
 			children = (
-				0588B59E131EB11D00F6B60B /* PLPoolConnectionProvider.h */,
-				0588B59F131EB11D00F6B60B /* PLPoolConnectionProvider.m */,
-				0588B5BB131EB4C900F6B60B /* PLPoolConnectionProviderTests.m */,
+				0588B59E131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.h */,
+				0588B59F131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.m */,
+				0588B5BB131EB4C900F6B60B /* PLDatabasePoolConnectionProviderTests.m */,
 			);
 			name = Pool;
 			sourceTree = "<group>";
@@ -419,9 +419,9 @@
 		05B66B3113A666A8004F433B /* Filter */ = {
 			isa = PBXGroup;
 			children = (
-				05B66B4513A666B8004F433B /* PLFilterConnectionProvider.h */,
-				05B66B4613A666B8004F433B /* PLFilterConnectionProvider.m */,
-				05B66B6313A66A60004F433B /* PLFilterConnectionProviderTests.m */,
+				05B66B4513A666B8004F433B /* PLDatabaseFilterConnectionProvider.h */,
+				05B66B4613A666B8004F433B /* PLDatabaseFilterConnectionProvider.m */,
+				05B66B6313A66A60004F433B /* PLDatabaseFilterConnectionProviderTests.m */,
 			);
 			name = Filter;
 			sourceTree = "<group>";
@@ -505,9 +505,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				05B76B071256403500BFB6DC /* PLSqliteStatementCache.h in Headers */,
-				054DCC7A132130ED005DFFE0 /* PLMigrationConnectionProvider.h in Headers */,
+				054DCC7A132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h in Headers */,
 				050C95451353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */,
-				05B66B4713A666B8004F433B /* PLFilterConnectionProvider.h in Headers */,
+				05B66B4713A666B8004F433B /* PLDatabaseFilterConnectionProvider.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,9 +516,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				05B76B091256403500BFB6DC /* PLSqliteStatementCache.h in Headers */,
-				054DCC7C132130ED005DFFE0 /* PLMigrationConnectionProvider.h in Headers */,
+				054DCC7C132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h in Headers */,
 				050C95471353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */,
-				05B66B4B13A666B8004F433B /* PLFilterConnectionProvider.h in Headers */,
+				05B66B4B13A666B8004F433B /* PLDatabaseFilterConnectionProvider.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,9 +542,9 @@
 				05534D3A104CBFFE00647A44 /* PLDatabaseMigrationTransactionManager.h in Headers */,
 				05B76B711256503300BFB6DC /* PLSqliteStatementCache.h in Headers */,
 				0588B4E4131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */,
-				05B66B8313A66C68004F433B /* PLFilterConnectionProvider.h in Headers */,
-				0588B5A0131EB11D00F6B60B /* PLPoolConnectionProvider.h in Headers */,
-				0572762D1325352900156E85 /* PLMigrationConnectionProvider.h in Headers */,
+				05B66B8313A66C68004F433B /* PLDatabaseFilterConnectionProvider.h in Headers */,
+				0588B5A0131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.h in Headers */,
+				0572762D1325352900156E85 /* PLDatabaseMigrationConnectionProvider.h in Headers */,
 				05B66B8413A66C87004F433B /* PLSqliteUnlockNotify.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -569,10 +569,10 @@
 				054CBF470EE21CC20043675E /* PLDatabaseMigrationTransactionManager.h in Headers */,
 				05B76B051256403500BFB6DC /* PLSqliteStatementCache.h in Headers */,
 				0588B4E3131EAB8500F6B60B /* PLDatabaseConstants.h in Headers */,
-				0588B5A2131EB11D00F6B60B /* PLPoolConnectionProvider.h in Headers */,
-				054DCC78132130ED005DFFE0 /* PLMigrationConnectionProvider.h in Headers */,
+				0588B5A2131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.h in Headers */,
+				054DCC78132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h in Headers */,
 				050C95431353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */,
-				05B66B4913A666B8004F433B /* PLFilterConnectionProvider.h in Headers */,
+				05B66B4913A666B8004F433B /* PLDatabaseFilterConnectionProvider.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -785,10 +785,10 @@
 				054CBF3C0EE21C670043675E /* PLDatabaseMigrationManager.m in Sources */,
 				054CBF3D0EE21C670043675E /* PLSqliteMigrationManager.m in Sources */,
 				05B76B081256403500BFB6DC /* PLSqliteStatementCache.m in Sources */,
-				0588B747131EC63200F6B60B /* PLPoolConnectionProvider.m in Sources */,
-				054DCC7B132130ED005DFFE0 /* PLMigrationConnectionProvider.m in Sources */,
+				0588B747131EC63200F6B60B /* PLDatabasePoolConnectionProvider.m in Sources */,
+				054DCC7B132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m in Sources */,
 				050C95441353AA9A0080FE20 /* PLSqliteUnlockNotify.m in Sources */,
-				05B66B4813A666B8004F433B /* PLFilterConnectionProvider.m in Sources */,
+				05B66B4813A666B8004F433B /* PLDatabaseFilterConnectionProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -804,10 +804,10 @@
 				054CBF430EE21C6D0043675E /* PLDatabaseMigrationManager.m in Sources */,
 				054CBF440EE21C6D0043675E /* PLSqliteMigrationManager.m in Sources */,
 				05B76B0A1256403500BFB6DC /* PLSqliteStatementCache.m in Sources */,
-				0588B748131EC63700F6B60B /* PLPoolConnectionProvider.m in Sources */,
-				054DCC7D132130ED005DFFE0 /* PLMigrationConnectionProvider.m in Sources */,
+				0588B748131EC63700F6B60B /* PLDatabasePoolConnectionProvider.m in Sources */,
+				054DCC7D132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m in Sources */,
 				050C95461353AA9A0080FE20 /* PLSqliteUnlockNotify.m in Sources */,
-				05B66B4C13A666B8004F433B /* PLFilterConnectionProvider.m in Sources */,
+				05B66B4C13A666B8004F433B /* PLDatabaseFilterConnectionProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -823,9 +823,9 @@
 				0578D9DE0EAEF1F5003F848A /* PLDatabaseMigrationManagerTests.m in Sources */,
 				05D196810EAFD2E700F7079D /* PLSqliteMigrationManagerTests.m in Sources */,
 				05B76B3312564A0D00BFB6DC /* PLSqliteStatementCacheTests.m in Sources */,
-				0588B5BC131EB4C900F6B60B /* PLPoolConnectionProviderTests.m in Sources */,
-				057275AB132164F500156E85 /* PLMigrationConnectionProviderTests.m in Sources */,
-				05B66B6413A66A60004F433B /* PLFilterConnectionProviderTests.m in Sources */,
+				0588B5BC131EB4C900F6B60B /* PLDatabasePoolConnectionProviderTests.m in Sources */,
+				057275AB132164F500156E85 /* PLDatabaseMigrationConnectionProviderTests.m in Sources */,
+				05B66B6413A66A60004F433B /* PLDatabaseFilterConnectionProviderTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -833,7 +833,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0588B5A1131EB11D00F6B60B /* PLPoolConnectionProvider.m in Sources */,
+				0588B5A1131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -849,10 +849,10 @@
 				0578D9D50EAEF1EF003F848A /* PLDatabaseMigrationManager.m in Sources */,
 				05D198930EB1248B00F7079D /* PLSqliteMigrationManager.m in Sources */,
 				05B76B061256403500BFB6DC /* PLSqliteStatementCache.m in Sources */,
-				0588B5A3131EB11D00F6B60B /* PLPoolConnectionProvider.m in Sources */,
-				054DCC79132130ED005DFFE0 /* PLMigrationConnectionProvider.m in Sources */,
+				0588B5A3131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.m in Sources */,
+				054DCC79132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m in Sources */,
 				050C95421353AA9A0080FE20 /* PLSqliteUnlockNotify.m in Sources */,
-				05B66B4A13A666B8004F433B /* PLFilterConnectionProvider.m in Sources */,
+				05B66B4A13A666B8004F433B /* PLDatabaseFilterConnectionProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

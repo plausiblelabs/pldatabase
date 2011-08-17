@@ -30,9 +30,9 @@
 #import <SenTestingKit/SenTestingKit.h>
 
 #import "PLSqliteConnectionProvider.h"
-#import "PLFilterConnectionProvider.h"
+#import "PLDatabaseFilterConnectionProvider.h"
 
-@interface PLFilterConnectionProviderTests : SenTestCase {
+@interface PLDatabaseFilterConnectionProviderTests : SenTestCase {
 @private
 }
 
@@ -41,7 +41,7 @@
 /**
  * PLFilterConnectionProvider Tests
  */
-@implementation PLFilterConnectionProviderTests
+@implementation PLDatabaseFilterConnectionProviderTests
 
 /**
  * Test basic filtering.
@@ -51,7 +51,7 @@
     
     /* Create a testing database provider */
     PLSqliteConnectionProvider *provider = [[[PLSqliteConnectionProvider alloc] initWithPath: @":memory:"] autorelease];
-    PLFilterConnectionProvider *filter = [[[PLFilterConnectionProvider alloc] initWithConnectionProvider: provider filterBlock: ^(id<PLDatabase> db) {
+    PLDatabaseFilterConnectionProvider *filter = [[[PLDatabaseFilterConnectionProvider alloc] initWithConnectionProvider: provider filterBlock: ^(id<PLDatabase> db) {
         NSError *error;
 
         STAssertNotNil(db, @"Filtering a nil database");

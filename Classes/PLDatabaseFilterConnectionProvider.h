@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 Plausible Labs Cooperative, Inc.
+ * Copyright (c) 2011 Plausible Labs Cooperative, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,21 +28,17 @@
  */
 
 #import <Foundation/Foundation.h>
-
-#import "PLDatabaseMigrationManager.h"
 #import "PLDatabaseConnectionProvider.h"
 
-
-@interface PLMigrationConnectionProvider : NSObject <PLDatabaseConnectionProvider> {
+@interface PLDatabaseFilterConnectionProvider : NSObject <PLDatabaseConnectionProvider> {
 @private
-    /** Backing connection provider. */
-    id<PLDatabaseConnectionProvider> _conProv;
+    /** The backing connection provider. */
+    id<PLDatabaseConnectionProvider> _provider;
 
-    /** Migration manager. */
-    PLDatabaseMigrationManager *_migrationMgr;
+    /** The internal filter block */
+    id<PLDatabase> (^_filterBlock)(id<PLDatabase>);
 }
 
-- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) conProv
-                 migrationManager: (PLDatabaseMigrationManager *) migrationManager;
+- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) provider filterBlock: (void (^)(id<PLDatabase> db)) block;
 
 @end

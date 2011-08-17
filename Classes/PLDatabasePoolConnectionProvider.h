@@ -28,17 +28,25 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <pthread.h>
+
 #import "PLDatabaseConnectionProvider.h"
 
-@interface PLFilterConnectionProvider : NSObject <PLDatabaseConnectionProvider> {
+@interface PLDatabasePoolConnectionProvider : NSObject <PLDatabaseConnectionProvider> {
 @private
+    /** Lock that must be held when mutating internal state. */
+    pthread_mutex_t _lock;
+
     /** The backing connection provider. */
     id<PLDatabaseConnectionProvider> _provider;
 
-    /** The internal filter block */
-    id<PLDatabase> (^_filterBlock)(id<PLDatabase>);
+    /** The set of available database connections. */
+    NSMutableSet *_connections;
+
+    /** The maximum number of connections that may be cached by this pool. */
+    NSUInteger _capacity;
 }
 
-- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) provider filterBlock: (void (^)(id<PLDatabase> db)) block;
+- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) provider capacity: (NSUInteger) capacity;
 
 @end

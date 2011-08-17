@@ -30,15 +30,15 @@
 #import <SenTestingKit/SenTestingKit.h>
 
 #import "PLSqliteConnectionProvider.h"
-#import "PLPoolConnectionProvider.h"
+#import "PLDatabasePoolConnectionProvider.h"
 
-@interface PLPoolConnectionProviderTests : SenTestCase {
+@interface PLDatabasePoolConnectionProviderTests : SenTestCase {
 @private
 }
 
 @end
 
-@implementation PLPoolConnectionProviderTests
+@implementation PLDatabasePoolConnectionProviderTests
 
 /**
  * Test basic pooling.
@@ -48,7 +48,7 @@
     
     /* Create a testing database pool */
     PLSqliteConnectionProvider *provider = [[[PLSqliteConnectionProvider alloc] initWithPath: @":memory:"] autorelease];
-    PLPoolConnectionProvider *pool = [[[PLPoolConnectionProvider alloc] initWithConnectionProvider: provider capacity: 0] autorelease];
+    PLDatabasePoolConnectionProvider *pool = [[[PLDatabasePoolConnectionProvider alloc] initWithConnectionProvider: provider capacity: 0] autorelease];
 
     /* Fetch a connection */
     id<PLDatabase> con = [pool getConnectionAndReturnError: &error];
@@ -73,7 +73,7 @@
     
     /* Create a testing database pool */
     PLSqliteConnectionProvider *provider = [[[PLSqliteConnectionProvider alloc] initWithPath: @":memory:"] autorelease];
-    PLPoolConnectionProvider *pool = [[[PLPoolConnectionProvider alloc] initWithConnectionProvider: provider capacity: 1] autorelease];
+    PLDatabasePoolConnectionProvider *pool = [[[PLDatabasePoolConnectionProvider alloc] initWithConnectionProvider: provider capacity: 1] autorelease];
     
     /* Fetch two connections and check one back in; the cache should now be at capacity. */
     id<PLDatabase> con1 = [pool getConnectionAndReturnError: &error];

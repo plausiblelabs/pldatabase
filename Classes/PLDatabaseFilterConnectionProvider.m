@@ -27,26 +27,59 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Foundation/Foundation.h>
-#import <pthread.h>
+#import "PLDatabaseFilterConnectionProvider.h"
 
-#import "PLDatabaseConnectionProvider.h"
+/**
+ * Provides a filtering database connection provider that supports modification of PLDatabase connections as they are
+ * returned from a backing PLDatabaseConnectionProvider.
+ *
+ * @par Thread Safety
+ * Thread-safe. May be used from any thread.
+ */
+@implementation PLDatabaseFilterConnectionProvider
 
-@interface PLPoolConnectionProvider : NSObject <PLDatabaseConnectionProvider> {
-@private
-    /** Lock that must be held when mutating internal state. */
-    pthread_mutex_t _lock;
 
-    /** The backing connection provider. */
-    id<PLDatabaseConnectionProvider> _provider;
+/**
+ * Initialize a new instance with the provided connection provider and filter block.
+ *
+ * @param provider A connection provider that will be used to acquire new database connections.
+ * @param filterBlock The filter block to be called for each returned database connection.
+ */
+- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) provider filterBlock: (void (^)(id<PLDatabase> db)) block {
+    if ((self = [super init]) == nil)
+        return nil;
 
-    /** The set of available database connections. */
-    NSMutableSet *_connections;
+    _provider = [provider retain];
+    _filterBlock = [block copy];
 
-    /** The maximum number of connections that may be cached by this pool. */
-    NSUInteger _capacity;
+    return self;
 }
 
-- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) provider capacity: (NSUInteger) capacity;
+- (void) dealloc {
+    [_provider release];
+    [_filterBlock release];
+
+    [super dealloc];
+}
+
+// from PLDatabaseConnectionProvider protocol
+- (id<PLDatabase>) getConnectionAndReturnError: (NSError **) outError {
+    /* Attempt to fetch the connection */
+    id<PLDatabase> db = [_provider getConnectionAndReturnError: outError];
+    if (db == nil)
+        return nil;
+    
+    /* Apply a filter block */
+    _filterBlock(db);
+
+    /* Return the filtered connection */
+    return db;
+}
+
+
+// from PLDatabaseConnectionProvider protocol
+- (void) closeConnection: (id<PLDatabase>) connection {
+    [_provider closeConnection: connection];
+}
 
 @end
