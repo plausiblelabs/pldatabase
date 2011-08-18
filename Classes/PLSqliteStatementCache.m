@@ -46,8 +46,15 @@ static const CFSetCallBacks StatementCacheSetCallbacks = {
     .hash = NULL
 };
 
+#define CLEANUP_HAS_LOCK() do { \
+    if (_needsCleanup) { \
+        [self performCleanupHasLock: YES]; \
+    } \
+} while (0);
+
 @interface PLSqliteStatementCache (PrivateMethods)
 static void cache_statement_finalize (const void *value, void *context);
+- (void) performCleanupHasLock: (BOOL) hasLock;
 - (void) removeAllStatementsHasLock: (BOOL) locked;
 @end
 
@@ -82,6 +89,7 @@ static void cache_statement_finalize (const void *value, void *context);
     _capacity = capacity;
     _availableStatements = [[NSMutableDictionary alloc] init];
     _allStatements = CFSetCreateMutable(NULL, 0, &StatementCacheSetCallbacks);
+    _cleanupQueue = CFSetCreateMutable(NULL, 0, &StatementCacheSetCallbacks);
 
     /* Disable collection of _availableStatements; we need this to live until our finalizer has run. */
 #ifdef __OBJC_GC__
@@ -122,11 +130,12 @@ static void cache_statement_finalize (const void *value, void *context);
 #endif /* __OBJC_GC__ */
 
     [_availableStatements release];
+    
+    if (_cleanupQueue != NULL)
+        CFRelease(_cleanupQueue);
 
-    if (_allStatements != NULL) {
+    if (_allStatements != NULL)
         CFRelease(_allStatements);
-        _allStatements = NULL;
-    }
 
     [super dealloc];
 }
@@ -142,6 +151,7 @@ static void cache_statement_finalize (const void *value, void *context);
  */
 - (void) registerStatement: (sqlite3_stmt *) stmt {
     OSSpinLockLock(&_lock); {
+        CLEANUP_HAS_LOCK();
         CFSetAddValue(_allStatements, stmt);
     }; OSSpinLockUnlock(&_lock);
 }
@@ -152,15 +162,40 @@ static void cache_statement_finalize (const void *value, void *context);
  *
  * @param stmt The statement to check in.
  * @param query The query string corresponding to this statement.
+ * @param inFinalizer YES if the caller is currently executing its -dealloc finalizer. This is used to ensure
+ * that the sqlite3_stmt is only referenced on the expected thread.
  *
  * @warning MEMORY OWNERSHIP WARNING: The receiver will claim ownership of the statement object.
  */
-- (void) checkinStatement: (sqlite3_stmt *) stmt forQuery: (NSString *) query {
+- (void) checkinStatement: (sqlite3_stmt *) stmt forQuery: (NSString *) query inFinalizer: (BOOL) inFinalizer {
     OSSpinLockLock(&_lock); {
-        /* If the statement pointer is not currently registered, there's nothing to do here. This may occur if
-         * a finalized PLSqlitePreparedStatement attempts to check in its statement, but the statement has already
-         * been destroyed. */
+        /* If we've already been closed, there's nothing to do. */
+        if (_closed)
+            return;
+
+        /*
+         * If we're being called frlom a finalizer, we may not be on the current thread that the database
+         * is expected to be used from; sqlite3 connections may only be used from one thread at a time.
+         *
+         * To deal with this, we'll add the sqlite3_stmt to a cleanup queue, and finalize the statement
+         * when it is next safe to do so.
+         */
+        if (inFinalizer) {
+            CFSetAddValue(_cleanupQueue, stmt);
+            _needsCleanup = YES;
+
+            OSSpinLockUnlock(&_lock);
+            return;
+        }
+        
+        /* If we're not being called from a finalizer, it is safe to perform cleanup */
+        CLEANUP_HAS_LOCK();
+    
+        /*
+         * If the statement pointer is not currently registered, there's nothing to do here. This should never occur.
+         */
         if (!CFSetContainsValue(_allStatements, stmt)) {
+            NSLog(@"[PLSqliteStatementCache]: Received an unknown statement %p during check-in.", stmt);
             OSSpinLockUnlock(&_lock);
             return;
         }
@@ -197,6 +232,8 @@ static void cache_statement_finalize (const void *value, void *context);
     sqlite3_stmt *stmt;
 
     OSSpinLockLock(&_lock); {
+        CLEANUP_HAS_LOCK();
+
         /* Fetch the statement set for this query */
         CFMutableArrayRef stmtArray = (CFMutableArrayRef) [_availableStatements objectForKey: query];
         if (stmtArray == nil || CFArrayGetCount(stmtArray) == 0) {
@@ -230,8 +267,10 @@ static void cache_statement_finalize (const void *value, void *context);
  */
 - (void) close {
     OSSpinLockLock(&_lock); {
+        /* Flush the cleanup queue */
+        CLEANUP_HAS_LOCK();
 
-        /* Finalize all registered statements */
+        /* Finalize all other registered statements */
         if (_allStatements != NULL) {
             CFSetApplyFunction(_allStatements, cache_statement_finalize, NULL);
             CFSetRemoveAllValues(_allStatements);
@@ -239,12 +278,51 @@ static void cache_statement_finalize (const void *value, void *context);
 
         /* Empty the statement cache of the now invalid references. */
         [_availableStatements removeAllObjects];
+
+        /* Mark ourselves as closed. */
+        _closed = YES;
     } OSSpinLockUnlock(&_lock);
 }
 
 @end
 
 @implementation PLSqliteStatementCache (PrivateMethods)
+
+static void cleanup_queue_statement_finalize (const void *value, void *context) {
+    /* Finalize the statement */
+    sqlite3_stmt *stmt = (sqlite3_stmt *) value;
+    sqlite3_finalize(stmt);
+
+    /* Discard the statement reference */
+    PLSqliteStatementCache *cache = context;
+    CFSetRemoveValue(cache->_allStatements, stmt);
+}
+
+/**
+ * Perform cleanup of the _cleanupQueue.
+ */
+- (void) performCleanupHasLock: (BOOL) hasLock {
+    if (!hasLock)
+        OSSpinLockLock(&_lock);
+    
+    /* Verify that cleanup is required */
+    if (!_needsCleanup) {
+        if (!hasLock)
+            OSSpinLockUnlock(&_lock);
+        return;
+    }
+    
+    /* Reset the clean-up flag */
+    _needsCleanup = NO;
+    
+    /* Simply finalize the statements. This clean-up is a last ditch effort, and we don't bother to try
+     * and implement caching for statements that are not explicitly closed. */
+    CFSetApplyFunction(_cleanupQueue, cleanup_queue_statement_finalize, self);
+    CFSetRemoveAllValues(_cleanupQueue);
+    
+    if (!hasLock)
+        OSSpinLockUnlock(&_lock);
+}
 
 static void cache_statement_finalize (const void *value, void *context) {
     sqlite3_stmt *stmt = (sqlite3_stmt *) value;
@@ -260,6 +338,9 @@ static void cache_statement_finalize (const void *value, void *context) {
 - (void) removeAllStatementsHasLock: (BOOL) locked {
     if (!locked)
         OSSpinLockLock(&_lock);
+
+    /* Flush the cleanup queue */
+    CLEANUP_HAS_LOCK();
     
     /* Iterate over all cached queries and finalize their sqlite statements */
     [_availableStatements enumerateKeysAndObjectsUsingBlock: ^(id key, id obj, BOOL *stop) {

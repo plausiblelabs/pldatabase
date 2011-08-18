@@ -68,18 +68,18 @@
     return self;
 }
 
-/* GC */
-- (void) finalize {
-    /* 'Check in' our prepared statement reference */
-    [self close];
-
-    [super finalize];
-}
-
 /* Manual */
 - (void) dealloc {
-    /* 'Check in' our prepared statement reference */
-    [self close];
+    /*
+     * To ensure thread-safety in the case where we are deallocated on an unexpected thread,
+     * we explicitly do not close the result set from -dealloc; instead, we rely on PLSqlitePreparedStatement's
+     * -dealloc implementation to perform cleanup of our borrowed _sqlite_stmt reference, if any.
+     *
+     * This is safe due to the expressed invaraints of the PLResultSet API; if the result set is not explicitly
+     * closed, the associated PLSqlitePreparedStatement may remain unusuable for an indefinate period of
+     * time. In this case, the period of time is forever. The prepared statement will be unusuable until its
+     * -dealloc is called and the sqlite3_stmt is relased.
+     */
 
     /* Release the column cache. */
     if (_columnNames != NULL)

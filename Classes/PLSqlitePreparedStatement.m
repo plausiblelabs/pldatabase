@@ -51,16 +51,17 @@
 
 @end
 
-/**
- * @internal
- * NSArray parameter strategy.
- */
+
 @interface PLSqliteArrayParameterStrategy : NSObject <PLSqliteParameterStrategy> {
 @private
     NSArray *_values;
 }
 @end
 
+/**
+ * @internal
+ * NSArray parameter strategy.
+ */
 @implementation PLSqliteArrayParameterStrategy
 
 - (id) initWithValues: (NSArray *) values {
@@ -81,6 +82,7 @@
     return [_values count];
 }
 
+// from PLSqliteParameterStrategy protocol
 - (id) valueForParameter: (int) parameterIndex withStatement: (sqlite3_stmt *) stmt {
     /* Arrays are zero-index, sqlite is 1-indexed, so adjust the index
      * for the array */
@@ -90,16 +92,16 @@
 @end
 
 
-/**
- * @internal
- * NSDictionary parameter strategy.
- */
 @interface PLSqliteDictionaryParameterStrategy : NSObject <PLSqliteParameterStrategy> {
 @private
     NSDictionary *_values;
 }
 @end
 
+/**
+ * @internal
+ * NSDictionary parameter strategy.
+ */
 @implementation PLSqliteDictionaryParameterStrategy
 
 - (id) initWithValueDictionary: (NSDictionary *) values {
@@ -120,6 +122,7 @@
     return [_values count];
 }
 
+// from PLSqliteParameterStrategy protocol
 - (id) valueForParameter: (int) parameterIndex withStatement: (sqlite3_stmt *) stmt {
     const char *sqlite_name;
 
@@ -148,6 +151,7 @@
 - (void) assertNotInUse;
 
 - (PLSqliteResultSet *) checkoutResultSet;
+- (void) closeInFinalizer: (BOOL) inFinalizer;
 
 @end
 
@@ -202,6 +206,7 @@
     _sqlite_stmt = sqlite_stmt;
     _queryString = [queryString retain];
     _inUse = NO;
+    _closeLock = OS_SPINLOCK_INIT;
 
     /* Cache parameter count */
     _parameterCount = sqlite3_bind_parameter_count(_sqlite_stmt);
@@ -217,7 +222,7 @@
     // to Apple's finalization rules. No ordering is maintained,
     // and such, there's no way to ensure that the sqlite3_stmt
     // is released before sqlite3_close() is called.
-    [self close];
+    [self closeInFinalizer: YES];
     [super finalize];
 }
 
@@ -225,7 +230,7 @@
 - (void) dealloc {
     /* The statement must be released before the database is released, as the statement has a reference
      * to the database which would cause a SQLITE_BUSY error when the database is released. */
-    [self close];
+    [self closeInFinalizer: YES];
     
     /* Now release the database. */
     [_database release];
@@ -242,12 +247,7 @@
 
 /* from PLPreparedStatement */
 - (void) close {
-    if (_sqlite_stmt == NULL)
-        return;
-
-    /* Check in the statement. */
-    [_statementCache checkinStatement: _sqlite_stmt forQuery: _queryString];
-    _sqlite_stmt = NULL;
+    [self closeInFinalizer: NO];
 }
 
 /**
@@ -376,8 +376,10 @@
 /**
  * @internal
  *
- * Check a result set back in, releasing any associated data
- * and releasing any exclusive ownership on the prepared statement.
+ * Check a result set back in, releasing any associated data and releasing any exclusive
+ * ownership on the prepared statement.
+ *
+ * @param resultSet The result set being checked in.
  */
 - (void) checkinResultSet: (PLSqliteResultSet *) resultSet {
     assert(_inUse == YES); // That would be strange.
@@ -421,6 +423,28 @@
 
     if (_inUse)
         [NSException raise: PLSqliteException format: @"A PLSqliteResultSet is already active and has not been properly closed for prepared statement '%@'", _queryString];
+}
+
+/**
+ * @internal
+ *
+ * Check the statement back into our managing PLSqliteStatementCache.
+ *
+ * @param inFinalizer YES if calling from within -dealloc, NO otherwise.
+ */
+- (void) closeInFinalizer: (BOOL) inFinalizer {
+    sqlite3_stmt *stmt;
+
+    OSSpinLockLock(&_closeLock); {
+        stmt = _sqlite_stmt;
+        _sqlite_stmt = NULL;
+
+        if (stmt == NULL)
+            return;
+    } OSSpinLockUnlock(&_closeLock);
+
+    /* Check in the statement. */
+    [_statementCache checkinStatement: stmt forQuery: _queryString inFinalizer: inFinalizer];
 }
 
 /**
