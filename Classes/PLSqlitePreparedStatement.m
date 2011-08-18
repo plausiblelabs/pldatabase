@@ -439,8 +439,11 @@
         stmt = _sqlite_stmt;
         _sqlite_stmt = NULL;
 
-        if (stmt == NULL)
+        /* If we've already been closed, return */
+        if (stmt == NULL) {
+            OSSpinLockUnlock(&_closeLock);
             return;
+        }
     } OSSpinLockUnlock(&_closeLock);
 
     /* Check in the statement. */
