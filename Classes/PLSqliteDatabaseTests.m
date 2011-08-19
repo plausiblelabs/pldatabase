@@ -164,6 +164,8 @@
 
     rs = [_db executeQuery: @"SELECT a FROM test WHERE a = 42"];
     STAssertTrue([rs next], @"No rows returned");
+
+    [rs close];
 }
 
 
@@ -171,6 +173,8 @@
     id<PLResultSet> result = [_db executeQuery: @"PRAGMA user_version"];
     STAssertNotNil(result, @"No result returned from query");
     STAssertTrue([result next], @"No rows were returned");
+
+    [result close];
 }
 
 /* Test handling of all supported parameter data types */
@@ -235,6 +239,8 @@
     
     /* Data */
     STAssertTrue([data isEqualToData: [rs dataForColumn: @"dataval"]], @"Data value incorrect");
+
+    [rs close];
 }
 
 - (void) testBeginAndRollbackBlockTransaction {
@@ -397,6 +403,8 @@
     rs = [_db executeQuery: @"SELECT b FROM test WHERE rowId = ?", [NSNumber numberWithLongLong: rowId]];
     STAssertTrue([rs next], @"No result returned");
     STAssertEquals(42, [rs intForColumn: @"b"], @"Did not retrieve expected column");
+    
+    [rs close];
 }
 
 - (void) testLastError {

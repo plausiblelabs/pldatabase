@@ -60,6 +60,7 @@
 
     stmt = [_db prepareStatement: @"SELECT * FROM test WHERE name = (?)"];
     STAssertEquals(1, [stmt parameterCount], @"Incorrect parameter count");
+    [stmt close];
 }
 
 - (void) testInUseHandling {
@@ -132,7 +133,9 @@
     STAssertFalse([rs isNullForColumn: @"id"], @"ID column wasn't set");
     STAssertTrue([@"Sarah" isEqual: [rs stringForColumn: @"name"]], @"Name set incorrectly");
     STAssertTrue([@"red" isEqual: [rs stringForColumn: @"color"]], @"Color set incorrectly");
+
     [rs close];
+    [stmt close];
 }
 
 
@@ -158,6 +161,9 @@
     STAssertTrue([rs next], @"No data returned");
     STAssertTrue([@"Appleseed" isEqual: [rs stringForColumn: @"name"]], @"Name incorrectly bound");
     STAssertTrue([@"blue" isEqual: [rs stringForColumn: @"color"]], @"Color incorrectly bound");
+    
+    [rs close];
+    [stmt close];
 }
 
 
@@ -240,6 +246,9 @@
     
     /* Data */
     STAssertTrue([data isEqualToData: [rs dataForColumn: @"dataval"]], @"Data value incorrect");
+    
+    [rs close];
+    [stmt close];
 }
 
 /**
@@ -260,6 +269,7 @@
 
     /* Bind and insert our values. If no exception is thrown, the test succeeds. */
     [stmt bindParameterDictionary: parameters];
+    [stmt close];
 }
 
 @end

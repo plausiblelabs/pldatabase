@@ -82,6 +82,8 @@
 
     STAssertTrue(success, @"Did not iterate successfully: %@", error);
     STAssertEquals((NSInteger)1, iterations, @"Did not stop when requested");
+
+    [result close];
 }
 
 /*
@@ -140,6 +142,8 @@
     [result nextAndReturnError: NULL];
     [result nextAndReturnError: NULL];
     STAssertEquals(PLResultSetStatusError, [result nextAndReturnError: &error], @"Result set did not return an error");
+    
+    [result close];
 }
 
 
@@ -149,6 +153,8 @@
     STAssertEquals(0, [result columnIndexForName: @"USER_VERSION"], @"Column index lookup appears to be case sensitive.");
 
     STAssertThrows([result columnIndexForName: @"not_a_column"], @"Did not throw an exception for bad column");
+
+    [result close];
 }
 
 - (void) testDateForColumn {
@@ -161,6 +167,8 @@
     result = [_db executeQuery: @"SELECT a FROM test"];
     STAssertTrue([result next], @"No rows returned");
     STAssertEquals([now timeIntervalSince1970], [[result dateForColumn: @"a"] timeIntervalSince1970], @"Did not return correct date value");
+    
+    [result close];
 }
 
 - (void) testStringForColumn {
@@ -172,6 +180,8 @@
     result = [_db executeQuery: @"SELECT a FROM test"];
     STAssertTrue([result next], @"No rows returned");
     STAssertTrue([@"TestString" isEqual: [result stringForColumn: @"a"]], @"Did not return correct string value");
+    
+    [result close];
 }
 
 - (void) testIntForColumn {
@@ -180,6 +190,8 @@
     STAssertTrue([result next], @"No rows were returned");
     
     STAssertEquals(0, [result intForColumn: @"user_version"], @"Could not retrieve user_version column");
+
+    [result close];
 }
 
 - (void) testBigIntForColumn {
@@ -191,6 +203,8 @@
     result = [_db executeQuery: @"SELECT a FROM test"];
     STAssertTrue([result next], @"No rows returned");
     STAssertEquals(INT64_MAX, [result bigIntForColumn: @"a"], @"Did not return correct big integer value");
+    
+    [result close];
 }
 
 - (void) testBoolForColumn {
@@ -202,6 +216,8 @@
     result = [_db executeQuery: @"SELECT a FROM test"];
     STAssertTrue([result next], @"No rows returned");
     STAssertTrue([result boolForColumn: @"a"], @"Did not return correct bool value");
+    
+    [result close];
 }
 
 - (void) testFloatForColumn {
@@ -213,6 +229,8 @@
     result = [_db executeQuery: @"SELECT a FROM test"];
     STAssertTrue([result next], @"No rows returned");
     STAssertEquals(3.14f, [result floatForColumn: @"a"], @"Did not return correct float value");
+    
+    [result close];
 }
 
 - (void) testDoubleForColumn {
@@ -224,6 +242,8 @@
     result = [_db executeQuery: @"SELECT a FROM test"];
     STAssertTrue([result next], @"No rows returned");
     STAssertEquals(3.14159, [result doubleForColumn: @"a"], @"Did not return correct double value");
+    
+    [result close];
 }
 
 - (void) testDataForColumn {
@@ -237,6 +257,8 @@
     result = [_db executeQuery: @"SELECT a FROM test"];
     STAssertTrue([result next], @"No rows returned");
     STAssertTrue([data isEqualToData: [result dataForColumn: @"a"]], @"Did not return correct data value");
+    
+    [result close];
 }
 
 - (void) testIsNullForColumn {
@@ -249,6 +271,8 @@
     STAssertTrue([result next], @"No rows returned");
     STAssertEquals(0, [result intForColumn: @"a"], @"NULL column should return 0");
     STAssertTrue([result isNullForColumn: @"a"], @"Column value should be NULL");
+    
+    [result close];
 }
 
 /* Test that dereferencing a null value returns a proper default 0 value */
@@ -271,6 +295,7 @@
     STAssertTrue([result dataForColumn: @"a"] == nil, @"Expected nil value");
     STAssertTrue([result objectForColumn: @"a"] == nil, @"Expected nil value");
 
+    [result close];
 }
 
 - (void) testObjectForColumn {
@@ -300,6 +325,8 @@
     STAssertTrue([testDouble isEqual: [result objectForColumn: @"c"]], @"Did not return correct double value");
     STAssertTrue([testBlob isEqual: [result objectForColumn: @"d"]], @"Did not return correct data value");
     STAssertTrue(nil == [result objectForColumn: @"e"], @"Did not return correct NSNull value");
+    
+    [result close];
 }
 
 @end
