@@ -124,11 +124,6 @@ static void cache_statement_finalize (const void *value, void *context);
     /* The sqlite statements have to be finalized explicitly */
     [self close];
 
-    /* Re-enable collection of _availableStatements */
-#ifdef __OBJC_GC__
-    [[NSGarbageCollector defaultCollector] enableCollectorForPointer: _availableStatements];
-#endif /* __OBJC_GC__ */
-
     [_availableStatements release];
     
     if (_cleanupQueue != NULL)
@@ -170,8 +165,10 @@ static void cache_statement_finalize (const void *value, void *context);
 - (void) checkinStatement: (sqlite3_stmt *) stmt forQuery: (NSString *) query inFinalizer: (BOOL) inFinalizer {
     OSSpinLockLock(&_lock); {
         /* If we've already been closed, there's nothing to do. */
-        if (_closed)
+        if (_closed) {
+            OSSpinLockUnlock(&_lock);
             return;
+        }
 
         /*
          * If we're being called frlom a finalizer, we may not be on the current thread that the database
