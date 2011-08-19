@@ -63,6 +63,9 @@ typedef enum {
  * to YES to stop iteration of the result set.
  *
  * @return Returns YES if the result set was successfully iterated, or NO if a database error occurs.
+ *
+ * @invariant If all rows are enumerated and iteration is not explicitly stopped by setting the provided stop argument, the result set will be implicitly closed.
+ * @invariant If an error occurs during enumeration and NO is returned by this method, the result set will be implicitly closed.
  */
 - (BOOL) enumerateWithBlock: (void (^)(id<PLResultSet> rs, BOOL *stop)) block;
 
@@ -77,6 +80,9 @@ typedef enum {
  * to YES to stop iteration of the result set.
  *
  * @return Returns YES if the result set was successfully iterated, or NO if a database error occurs.
+ *
+ * @invariant If all rows are enumerated and iteration is not explicitly stopped by setting the provided stop argument, the result set will be implicitly closed.
+ * @invariant If an error occurs during enumeration and NO is returned by this method, the result set will be implicitly closed.
  */
 - (BOOL) enumerateAndReturnError: (NSError **) outError block: (void (^)(id<PLResultSet> rs, BOOL *stop)) block;
 

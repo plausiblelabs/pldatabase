@@ -52,6 +52,10 @@
 }
 
 - (id) initWithPreparedStatement: (PLSqlitePreparedStatement *) stmt sqliteStatemet: (sqlite3_stmt *)sqlite_stmt;
+
+/** Return YES if the result set has been closed, NO otherwise. Exposed to support the PLResultSet unit tests. */
+@property(nonatomic, readonly, getter=isClosed) BOOL closed;
+
 @end
 
 #import "PLSqlitePreparedStatement.h"

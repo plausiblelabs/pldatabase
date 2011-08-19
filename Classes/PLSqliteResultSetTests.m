@@ -63,6 +63,7 @@
     STAssertTrue([_db rollbackTransaction], @"Could not roll back, was result actually closed?");
 }
 
+/* Test block-based iteration of a result set */
 - (void) testBlockIteration {
     id<PLResultSet> result;
     
@@ -81,6 +82,53 @@
 
     STAssertTrue(success, @"Did not iterate successfully: %@", error);
     STAssertEquals((NSInteger)1, iterations, @"Did not stop when requested");
+}
+
+/*
+ * Test the implicit completion close behavior of block-based iteration
+ */
+- (void) testBlockEnumerationCompletionClosure {
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int)"], @"Create table failed");
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a) VALUES (?)", [NSNumber numberWithInt: 1]]), @"Could not insert row");
+
+    /* Enumerate the table */
+    NSError *error;
+    PLSqliteResultSet *rs = [_db executeQueryAndReturnError: &error statement: @"SELECT a FROM test"];
+    STAssertNotNil(rs, @"Failed to parse query: %@", error);
+
+    BOOL success = [rs enumerateAndReturnError: &error block: ^(id <PLResultSet> rs, BOOL *stop) {}];
+    STAssertTrue(success, @"Did not iterate successfully: %@", error);
+    
+    /* Assert that the result set was closed */
+    STAssertTrue(rs.isClosed, @"Result set was not closed");
+    
+    /* Verify that the result set is not closed if *stop is set, even if all rows are enumerated */
+    rs = [_db executeQueryAndReturnError: &error statement: @"SELECT a FROM test"];
+    success = [rs enumerateAndReturnError: &error block:^(id <PLResultSet> rs, BOOL *stop) {
+        *stop = YES;
+    }];
+    
+    STAssertTrue(success, @"Did not iterate successfully: %@", error);
+    STAssertFalse(rs.isClosed, @"Result set was closed");
+    [rs close];
+}
+
+/*
+ * Test the implicit close behavior of block-based iteration when an error occurs.
+ */
+- (void) testBlockEnumerationErrorClosure {
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int NOT NULL)"], @"Create table failed");
+    
+    /* Perform error-inducing enumeration by triggering a constraint error. */
+    NSError *error;
+    PLSqliteResultSet *rs = [_db executeQueryAndReturnError: &error statement: @"INSERT INTO test (a) VALUES (NULL)"];
+    STAssertNotNil(rs, @"Failed to parse query: %@", error);
+    
+    BOOL success = [rs enumerateAndReturnError: &error block: ^(id <PLResultSet> rs, BOOL *stop) {}];
+    STAssertFalse(success, @"Executing the query did not trigger a constraint error");
+    
+    /* Assert that the result set was closed */
+    STAssertTrue(rs.isClosed, @"Result set was not closed on error");
 }
 
 - (void) testNextErrorHandling {

@@ -91,6 +91,14 @@
     [super dealloc];
 }
 
+// property getter
+- (BOOL) isClosed {
+    if (_sqlite_stmt == NULL)
+        return YES;
+
+    return NO;
+}
+
 // From PLResultSet
 - (void) close {
     if (_sqlite_stmt == NULL)
@@ -159,15 +167,25 @@
     BOOL stop = NO;
     
     /* Iterate over the results */
-    PLResultSetStatus row;
-    while ((row = [self nextAndReturnError: outError]) == PLResultSetStatusRow) {
+    PLResultSetStatus rss;
+    while ((rss = [self nextAndReturnError: outError]) == PLResultSetStatusRow) {
         block(self, &stop);
         if (stop)
             break;
     }
-    
-    if (row == PLResultSetStatusError)
+
+    /* Handle completion invariant; the result set is expected to implicitly close when
+     * all rows are iterated and *stop is not set. */
+    if (stop == NO && rss == PLResultSetStatusDone) {
+        [self close];
+    }
+
+    /* Handle error completion invariant. If an error occurs, the result set is expected
+     * to implicitly close */
+    if (rss == PLResultSetStatusError) {
+        [self close];
         return NO;
+    }
     
     return YES;
 }
