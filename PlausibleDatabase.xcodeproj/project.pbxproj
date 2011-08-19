@@ -42,6 +42,21 @@
 		050C95451353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C95411353AA9A0080FE20 /* PLSqliteUnlockNotify.h */; };
 		050C95461353AA9A0080FE20 /* PLSqliteUnlockNotify.m in Sources */ = {isa = PBXBuildFile; fileRef = 050C95401353AA9A0080FE20 /* PLSqliteUnlockNotify.m */; };
 		050C95471353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C95411353AA9A0080FE20 /* PLSqliteUnlockNotify.h */; };
+		050CCFAD13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 050CCFAB13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		050CCFAE13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 050CCFAC13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.m */; };
+		050CCFAF13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 050CCFAB13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.h */; };
+		050CCFB013FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 050CCFAC13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.m */; };
+		050CCFB113FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 050CCFAB13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.h */; };
+		050CCFB213FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 050CCFAC13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.m */; };
+		050CCFB513FEF60900DCAABE /* PLDatabaseThreadLocalConnectionProviderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 050CCFB413FEF60900DCAABE /* PLDatabaseThreadLocalConnectionProviderTests.m */; };
+		050CD00113FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = 050CCFFF13FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h */; };
+		050CD00213FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 050CD00013FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.m */; };
+		050CD00313FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = 050CCFFF13FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h */; };
+		050CD00413FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 050CD00013FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.m */; };
+		050CD00513FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = 050CCFFF13FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h */; };
+		050CD00613FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 050CD00013FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.m */; };
+		050CD02D13FF063600DCAABE /* PLDatabaseThreadLocalConnectionProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 050CCFAB13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		050CD02E13FF063600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = 050CCFFF13FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h */; };
 		051D157C0DD377F00083CC76 /* PlausibleDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */; };
 		054CBF370EE21C670043675E /* PlausibleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */; };
 		054CBF380EE21C670043675E /* PLSqliteDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0551CA690DCBEC5B00E31E46 /* PLSqliteDatabase.m */; };
@@ -210,6 +225,11 @@
 		0502A84C0DDE9F81006F4613 /* PLSqlitePreparedStatementTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqlitePreparedStatementTests.m; sourceTree = "<group>"; };
 		050C95401353AA9A0080FE20 /* PLSqliteUnlockNotify.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLSqliteUnlockNotify.m; sourceTree = "<group>"; };
 		050C95411353AA9A0080FE20 /* PLSqliteUnlockNotify.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLSqliteUnlockNotify.h; sourceTree = "<group>"; };
+		050CCFAB13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabaseThreadLocalConnectionProvider.h; sourceTree = "<group>"; };
+		050CCFAC13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLDatabaseThreadLocalConnectionProvider.m; sourceTree = "<group>"; };
+		050CCFB413FEF60900DCAABE /* PLDatabaseThreadLocalConnectionProviderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLDatabaseThreadLocalConnectionProviderTests.m; sourceTree = "<group>"; };
+		050CCFFF13FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLDatabaseThreadLocalConnectionProviderEntry.h; sourceTree = "<group>"; };
+		050CD00013FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLDatabaseThreadLocalConnectionProviderEntry.m; sourceTree = "<group>"; };
 		051D15570DD36FAB0083CC76 /* PlausibleDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabase.m; sourceTree = "<group>"; };
 		051D157B0DD377F00083CC76 /* PlausibleDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlausibleDatabaseTests.m; sourceTree = "<group>"; };
 		054CBF0D0EE21B2B0043675E /* libPlausibleDatabase-iphoneos.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPlausibleDatabase-iphoneos.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -313,6 +333,26 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		050CCFAA13FEF54300DCAABE /* Thread-Local */ = {
+			isa = PBXGroup;
+			children = (
+				050CCFAB13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.h */,
+				050CCFAC13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.m */,
+				050CCFB413FEF60900DCAABE /* PLDatabaseThreadLocalConnectionProviderTests.m */,
+				050CCFFE13FF017700DCAABE /* Private */,
+			);
+			name = "Thread-Local";
+			sourceTree = "<group>";
+		};
+		050CCFFE13FF017700DCAABE /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				050CCFFF13FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h */,
+				050CD00013FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.m */,
+			);
+			name = Private;
+			sourceTree = "<group>";
+		};
 		053D389E0DDAE62B009D4EAF /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
@@ -344,6 +384,7 @@
 			children = (
 				0578D9940EAEED94003F848A /* PLDatabaseConnectionProvider.h */,
 				05B66B3113A666A8004F433B /* Filter */,
+				050CCFAA13FEF54300DCAABE /* Thread-Local */,
 				0588B59D131EB10E00F6B60B /* Pool */,
 				057275A91321621400156E85 /* Migration */,
 				0578D9970EAEEEA4003F848A /* SQLite */,
@@ -508,6 +549,8 @@
 				054DCC7A132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h in Headers */,
 				050C95451353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */,
 				05B66B4713A666B8004F433B /* PLDatabaseFilterConnectionProvider.h in Headers */,
+				050CCFAF13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.h in Headers */,
+				050CD00313FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -519,6 +562,8 @@
 				054DCC7C132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h in Headers */,
 				050C95471353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */,
 				05B66B4B13A666B8004F433B /* PLDatabaseFilterConnectionProvider.h in Headers */,
+				050CCFB113FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.h in Headers */,
+				050CD00113FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -546,6 +591,8 @@
 				0588B5A0131EB11D00F6B60B /* PLDatabasePoolConnectionProvider.h in Headers */,
 				0572762D1325352900156E85 /* PLDatabaseMigrationConnectionProvider.h in Headers */,
 				05B66B8413A66C87004F433B /* PLSqliteUnlockNotify.h in Headers */,
+				050CD02D13FF063600DCAABE /* PLDatabaseThreadLocalConnectionProvider.h in Headers */,
+				050CD02E13FF063600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -573,6 +620,8 @@
 				054DCC78132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.h in Headers */,
 				050C95431353AA9A0080FE20 /* PLSqliteUnlockNotify.h in Headers */,
 				05B66B4913A666B8004F433B /* PLDatabaseFilterConnectionProvider.h in Headers */,
+				050CCFAD13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.h in Headers */,
+				050CD00513FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -789,6 +838,8 @@
 				054DCC7B132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m in Sources */,
 				050C95441353AA9A0080FE20 /* PLSqliteUnlockNotify.m in Sources */,
 				05B66B4813A666B8004F433B /* PLDatabaseFilterConnectionProvider.m in Sources */,
+				050CCFB013FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.m in Sources */,
+				050CD00413FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -808,6 +859,8 @@
 				054DCC7D132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m in Sources */,
 				050C95461353AA9A0080FE20 /* PLSqliteUnlockNotify.m in Sources */,
 				05B66B4C13A666B8004F433B /* PLDatabaseFilterConnectionProvider.m in Sources */,
+				050CCFB213FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.m in Sources */,
+				050CD00213FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -826,6 +879,7 @@
 				0588B5BC131EB4C900F6B60B /* PLDatabasePoolConnectionProviderTests.m in Sources */,
 				057275AB132164F500156E85 /* PLDatabaseMigrationConnectionProviderTests.m in Sources */,
 				05B66B6413A66A60004F433B /* PLDatabaseFilterConnectionProviderTests.m in Sources */,
+				050CCFB513FEF60900DCAABE /* PLDatabaseThreadLocalConnectionProviderTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -853,6 +907,8 @@
 				054DCC79132130ED005DFFE0 /* PLDatabaseMigrationConnectionProvider.m in Sources */,
 				050C95421353AA9A0080FE20 /* PLSqliteUnlockNotify.m in Sources */,
 				05B66B4A13A666B8004F433B /* PLDatabaseFilterConnectionProvider.m in Sources */,
+				050CCFAE13FEF56700DCAABE /* PLDatabaseThreadLocalConnectionProvider.m in Sources */,
+				050CD00613FF018600DCAABE /* PLDatabaseThreadLocalConnectionProviderEntry.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
