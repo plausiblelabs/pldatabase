@@ -33,7 +33,7 @@
  * Provides a size-constrained thread-safe database connection pool.
  *
  * @par Thread Safety
- * Thread-safe. May be used from any thread.
+ * Thread-safe. May be used from any thread, subject to SQLite's documented thread-safety constraints.
  */
 @implementation PLDatabasePoolConnectionProvider
 
