@@ -35,6 +35,7 @@
 /* Used to maintain a CFDictionary mapping PLDatabaseThreadLocalConnectionProvider instances to corresponding
  * PLDatabaseThreadLocalConnectionProviderEntry instances. */
 static pthread_key_t prov_dictionary_key;
+static BOOL prov_key_initialized = NO;
 
 /* Key callbacks. We specifically avoid retaining the PLDatabaseThreadLocalConnectionProvider */
 static const CFDictionaryKeyCallBacks keyCallbacks = {
@@ -79,10 +80,11 @@ static void tld_cleanup_providers (void *value) {
 
 /* Set up our thread-local key */
 + (void) initialize {
-    if (![[self class] isEqual: [PLDatabaseThreadLocalConnectionProvider class]])
+    if (![self isEqual: [PLDatabaseThreadLocalConnectionProvider class]])
         return;
     
     pthread_key_create(&prov_dictionary_key, tld_cleanup_providers);
+    prov_key_initialized = YES;
 }
 
 /**
@@ -93,6 +95,8 @@ static void tld_cleanup_providers (void *value) {
 - (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) provider {
     if ((self = [super init]) == nil)
         return nil;
+
+    NSAssert(prov_key_initialized, @"+initialize was not called");
     
     _provider = [provider retain];
 
