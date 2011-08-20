@@ -42,6 +42,31 @@
 @implementation PLDatabaseThreadLocalConnectionProviderTests
 
 /**
+ * Ensure that two pools do not conflict.
+ */
+- (void) testPoolConflict {
+    NSError *error;
+    
+    /* Create two pools */
+    PLSqliteConnectionProvider *provider = [[[PLSqliteConnectionProvider alloc] initWithPath: @":memory:"] autorelease];
+    PLDatabaseThreadLocalConnectionProvider *pool1 = [[[PLDatabaseThreadLocalConnectionProvider alloc] initWithConnectionProvider: provider] autorelease];
+    PLDatabaseThreadLocalConnectionProvider *pool2 = [[[PLDatabaseThreadLocalConnectionProvider alloc] initWithConnectionProvider: provider] autorelease];
+
+    /* Fetch two connections */
+    id<PLDatabase> con1 = [pool1 getConnectionAndReturnError: &error];
+    STAssertNotNil(con1, @"Failed to fetch connection: %@", error);
+    [pool1 closeConnection: con1];
+    
+    id<PLDatabase> con2 = [pool2 getConnectionAndReturnError: &error];
+    STAssertNotNil(con2, @"Failed to fetch connection: %@", error);
+    [pool2 closeConnection: con2];
+    
+    /* Verify that the individual pools return their own respective connections. */
+    STAssertEquals(con1, [pool1 getConnectionAndReturnError: NULL], @"Returned incorrect connection");
+    STAssertEquals(con2, [pool2 getConnectionAndReturnError: NULL], @"Returned incorrect connection");
+}
+
+/**
  * Test basic caching of a single connection.
  */
 - (void) testPooling {
