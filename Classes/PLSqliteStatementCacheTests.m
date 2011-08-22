@@ -83,4 +83,39 @@
     [db close];
 }
 
+/**
+ * Test dropping of all statements
+ */
+- (void) testRemoveAllStatements {
+    NSError *error;
+    
+    /* Create a testing database */
+    PLSqliteDatabase *db = [PLSqliteDatabase databaseWithPath: @":memory:"];
+    STAssertTrue([db openAndReturnError: &error], @"Database could not be opened: %@", error);
+    sqlite3 *sqlite = [db sqliteHandle];
+    
+    /* Cache a statement for testing. */
+    NSString *queryString = @"SELECT 1";
+    sqlite3_stmt *stmt;
+    const char *unused;
+    int ret;
+    
+    ret = sqlite3_prepare_v2(sqlite, [queryString UTF8String], -1, &stmt, &unused);
+    STAssertEquals(ret, SQLITE_OK, @"Failed to prepare the statement");
+    
+    PLSqliteStatementCache *cache = [[[PLSqliteStatementCache alloc] initWithCapacity: 500] autorelease];
+    [cache registerStatement: stmt];
+    [cache checkinStatement: stmt forQuery: queryString];
+    
+    /* Try removing all statements */
+    [cache removeAllStatements];
+    
+    /* Verify that fetching the statement fails */
+    sqlite3_stmt *cached_stmt = [cache checkoutStatementForQueryString: queryString];
+    STAssertTrue(cached_stmt == NULL, @"Cache was not purged");
+
+    /* Verify that the cache closes cleanly. */
+    [cache close];
+}
+
 @end

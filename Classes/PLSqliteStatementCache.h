@@ -64,6 +64,8 @@
 
 - (sqlite3_stmt *) checkoutStatementForQueryString: (NSString *) query;
 
+- (void) removeAllStatements;
+
 @end
 
 #endif /* PL_DB_PRIVATE */

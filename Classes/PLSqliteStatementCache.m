@@ -47,7 +47,6 @@ static const CFSetCallBacks StatementCacheSetCallbacks = {
 };
 
 @interface PLSqliteStatementCache (PrivateMethods)
-static void cache_statement_finalize (const void *value, void *context);
 - (void) removeAllStatementsHasLock: (BOOL) locked;
 @end
 
@@ -222,6 +221,13 @@ static void cache_statement_finalize (const void *value, void *context);
     [self removeAllStatementsHasLock: NO];
 }
 
+/* Function to be applied to a CF container. Calls sqlite3_finalize() on the supplied value. */
+static void apply_cache_statement_finalize (const void *value, void *context) {
+    /* Finalize the statement */
+    sqlite3_stmt *stmt = (sqlite3_stmt *) value;
+    sqlite3_finalize(stmt);
+}
+
 /**
  * Close the cache, invalidating <em>all</em> registered statements from the cache.
  *
@@ -233,7 +239,7 @@ static void cache_statement_finalize (const void *value, void *context);
 
         /* Finalize all registered statements */
         if (_allStatements != NULL) {
-            CFSetApplyFunction(_allStatements, cache_statement_finalize, NULL);
+            CFSetApplyFunction(_allStatements, apply_cache_statement_finalize, NULL);
             CFSetRemoveAllValues(_allStatements);
         }
 
@@ -246,9 +252,16 @@ static void cache_statement_finalize (const void *value, void *context);
 
 @implementation PLSqliteStatementCache (PrivateMethods)
 
-static void cache_statement_finalize (const void *value, void *context) {
+/* Function to be applied to a CF container. Calls sqlite3_finalize() on the supplied value, and removes it from _allStatements. */
+static void apply_cache_remove_statement (const void *value, void *context) {
+    PLSqliteStatementCache *self = context;
+
+    /* Finalize the statement */
     sqlite3_stmt *stmt = (sqlite3_stmt *) value;
     sqlite3_finalize(stmt);
+
+    /* Clean up remaining statement reference */
+    CFSetRemoveValue(self->_allStatements, stmt);
 }
 
 /**
@@ -267,7 +280,7 @@ static void cache_statement_finalize (const void *value, void *context) {
         CFIndex count = CFArrayGetCount(array);
         
         /* Finalize all statements */
-        CFArrayApplyFunction(array, CFRangeMake(0, count), cache_statement_finalize, NULL);
+        CFArrayApplyFunction(array, CFRangeMake(0, count), apply_cache_remove_statement, self);
     }];
     
     /* Empty the statement cache of the now invalid references. */
