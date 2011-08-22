@@ -57,13 +57,6 @@
     
     /** If YES, the prepared statement is closed when the first result set is checked in. */
     BOOL _closeAtCheckin;
-
-    /**
-     * Lock used to ensure thread-safety of closeInFinalizer's _sqlite_stmt reference, as the method may be called
-     * from -dealloc on an unexpected thread. We could probably also use a memory barrier to ensure atomic update of
-     * _sqlite_stmt, as the updates will otherwise be strictly ordered.
-     */
-    OSSpinLock _closeLock;
 }
 
 - (id) initWithDatabase: (PLSqliteDatabase *) db 

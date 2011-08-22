@@ -49,18 +49,6 @@
     
     /** All live statements (whether or not they're checked out). */
     __strong CFMutableSetRef _allStatements;
-    
-    /**
-     * Statements to be finalized at the next available opportunity. This is used to avoid
-     * calling sqlite3_finalize() on an incorrect thread.
-     */
-    CFMutableSetRef _cleanupQueue;
-
-    /** If YES, the _cleanupQueue is non-empty */
-    BOOL _needsCleanup;
-    
-    /** If YES, -close has been called and all statements finalized. */
-    BOOL _closed;
 
     /** Internal lock. Must be held when mutating state. */
     OSSpinLock _lock;
@@ -72,7 +60,7 @@
 
 - (void) registerStatement: (sqlite3_stmt *) stmt;
 
-- (void) checkinStatement: (sqlite3_stmt *) stmt forQuery: (NSString *) query inFinalizer: (BOOL) inFinalizer;
+- (void) checkinStatement: (sqlite3_stmt *) stmt forQuery: (NSString *) query;
 
 - (sqlite3_stmt *) checkoutStatementForQueryString: (NSString *) query;
 

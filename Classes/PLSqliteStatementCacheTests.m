@@ -66,57 +66,20 @@
     /* Try caching it */
     PLSqliteStatementCache *cache = [[[PLSqliteStatementCache alloc] initWithCapacity: 500] autorelease];
     [cache registerStatement: stmt];
-    [cache checkinStatement: stmt forQuery: queryString inFinalizer: NO];
+    [cache checkinStatement: stmt forQuery: queryString];
 
     /* Make sure we can get it back out again */
     sqlite3_stmt *cached_stmt = [cache checkoutStatementForQueryString: queryString];
     STAssertEquals(stmt, cached_stmt, @"Statement was not cached");
 
     /* Re-add it to the cache so that we can test the cache's finalization of statements. */
-    [cache checkinStatement: stmt forQuery: queryString inFinalizer: NO];
+    [cache checkinStatement: stmt forQuery: queryString];
 
     /* Finalize all statements */
     [cache close];
 
     /* Now verify that the databases closes cleanly. If it doesn't, that means that the statements were leaked, and an 
      * exception will be raised. */
-    [db close];
-}
-
-/**
- * Test cleanup of statements from their finalizers.
- */
-- (void) testFinalizationHandling {
-    NSError *error;
-    
-    /* Create a testing database */
-    PLSqliteDatabase *db = [PLSqliteDatabase databaseWithPath: @":memory:"];
-    STAssertTrue([db openAndReturnError: &error], @"Database could not be opened: %@", error);
-    sqlite3 *sqlite = [db sqliteHandle];
-    
-    /* Prepare a statement to test with */
-    NSString *queryString = @"SELECT 1";
-    sqlite3_stmt *stmt;
-    const char *unused;
-    int ret;
-    
-    ret = sqlite3_prepare_v2(sqlite, [queryString UTF8String], -1, &stmt, &unused);
-    STAssertEquals(ret, SQLITE_OK, @"Failed to prepare the statement");
-    
-    /* Register the statement */
-    PLSqliteStatementCache *cache = [[[PLSqliteStatementCache alloc] initWithCapacity: 500] autorelease];
-    [cache registerStatement: stmt];
-
-    /* Check it in with finalization = YES */
-    [cache checkinStatement: stmt forQuery: queryString inFinalizer: YES];
-    
-    /* Make sure we don't get it back out again. The statement should be sitting in the finalization queue. */
-    sqlite3_stmt *cached_stmt = [cache checkoutStatementForQueryString: queryString];
-    STAssertTrue(cached_stmt == NULL, @"Statement was cached");
-    
-    /* Verify that the databases closes cleanly. The above checkout request should trigger flushing of the cleanup queue;
-     * If it doesn't, that means that the statements were leaked, and an exception will be raised in
-     * -[PLSqliteDatabase close] */
     [db close];
 }
 

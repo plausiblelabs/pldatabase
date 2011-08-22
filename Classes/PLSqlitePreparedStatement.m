@@ -151,7 +151,6 @@
 - (void) assertNotInUse;
 
 - (PLSqliteResultSet *) checkoutResultSet;
-- (void) closeInFinalizer: (BOOL) inFinalizer;
 
 @end
 
@@ -206,7 +205,6 @@
     _sqlite_stmt = sqlite_stmt;
     _queryString = [queryString retain];
     _inUse = NO;
-    _closeLock = OS_SPINLOCK_INIT;
 
     /* Cache parameter count */
     _parameterCount = sqlite3_bind_parameter_count(_sqlite_stmt);
@@ -222,7 +220,7 @@
     // to Apple's finalization rules. No ordering is maintained,
     // and such, there's no way to ensure that the sqlite3_stmt
     // is released before sqlite3_close() is called.
-    [self closeInFinalizer: YES];
+    [self close];
     [super finalize];
 }
 
@@ -230,7 +228,7 @@
 - (void) dealloc {
     /* The statement must be released before the database is released, as the statement has a reference
      * to the database which would cause a SQLITE_BUSY error when the database is released. */
-    [self closeInFinalizer: YES];
+    [self close];
     
     /* Now release the database. */
     [_database release];
@@ -247,7 +245,12 @@
 
 /* from PLPreparedStatement */
 - (void) close {
-    [self closeInFinalizer: NO];
+    if (_sqlite_stmt == NULL)
+        return;
+
+    /* Check in the statement. */
+    [_statementCache checkinStatement: _sqlite_stmt forQuery: _queryString];
+    _sqlite_stmt = NULL;
 }
 
 /**
@@ -376,10 +379,8 @@
 /**
  * @internal
  *
- * Check a result set back in, releasing any associated data and releasing any exclusive
- * ownership on the prepared statement.
- *
- * @param resultSet The result set being checked in.
+ * Check a result set back in, releasing any associated data
+ * and releasing any exclusive ownership on the prepared statement.
  */
 - (void) checkinResultSet: (PLSqliteResultSet *) resultSet {
     assert(_inUse == YES); // That would be strange.
@@ -423,31 +424,6 @@
 
     if (_inUse)
         [NSException raise: PLSqliteException format: @"A PLSqliteResultSet is already active and has not been properly closed for prepared statement '%@'", _queryString];
-}
-
-/**
- * @internal
- *
- * Check the statement back into our managing PLSqliteStatementCache.
- *
- * @param inFinalizer YES if calling from within -dealloc, NO otherwise.
- */
-- (void) closeInFinalizer: (BOOL) inFinalizer {
-    sqlite3_stmt *stmt;
-
-    OSSpinLockLock(&_closeLock); {
-        stmt = _sqlite_stmt;
-        _sqlite_stmt = NULL;
-
-        /* If we've already been closed, return */
-        if (stmt == NULL) {
-            OSSpinLockUnlock(&_closeLock);
-            return;
-        }
-    } OSSpinLockUnlock(&_closeLock);
-
-    /* Check in the statement. */
-    [_statementCache checkinStatement: stmt forQuery: _queryString inFinalizer: inFinalizer];
 }
 
 /**
