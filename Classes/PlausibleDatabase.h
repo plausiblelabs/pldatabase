@@ -65,7 +65,6 @@
 
 #import "PLDatabaseFilterConnectionProvider.h"
 #import "PLDatabasePoolConnectionProvider.h"
-#import "PLDatabaseThreadLocalConnectionProvider.h"
 #import "PLDatabaseMigrationConnectionProvider.h"
 
 #import "PLSqliteConnectionProvider.h"
