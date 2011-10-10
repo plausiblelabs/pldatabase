@@ -47,7 +47,8 @@
 
 - (void) tearDown {
     /* Remove the temporary database file */
-    STAssertTrue([[NSFileManager defaultManager] removeItemAtPath: _dbPath error: NULL], @"Could not clean up database %@", _dbPath);
+    if ([[NSFileManager defaultManager] fileExistsAtPath: _dbPath])
+        STAssertTrue([[NSFileManager defaultManager] removeItemAtPath: _dbPath error: NULL], @"Could not clean up database %@", _dbPath);
 
     /* Release our objects */
     [_dbPath release];
@@ -58,8 +59,8 @@
     id<PLDatabase> db;
     NSError *error;
 
-    /* Create our delegate and request a connection. We use SQLITE_OPEN_EXCLUSIVE to test flag handling -- if set, the second open will fail on creation. */
-    provider = [[[PLSqliteConnectionProvider alloc] initWithPath: _dbPath flags: SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE|SQLITE_OPEN_EXCLUSIVE] autorelease];
+    /* Create our delegate and request a connection, verifying that it is created */
+    provider = [[[PLSqliteConnectionProvider alloc] initWithPath: _dbPath flags: SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE] autorelease];
     db = [provider getConnectionAndReturnError: &error];
     
     /* Test the connection */
@@ -69,8 +70,11 @@
     /* Try to be polite */
     [provider closeConnection: db];
     STAssertFalse([db goodConnection], @"Connection should be closed");
+    STAssertTrue([[NSFileManager defaultManager] removeItemAtPath: _dbPath error: NULL], @"Could not clean up database %@", _dbPath);
     
-    /* Create our second connection -- SQLITE_OPEN_EXCLUSIVE should ensure this fails, as the database already exists. */
+    /* Create our second provider -- the lack of SQLITE_OPEN_CREATE should ensure that opening the connection fails,
+     * as the database does not exist. */
+    provider = [[[PLSqliteConnectionProvider alloc] initWithPath: _dbPath flags: SQLITE_OPEN_READWRITE] autorelease];
     db = [provider getConnectionAndReturnError: NULL];
     STAssertNil(db, @"Database open flag was not specified -- provider created a database even though SQLITE_OPEN_CREATE|SQLITE_OPEN_EXCLUSIVE was set");
 }
