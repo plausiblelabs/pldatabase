@@ -33,10 +33,6 @@
 #import "PLSqliteUnlockNotify.h"
 
 #import <pthread.h>
-#import <dlfcn.h>
-
-/* Optional sqlite3_unlock_notify() implementation. */
-static int (*pl_sqlite3_unlock_notify)(sqlite3 *pBlocked, void (*xNotify)(void **apArg, int nArg), void *pNotifyArg) = NULL;
 
 /*
  * A pointer to an instance of this structure is passed as the user-context
@@ -81,17 +77,13 @@ static int wait_for_unlock_notify(sqlite3 *db){
     int rc;
     UnlockNotification un;
     
-    /* Check if sqlite3_unlock_notify() is supported. */
-    if (pl_sqlite3_unlock_notify == NULL)
-        return SQLITE_LOCKED;
-    
     /* Initialize the UnlockNotification structure. */
     un.fired = 0;
     pthread_mutex_init(&un.mutex, 0);
     pthread_cond_init(&un.cond, 0);
     
     /* Register for an unlock-notify callback. */
-    rc = pl_sqlite3_unlock_notify(db, unlock_notify_cb, (void *)&un);
+    rc = sqlite3_unlock_notify(db, unlock_notify_cb, (void *)&un);
     assert( rc==SQLITE_LOCKED || rc==SQLITE_OK );
     
     /* The call to sqlite3_unlock_notify() always returns either SQLITE_LOCKED 
@@ -115,20 +107,6 @@ static int wait_for_unlock_notify(sqlite3 *db){
     pthread_mutex_destroy(&un.mutex);
     
     return rc;
-}
-
-/**
- * Perform initialization of the sqlite3 unlock notification subsystem. If YES is returned,
- * unlock notification is supported.
- */
-BOOL pl_sqlite3_notify_init () {
-    /* Search for the unlock notify implementation */
-    pl_sqlite3_unlock_notify = dlsym(RTLD_SELF, "sqlite3_unlock_notify");
-    if (pl_sqlite3_unlock_notify != NULL) {
-        return YES;
-    }
-
-    return NO;
 }
 
 /*

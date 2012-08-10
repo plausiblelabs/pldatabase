@@ -68,14 +68,6 @@ NSString *PLSqliteException = @"PLSqliteException";
  */
 @implementation PLSqliteDatabase
 
-+ (void) initialize {
-    if (![[self class] isEqual: [PLSqliteDatabase class]])
-        return;
-
-    /* Initialize the notification system. */
-    pl_sqlite3_notify_init();
-}
-
 /**
  * Creates and returns an SQLite database with the provided
  * file path.

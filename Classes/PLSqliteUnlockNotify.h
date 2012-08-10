@@ -31,7 +31,6 @@
 #import <sqlite3.h>
 
 #ifdef PL_DB_PRIVATE
-BOOL pl_sqlite3_notify_init ();
 int pl_sqlite3_blocking_prepare_v2 (sqlite3 *db, const char *zSql, int nSql, sqlite3_stmt **ppStmt, const char **pz);
 int pl_sqlite3_blocking_step (sqlite3_stmt *pStmt);
 #endif /* PL_DB_PRIVATE */

@@ -135,12 +135,13 @@
 
 - (void) testNextErrorHandling {
     NSError *error;
+    
+    STAssertTrue([_db executeUpdate: @"CREATE TABLE test (a int NOT NULL)"], @"Create table failed");
 
-    /* Trigger an error by over iterating the result set. (Is there a better way to trigger this error?) */
-    id<PLResultSet> result = [_db executeQuery: @"PRAGMA user_version"];
-    [result nextAndReturnError: NULL];
-    [result nextAndReturnError: NULL];
-    [result nextAndReturnError: NULL];
+    /* Trigger an error by inserting NULL data into NOT NULL column. */
+    id<PLResultSet> result = [_db executeQuery: @"INSERT INTO test VALUES (NULL)"];
+    STAssertNotNil(result, @"Failed to execute query");
+
     STAssertEquals(PLResultSetStatusError, [result nextAndReturnError: &error], @"Result set did not return an error");
     
     [result close];
