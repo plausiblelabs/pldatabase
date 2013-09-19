@@ -375,7 +375,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 }
 
 /* from PLDatabase. */
-- (BOOL) performTransactionWithRetryBlock: (PLDatabaseTransactionResult (^)()) block error: (NSError **) outError {    
+- (BOOL) performTransactionWithRetryBlock: (PLDatabaseTransactionResult (^)(void)) block error: (NSError **) outError {
     return [self performTransactionWithIsolationLevel: PLDatabaseIsolationLevelReadCommitted 
                                            retryBlock: block 
                                                 error: outError];
@@ -383,7 +383,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* from PLDatabase. */
 - (BOOL) performTransactionWithIsolationLevel: (PLDatabaseIsolationLevel) isolationLevel
-                                   retryBlock: (PLDatabaseTransactionResult (^)()) block
+                                   retryBlock: (PLDatabaseTransactionResult (^)(void)) block
                                         error: (NSError **) outError
 {
     /* */

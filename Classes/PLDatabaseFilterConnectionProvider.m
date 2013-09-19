@@ -50,7 +50,7 @@
         return nil;
 
     _provider = [provider retain];
-    _filterBlock = [block copy];
+    _filterBlock = [filterBlock copy];
 
     return self;
 }
