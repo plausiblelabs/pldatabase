@@ -63,12 +63,6 @@
     return self;
 }
 
-- (void) finalize {
-    pthread_mutex_destroy(&_lock);
-
-    [super finalize];
-}
-
 - (void) dealloc {
     [_provider release];
     [_connections release];

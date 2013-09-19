@@ -95,14 +95,6 @@ NSString *PLSqliteException = @"PLSqliteException";
     return self;
 }
 
-/* GC */
-- (void) finalize {
-    [self close];
-
-    [super finalize];
-}
-
-/* Manual */
 - (void) dealloc {
     [self close];
     
@@ -226,7 +218,7 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 /* From PLDatabase */
 - (void) close {
-    /* NOTE: This method must work correctly even if called from an unexpected thread from -dealloc or -finalize */
+    /* NOTE: This method must work correctly even if called from an unexpected thread from -dealloc */
     int err;
     
     if (_sqlite == NULL)

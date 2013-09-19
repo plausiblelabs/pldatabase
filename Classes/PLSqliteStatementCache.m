@@ -81,44 +81,15 @@ static const CFSetCallBacks StatementCacheSetCallbacks = {
     _capacity = capacity;
     _availableStatements = [[NSMutableDictionary alloc] init];
     _allStatements = CFSetCreateMutable(NULL, 0, &StatementCacheSetCallbacks);
-
-    /* Disable collection of _availableStatements; we need this to live until our finalizer has run. */
-#ifdef __OBJC_GC__
-    [[NSGarbageCollector defaultCollector] disableCollectorForPointer: _availableStatements];
-#endif /* __OBJC_GC__ */
     
     _lock = OS_SPINLOCK_INIT;
 
     return self;
 }
 
-- (void) finalize {
-    /* The sqlite statements have to be finalized explicitly */
-    [self close];
-
-    OSSpinLockLock(&_lock); {
-        if (_allStatements != NULL) {
-                CFRelease(_allStatements);
-                _allStatements = NULL;
-        }
-    } OSSpinLockUnlock(&_lock);
-
-    /* Re-enable collection of _availableStatements */
-#ifdef __OBJC_GC__
-    [[NSGarbageCollector defaultCollector] enableCollectorForPointer: _availableStatements];
-#endif /* __OBJC_GC__ */
-
-    [super finalize];
-}
-
 - (void) dealloc {
     /* The sqlite statements have to be finalized explicitly */
     [self close];
-
-    /* Re-enable collection of _availableStatements */
-#ifdef __OBJC_GC__
-    [[NSGarbageCollector defaultCollector] enableCollectorForPointer: _availableStatements];
-#endif /* __OBJC_GC__ */
 
     [_availableStatements release];
 
