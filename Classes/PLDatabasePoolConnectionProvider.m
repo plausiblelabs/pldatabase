@@ -49,7 +49,7 @@
     if ((self = [super init]) == nil)
         return nil;
     
-    _provider = [provider retain];
+    _provider = provider;
     _capacity = capacity;
 
     if (capacity > 0) {
@@ -64,12 +64,7 @@
 }
 
 - (void) dealloc {
-    [_provider release];
-    [_connections release];
-    
     pthread_mutex_destroy(&_lock);
-
-    [super dealloc];
 }
 
 // from PLDatabaseConnectionProvider protocol
@@ -78,7 +73,7 @@
     
     pthread_mutex_lock(&_lock); {
         /* Try to fetch an existing connection */
-        db = [[[_connections anyObject] retain] autorelease];
+        db = [_connections anyObject];
         if (db != nil)
             [_connections removeObject: db];
     } pthread_mutex_unlock(&_lock);

@@ -73,7 +73,7 @@ NSString *PLSqliteException = @"PLSqliteException";
  * file path.
  */
 + (id) databaseWithPath: (NSString *) dbPath {
-    return [[[self alloc] initWithPath: dbPath] autorelease];
+    return [[self alloc] initWithPath: dbPath];
 }
 
 /**
@@ -89,7 +89,7 @@ NSString *PLSqliteException = @"PLSqliteException";
     if ((self = [super init]) == nil)
         return nil;
 
-    _path = [dbPath retain];
+    _path = dbPath;
     _statementCache = [[PLSqliteStatementCache alloc] initWithCapacity: 100 /* TODO: configurable? */];
     
     return self;
@@ -97,14 +97,6 @@ NSString *PLSqliteException = @"PLSqliteException";
 
 - (void) dealloc {
     [self close];
-    
-    /* Drop the statement cache */
-    [_statementCache release];
-
-    /* Release our backing path */
-    [_path release];
-
-    [super dealloc];
 }
 
 
@@ -748,11 +740,11 @@ NSString *PLSqliteException = @"PLSqliteException";
      * MEMORY OWNERSHIP WARNING:
      * We pass our sqlite3_stmt reference to the PLSqlitePreparedStatement, which now must assume authority for releasing
      * that statement using sqlite3_finalize(). */
-    return [[[PLSqlitePreparedStatement alloc] initWithDatabase: self
+    return [[PLSqlitePreparedStatement alloc] initWithDatabase: self
                                                  statementCache: _statementCache
                                                      sqliteStmt: sqlite_stmt
                                                     queryString: statement 
-                                                 closeAtCheckin: closeAtCheckin] autorelease];
+                                                 closeAtCheckin: closeAtCheckin];
 }
 
 @end

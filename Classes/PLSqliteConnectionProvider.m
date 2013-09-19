@@ -53,7 +53,7 @@
         return nil;
     
     /* Path to our backing database */
-    _dbPath = [dbPath retain];
+    _dbPath = dbPath;
     _flags = flags;
     _useFlags = useFlags;
     
@@ -88,18 +88,13 @@
 
 
 
-- (void) dealloc {
-    [_dbPath release];
-    
-    [super dealloc];
-}
 
 // from PLDatabaseConnectionProvider protocol
 - (id<PLDatabase>) getConnectionAndReturnError: (NSError **) error {
     PLSqliteDatabase *database;
 
     /* Create and attempt to open */
-    database = [[[PLSqliteDatabase alloc] initWithPath: _dbPath] autorelease];
+    database = [[PLSqliteDatabase alloc] initWithPath: _dbPath];
 
     /* Open with the correct flags (or the default flags) */
     BOOL ret;

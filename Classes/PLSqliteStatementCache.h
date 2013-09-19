@@ -48,7 +48,7 @@
     NSMutableDictionary *_availableStatements;
     
     /** All live statements (whether or not they're checked out). */
-    __strong CFMutableSetRef _allStatements;
+    CFMutableSetRef _allStatements;
 
     /** Internal lock. Must be held when mutating state. */
     OSSpinLock _lock;

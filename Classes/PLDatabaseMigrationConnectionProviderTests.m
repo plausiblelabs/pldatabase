@@ -57,15 +57,15 @@
     PLDatabaseMigrationManager *mgr;
 
     /* Set up the migration manager */
-    sqliteMgr = [[[PLSqliteMigrationManager alloc] init] autorelease];
-    mgr = [[[PLDatabaseMigrationManager alloc] initWithTransactionManager: sqliteMgr
+    sqliteMgr = [[PLSqliteMigrationManager alloc] init];
+    mgr = [[PLDatabaseMigrationManager alloc] initWithTransactionManager: sqliteMgr
                                                            versionManager: sqliteMgr
-                                                                 delegate: self] autorelease];
+                                                                 delegate: self];
 
     /* Set up the connection providers */
-    prov = [[[PLSqliteConnectionProvider alloc] initWithPath: @""] autorelease];
-    mprov = [[[PLDatabaseMigrationConnectionProvider alloc] initWithConnectionProvider: prov
-                                                                      migrationManager: mgr] autorelease];
+    prov = [[PLSqliteConnectionProvider alloc] initWithPath: @""];
+    mprov = [[PLDatabaseMigrationConnectionProvider alloc] initWithConnectionProvider: prov
+                                                                      migrationManager: mgr];
 
     /* Try fetching a connection, and verify that it has been migrated. */
     NSError *error;

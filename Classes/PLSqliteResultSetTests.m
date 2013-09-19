@@ -46,7 +46,7 @@
 }
 
 - (void) tearDown {
-    [_db release];
+    _db = nil;
 }
 
 /* Test close by trying to rollback a transaction after opening (and closing) a result set. */

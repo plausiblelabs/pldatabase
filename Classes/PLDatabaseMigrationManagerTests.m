@@ -113,12 +113,12 @@
 
 - (void) setUp {
     /* Create a temporary directory. Secure, as the user owns enclosing directory. */
-    _testDir = [[NSTemporaryDirectory() stringByAppendingPathComponent: [[NSProcessInfo processInfo] globallyUniqueString]] retain];
+    _testDir = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSProcessInfo processInfo] globallyUniqueString]];
     STAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath: _testDir withIntermediateDirectories: YES attributes: nil error: NULL],
                  @"Could not create test directory");
     
     /* A new database manager */
-    PLDatabaseMigrationManagerTestsDelegateMock *delegate = [[[PLDatabaseMigrationManagerTestsDelegateMock alloc] initWithNewVersion: TEST_DATABASE_VERSION shouldFail: NO] autorelease];
+    PLDatabaseMigrationManagerTestsDelegateMock *delegate = [[PLDatabaseMigrationManagerTestsDelegateMock alloc] initWithNewVersion: TEST_DATABASE_VERSION shouldFail: NO];
 
     _versionManager = [[PLSqliteMigrationManager alloc] init];
     _dbManager = [[PLDatabaseMigrationManager alloc] initWithTransactionManager: _versionManager
@@ -135,9 +135,6 @@
     result = [[NSFileManager defaultManager] removeItemAtPath: _testDir error: NULL];
 	STAssertTrue(result, @"Deletion of test directory returned error");
     
-	[_testDir release];
-    [_dbManager release];
-    [_versionManager release];
 }
 
 
@@ -170,10 +167,10 @@
     NSError *error;
     
     /* Set up our delegate */
-    delegate = [[[PLDatabaseMigrationManagerTestsDelegateMock alloc] initWithNewVersion: TEST_DATABASE_VERSION shouldFail: YES] autorelease];    
-    dbManager = [[[PLDatabaseMigrationManager alloc] initWithTransactionManager: _versionManager
+    delegate = [[PLDatabaseMigrationManagerTestsDelegateMock alloc] initWithNewVersion: TEST_DATABASE_VERSION shouldFail: YES];    
+    dbManager = [[PLDatabaseMigrationManager alloc] initWithTransactionManager: _versionManager
                                                                  versionManager: _versionManager 
-                                                                       delegate: delegate] autorelease];
+                                                                       delegate: delegate];
     
     /* Create a test database */
     PLSqliteDatabase *database = [PLSqliteDatabase databaseWithPath: @":memory:"];
@@ -208,10 +205,10 @@
     STAssertTrue([_versionManager setVersion: TEST_DATABASE_VERSION forDatabase: database error: &error], @"Could not set version: %@", error);
 
     /* Set up our delegate (will fail, should roll back) */
-    delegate = [[[PLDatabaseMigrationManagerTestsDelegateDoNothingMock alloc] init] autorelease];
-    dbManager = [[[PLDatabaseMigrationManager alloc] initWithTransactionManager: _versionManager
+    delegate = [[PLDatabaseMigrationManagerTestsDelegateDoNothingMock alloc] init];
+    dbManager = [[PLDatabaseMigrationManager alloc] initWithTransactionManager: _versionManager
                                                                  versionManager: _versionManager 
-                                                                       delegate: delegate] autorelease];
+                                                                       delegate: delegate];
     
     /* Run the migration */
     STAssertTrue([_dbManager migrateDatabase: database error: &error], @"Migration failed: %@", error);

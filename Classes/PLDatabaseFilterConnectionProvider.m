@@ -49,18 +49,12 @@
     if ((self = [super init]) == nil)
         return nil;
 
-    _provider = [provider retain];
+    _provider = provider;
     _filterBlock = [block copy];
 
     return self;
 }
 
-- (void) dealloc {
-    [_provider release];
-    [_filterBlock release];
-
-    [super dealloc];
-}
 
 // from PLDatabaseConnectionProvider protocol
 - (id<PLDatabase>) getConnectionAndReturnError: (NSError **) outError {

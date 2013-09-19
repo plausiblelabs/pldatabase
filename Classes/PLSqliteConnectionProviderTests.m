@@ -42,7 +42,7 @@
 
 - (void) setUp {
     /* Create a temporary file for the database. Secure -- user owns enclosing directory. */
-    _dbPath = [[NSTemporaryDirectory() stringByAppendingPathComponent: [[NSProcessInfo processInfo] globallyUniqueString]] retain];
+    _dbPath = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSProcessInfo processInfo] globallyUniqueString]];
 }
 
 - (void) tearDown {
@@ -51,7 +51,7 @@
         STAssertTrue([[NSFileManager defaultManager] removeItemAtPath: _dbPath error: NULL], @"Could not clean up database %@", _dbPath);
 
     /* Release our objects */
-    [_dbPath release];
+    _dbPath = nil;
 }
 
 - (void) testInitWithFlags {
@@ -60,7 +60,7 @@
     NSError *error;
 
     /* Create our delegate and request a connection, verifying that it is created */
-    provider = [[[PLSqliteConnectionProvider alloc] initWithPath: _dbPath flags: SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE] autorelease];
+    provider = [[PLSqliteConnectionProvider alloc] initWithPath: _dbPath flags: SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE];
     db = [provider getConnectionAndReturnError: &error];
     
     /* Test the connection */
@@ -74,7 +74,7 @@
     
     /* Create our second provider -- the lack of SQLITE_OPEN_CREATE should ensure that opening the connection fails,
      * as the database does not exist. */
-    provider = [[[PLSqliteConnectionProvider alloc] initWithPath: _dbPath flags: SQLITE_OPEN_READWRITE] autorelease];
+    provider = [[PLSqliteConnectionProvider alloc] initWithPath: _dbPath flags: SQLITE_OPEN_READWRITE];
     db = [provider getConnectionAndReturnError: NULL];
     STAssertNil(db, @"Database open flag was not specified -- provider created a database even though SQLITE_OPEN_CREATE|SQLITE_OPEN_EXCLUSIVE was set");
 }
@@ -84,7 +84,7 @@
     id<PLDatabase> db;
 
     /* Create our delegate and request a connection */
-    provider = [[[PLSqliteConnectionProvider alloc] initWithPath: _dbPath] autorelease];
+    provider = [[PLSqliteConnectionProvider alloc] initWithPath: _dbPath];
     db = [provider getConnectionAndReturnError: NULL];
 
     /* Test the connection */

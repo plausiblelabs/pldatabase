@@ -65,8 +65,8 @@
     
     /* Save the delegates/providers */
     _delegate = delegate; // cyclic reference, can not retain
-    _txManager = [lockManager retain];
-    _versionManager = [versionManager retain];
+    _txManager = lockManager;
+    _versionManager = versionManager;
     
     return self;
 }
@@ -83,19 +83,12 @@
         return nil;
 
     /* Save the connection provider */
-    _connectionProvider = [connectionProvider retain];
+    _connectionProvider = connectionProvider;
 
     return self;
 }
 
 
-- (void) dealloc {
-    [_connectionProvider release];
-    [_txManager release];
-    [_versionManager release];
-
-    [super dealloc];
-}
 
 /**
  * Perform any pending migrations on @a database using the receiver's PLDatabaseMigrationDelegate.

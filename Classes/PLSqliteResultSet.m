@@ -59,7 +59,7 @@
     }
     
     /* Save our database and statement references. */
-    _stmt = [stmt retain];
+    _stmt = stmt;
     _sqlite_stmt = sqlite_stmt;
 
     /* Save result information */
@@ -71,15 +71,6 @@
 - (void) dealloc {
     /* 'Check in' our prepared statement reference */
     [self close];
-
-    /* Release the column cache. */
-    if (_columnNames != NULL)
-        [_columnNames release];
-    
-    /* Release the statement. */
-    [_stmt release];
-    
-    [super dealloc];
 }
 
 // property getter

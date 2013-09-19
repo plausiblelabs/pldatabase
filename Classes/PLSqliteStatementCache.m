@@ -91,14 +91,10 @@ static const CFSetCallBacks StatementCacheSetCallbacks = {
     /* The sqlite statements have to be finalized explicitly */
     [self close];
 
-    [_availableStatements release];
-
     if (_allStatements != NULL) {
         CFRelease(_allStatements);
         _allStatements = NULL;
     }
-
-    [super dealloc];
 }
 
 /**
@@ -142,11 +138,11 @@ static const CFSetCallBacks StatementCacheSetCallbacks = {
         }
 
         /* Fetch the statement set for this query */
-        CFMutableArrayRef stmtArray = (CFMutableArrayRef) [_availableStatements objectForKey: query];
+        CFMutableArrayRef stmtArray = (__bridge CFMutableArrayRef) [_availableStatements objectForKey: query];
         if (stmtArray == nil) {
             stmtArray = CFArrayCreateMutable(NULL, 0, &StatementCacheArrayCallbacks);
-            [_availableStatements setObject: (id) stmtArray forKey: query];
-            [(id)stmtArray release];
+            [_availableStatements setObject: (__bridge id) stmtArray forKey: query];
+            CFRelease(stmtArray);
         }
 
         /* Claim ownership of the statement */
@@ -168,7 +164,7 @@ static const CFSetCallBacks StatementCacheSetCallbacks = {
 
     OSSpinLockLock(&_lock); {
         /* Fetch the statement set for this query */
-        CFMutableArrayRef stmtArray = (CFMutableArrayRef) [_availableStatements objectForKey: query];
+        CFMutableArrayRef stmtArray = (__bridge CFMutableArrayRef) [_availableStatements objectForKey: query];
         if (stmtArray == nil || CFArrayGetCount(stmtArray) == 0) {
             OSSpinLockUnlock(&_lock);
             return NULL;
@@ -225,7 +221,7 @@ static void apply_cache_statement_finalize (const void *value, void *context) {
 
 /* Function to be applied to a CF container. Calls sqlite3_finalize() on the supplied value, and removes it from _allStatements. */
 static void apply_cache_remove_statement (const void *value, void *context) {
-    PLSqliteStatementCache *self = context;
+    PLSqliteStatementCache *self = (__bridge id) context;
 
     /* Finalize the statement */
     sqlite3_stmt *stmt = (sqlite3_stmt *) value;
@@ -247,11 +243,11 @@ static void apply_cache_remove_statement (const void *value, void *context) {
     
     /* Iterate over all cached queries and finalize their sqlite statements */
     [_availableStatements enumerateKeysAndObjectsUsingBlock: ^(id key, id obj, BOOL *stop) {
-        CFMutableArrayRef array = (CFMutableArrayRef) obj;
+        CFMutableArrayRef array = (__bridge CFMutableArrayRef) obj;
         CFIndex count = CFArrayGetCount(array);
         
         /* Finalize all statements */
-        CFArrayApplyFunction(array, CFRangeMake(0, count), apply_cache_remove_statement, self);
+        CFArrayApplyFunction(array, CFRangeMake(0, count), apply_cache_remove_statement, (__bridge void *)(self));
     }];
     
     /* Empty the statement cache of the now invalid references. */

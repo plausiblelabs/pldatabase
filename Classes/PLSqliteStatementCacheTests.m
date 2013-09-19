@@ -64,7 +64,7 @@
     STAssertEquals(ret, SQLITE_OK, @"Failed to prepare the statement");
 
     /* Try caching it */
-    PLSqliteStatementCache *cache = [[[PLSqliteStatementCache alloc] initWithCapacity: 500] autorelease];
+    PLSqliteStatementCache *cache = [[PLSqliteStatementCache alloc] initWithCapacity: 500];
     [cache registerStatement: stmt];
     [cache checkinStatement: stmt forQuery: queryString];
 
@@ -103,7 +103,7 @@
     ret = sqlite3_prepare_v2(sqlite, [queryString UTF8String], -1, &stmt, &unused);
     STAssertEquals(ret, SQLITE_OK, @"Failed to prepare the statement");
     
-    PLSqliteStatementCache *cache = [[[PLSqliteStatementCache alloc] initWithCapacity: 500] autorelease];
+    PLSqliteStatementCache *cache = [[PLSqliteStatementCache alloc] initWithCapacity: 500];
     [cache registerStatement: stmt];
     [cache checkinStatement: stmt forQuery: queryString];
     

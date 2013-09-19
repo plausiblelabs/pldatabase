@@ -68,15 +68,11 @@
     if ((self = [super init]) == nil)
         return nil;
 
-    _values = [values retain];
+    _values = values;
 
     return self;
 }
 
-- (void) dealloc {
-    [_values release];
-    [super dealloc];
-}
 
 - (int) count {
     return [_values count];
@@ -108,15 +104,11 @@
     if ((self = [super init]) == nil)
         return nil;
 
-    _values = [values retain];
+    _values = values;
 
     return self;
 }
 
-- (void) dealloc {
-    [_values release];
-    [super dealloc];
-}
 
 - (int) count {
     return [_values count];
@@ -200,10 +192,10 @@
     _closeAtCheckin = closeAtCheckin;
 
     /* Save our database and statement reference. */
-    _database = [db retain];
-    _statementCache = [statementCache retain];
+    _database = db;
+    _statementCache = statementCache;
     _sqlite_stmt = sqlite_stmt;
-    _queryString = [queryString retain];
+    _queryString = queryString;
     _inUse = NO;
 
     /* Cache parameter count */
@@ -217,17 +209,6 @@
     /* The statement must be released before the database is released, as the statement has a reference
      * to the database which would cause a SQLITE_BUSY error when the database is released. */
     [self close];
-    
-    /* Now release the database. */
-    [_database release];
-    
-    /* Drop the statement cache reference */
-    [_statementCache release];
-    
-    /* Release the query statement */
-    [_queryString release];
-    
-    [super dealloc];
 }
 
 
@@ -304,14 +285,14 @@
 - (void) bindParameters: (NSArray *) parameters {
     PLSqliteArrayParameterStrategy *strategy;
     
-    strategy = [[[PLSqliteArrayParameterStrategy alloc] initWithValues: parameters] autorelease];
+    strategy = [[PLSqliteArrayParameterStrategy alloc] initWithValues: parameters];
     [self bindParametersWithStrategy: strategy];
 }
 
 - (void) bindParameterDictionary: (NSDictionary *) parameters {
     PLSqliteDictionaryParameterStrategy *strategy;
     
-    strategy = [[[PLSqliteDictionaryParameterStrategy alloc] initWithValueDictionary: parameters] autorelease];
+    strategy = [[PLSqliteDictionaryParameterStrategy alloc] initWithValueDictionary: parameters];
     [self bindParametersWithStrategy: strategy];
 }
 
@@ -432,7 +413,7 @@
     * that the statement reference will remain valid until checkinResultSet is called for
     * the new PLSqliteResultSet instance.
     */
-    return [[[PLSqliteResultSet alloc] initWithPreparedStatement: self sqliteStatemet: _sqlite_stmt] autorelease];
+    return [[PLSqliteResultSet alloc] initWithPreparedStatement: self sqliteStatemet: _sqlite_stmt];
 }
 
 /**

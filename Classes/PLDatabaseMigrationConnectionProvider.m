@@ -56,18 +56,12 @@
     if ((self = [super init]) == nil)
         return nil;
     
-    _conProv = [conProv retain];
-    _migrationMgr = [migrationManager retain];
+    _conProv = conProv;
+    _migrationMgr = migrationManager;
 
     return self;
 }
 
-- (void) dealloc {
-    [_conProv release];
-    [_migrationMgr release];
-
-    [super dealloc];
-}
 
 // from PLDatabaseConnectionProvider protocol
 - (id<PLDatabase>) getConnectionAndReturnError: (NSError **) outError {

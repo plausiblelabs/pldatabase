@@ -46,7 +46,7 @@
 
 - (void) setUp {
     /* Create a temporary file for the database. Secure -- user owns enclosing directory. */
-    _dbPath = [[NSTemporaryDirectory() stringByAppendingPathComponent: [[NSProcessInfo processInfo] globallyUniqueString]] retain];
+    _dbPath = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSProcessInfo processInfo] globallyUniqueString]];
     
     /* Create the temporary database */
     _db = [[PLSqliteDatabase alloc] initWithPath: _dbPath];
@@ -64,9 +64,6 @@
     STAssertTrue([[NSFileManager defaultManager] removeItemAtPath: _dbPath error: NULL], @"Could not clean up database %@", _dbPath);
     
     /* Release our objects */
-    [_dbPath release];
-    [_db release];
-    [_versionManager release];
 }
 
 - (void) testDefaultVersion {

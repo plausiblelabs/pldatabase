@@ -47,8 +47,8 @@
     NSError *error;
     
     /* Create a testing database pool */
-    PLSqliteConnectionProvider *provider = [[[PLSqliteConnectionProvider alloc] initWithPath: @":memory:"] autorelease];
-    PLDatabasePoolConnectionProvider *pool = [[[PLDatabasePoolConnectionProvider alloc] initWithConnectionProvider: provider capacity: 0] autorelease];
+    PLSqliteConnectionProvider *provider = [[PLSqliteConnectionProvider alloc] initWithPath: @":memory:"];
+    PLDatabasePoolConnectionProvider *pool = [[PLDatabasePoolConnectionProvider alloc] initWithConnectionProvider: provider capacity: 0];
 
     /* Fetch a connection */
     id<PLDatabase> con = [pool getConnectionAndReturnError: &error];
@@ -72,8 +72,8 @@
     NSError *error;
     
     /* Create a testing database pool */
-    PLSqliteConnectionProvider *provider = [[[PLSqliteConnectionProvider alloc] initWithPath: @":memory:"] autorelease];
-    PLDatabasePoolConnectionProvider *pool = [[[PLDatabasePoolConnectionProvider alloc] initWithConnectionProvider: provider capacity: 1] autorelease];
+    PLSqliteConnectionProvider *provider = [[PLSqliteConnectionProvider alloc] initWithPath: @":memory:"];
+    PLDatabasePoolConnectionProvider *pool = [[PLDatabasePoolConnectionProvider alloc] initWithConnectionProvider: provider capacity: 1];
     
     /* Fetch two connections and check one back in; the cache should now be at capacity. */
     id<PLDatabase> con1 = [pool getConnectionAndReturnError: &error];

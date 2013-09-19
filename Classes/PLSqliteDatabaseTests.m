@@ -47,18 +47,18 @@
 }
 
 - (void) tearDown {
-    [_db release];
+    _db = nil;
 }
 
 - (void) testInitWithPath {
-    PLSqliteDatabase *db = [[[PLSqliteDatabase alloc] initWithPath:  @":memory:"] autorelease];
+    PLSqliteDatabase *db = [[PLSqliteDatabase alloc] initWithPath:  @":memory:"];
     STAssertNotNil(db, @"Returned database is nil");
 }
 
 - (void) testOpenWithEmptyPath {
     /* SQLite treats an empty path as a request for a disk-backed temporary database that will automatically
      * be closed */
-    PLSqliteDatabase *db = [[[PLSqliteDatabase alloc] initWithPath: @""] autorelease];
+    PLSqliteDatabase *db = [[PLSqliteDatabase alloc] initWithPath: @""];
     STAssertNotNil(db, @"Returned database is nil");
 
     NSError *error;
@@ -67,7 +67,7 @@
 }
 
 - (void) testOpen {
-    PLSqliteDatabase *db = [[[PLSqliteDatabase alloc] initWithPath:  @":memory:"] autorelease];
+    PLSqliteDatabase *db = [[PLSqliteDatabase alloc] initWithPath:  @":memory:"];
     STAssertTrue([db sqliteHandle] == NULL, @"The returned database handle is not NULL");
     STAssertTrue([db open], @"Could not open the database");
     STAssertTrue([db goodConnection], @"The database did not report a good connection");
@@ -87,7 +87,7 @@
 }
 
 - (void) testGoodConnection {
-    PLSqliteDatabase *db = [[[PLSqliteDatabase alloc] initWithPath:  @":memory:"] autorelease];
+    PLSqliteDatabase *db = [[PLSqliteDatabase alloc] initWithPath:  @":memory:"];
     STAssertTrue([db open], @"Could not open the database");
     STAssertTrue([db goodConnection], @"The database did not report a good connection");
     [db close];
@@ -134,7 +134,6 @@
 
 	[stmt close];
 	[db close];
-	[db release];
 }
 
 
@@ -152,7 +151,6 @@
 
 	[resultSet close];
 	[db close];
-	[db release];
 }
 
 

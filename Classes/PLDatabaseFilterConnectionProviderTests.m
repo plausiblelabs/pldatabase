@@ -50,13 +50,13 @@
     NSError *error;
     
     /* Create a testing database provider */
-    PLSqliteConnectionProvider *provider = [[[PLSqliteConnectionProvider alloc] initWithPath: @":memory:"] autorelease];
-    PLDatabaseFilterConnectionProvider *filter = [[[PLDatabaseFilterConnectionProvider alloc] initWithConnectionProvider: provider filterBlock: ^(id<PLDatabase> db) {
+    PLSqliteConnectionProvider *provider = [[PLSqliteConnectionProvider alloc] initWithPath: @":memory:"];
+    PLDatabaseFilterConnectionProvider *filter = [[PLDatabaseFilterConnectionProvider alloc] initWithConnectionProvider: provider filterBlock: ^(id<PLDatabase> db) {
         NSError *error;
 
         STAssertNotNil(db, @"Filtering a nil database");
         STAssertTrue([db executeUpdateAndReturnError: &error statement: @"PRAGMA user_version = 42;"], @"Failed to set user version: %@", error);
-    }] autorelease];
+    }];
     
     /* Fetch a connection */
     id<PLDatabase> con = [filter getConnectionAndReturnError: &error];

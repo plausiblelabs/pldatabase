@@ -52,7 +52,7 @@
 }
 
 - (void) tearDown {
-    [_db release];
+    _db = nil;
 }
 
 - (void) testParameterCount {
