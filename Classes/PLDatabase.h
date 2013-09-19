@@ -222,7 +222,7 @@ typedef enum {
  *
  * @warning The provided @a block may be executed multiple times and <em>must</em> be idempotent.
  */
-- (BOOL) performTransactionWithRetryBlock: (PLDatabaseTransactionResult (^)()) block error: (NSError **) outError;
+- (BOOL) performTransactionWithRetryBlock: (PLDatabaseTransactionResult (^)(void)) block error: (NSError **) outError;
 
 /**
  * Begin a transaction and execute @a block. If @a block returns PLDatabaseTransactionRollback, and
@@ -249,7 +249,7 @@ typedef enum {
  * @warning The provided @a block may be executed multiple times and <em>must</em> be idempotent.
  */
 - (BOOL) performTransactionWithIsolationLevel: (PLDatabaseIsolationLevel) isolationLevel
-                                   retryBlock: (PLDatabaseTransactionResult (^)()) block
+                                   retryBlock: (PLDatabaseTransactionResult (^)(void)) block
                                         error: (NSError **) outError;
 
 

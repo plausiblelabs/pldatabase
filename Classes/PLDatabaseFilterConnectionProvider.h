@@ -39,6 +39,6 @@
     id<PLDatabase> (^_filterBlock)(id<PLDatabase>);
 }
 
-- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) provider filterBlock: (void (^)(id<PLDatabase> db)) block;
+- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) provider filterBlock: (void (^)(id<PLDatabase> db)) filterBlock;
 
 @end

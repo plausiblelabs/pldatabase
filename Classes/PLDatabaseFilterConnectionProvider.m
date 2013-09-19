@@ -45,7 +45,7 @@
  * @param provider A connection provider that will be used to acquire new database connections.
  * @param filterBlock The filter block to be called for each returned database connection.
  */
-- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) provider filterBlock: (void (^)(id<PLDatabase> db)) block {
+- (id) initWithConnectionProvider: (id<PLDatabaseConnectionProvider>) provider filterBlock: (void (^)(id<PLDatabase> db)) filterBlock {
     if ((self = [super init]) == nil)
         return nil;
 
