@@ -299,6 +299,11 @@
     [result close];
 }
 
+/*
+ * Test the object variants:
+ * - objectForColumn and objectForKeyedSubscript
+ * - objectForColumnIndex and objectAtIndexedSubscript
+ */
 - (void) testObjectForColumn {
     id<PLResultSet> result;
     NSNumber *testInteger;
@@ -322,11 +327,25 @@
     STAssertTrue([result next], @"No rows returned");
     
     STAssertTrue([testInteger isEqual: [result objectForColumn: @"a"]], @"Did not return correct integer value");
+    STAssertTrue([testInteger isEqual: result[@"a"]], @"Did not return correct integer value");
+    STAssertTrue([testInteger isEqual: result[0]], @"Did not return correct integer value");
+
     STAssertTrue([testString isEqual: [result objectForColumn: @"b"]], @"Did not return correct string value");
+    STAssertTrue([testString isEqual: result[@"b"]], @"Did not return correct string value");
+    STAssertTrue([testString isEqual: result[1]], @"Did not return correct string value");
+
     STAssertTrue([testDouble isEqual: [result objectForColumn: @"c"]], @"Did not return correct double value");
+    STAssertTrue([testDouble isEqual: result[@"c"]], @"Did not return correct double value");
+    STAssertTrue([testDouble isEqual: result[2]], @"Did not return correct double value");
+
     STAssertTrue([testBlob isEqual: [result objectForColumn: @"d"]], @"Did not return correct data value");
+    STAssertTrue([testBlob isEqual: result[@"d"]], @"Did not return correct data value");
+    STAssertTrue([testBlob isEqual: result[3]], @"Did not return correct data value");
+
     STAssertTrue(nil == [result objectForColumn: @"e"], @"Did not return correct NSNull value");
-    
+    STAssertTrue(nil == result[@"e"], @"Did not return correct nil value");
+    STAssertTrue(nil == result[4], @"Did not return correct nil value");
+
     [result close];
 }
 

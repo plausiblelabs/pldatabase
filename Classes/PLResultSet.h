@@ -295,7 +295,7 @@ typedef enum {
 - (NSData *) dataForColumnIndex: (int) columnIndex;
 
 /**
- * Return the value of the named column as a Foundation Objective-C  object, using the database driver's built-in
+ * Return the value of the named column as a Foundation Objective-C object, using the database driver's built-in
  * SQL and Foundation data-type mappings.
  *
  * If the column value is NULL, nil will be returned.
@@ -323,5 +323,36 @@ typedef enum {
  * and the implementation has been modified to return nil.
  */
 - (id) objectForColumnIndex: (int) columnIndex;
+
+/**
+ * Return the value of the named column as a Foundation Objective-C object, using the database driver's built-in
+ * SQL and Foundation data-type mappings.
+ *
+ * If the column value is NULL, nil will be returned.
+ *
+ * Will throw NSException if the column name is unknown.
+ *
+ * @param columnName Name of column value to return.
+ *
+ * @note This method provides support for Objective-C's subscript syntax, and is otherwise identical to PLResultSet::objectForColumn:.
+ */
+- (id) objectForKeyedSubscript: (id)key;
+
+/**
+ * Return the value of the named column as a Foundation Objective-C object, using the database driver's built-in
+ * SQL and Foundation data-type mappings.
+ *
+ * If the column value is NULL, nil will be returned.
+ *
+ * Will throw NSException if the column index is out of range.
+ *
+ * @param columnIndex Index of column value to return.
+ *
+ * @note This method provides support for Objective-C's subscript syntax, and is otherwise identical to PLResultSet::objectForColumnIndex:.
+ */
+- (id) objectAtIndexedSubscript: (NSUInteger) index;
+
+
+
 @end
 

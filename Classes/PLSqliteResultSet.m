@@ -315,6 +315,16 @@ VALUE_ACCESSORS(NSData *, data, columnType == SQLITE_NULL ? nil :
     return [self objectForColumnIndex: [self columnIndexForName: columnName]];
 }
 
+/* From PLResultSet */
+- (id) objectForKeyedSubscript: (id)key {
+    return [self objectForColumn: key];
+}
+
+/* From PLResultSet */
+- (id) objectAtIndexedSubscript: (NSUInteger) index {
+    return [self objectForColumnIndex: (int) index];
+}
+
 
 /* from PLResultSet */
 - (BOOL) isNullForColumnIndex: (int) columnIndex {
