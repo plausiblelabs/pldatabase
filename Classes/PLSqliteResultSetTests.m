@@ -307,6 +307,7 @@
 - (void) testObjectForColumn {
     id<PLResultSet> result;
     NSNumber *testInteger;
+    NSNumber *testBigInteger;
     NSString *testString;
     NSNumber *testDouble;
     NSData *testBlob;
@@ -317,10 +318,11 @@
     testString = @"Test string";
     testDouble = [NSNumber numberWithDouble: 42.42];
     testBlob = [@"Test data" dataUsingEncoding: NSUTF8StringEncoding]; 
+    testBigInteger = [NSNumber numberWithLongLong: LLONG_MAX];
 
-    STAssertTrue([_db executeUpdateAndReturnError: &error statement: @"CREATE TABLE test (a integer, b varchar(20), c double, d blob, e varchar(20))"], @"Create table failed: %@", error);
-    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a, b, c, d, e) VALUES (?, ?, ?, ?, ?)",
-                   testInteger, testString, testDouble, testBlob, nil]), @"Could not insert row");
+    STAssertTrue([_db executeUpdateAndReturnError: &error statement: @"CREATE TABLE test (a integer, b varchar(20), c double, d blob, e varchar(20), f integer)"], @"Create table failed: %@", error);
+    STAssertTrue(([_db executeUpdate: @"INSERT INTO test (a, b, c, d, e, f) VALUES (?, ?, ?, ?, ?, ?)",
+                   testInteger, testString, testDouble, testBlob, nil, testBigInteger]), @"Could not insert row");
     
     /* Query the data */
     result = [_db executeQuery: @"SELECT * FROM test"];
@@ -345,6 +347,10 @@
     STAssertTrue(nil == [result objectForColumn: @"e"], @"Did not return correct NSNull value");
     STAssertTrue(nil == result[@"e"], @"Did not return correct nil value");
     STAssertTrue(nil == result[4], @"Did not return correct nil value");
+    
+    STAssertTrue([testBigInteger isEqual: [result objectForColumn: @"f"]], @"Did not return correct integer value");
+    STAssertTrue([testBigInteger isEqual: result[@"f"]], @"Did not return correct integer value");
+    STAssertTrue([testBigInteger isEqual: result[5]], @"Did not return correct integer value");
 
     [result close];
 }

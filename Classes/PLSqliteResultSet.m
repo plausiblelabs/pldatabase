@@ -290,7 +290,7 @@ VALUE_ACCESSORS(NSData *, data, columnType == SQLITE_NULL ? nil :
             return [self stringForColumnIndex: columnIndex];
 
         case SQLITE_INTEGER:
-            return [NSNumber numberWithLong: [self bigIntForColumnIndex: columnIndex]];
+            return [NSNumber numberWithLongLong: [self bigIntForColumnIndex: columnIndex]];
 
         case SQLITE_FLOAT:
             return [NSNumber numberWithDouble: [self doubleForColumnIndex: columnIndex]];
